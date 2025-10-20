@@ -41,7 +41,9 @@ interface GreetingProps {
 export const Greeting: React.FC<GreetingProps> = ({ name = 'Guest' }) => {
   // TODO: Implement greeting component
   // Should render: "Hello, [name]!"
-  return null;
+  return (<div>
+    Hello, {name}!
+  </div>);
 };
 
 // ============================================
@@ -68,7 +70,12 @@ interface UserCardProps {
 export const UserCard: React.FC<UserCardProps> = ({ name, email, age }) => {
   // TODO: Implement user card component
   // Should display: name, email, and age
-  return null;
+  return (
+  <div>
+    <span>{name}</span>
+    <span>Age: {age}</span>
+    <span>{email}</span>
+  </div>);
 };
 
 // ============================================
@@ -100,7 +107,17 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
   // TODO: Implement todo list
   // Remember: Each list item needs a unique key!
   // Use: the map method to render each todo
-  return null;
+  return (
+    <ul>
+    {todos.map((todo) => (
+        <li key={todo.id}>
+          <span>{todo.text}</span>
+          {todo.completed ? ' ✅' : ' ⏳'}
+        </li>
+    ))}
+    </ul>
+  );
+  
 };
 
 // ============================================
@@ -122,7 +139,12 @@ export const Counter: React.FC = () => {
   // TODO: Implement counter using useState
   // Should have increment and decrement buttons
   // Display: "Count: [number]"
-  return null;
+  const [count, setCount] = useState(0);
+  return <div>
+    <button onClick={ () => setCount(count + 1)}>Incrementa</button>
+    <button onClick={ () => setCount(count - 1)}>Decrementa</button>
+    <p>Count: {count}</p>
+  </div>;
 };
 
 // ============================================
@@ -153,6 +175,17 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({ isLoading, error, 
   // Use: isLoading && <div>Loading...</div>
   // Use: error && <div>Error: {error}</div>
   // Use: data && <div>{data}</div>
+  if (isLoading) {
+    return <p>Loading..</p>
+  }
+
+  if (error) {
+    return <p>{error}</p>
+  }  
+  
+  if (data) {
+    return <p>{data}</p>
+  }
   return null;
 };
 
@@ -179,7 +212,9 @@ interface ActionButtonProps {
 export const ActionButton: React.FC<ActionButtonProps> = ({ text, onClick }) => {
   // TODO: Implement button with click handler
   // Use: <button onClick={onClick}>{text}</button>
-  return null;
+  return (
+    <button onClick={onClick}>{text}</button>
+  );
 };
 
 // ============================================
@@ -207,7 +242,21 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
   // Use useState for name and email
   // Use: <input value={name} onChange={(e) => setName(e.target.value)} />
   // Handle form submission with preventDefault
-  return null;
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit({name, email})
+  }
+  return <form onSubmit={handleSubmit} role="form">
+    <label htmlFor="name">Name:</label>
+    <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)}></input>
+    <label htmlFor="email">Email:</label>
+    <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}></input>
+
+    <button type="submit">Submit</button>
+  </form>
 };
 
 // ============================================
@@ -241,5 +290,16 @@ export const FilteredList: React.FC<FilteredListProps> = ({ items }) => {
   // Use useState for search term
   // Filter items: items.filter(item => item.name.includes(searchTerm))
   // Display search input and filtered results
-  return null;
+  const [searchTerm, setSearchTerm]=useState('');
+
+  const filteredItems = items.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
+  return <div>
+    <input type="search" placeholder='Search' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}></input>
+
+    <ul>
+      {filteredItems.map(item => (
+        <li key={item.id}>{item.name}</li>
+      ))}
+    </ul>
+  </div>;
 };
