@@ -62,7 +62,7 @@ export function extractExercises(fullCode: string): ExtractedExercise[] {
   const lines = fullCode.split('\n');
   const exercises: ExtractedExercise[] = [];
 
-  let currentExercise: { number: number; title: string; startLine: number } | null = null;
+  let currentExercise: { number: number; title: string } | null = null;
   let blockStart = -1;
 
   for (let i = 0; i < lines.length; i++) {

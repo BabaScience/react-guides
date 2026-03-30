@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/copy-content.js",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
