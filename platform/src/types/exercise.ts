@@ -8,6 +8,21 @@ export interface Exercise {
   angularEquivalent: string;
 }
 
+export interface LessonStep {
+  type: 'lesson';
+  id: string;
+  title: string;
+  sectionHeading: string;
+}
+
+export interface ExerciseStep {
+  type: 'exercise';
+  id: string;
+  title: string;
+}
+
+export type Step = LessonStep | ExerciseStep;
+
 export interface Module {
   id: string;
   number: number;
@@ -17,6 +32,7 @@ export interface Module {
   exerciseDir: string;
   status: 'available' | 'coming-soon';
   exercises: Exercise[];
+  steps: Step[];
 }
 
 export interface TestCaseResult {

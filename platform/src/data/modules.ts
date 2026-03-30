@@ -1,4 +1,47 @@
-import type { Module } from '@/types/exercise';
+import type { Module, Step } from '@/types/exercise';
+
+// --- Step definitions for Module 01: Fundamentals ---
+const fundamentalsSteps: Step[] = [
+  { type: 'lesson', id: 'understanding-react', title: 'Understanding React', sectionHeading: '1. Understanding React' },
+  { type: 'lesson', id: 'setup-environment', title: 'Setting Up a Dev Environment', sectionHeading: '2. Setting Up a React Development Environment' },
+  { type: 'lesson', id: 'jsx-syntax', title: 'JSX Syntax', sectionHeading: '3. JSX Syntax' },
+  { type: 'lesson', id: 'components', title: 'Components: Building Blocks', sectionHeading: '4. Components' },
+  { type: 'lesson', id: 'props', title: 'Props: Passing Data', sectionHeading: '5. Props' },
+  { type: 'exercise', id: 'greeting', title: 'Exercise: Greeting Component' },
+  { type: 'exercise', id: 'user-card', title: 'Exercise: User Card' },
+  { type: 'lesson', id: 'lists-keys', title: 'Lists and Keys', sectionHeading: '9. Lists and Keys' },
+  { type: 'exercise', id: 'todo-list', title: 'Exercise: Todo List' },
+  { type: 'lesson', id: 'state-usestate', title: 'State Management with useState', sectionHeading: '6. State Management' },
+  { type: 'exercise', id: 'counter', title: 'Exercise: Counter with State' },
+  { type: 'lesson', id: 'conditional-rendering', title: 'Conditional Rendering', sectionHeading: '8. Conditional Rendering' },
+  { type: 'exercise', id: 'status-message', title: 'Exercise: StatusMessage' },
+  { type: 'lesson', id: 'event-handling', title: 'Event Handling', sectionHeading: '7. Event Handling' },
+  { type: 'exercise', id: 'action-button', title: 'Exercise: ActionButton' },
+  { type: 'lesson', id: 'forms-controlled', title: 'Forms and Controlled Components', sectionHeading: '10. Forms and Controlled Components' },
+  { type: 'exercise', id: 'contact-form', title: 'Exercise: ContactForm' },
+  { type: 'exercise', id: 'filtered-list', title: 'Exercise: FilteredList' },
+];
+
+// --- Step definitions for Module 02: Hooks ---
+const hooksSteps: Step[] = [
+  { type: 'lesson', id: 'understanding-hooks', title: 'Understanding Hooks', sectionHeading: '1. Understanding Hooks' },
+  { type: 'lesson', id: 'usestate', title: 'useState: State Fundamentals', sectionHeading: '2. useState' },
+  { type: 'exercise', id: 'counter-functional', title: 'Exercise: useState Counter' },
+  { type: 'lesson', id: 'useeffect', title: 'useEffect: Side Effects', sectionHeading: '3. useEffect' },
+  { type: 'exercise', id: 'data-fetching', title: 'Exercise: Data Fetching' },
+  { type: 'lesson', id: 'usecontext', title: 'useContext: Global State', sectionHeading: '4. useContext' },
+  { type: 'exercise', id: 'theme-context', title: 'Exercise: Theme Context' },
+  { type: 'lesson', id: 'useref', title: 'useRef: DOM & Persistence', sectionHeading: '5. useRef' },
+  { type: 'exercise', id: 'focus-input', title: 'Exercise: Focus Input' },
+  { type: 'lesson', id: 'usememo', title: 'useMemo: Memoization', sectionHeading: '6. useMemo' },
+  { type: 'exercise', id: 'filtered-list-memo', title: 'Exercise: Filtered List (useMemo)' },
+  { type: 'lesson', id: 'usecallback', title: 'useCallback: Function Memoization', sectionHeading: '7. useCallback' },
+  { type: 'exercise', id: 'callback-parent', title: 'Exercise: Stable Callbacks' },
+  { type: 'lesson', id: 'usereducer', title: 'useReducer: Complex State', sectionHeading: '8. useReducer' },
+  { type: 'exercise', id: 'todo-reducer', title: 'Exercise: Todo App (useReducer)' },
+  { type: 'lesson', id: 'custom-hooks', title: 'Custom Hooks', sectionHeading: '9. Custom Hooks' },
+  { type: 'lesson', id: 'advanced-patterns', title: 'Advanced Patterns', sectionHeading: '10. Advanced Patterns' },
+];
 
 export const modules: Module[] = [
   {
@@ -9,6 +52,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/01-fundamentals.md',
     exerciseDir: 'src/01-fundamentals',
     status: 'available',
+    steps: fundamentalsSteps,
     exercises: [
       {
         id: 'greeting',
@@ -92,6 +136,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/02-react-hooks.md',
     exerciseDir: 'src/02-hooks',
     status: 'available',
+    steps: hooksSteps,
     exercises: [
       {
         id: 'counter-functional',
@@ -166,6 +211,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/03-component-patterns-best-practices.md',
     exerciseDir: 'src/03-component-patterns',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -176,6 +222,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/04-react-styling.md',
     exerciseDir: 'src/04-styling',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -186,6 +233,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/05-routing.md',
     exerciseDir: 'src/05-routing',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -196,6 +244,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/06-state-management.md',
     exerciseDir: 'src/06-state-management',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -206,6 +255,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/07-data-fetching.md',
     exerciseDir: 'src/07-data-fetching',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -216,6 +266,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/08-forms-and-validations.md',
     exerciseDir: 'src/08-forms',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -226,6 +277,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/09-performance-optimization.md',
     exerciseDir: 'src/09-performance',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -236,6 +288,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/10-testing.md',
     exerciseDir: 'src/10-testing',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -246,6 +299,7 @@ export const modules: Module[] = [
     guideFile: '',
     exerciseDir: 'src/11-typescript',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
   {
@@ -256,6 +310,7 @@ export const modules: Module[] = [
     guideFile: '',
     exerciseDir: 'src/12-advanced-patterns',
     status: 'coming-soon',
+    steps: [],
     exercises: [],
   },
 ];

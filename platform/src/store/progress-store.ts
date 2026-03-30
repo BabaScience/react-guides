@@ -6,10 +6,15 @@ import { modules } from '@/data/modules';
 
 interface ProgressStore {
   exercises: Record<string, ExerciseProgress>;
+  lessonSteps: Record<string, boolean>;
   getExerciseProgress: (moduleId: string, exerciseId: string) => ExerciseProgress;
   getExerciseStatus: (moduleId: string, exerciseId: string) => ExerciseStatus;
   isModuleUnlocked: (moduleId: string) => boolean;
   getModuleProgress: (moduleId: string) => { passed: number; total: number };
+  getStepProgress: (moduleId: string) => { completed: number; total: number };
+  isStepComplete: (moduleId: string, stepId: string) => boolean;
+  isLessonComplete: (moduleId: string, stepId: string) => boolean;
+  markLessonComplete: (moduleId: string, stepId: string) => void;
   saveCode: (moduleId: string, exerciseId: string, code: string) => void;
   saveTestResults: (moduleId: string, exerciseId: string, results: TestRunResult) => void;
   resetExercise: (moduleId: string, exerciseId: string) => void;
@@ -30,6 +35,7 @@ export const useProgressStore = create<ProgressStore>()(
   persist(
     (set, get) => ({
       exercises: {},
+      lessonSteps: {},
 
       getExerciseProgress: (moduleId, exerciseId) => {
         return get().exercises[getKey(moduleId, exerciseId)] ?? defaultProgress;
@@ -91,6 +97,40 @@ export const useProgressStore = create<ProgressStore>()(
         }).length;
 
         return { passed, total: mod.exercises.length };
+      },
+
+      getStepProgress: (moduleId) => {
+        const mod = modules.find((m) => m.id === moduleId);
+        if (!mod) return { completed: 0, total: 0 };
+
+        const completed = mod.steps.filter((step) => {
+          if (step.type === 'lesson') {
+            return get().lessonSteps[getKey(moduleId, step.id)] === true;
+          }
+          const progress = get().exercises[getKey(moduleId, step.id)];
+          return progress?.status === 'passed';
+        }).length;
+
+        return { completed, total: mod.steps.length };
+      },
+
+      isStepComplete: (moduleId, stepId) => {
+        // Check lesson steps first
+        if (get().lessonSteps[getKey(moduleId, stepId)] === true) return true;
+        // Check exercise steps
+        const progress = get().exercises[getKey(moduleId, stepId)];
+        return progress?.status === 'passed';
+      },
+
+      isLessonComplete: (moduleId, stepId) => {
+        return get().lessonSteps[getKey(moduleId, stepId)] === true;
+      },
+
+      markLessonComplete: (moduleId, stepId) => {
+        const key = getKey(moduleId, stepId);
+        set((state) => ({
+          lessonSteps: { ...state.lessonSteps, [key]: true },
+        }));
       },
 
       saveCode: (moduleId, exerciseId, code) => {

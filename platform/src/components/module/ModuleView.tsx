@@ -1,18 +1,26 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { getModule } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
-import { ExerciseChecklist } from '@/components/progress/ExerciseChecklist';
+import { StepTimeline } from './StepTimeline';
 
 export function ModuleView() {
   const { id } = useParams<{ id: string }>();
   const mod = id ? getModule(id) : undefined;
   const isUnlocked = useProgressStore((s) => id ? s.isModuleUnlocked(id) : false);
-  const { passed, total } = useProgressStore((s) => id ? s.getModuleProgress(id) : { passed: 0, total: 0 });
+  const { completed, total } = useProgressStore((s) => id ? s.getStepProgress(id) : { completed: 0, total: 0 });
+  const isStepComplete = useProgressStore((s) => s.isStepComplete);
 
   if (!mod) return <Navigate to="/" replace />;
   if (!isUnlocked) return <Navigate to="/" replace />;
 
-  const progressPct = total > 0 ? (passed / total) * 100 : 0;
+  const progressPct = total > 0 ? (completed / total) * 100 : 0;
+
+  // Find first incomplete step
+  const firstIncompleteIndex = mod.steps.findIndex(
+    (step) => !isStepComplete(mod.id, step.id)
+  );
+  const startStepIndex = firstIncompleteIndex === -1 ? 0 : firstIncompleteIndex;
+  const allComplete = firstIncompleteIndex === -1 && total > 0;
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
@@ -26,37 +34,52 @@ export function ModuleView() {
         <p className="text-gray-400">{mod.description}</p>
       </div>
 
-      <div className="flex items-center gap-4 mb-6">
+      {/* Progress + CTA */}
+      <div className="flex items-center gap-4 mb-8">
         <div className="flex-1">
           <div className="flex items-center justify-between text-sm mb-1">
             <span className="text-gray-400">Progress</span>
             <span className="text-gray-300">
-              {passed}/{total} exercises
+              {completed}/{total} steps
             </span>
           </div>
           <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-primary-500 rounded-full transition-all"
+              className={`h-full rounded-full transition-all ${allComplete ? 'bg-emerald-500' : 'bg-primary-500'}`}
               style={{ width: `${progressPct}%` }}
             />
           </div>
         </div>
-        {mod.guideFile && (
+        {!allComplete && mod.steps.length > 0 && (
           <Link
-            to={`/module/${mod.id}/lesson`}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm rounded-lg transition-colors flex-shrink-0"
+            to={`/module/${mod.id}/step/${startStepIndex}`}
+            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors flex-shrink-0"
           >
-            Read Lesson
+            {completed === 0 ? 'Start Learning' : 'Continue'}
           </Link>
+        )}
+        {allComplete && (
+          <span className="px-4 py-2 bg-emerald-600/20 text-emerald-400 text-sm font-medium rounded-lg flex-shrink-0">
+            Complete ✓
+          </span>
         )}
       </div>
 
-      <div className="border border-gray-800 rounded-xl overflow-hidden">
-        <div className="px-4 py-3 bg-gray-900/50 border-b border-gray-800">
-          <h2 className="text-sm font-semibold text-gray-300">Exercises</h2>
+      {/* Step timeline */}
+      {mod.steps.length > 0 ? (
+        <div className="border border-gray-800 rounded-xl overflow-hidden">
+          <div className="px-4 py-3 bg-gray-900/50 border-b border-gray-800">
+            <h2 className="text-sm font-semibold text-gray-300">Learning Path</h2>
+          </div>
+          <div className="p-4">
+            <StepTimeline module={mod} />
+          </div>
         </div>
-        <ExerciseChecklist module={mod} />
-      </div>
+      ) : (
+        <div className="text-center py-12 text-gray-500">
+          Coming soon — exercises for this module are not yet available.
+        </div>
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useUIStore } from '@/store/ui-store';
 export function Sidebar() {
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+  const getStepProgress = useProgressStore((s) => s.getStepProgress);
   const getModuleProgress = useProgressStore((s) => s.getModuleProgress);
   const isModuleUnlocked = useProgressStore((s) => s.isModuleUnlocked);
 
@@ -33,7 +34,12 @@ export function Sidebar() {
 
       <nav className="flex-1 overflow-y-auto py-2">
         {modules.map((mod) => {
-          const { passed, total } = getModuleProgress(mod.id);
+          // Use step progress if steps exist, otherwise fall back to exercise progress
+          const stepProgress = getStepProgress(mod.id);
+          const exProgress = getModuleProgress(mod.id);
+          const hasSteps = mod.steps.length > 0;
+          const passed = hasSteps ? stepProgress.completed : exProgress.passed;
+          const total = hasSteps ? stepProgress.total : exProgress.total;
           const unlocked = isModuleUnlocked(mod.id);
           const isComingSoon = mod.status === 'coming-soon';
           const progressPct = total > 0 ? (passed / total) * 100 : 0;
