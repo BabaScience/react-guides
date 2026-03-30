@@ -14,17 +14,15 @@ const components: Components = {
     const match = /language-(\w+)/.exec(className || '');
     const codeStr = String(children).replace(/\n$/, '');
 
-    // Check if it's an inline code (no language class and short content)
     const isInline = !className && !codeStr.includes('\n');
     if (isInline) {
       return (
-        <code className="bg-gray-800 text-primary-400 px-1.5 py-0.5 rounded text-sm" {...props}>
+        <code className="bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-sm" {...props}>
           {children}
         </code>
       );
     }
 
-    // Mermaid diagrams
     if (match?.[1] === 'mermaid') {
       return <MermaidDiagram chart={codeStr} />;
     }
@@ -37,7 +35,7 @@ const components: Components = {
   },
   pre({ children }) {
     return (
-      <pre className="bg-gray-900 border border-gray-800 rounded-lg overflow-x-auto p-4 my-4 text-sm">
+      <pre className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg overflow-x-auto p-4 my-4 text-sm">
         {children}
       </pre>
     );
@@ -45,7 +43,7 @@ const components: Components = {
   table({ children }) {
     return (
       <div className="overflow-x-auto my-4">
-        <table className="min-w-full divide-y divide-gray-700 border border-gray-800 rounded-lg overflow-hidden">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700 border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
           {children}
         </table>
       </div>
@@ -53,61 +51,61 @@ const components: Components = {
   },
   th({ children }) {
     return (
-      <th className="px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase bg-gray-800/50">
+      <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase bg-gray-50 dark:bg-gray-800/50">
         {children}
       </th>
     );
   },
   td({ children }) {
     return (
-      <td className="px-4 py-2 text-sm text-gray-300 border-t border-gray-800">
+      <td className="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 border-t border-gray-200 dark:border-gray-800">
         {children}
       </td>
     );
   },
   h1({ children }) {
-    return <h1 className="text-3xl font-bold text-white mt-8 mb-4">{children}</h1>;
+    return <h1 className="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{children}</h1>;
   },
   h2({ children }) {
-    return <h2 className="text-2xl font-bold text-white mt-8 mb-3 pb-2 border-b border-gray-800">{children}</h2>;
+    return <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-3 pb-2 border-b border-gray-200 dark:border-gray-800">{children}</h2>;
   },
   h3({ children }) {
-    return <h3 className="text-xl font-semibold text-gray-200 mt-6 mb-2">{children}</h3>;
+    return <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">{children}</h3>;
   },
   h4({ children }) {
-    return <h4 className="text-lg font-semibold text-gray-300 mt-4 mb-2">{children}</h4>;
+    return <h4 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mt-4 mb-2">{children}</h4>;
   },
   p({ children }) {
-    return <p className="text-gray-300 leading-relaxed mb-4">{children}</p>;
+    return <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">{children}</p>;
   },
   ul({ children }) {
-    return <ul className="list-disc list-inside space-y-1 mb-4 text-gray-300">{children}</ul>;
+    return <ul className="list-disc list-inside space-y-1 mb-4 text-gray-700 dark:text-gray-300">{children}</ul>;
   },
   ol({ children }) {
-    return <ol className="list-decimal list-inside space-y-1 mb-4 text-gray-300">{children}</ol>;
+    return <ol className="list-decimal list-inside space-y-1 mb-4 text-gray-700 dark:text-gray-300">{children}</ol>;
   },
   li({ children }) {
-    return <li className="text-gray-300">{children}</li>;
+    return <li className="text-gray-700 dark:text-gray-300">{children}</li>;
   },
   blockquote({ children }) {
     return (
-      <blockquote className="border-l-4 border-primary-500 pl-4 my-4 text-gray-400 italic">
+      <blockquote className="border-l-4 border-primary-500 pl-4 my-4 text-gray-500 dark:text-gray-400 italic">
         {children}
       </blockquote>
     );
   },
   a({ href, children }) {
     return (
-      <a href={href} className="text-primary-400 hover:text-primary-300 underline" target="_blank" rel="noopener noreferrer">
+      <a href={href} className="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 underline" target="_blank" rel="noopener noreferrer">
         {children}
       </a>
     );
   },
   hr() {
-    return <hr className="border-gray-800 my-8" />;
+    return <hr className="border-gray-200 dark:border-gray-800 my-8" />;
   },
   strong({ children }) {
-    return <strong className="font-semibold text-white">{children}</strong>;
+    return <strong className="font-semibold text-gray-900 dark:text-white">{children}</strong>;
   },
 };
 

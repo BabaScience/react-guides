@@ -123,17 +123,17 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   return (
     <div className="h-full flex flex-col">
       {/* Exercise top bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-900/50 border-b border-gray-800">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-2">
-          <span className="text-xs bg-primary-900/40 text-primary-400 px-2 py-0.5 rounded">
+          <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded">
             Exercise {exercise.number}
           </span>
-          <span className="text-sm text-gray-300">{exercise.name}</span>
+          <span className="text-sm text-gray-700 dark:text-gray-300">{exercise.name}</span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="px-2 py-1 text-xs text-gray-400 hover:text-white border border-gray-700 rounded transition-colors"
+            className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
           >
             Reset
           </button>
@@ -156,7 +156,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
           }
           right={
             <div className="h-full flex flex-col">
-              <div className="h-2/5 border-b border-gray-800 overflow-hidden">
+              <div className="h-2/5 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
                 <ExercisePanel exercise={exercise} moduleName={module.name} />
               </div>
               <div className="flex-1 min-h-0">

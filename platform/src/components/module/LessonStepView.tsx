@@ -72,7 +72,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
     <div className="max-w-4xl mx-auto px-6 py-8">
       {/* Step indicator */}
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-6">
-        <span className="bg-gray-800 px-2 py-1 rounded">📖 Lesson</span>
+        <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">📖 Lesson</span>
         <span>Step {stepIndex + 1} of {totalSteps}</span>
       </div>
 
@@ -80,10 +80,10 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
       {content && <MarkdownRenderer content={content} />}
 
       {/* Navigation */}
-      <div className="mt-8 pt-6 border-t border-gray-800 flex items-center justify-between">
+      <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
         <Link
           to={`/module/${module.id}`}
-          className="text-sm text-gray-400 hover:text-white transition-colors"
+          className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
           ← Back to module
         </Link>

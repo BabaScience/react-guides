@@ -10,20 +10,20 @@ export function Header() {
   const crumbs = buildBreadcrumbs(location.pathname);
 
   return (
-    <header className="h-12 flex-shrink-0 bg-gray-900/50 border-b border-gray-800 flex items-center justify-between px-4">
+    <header className="h-12 flex-shrink-0 bg-white/80 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between px-4">
       <nav className="flex items-center gap-1 text-sm">
         {crumbs.map((crumb, i) => (
           <span key={i} className="flex items-center gap-1">
-            {i > 0 && <span className="text-gray-600">/</span>}
+            {i > 0 && <span className="text-gray-300 dark:text-gray-600">/</span>}
             {crumb.href ? (
               <Link
                 to={crumb.href}
-                className="text-gray-400 hover:text-white transition-colors"
+                className="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
               >
                 {crumb.label}
               </Link>
             ) : (
-              <span className="text-gray-200">{crumb.label}</span>
+              <span className="text-gray-800 dark:text-gray-200">{crumb.label}</span>
             )}
           </span>
         ))}
@@ -31,7 +31,7 @@ export function Header() {
 
       <button
         onClick={toggleTheme}
-        className="p-2 rounded-lg hover:bg-gray-800 text-gray-400 hover:text-white transition-colors"
+        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
       >
         {theme === 'dark' ? '☀️' : '🌙'}
@@ -64,6 +64,12 @@ function buildBreadcrumbs(pathname: string): Crumb[] {
         const ex = mod.exercises.find((e) => e.id === parts[3]);
         if (ex) {
           crumbs.push({ label: `Exercise ${ex.number}: ${ex.name}` });
+        }
+      } else if (parts[2] === 'step' && parts[3]) {
+        const stepIdx = parseInt(parts[3]);
+        const step = mod.steps[stepIdx];
+        if (step) {
+          crumbs.push({ label: step.title });
         }
       }
     }

@@ -1,5 +1,6 @@
 import Editor, { type BeforeMount } from '@monaco-editor/react';
 import { useRef } from 'react';
+import { useUIStore } from '@/store/ui-store';
 
 interface CodeEditorProps {
   value: string;
@@ -41,6 +42,7 @@ declare global {
 `;
 
 export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
+  const theme = useUIStore((s) => s.theme);
   const monacoConfigured = useRef(false);
 
   const handleBeforeMount: BeforeMount = (monaco) => {
@@ -93,9 +95,9 @@ export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-900/50 border-b border-gray-800">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
         <span className="text-xs text-gray-500 font-mono">index.tsx</span>
-        <span className="text-xs text-gray-600">
+        <span className="text-xs text-gray-400 dark:text-gray-600">
           Ctrl+Enter to run tests
         </span>
       </div>
@@ -103,7 +105,7 @@ export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
         <Editor
           height="100%"
           language="typescript"
-          theme="vs-dark"
+          theme={theme === 'dark' ? 'vs-dark' : 'vs'}
           path="file:///index.tsx"
           value={value}
           onChange={(v) => onChange(v ?? '')}

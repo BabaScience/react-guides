@@ -63,14 +63,14 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
                 ? isExercise
                   ? 'bg-primary-600/20 border-primary-500 text-primary-400'
                   : 'bg-amber-600/20 border-amber-500 text-amber-400'
-                : 'bg-gray-800 border-gray-700 text-gray-500'
+                : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400 dark:text-gray-500'
           }`}
         >
           {complete ? '✓' : isExercise ? '⚡' : '📖'}
         </div>
         {!isLast && (
           <div
-            className={`w-0.5 h-8 ${complete ? 'bg-emerald-600/50' : 'bg-gray-800'}`}
+            className={`w-0.5 h-8 ${complete ? 'bg-emerald-600/50' : 'bg-gray-200 dark:bg-gray-800'}`}
           />
         )}
       </div>
@@ -81,9 +81,9 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
           <span
             className={`text-sm font-medium ${
               complete
-                ? 'text-gray-400'
+                ? 'text-gray-400 dark:text-gray-400'
                 : isCurrent
-                  ? 'text-white'
+                  ? 'text-gray-900 dark:text-white'
                   : 'text-gray-500'
             }`}
           >
@@ -92,8 +92,8 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
           <span
             className={`text-[10px] px-1.5 py-0.5 rounded ${
               isExercise
-                ? 'bg-primary-900/40 text-primary-400'
-                : 'bg-gray-800 text-gray-500'
+                ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400'
+                : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
             }`}
           >
             {isExercise ? 'Exercise' : 'Lesson'}
@@ -114,7 +114,7 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
     <Link
       to={`/module/${moduleId}/step/${index}`}
       className={`block pl-2 rounded-lg transition-colors ${
-        isCurrent ? 'bg-gray-800/30' : 'hover:bg-gray-800/20'
+        isCurrent ? 'bg-primary-50 dark:bg-gray-800/30' : 'hover:bg-gray-50 dark:hover:bg-gray-800/20'
       }`}
     >
       {content}

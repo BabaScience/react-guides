@@ -42,7 +42,7 @@ export function SplitPane({ left, right, defaultSplit = 55 }: SplitPaneProps) {
       </div>
       <div
         onMouseDown={onMouseDown}
-        className="w-1 bg-gray-800 hover:bg-primary-500 cursor-col-resize flex-shrink-0 transition-colors"
+        className="w-1 bg-gray-200 dark:bg-gray-800 hover:bg-primary-500 cursor-col-resize flex-shrink-0 transition-colors"
       />
       <div style={{ width: `${100 - split}%` }} className="min-w-0 flex flex-col">
         {right}

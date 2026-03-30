@@ -135,22 +135,22 @@ export function ExerciseView() {
   return (
     <div className="h-full flex flex-col">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-2 bg-gray-900/80 border-b border-gray-800">
+      <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-3">
           <Link
             to={`/module/${moduleId}`}
-            className="text-xs text-gray-500 hover:text-white transition-colors"
+            className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             ← Back
           </Link>
-          <span className="text-sm font-medium text-gray-200">
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
             Exercise {exercise.number}: {exercise.name}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="px-2 py-1 text-xs text-gray-400 hover:text-white border border-gray-700 rounded transition-colors"
+            className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
           >
             Reset Code
           </button>
@@ -170,7 +170,7 @@ export function ExerciseView() {
         <SplitPane
           left={
             <div className="h-full flex flex-col">
-              <div className="flex border-b border-gray-800">
+              <div className="flex border-b border-gray-200 dark:border-gray-800">
                 <TabButton label="Code" active />
               </div>
               <div className="flex-1 min-h-0">
@@ -185,7 +185,7 @@ export function ExerciseView() {
           right={
             <div className="h-full flex flex-col">
               <div className="flex-1 min-h-0 flex flex-col">
-                <div className="h-1/3 border-b border-gray-800 overflow-hidden">
+                <div className="h-1/3 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
                   <ExercisePanel exercise={exercise} moduleName={mod.name} />
                 </div>
                 <div className="flex-1 min-h-0">
@@ -244,8 +244,8 @@ function TabButton({ label, active }: { label: string; active?: boolean }) {
     <button
       className={`px-4 py-2 text-xs font-medium transition-colors ${
         active
-          ? 'text-white border-b-2 border-primary-500 bg-gray-900/50'
-          : 'text-gray-500 hover:text-gray-300'
+          ? 'text-gray-900 dark:text-white border-b-2 border-primary-500 bg-gray-50 dark:bg-gray-900/50'
+          : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
       }`}
     >
       {label}

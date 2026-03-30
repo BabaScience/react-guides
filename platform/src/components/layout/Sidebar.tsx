@@ -14,18 +14,18 @@ export function Sidebar() {
     <aside
       className={`${
         collapsed ? 'w-16' : 'w-64'
-      } flex-shrink-0 bg-gray-900 border-r border-gray-800 flex flex-col transition-all duration-200 overflow-hidden`}
+      } flex-shrink-0 bg-gray-50 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 flex flex-col transition-all duration-200 overflow-hidden`}
     >
-      <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+      <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
         {!collapsed && (
           <NavLink to="/" className="flex items-center gap-2">
             <span className="text-xl">⚛️</span>
-            <span className="font-bold text-white text-sm">React Mastery</span>
+            <span className="font-bold text-gray-900 dark:text-white text-sm">React Mastery</span>
           </NavLink>
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded hover:bg-gray-800 text-gray-400 hover:text-white"
+          className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? '→' : '←'}
@@ -34,7 +34,6 @@ export function Sidebar() {
 
       <nav className="flex-1 overflow-y-auto py-2">
         {modules.map((mod) => {
-          // Use step progress if steps exist, otherwise fall back to exercise progress
           const stepProgress = getStepProgress(mod.id);
           const exProgress = getModuleProgress(mod.id);
           const hasSteps = mod.steps.length > 0;
@@ -58,8 +57,8 @@ export function Sidebar() {
                     : !unlocked
                       ? 'opacity-50 cursor-not-allowed'
                       : isActive
-                        ? 'bg-primary-600/20 text-primary-400'
-                        : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                        ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400'
+                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                 }`
               }
             >
@@ -71,29 +70,29 @@ export function Sidebar() {
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-medium truncate">
-                      <span className="text-gray-500 mr-1 font-mono text-xs">
+                      <span className="text-gray-400 dark:text-gray-500 mr-1 font-mono text-xs">
                         {String(mod.number).padStart(2, '0')}
                       </span>
                       {mod.name}
                     </span>
                     {isComingSoon && (
-                      <span className="text-[10px] bg-gray-700 text-gray-400 px-1.5 py-0.5 rounded">
+                      <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded">
                         Soon
                       </span>
                     )}
                     {!isComingSoon && !unlocked && (
-                      <span className="text-gray-500">🔒</span>
+                      <span className="text-gray-400 dark:text-gray-500">🔒</span>
                     )}
                   </div>
                   {!isComingSoon && total > 0 && (
                     <div className="mt-1.5 flex items-center gap-2">
-                      <div className="flex-1 h-1 bg-gray-700 rounded-full overflow-hidden">
+                      <div className="flex-1 h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-emerald-500 rounded-full transition-all"
                           style={{ width: `${progressPct}%` }}
                         />
                       </div>
-                      <span className="text-[10px] text-gray-500">
+                      <span className="text-[10px] text-gray-400 dark:text-gray-500">
                         {passed}/{total}
                       </span>
                     </div>

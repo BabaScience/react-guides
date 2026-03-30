@@ -25,19 +25,19 @@ export function StepView() {
   return (
     <div className="h-full flex flex-col">
       {/* Step navigation bar */}
-      <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-gray-900/80 border-b border-gray-800">
+      <div className="flex-shrink-0 flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-3">
           <Link
             to={`/module/${mod.id}`}
-            className="text-xs text-gray-500 hover:text-white transition-colors"
+            className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
             ← Module
           </Link>
-          <span className="text-xs text-gray-600">|</span>
-          <span className="text-sm text-gray-300">
+          <span className="text-xs text-gray-300 dark:text-gray-600">|</span>
+          <span className="text-sm text-gray-600 dark:text-gray-300">
             Step {stepIndex + 1}/{mod.steps.length}
           </span>
-          <span className="text-sm font-medium text-gray-200">
+          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
             {step.title}
           </span>
         </div>
@@ -45,7 +45,7 @@ export function StepView() {
           {stepIndex > 0 && (
             <Link
               to={`/module/${mod.id}/step/${stepIndex - 1}`}
-              className="px-2 py-1 text-xs text-gray-400 hover:text-white border border-gray-700 rounded transition-colors"
+              className="px-2 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
             >
               ← Prev
             </Link>
@@ -53,7 +53,7 @@ export function StepView() {
           {stepIndex < mod.steps.length - 1 && (
             <Link
               to={`/module/${mod.id}/step/${stepIndex + 1}`}
-              className="px-2 py-1 text-xs text-gray-400 hover:text-white border border-gray-700 rounded transition-colors"
+              className="px-2 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
             >
               Next →
             </Link>
