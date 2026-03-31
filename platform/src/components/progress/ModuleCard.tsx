@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Module } from '@/types/exercise';
 import { useProgressStore } from '@/store/progress-store';
 
@@ -12,6 +13,7 @@ const moduleIcons: Record<number, string> = {
 };
 
 export function ModuleCard({ module }: ModuleCardProps) {
+  const { t } = useTranslation();
   const { completed, total } = useProgressStore((s) => s.getStepProgress(module.id));
   const unlocked = useProgressStore((s) => s.isModuleUnlocked(module.id));
   const isComingSoon = module.status === 'coming-soon';
@@ -42,17 +44,17 @@ export function ModuleCard({ module }: ModuleCardProps) {
 
       {isComingSoon ? (
         <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 px-2 py-1 rounded-md self-start">
-          Coming Soon
+          {t('module.comingSoon')}
         </span>
       ) : !unlocked ? (
-        <span className="text-xs text-gray-400 dark:text-gray-500">🔒 Complete previous module to unlock</span>
+        <span className="text-xs text-gray-400 dark:text-gray-500">{t('module.locked')}</span>
       ) : (
         <div>
           <div className="flex items-center justify-between text-xs mb-1">
             <span className="text-gray-500 dark:text-gray-400">
-              {completed}/{total} steps
+              {t('module.steps', { completed, total })}
             </span>
-            {isComplete && <span className="text-emerald-600 dark:text-emerald-400">Complete ✓</span>}
+            {isComplete && <span className="text-emerald-600 dark:text-emerald-400">{t('module.complete')}</span>}
           </div>
           <div className="h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
             <div

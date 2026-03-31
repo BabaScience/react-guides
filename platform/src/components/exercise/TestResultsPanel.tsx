@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { TestRunResult } from '@/types/exercise';
 
 interface TestResultsPanelProps {
@@ -7,16 +8,18 @@ interface TestResultsPanelProps {
 }
 
 export function TestResultsPanel({ results, running, onRun }: TestResultsPanelProps) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Test Results</h3>
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t('exercise.testResults')}</h3>
         <button
           onClick={onRun}
           disabled={running}
           className="px-3 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-md transition-colors"
         >
-          {running ? 'Running...' : 'Run Tests ▶'}
+          {running ? t('exercise.running') : t('exercise.runTests')}
         </button>
       </div>
 
@@ -24,7 +27,7 @@ export function TestResultsPanel({ results, running, onRun }: TestResultsPanelPr
         {!results && !running && (
           <div className="text-center py-8">
             <p className="text-gray-400 dark:text-gray-500 text-sm">
-              Click "Run Tests" or press <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">Ctrl+Enter</kbd> to run
+              {t('exercise.runPrompt')} <kbd className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 rounded text-xs">Ctrl+Enter</kbd> {t('exercise.toRun')}
             </p>
           </div>
         )}
@@ -32,7 +35,7 @@ export function TestResultsPanel({ results, running, onRun }: TestResultsPanelPr
         {running && (
           <div className="text-center py-8">
             <div className="inline-block w-6 h-6 border-2 border-primary-500 border-t-transparent rounded-full animate-spin" />
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3">Running tests...</p>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3">{t('exercise.runningTests')}</p>
           </div>
         )}
 
@@ -44,10 +47,10 @@ export function TestResultsPanel({ results, running, onRun }: TestResultsPanelPr
                   results.failed === 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'
                 }`}
               >
-                {results.failed === 0 ? 'All Passed!' : `${results.failed} Failed`}
+                {results.failed === 0 ? t('exercise.allPassed') : t('exercise.failed', { count: results.failed })}
               </div>
               <div className="text-sm text-gray-500">
-                {results.passed}/{results.total} passing
+                {t('exercise.passing', { passed: results.passed, total: results.total })}
               </div>
             </div>
 

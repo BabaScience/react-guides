@@ -1,5 +1,6 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getModule } from '@/data/modules';
 import { loadGuideContent } from '@/data/loader';
 import { MarkdownRenderer } from './MarkdownRenderer';
@@ -7,6 +8,7 @@ import { MarkdownRenderer } from './MarkdownRenderer';
 export function LessonView() {
   const { id } = useParams<{ id: string }>();
   const mod = id ? getModule(id) : undefined;
+  const { t } = useTranslation();
   const [content, setContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,7 +39,7 @@ export function LessonView() {
 
       {error && (
         <div className="max-w-4xl mx-auto text-center py-12">
-          <p className="text-red-400 mb-4">Failed to load lesson content</p>
+          <p className="text-red-400 mb-4">{t('errors.failedToLoadLesson')}</p>
           <p className="text-gray-500 text-sm">{error}</p>
         </div>
       )}
@@ -50,14 +52,14 @@ export function LessonView() {
               to={`/module/${mod.id}`}
               className="text-sm text-gray-400 hover:text-white transition-colors"
             >
-              ← Back to module
+              {t('nav.backToModule')}
             </Link>
             {mod.exercises.length > 0 && (
               <Link
                 to={`/module/${mod.id}/exercise/${mod.exercises[0].id}`}
                 className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm rounded-lg transition-colors"
               >
-                Start Exercises →
+                {t('nav.startExercises')}
               </Link>
             )}
           </div>

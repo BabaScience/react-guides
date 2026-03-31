@@ -4,7 +4,26 @@
  * serves files without Vite transformation.
  */
 
+import i18n from '@/i18n';
+
+/**
+ * Load guide content with language fallback.
+ * Tries: arguments/chapters/{lang}/filename → arguments/chapters/filename (English default)
+ */
 export async function loadGuideContent(guideFile: string): Promise<string> {
+  const lang = i18n.language;
+
+  // If not English, try the localized version first
+  if (lang !== 'en') {
+    const localizedPath = guideFile.replace(
+      'arguments/chapters/',
+      `arguments/chapters/${lang}/`
+    );
+    const res = await fetch(`/raw/${localizedPath}`);
+    if (res.ok) return res.text();
+    // Fall back to English
+  }
+
   const res = await fetch(`/raw/${guideFile}`);
   if (!res.ok) throw new Error(`Failed to load guide: ${guideFile}`);
   return res.text();

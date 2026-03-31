@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Module } from '@/types/exercise';
 import { loadExerciseStub, loadTestFile } from '@/data/loader';
 import { useProgressStore } from '@/store/progress-store';
@@ -43,6 +44,7 @@ function stripImports(code: string): string {
 }
 
 export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: ExerciseStepViewProps) {
+  const { t } = useTranslation();
   const exercise = module.exercises.find((e) => e.id === exerciseId);
   const progress = useProgressStore((s) => s.getExerciseProgress(module.id, exerciseId));
   const saveCode = useProgressStore((s) => s.saveCode);
@@ -107,7 +109,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
     saveCode(module.id, exerciseId, defaultCode);
   }, [defaultCode, module.id, exerciseId, saveCode]);
 
-  if (!exercise) return <div className="p-8 text-red-400">Exercise not found</div>;
+  if (!exercise) return <div className="p-8 text-red-400">{t('errors.exerciseNotFound')}</div>;
 
   const allPassed = results && results.failed === 0 && results.total > 0;
   const hasNext = stepIndex < totalSteps - 1;
@@ -115,7 +117,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-pulse text-gray-500">Loading exercise...</div>
+        <div className="animate-pulse text-gray-500">{t('exercise.loadingExercise')}</div>
       </div>
     );
   }
@@ -126,7 +128,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-2">
           <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded">
-            Exercise {exercise.number}
+            {t('exercise.title', { number: exercise.number })}
           </span>
           <span className="text-sm text-gray-700 dark:text-gray-300">{exercise.name}</span>
         </div>
@@ -135,14 +137,14 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
             onClick={handleReset}
             className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
           >
-            Reset
+            {t('exercise.reset')}
           </button>
           {allPassed && hasNext && (
             <Link
               to={`/module/${module.id}/step/${stepIndex + 1}`}
               className="px-3 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
             >
-              Next Step →
+              {t('nav.nextStep')}
             </Link>
           )}
         </div>
@@ -157,7 +159,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
           right={
             <div className="h-full flex flex-col">
               <div className="h-2/5 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
-                <ExercisePanel exercise={exercise} moduleName={module.name} />
+                <ExercisePanel exercise={exercise} moduleName={module.name} moduleId={module.id} />
               </div>
               <div className="flex-1 min-h-0">
                 <TestResultsPanel results={results} running={running} onRun={handleRunTests} />

@@ -1,10 +1,12 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { getModule } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
 import { LessonStepView } from './LessonStepView';
 import { ExerciseStepView } from './ExerciseStepView';
 
 export function StepView() {
+  const { t } = useTranslation();
   const { id: moduleId, stepIndex: stepIndexStr } = useParams<{
     id: string;
     stepIndex: string;
@@ -31,11 +33,11 @@ export function StepView() {
             to={`/module/${mod.id}`}
             className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            ← Module
+            {t('nav.module')}
           </Link>
           <span className="text-xs text-gray-300 dark:text-gray-600">|</span>
           <span className="text-sm text-gray-600 dark:text-gray-300">
-            Step {stepIndex + 1}/{mod.steps.length}
+            {t('step.stepProgress', { current: stepIndex + 1, total: mod.steps.length })}
           </span>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
             {step.title}
@@ -47,7 +49,7 @@ export function StepView() {
               to={`/module/${mod.id}/step/${stepIndex - 1}`}
               className="px-2 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
             >
-              ← Prev
+              {t('nav.prev')}
             </Link>
           )}
           {stepIndex < mod.steps.length - 1 && (
@@ -55,7 +57,7 @@ export function StepView() {
               to={`/module/${mod.id}/step/${stepIndex + 1}`}
               className="px-2 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
             >
-              Next →
+              {t('nav.next')}
             </Link>
           )}
         </div>

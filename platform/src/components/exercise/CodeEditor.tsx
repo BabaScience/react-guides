@@ -1,5 +1,6 @@
 import Editor, { type BeforeMount } from '@monaco-editor/react';
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useUIStore } from '@/store/ui-store';
 
 interface CodeEditorProps {
@@ -42,6 +43,7 @@ declare global {
 `;
 
 export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
+  const { t } = useTranslation();
   const theme = useUIStore((s) => s.theme);
   const monacoConfigured = useRef(false);
 
@@ -96,9 +98,9 @@ export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
   return (
     <div className="h-full flex flex-col">
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
-        <span className="text-xs text-gray-500 font-mono">index.tsx</span>
+        <span className="text-xs text-gray-500 font-mono">{t('exercise.fileName')}</span>
         <span className="text-xs text-gray-400 dark:text-gray-600">
-          Ctrl+Enter to run tests
+          {t('exercise.ctrlEnter')}
         </span>
       </div>
       <div className="flex-1">

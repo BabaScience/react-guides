@@ -1,0 +1,183 @@
+{
+  "app": {
+    "title": "React Mastery",
+    "subtitle": "Piattaforma di apprendimento interattiva per sviluppatori Angular in transizione verso React"
+  },
+  "nav": {
+    "home": "Home",
+    "back": "← Indietro",
+    "backToModule": "← Torna al modulo",
+    "module": "← Modulo",
+    "prev": "← Prec",
+    "next": "Succ →",
+    "continue": "Continua →",
+    "nextStep": "Passo Successivo →",
+    "nextExercise": "Esercizio Successivo →",
+    "completeModule": "Completa Modulo ✓",
+    "startLearning": "Inizia a Imparare",
+    "readLesson": "Leggi Lezione",
+    "startExercises": "Inizia Esercizi →"
+  },
+  "dashboard": {
+    "stepsCompleted": "{{completed}}/{{total}} passi completati",
+    "modules": "12 Moduli"
+  },
+  "module": {
+    "progress": "Progresso",
+    "steps": "{{completed}}/{{total}} passi",
+    "complete": "Completato ✓",
+    "comingSoon": "Prossimamente",
+    "locked": "🔒 Completa il modulo precedente per sbloccare",
+    "learningPath": "Percorso di Apprendimento",
+    "comingSoonMessage": "Prossimamente — gli esercizi per questo modulo non sono ancora disponibili.",
+    "soon": "Presto"
+  },
+  "step": {
+    "lesson": "Lezione",
+    "exercise": "Esercizio",
+    "stepOf": "Passo {{current}} di {{total}}",
+    "stepProgress": "Passo {{current}}/{{total}}"
+  },
+  "exercise": {
+    "title": "Esercizio {{number}}",
+    "reset": "Ripristina",
+    "resetCode": "Ripristina Codice",
+    "angularEquivalent": "Equivalente Angular",
+    "showHints": "Mostra Suggerimenti ({{count}})",
+    "hideHints": "Nascondi Suggerimenti",
+    "runTests": "Esegui Test ▶",
+    "running": "In esecuzione...",
+    "testResults": "Risultati Test",
+    "allPassed": "Tutti Superati!",
+    "failed": "{{count}} Falliti",
+    "passing": "{{passed}}/{{total}} superati",
+    "runPrompt": "Clicca \"Esegui Test\" o premi",
+    "toRun": "per eseguire",
+    "runningTests": "Esecuzione test...",
+    "sandboxError": "Errore Sandbox",
+    "loadingExercise": "Caricamento esercizio...",
+    "exerciseNotFound": "Esercizio non trovato",
+    "fileName": "index.tsx",
+    "ctrlEnter": "Ctrl+Invio per eseguire i test",
+    "code": "Codice"
+  },
+  "status": {
+    "passed": "Superato",
+    "inProgress": "In Corso",
+    "start": "Inizia",
+    "locked": "Bloccato",
+    "complete": "Completo"
+  },
+  "sidebar": {
+    "expand": "Espandi barra laterale",
+    "collapse": "Comprimi barra laterale"
+  },
+  "common": {
+    "copy": "Copia",
+    "code": "codice"
+  },
+  "errors": {
+    "failedToLoadLesson": "Impossibile caricare il contenuto della lezione",
+    "exerciseNotFound": "Esercizio non trovato"
+  },
+  "theme": {
+    "switchToLight": "Passa alla modalità chiara",
+    "switchToDark": "Passa alla modalità scura"
+  },
+  "exercises": {
+    "01-fundamentals": {
+      "greeting": {
+        "name": "Componente Saluto Base",
+        "description": "Crea un componente Greeting che mostra un messaggio personalizzato con una prop nome opzionale.",
+        "hints": ["Accetta una prop nome opzionale con valore predefinito \"Guest\"", "Renderizza: \"Hello, [nome]!\""],
+        "angularEquivalent": "@Component con @Input() nome e interpolazione nel template"
+      },
+      "user-card": {
+        "name": "Card Utente con Props Multiple",
+        "description": "Crea un componente UserCard che mostra nome, email ed età con props tipizzate.",
+        "hints": ["Definisci un'interfaccia TypeScript per le props", "Mostra tutti e tre i campi"],
+        "angularEquivalent": "Decoratori @Input() multipli con tipi"
+      },
+      "todo-list": {
+        "name": "Lista Todo (Array e Keys)",
+        "description": "Renderizza una lista di todo con gestione corretta delle chiavi e stato di completamento.",
+        "hints": ["Usa .map() per renderizzare ogni todo", "Ogni elemento della lista necessita di una prop key unica", "Mostra lo stato di completamento"],
+        "angularEquivalent": "*ngFor con trackBy"
+      },
+      "counter": {
+        "name": "Contatore con Stato",
+        "description": "Crea un contatore con pulsanti incrementa e decrementa usando l'hook useState.",
+        "hints": ["Usa useState per gestire il conteggio", "Crea gestori per incremento e decremento", "Mostra \"Count: [numero]\""],
+        "angularEquivalent": "Proprietà di classe con metodi"
+      },
+      "status-message": {
+        "name": "Rendering Condizionale",
+        "description": "Implementa il rendering condizionale per stati di caricamento, errore e dati.",
+        "hints": ["Priorità: caricamento > errore > dati", "Usa return anticipati o operatori ternari", "Gestisci tutti e tre gli stati"],
+        "angularEquivalent": "Direttiva *ngIf"
+      },
+      "action-button": {
+        "name": "Pulsante con Gestore Eventi",
+        "description": "Crea un pulsante che gestisce gli eventi click tramite una prop callback.",
+        "hints": ["Accetta le props text e onClick", "Collega onClick all'elemento button"],
+        "angularEquivalent": "Binding evento (click)=\"onClick()\""
+      },
+      "contact-form": {
+        "name": "Form con Input Controllati",
+        "description": "Crea un form con input controllati per nome ed email, gestendo l'invio.",
+        "hints": ["Usa useState per ogni campo", "Usa value + onChange per input controllati", "Gestisci l'invio del form con preventDefault"],
+        "angularEquivalent": "Binding bidirezionale [(ngModel)]=\"value\""
+      },
+      "filtered-list": {
+        "name": "Lista Filtrata con Stato",
+        "description": "Crea una lista ricercabile che filtra gli elementi in base a un termine di ricerca.",
+        "hints": ["Usa useState per il termine di ricerca", "Filtra gli elementi usando .filter() e .includes()", "Ricerca case-insensitive"],
+        "angularEquivalent": "*ngFor con filter pipe"
+      }
+    },
+    "02-hooks": {
+      "counter-functional": {
+        "name": "useState con Aggiornamenti Funzionali",
+        "description": "Crea un contatore usando aggiornamenti funzionali per prevenire stato obsoleto.",
+        "hints": ["Usa il pattern setCount(prev => prev + 1)", "Gli aggiornamenti funzionali garantiscono il valore corretto nel batching"],
+        "angularEquivalent": "Proprietà del componente con metodi"
+      },
+      "data-fetching": {
+        "name": "Recupero Dati con useEffect",
+        "description": "Recupera dati al montaggio con stati di caricamento, errore e successo.",
+        "hints": ["Usa useEffect con array di dipendenze vuoto per il montaggio", "Traccia gli stati caricamento/errore/dati", "Implementa cleanup per prevenire memory leak"],
+        "angularEquivalent": "Hook del ciclo di vita ngOnInit + ngOnDestroy"
+      },
+      "theme-context": {
+        "name": "Provider Tema con useContext",
+        "description": "Crea un contesto tema con provider, hook consumer e componente toggle.",
+        "hints": ["Usa createContext + useContext", "ThemeProvider gestisce lo stato e fornisce il valore", "L'hook useTheme lancia errore se usato fuori dal provider"],
+        "angularEquivalent": "Servizio iniettabile con dependency injection"
+      },
+      "focus-input": {
+        "name": "Gestione Focus con useRef",
+        "description": "Usa useRef per creare un riferimento a un input e un pulsante che lo mette a fuoco.",
+        "hints": ["Crea ref con useRef<HTMLInputElement>(null)", "Chiama ref.current?.focus() al click del pulsante"],
+        "angularEquivalent": "@ViewChild per accesso agli elementi DOM"
+      },
+      "filtered-list-memo": {
+        "name": "Dati Derivati con useMemo",
+        "description": "Usa useMemo per ottimizzare il filtraggio e l'ordinamento di una lista.",
+        "hints": ["Memoizza il risultato filtrato+ordinato", "Dipendenze: items, filter, sortBy", "Filtra per categoria, ordina per nome o valore"],
+        "angularEquivalent": "Proprietà calcolate o OnPush change detection"
+      },
+      "callback-parent": {
+        "name": "Riferimenti Stabili con useCallback",
+        "description": "Usa useCallback per prevenire re-render non necessari dei figli memoizzati.",
+        "hints": ["Avvolgi i gestori in useCallback", "Il figlio usa React.memo", "Verifica che il figlio non si re-renderizzi quando cambia stato non correlato"],
+        "angularEquivalent": "Arrow function nei template (ottimizzazione performance)"
+      },
+      "todo-reducer": {
+        "name": "Gestione Todo con useReducer",
+        "description": "Implementa un'app todo completa con useReducer per gestione stato complesso.",
+        "hints": ["Definisci azioni: ADD_TODO, TOGGLE_TODO, DELETE_TODO, CLEAR_COMPLETED", "Il reducer è una funzione pura", "Usa dispatch per inviare azioni"],
+        "angularEquivalent": "Store NgRx con reducer e azioni"
+      }
+    }
+  }
+}

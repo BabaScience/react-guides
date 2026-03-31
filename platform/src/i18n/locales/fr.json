@@ -1,0 +1,183 @@
+{
+  "app": {
+    "title": "React Mastery",
+    "subtitle": "Plateforme d'apprentissage interactive pour les développeurs Angular en transition vers React"
+  },
+  "nav": {
+    "home": "Accueil",
+    "back": "← Retour",
+    "backToModule": "← Retour au module",
+    "module": "← Module",
+    "prev": "← Préc",
+    "next": "Suiv →",
+    "continue": "Continuer →",
+    "nextStep": "Étape Suivante →",
+    "nextExercise": "Exercice Suivant →",
+    "completeModule": "Terminer le Module ✓",
+    "startLearning": "Commencer",
+    "readLesson": "Lire la Leçon",
+    "startExercises": "Commencer les Exercices →"
+  },
+  "dashboard": {
+    "stepsCompleted": "{{completed}}/{{total}} étapes complétées",
+    "modules": "12 Modules"
+  },
+  "module": {
+    "progress": "Progression",
+    "steps": "{{completed}}/{{total}} étapes",
+    "complete": "Terminé ✓",
+    "comingSoon": "Bientôt",
+    "locked": "🔒 Complétez le module précédent pour débloquer",
+    "learningPath": "Parcours d'Apprentissage",
+    "comingSoonMessage": "Bientôt disponible — les exercices de ce module ne sont pas encore disponibles.",
+    "soon": "Bientôt"
+  },
+  "step": {
+    "lesson": "Leçon",
+    "exercise": "Exercice",
+    "stepOf": "Étape {{current}} sur {{total}}",
+    "stepProgress": "Étape {{current}}/{{total}}"
+  },
+  "exercise": {
+    "title": "Exercice {{number}}",
+    "reset": "Réinitialiser",
+    "resetCode": "Réinitialiser le Code",
+    "angularEquivalent": "Équivalent Angular",
+    "showHints": "Afficher les Indices ({{count}})",
+    "hideHints": "Masquer les Indices",
+    "runTests": "Lancer les Tests ▶",
+    "running": "En cours...",
+    "testResults": "Résultats des Tests",
+    "allPassed": "Tous Réussis !",
+    "failed": "{{count}} Échoué(s)",
+    "passing": "{{passed}}/{{total}} réussis",
+    "runPrompt": "Cliquez sur \"Lancer les Tests\" ou appuyez sur",
+    "toRun": "pour exécuter",
+    "runningTests": "Exécution des tests...",
+    "sandboxError": "Erreur Sandbox",
+    "loadingExercise": "Chargement de l'exercice...",
+    "exerciseNotFound": "Exercice non trouvé",
+    "fileName": "index.tsx",
+    "ctrlEnter": "Ctrl+Entrée pour lancer les tests",
+    "code": "Code"
+  },
+  "status": {
+    "passed": "Réussi",
+    "inProgress": "En Cours",
+    "start": "Commencer",
+    "locked": "Verrouillé",
+    "complete": "Terminé"
+  },
+  "sidebar": {
+    "expand": "Développer la barre latérale",
+    "collapse": "Réduire la barre latérale"
+  },
+  "common": {
+    "copy": "Copier",
+    "code": "code"
+  },
+  "errors": {
+    "failedToLoadLesson": "Impossible de charger le contenu de la leçon",
+    "exerciseNotFound": "Exercice non trouvé"
+  },
+  "theme": {
+    "switchToLight": "Passer en mode clair",
+    "switchToDark": "Passer en mode sombre"
+  },
+  "exercises": {
+    "01-fundamentals": {
+      "greeting": {
+        "name": "Composant Salutation de Base",
+        "description": "Créez un composant Greeting qui affiche un message personnalisé avec une prop nom optionnelle.",
+        "hints": ["Acceptez une prop nom optionnelle avec la valeur par défaut \"Guest\"", "Affichez : \"Hello, [nom] !\""],
+        "angularEquivalent": "@Component avec @Input() nom et interpolation dans le template"
+      },
+      "user-card": {
+        "name": "Carte Utilisateur avec Props Multiples",
+        "description": "Créez un composant UserCard qui affiche le nom, l'email et l'âge avec des props typées.",
+        "hints": ["Définissez une interface TypeScript pour les props", "Affichez les trois champs"],
+        "angularEquivalent": "Décorateurs @Input() multiples avec types"
+      },
+      "todo-list": {
+        "name": "Liste Todo (Tableaux et Clés)",
+        "description": "Affichez une liste de tâches avec une gestion correcte des clés et l'état de complétion.",
+        "hints": ["Utilisez .map() pour afficher chaque todo", "Chaque élément de liste nécessite une prop key unique", "Affichez l'état de complétion"],
+        "angularEquivalent": "*ngFor avec trackBy"
+      },
+      "counter": {
+        "name": "Compteur avec État",
+        "description": "Créez un compteur avec des boutons incrémenter et décrémenter en utilisant le hook useState.",
+        "hints": ["Utilisez useState pour gérer le compteur", "Créez des gestionnaires d'incrémentation et de décrémentation", "Affichez \"Count: [nombre]\""],
+        "angularEquivalent": "Propriété de classe avec méthodes"
+      },
+      "status-message": {
+        "name": "Rendu Conditionnel",
+        "description": "Implémentez le rendu conditionnel pour les états de chargement, d'erreur et de données.",
+        "hints": ["Priorité : chargement > erreur > données", "Utilisez des retours anticipés ou des opérateurs ternaires", "Gérez les trois états"],
+        "angularEquivalent": "Directive *ngIf"
+      },
+      "action-button": {
+        "name": "Bouton avec Gestionnaire d'Événements",
+        "description": "Créez un bouton qui gère les événements de clic via une prop callback.",
+        "hints": ["Acceptez les props text et onClick", "Reliez onClick à l'élément button"],
+        "angularEquivalent": "Liaison événement (click)=\"onClick()\""
+      },
+      "contact-form": {
+        "name": "Formulaire avec Entrées Contrôlées",
+        "description": "Créez un formulaire avec des entrées contrôlées pour le nom et l'email, gérant la soumission.",
+        "hints": ["Utilisez useState pour chaque champ", "Utilisez value + onChange pour les entrées contrôlées", "Gérez la soumission du formulaire avec preventDefault"],
+        "angularEquivalent": "Liaison bidirectionnelle [(ngModel)]=\"value\""
+      },
+      "filtered-list": {
+        "name": "Liste Filtrée avec État",
+        "description": "Créez une liste filtrable qui filtre les éléments en fonction d'un terme de recherche.",
+        "hints": ["Utilisez useState pour le terme de recherche", "Filtrez les éléments avec .filter() et .includes()", "Recherche insensible à la casse"],
+        "angularEquivalent": "*ngFor avec filter pipe"
+      }
+    },
+    "02-hooks": {
+      "counter-functional": {
+        "name": "useState avec Mises à Jour Fonctionnelles",
+        "description": "Créez un compteur avec des mises à jour fonctionnelles pour éviter un état obsolète.",
+        "hints": ["Utilisez le pattern setCount(prev => prev + 1)", "Les mises à jour fonctionnelles garantissent la valeur correcte lors du batching"],
+        "angularEquivalent": "Propriétés du composant avec méthodes"
+      },
+      "data-fetching": {
+        "name": "Récupération de Données avec useEffect",
+        "description": "Récupérez des données au montage avec des états de chargement, d'erreur et de succès.",
+        "hints": ["Utilisez useEffect avec un tableau de dépendances vide pour le montage", "Suivez les états chargement/erreur/données", "Implémentez un cleanup pour éviter les fuites mémoire"],
+        "angularEquivalent": "Hooks de cycle de vie ngOnInit + ngOnDestroy"
+      },
+      "theme-context": {
+        "name": "Fournisseur de Thème avec useContext",
+        "description": "Créez un contexte de thème avec fournisseur, hook consommateur et composant de bascule.",
+        "hints": ["Utilisez createContext + useContext", "ThemeProvider gère l'état et fournit la valeur", "Le hook useTheme lance une erreur s'il est utilisé en dehors du fournisseur"],
+        "angularEquivalent": "Service injectable avec injection de dépendances"
+      },
+      "focus-input": {
+        "name": "Gestion du Focus avec useRef",
+        "description": "Utilisez useRef pour créer une référence à un input et un bouton qui le met en focus.",
+        "hints": ["Créez la ref avec useRef<HTMLInputElement>(null)", "Appelez ref.current?.focus() au clic du bouton"],
+        "angularEquivalent": "@ViewChild pour l'accès aux éléments DOM"
+      },
+      "filtered-list-memo": {
+        "name": "Données Dérivées avec useMemo",
+        "description": "Utilisez useMemo pour optimiser le filtrage et le tri d'une liste.",
+        "hints": ["Mémoïsez le résultat filtré+trié", "Dépendances : items, filter, sortBy", "Filtrez par catégorie, triez par nom ou valeur"],
+        "angularEquivalent": "Propriétés calculées ou OnPush change detection"
+      },
+      "callback-parent": {
+        "name": "Références Stables avec useCallback",
+        "description": "Utilisez useCallback pour éviter les re-rendus inutiles des enfants mémoïsés.",
+        "hints": ["Enveloppez les gestionnaires dans useCallback", "L'enfant utilise React.memo", "Vérifiez que l'enfant ne se re-rend pas quand un état non lié change"],
+        "angularEquivalent": "Fonctions fléchées dans les templates (optimisation des performances)"
+      },
+      "todo-reducer": {
+        "name": "Gestion Todo avec useReducer",
+        "description": "Implémentez une application todo complète avec useReducer pour une gestion d'état complexe.",
+        "hints": ["Définissez les actions : ADD_TODO, TOGGLE_TODO, DELETE_TODO, CLEAR_COMPLETED", "Le reducer est une fonction pure", "Utilisez dispatch pour envoyer des actions"],
+        "angularEquivalent": "Store NgRx avec reducers et actions"
+      }
+    }
+  }
+}

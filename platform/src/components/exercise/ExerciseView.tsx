@@ -1,5 +1,6 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getModule } from '@/data/modules';
 import { loadExerciseStub, loadTestFile } from '@/data/loader';
 import { useProgressStore } from '@/store/progress-store';
@@ -12,6 +13,7 @@ import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extrac
 import type { TestRunResult } from '@/types/exercise';
 
 export function ExerciseView() {
+  const { t } = useTranslation();
   const { id: moduleId, exId } = useParams<{ id: string; exId: string }>();
   const mod = moduleId ? getModule(moduleId) : undefined;
   const exercise = mod?.exercises.find((e) => e.id === exId);
@@ -127,7 +129,7 @@ export function ExerciseView() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="animate-pulse text-gray-500">Loading exercise...</div>
+        <div className="animate-pulse text-gray-500">{t('exercise.loadingExercise')}</div>
       </div>
     );
   }
@@ -141,10 +143,10 @@ export function ExerciseView() {
             to={`/module/${moduleId}`}
             className="text-xs text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
           >
-            ← Back
+            {t('nav.back')}
           </Link>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-            Exercise {exercise.number}: {exercise.name}
+            {t('exercise.title', { number: exercise.number })}: {exercise.name}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -152,14 +154,14 @@ export function ExerciseView() {
             onClick={handleReset}
             className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
           >
-            Reset Code
+            {t('exercise.resetCode')}
           </button>
           {allPassed && nextExercise && (
             <Link
               to={`/module/${moduleId}/exercise/${nextExercise.id}`}
               className="px-3 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
             >
-              Next Exercise →
+              {t('nav.nextExercise')}
             </Link>
           )}
         </div>
@@ -171,7 +173,7 @@ export function ExerciseView() {
           left={
             <div className="h-full flex flex-col">
               <div className="flex border-b border-gray-200 dark:border-gray-800">
-                <TabButton label="Code" active />
+                <TabButton label={t('exercise.code')} active />
               </div>
               <div className="flex-1 min-h-0">
                 <CodeEditor

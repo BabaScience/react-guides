@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Module } from '@/types/exercise';
 import { useProgressStore } from '@/store/progress-store';
 
@@ -7,6 +8,7 @@ interface ExerciseChecklistProps {
 }
 
 export function ExerciseChecklist({ module }: ExerciseChecklistProps) {
+  const { t } = useTranslation();
   const getExerciseStatus = useProgressStore((s) => s.getExerciseStatus);
 
   return (
@@ -52,7 +54,7 @@ export function ExerciseChecklist({ module }: ExerciseChecklistProps) {
                       : 'bg-gray-800/50 text-gray-600'
               }`}
             >
-              {status === 'passed' ? 'Passed' : status === 'in-progress' ? 'In Progress' : status === 'available' ? 'Start' : 'Locked'}
+              {status === 'passed' ? t('status.passed') : status === 'in-progress' ? t('status.inProgress') : status === 'available' ? t('status.start') : t('status.locked')}
             </span>
           </Link>
         );

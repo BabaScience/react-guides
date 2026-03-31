@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import i18n from '@/i18n';
 import type { LessonStep, Module } from '@/types/exercise';
 import { loadGuideContent } from '@/data/loader';
 import { extractSections, findSection } from '@/sandbox/section-extractor';
@@ -14,6 +16,7 @@ interface LessonStepViewProps {
 }
 
 export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonStepViewProps) {
+  const { t } = useTranslation();
   const [content, setContent] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +43,8 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
       })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
-  }, [module.guideFile, step.sectionHeading]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [module.guideFile, step.sectionHeading, i18n.language]);
 
   const handleContinue = () => {
     markLessonComplete(module.id, step.id);
@@ -72,8 +76,8 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
     <div className="max-w-4xl mx-auto px-6 py-8">
       {/* Step indicator */}
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-6">
-        <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">📖 Lesson</span>
-        <span>Step {stepIndex + 1} of {totalSteps}</span>
+        <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">📖 {t('step.lesson')}</span>
+        <span>{t('step.stepOf', { current: stepIndex + 1, total: totalSteps })}</span>
       </div>
 
       {/* Lesson content */}
@@ -94,7 +98,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
             onClick={handleContinue}
             className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            {isComplete ? 'Next Step →' : 'Continue →'}
+            {isComplete ? t('nav.nextStep') : t('nav.continue')}
           </Link>
         )}
 
@@ -104,7 +108,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
             onClick={handleContinue}
             className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors"
           >
-            Complete Module ✓
+            {t('nav.completeModule')}
           </Link>
         )}
       </div>

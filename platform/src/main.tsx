@@ -1,22 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { App } from './App';
+import './i18n';
 import './styles/globals.css';
 
-// Initialize dark mode from stored preference
+// Initialize theme from stored preference
 const stored = localStorage.getItem('react-mastery-ui');
+let theme = 'dark'; // default
 if (stored) {
   try {
     const { state } = JSON.parse(stored);
-    if (state?.theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    }
-  } catch {
-    document.documentElement.classList.add('dark');
-  }
-} else {
-  document.documentElement.classList.add('dark');
+    if (state?.theme) theme = state.theme;
+  } catch { /* use default */ }
 }
+document.documentElement.classList.toggle('dark', theme === 'dark');
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import type { Module, Step } from '@/types/exercise';
 import { useProgressStore } from '@/store/progress-store';
 
@@ -49,6 +50,7 @@ interface StepItemProps {
 }
 
 function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast }: StepItemProps) {
+  const { t } = useTranslation();
   const isExercise = step.type === 'exercise';
 
   const content = (
@@ -96,10 +98,10 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
             }`}
           >
-            {isExercise ? 'Exercise' : 'Lesson'}
+            {isExercise ? t('step.exercise') : t('step.lesson')}
           </span>
           {complete && (
-            <span className="text-[10px] text-emerald-500">Complete</span>
+            <span className="text-[10px] text-emerald-500">{t('status.complete')}</span>
           )}
         </div>
       </div>

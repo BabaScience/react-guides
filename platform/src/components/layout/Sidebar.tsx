@@ -1,9 +1,11 @@
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { modules } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
 import { useUIStore } from '@/store/ui-store';
 
 export function Sidebar() {
+  const { t } = useTranslation();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const getStepProgress = useProgressStore((s) => s.getStepProgress);
@@ -20,13 +22,13 @@ export function Sidebar() {
         {!collapsed && (
           <NavLink to="/" className="flex items-center gap-2">
             <span className="text-xl">⚛️</span>
-            <span className="font-bold text-gray-900 dark:text-white text-sm">React Mastery</span>
+            <span className="font-bold text-gray-900 dark:text-white text-sm">{t('app.title')}</span>
           </NavLink>
         )}
         <button
           onClick={toggleSidebar}
           className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
         >
           {collapsed ? '→' : '←'}
         </button>
@@ -77,7 +79,7 @@ export function Sidebar() {
                     </span>
                     {isComingSoon && (
                       <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded">
-                        Soon
+                        {t('module.soon')}
                       </span>
                     )}
                     {!isComingSoon && !unlocked && (
