@@ -13,6 +13,8 @@ export function SplitPane({ left, right, defaultSplit = 55 }: SplitPaneProps) {
 
   const onMouseDown = useCallback(() => {
     dragging.current = true;
+    const prevCursor = document.body.style.cursor;
+    const prevUserSelect = document.body.style.userSelect;
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
 
@@ -23,16 +25,21 @@ export function SplitPane({ left, right, defaultSplit = 55 }: SplitPaneProps) {
       setSplit(Math.min(80, Math.max(20, pct)));
     };
 
-    const onMouseUp = () => {
+    const stop = () => {
+      if (!dragging.current) return;
       dragging.current = false;
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.body.style.cursor = prevCursor;
+      document.body.style.userSelect = prevUserSelect;
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', stop);
+      window.removeEventListener('blur', stop);
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    // Listen on window so a mouseup outside the document (e.g. devtools) is caught,
+    // and on blur so styles reset if the window loses focus mid-drag.
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', stop);
+    window.addEventListener('blur', stop);
   }, []);
 
   return (

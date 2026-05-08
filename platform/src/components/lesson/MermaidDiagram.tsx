@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 interface MermaidDiagramProps {
   chart: string;
@@ -26,15 +26,15 @@ function getMermaid() {
   return mermaidReady;
 }
 
-let counter = 0;
-
 export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [error, setError] = useState<string | null>(null);
+  // Mermaid IDs must be valid CSS identifiers; useId() may contain colons.
+  const reactId = useId().replace(/[^a-zA-Z0-9_-]/g, '-');
 
   useEffect(() => {
     let cancelled = false;
-    const id = `mermaid-${++counter}`;
+    const id = `mermaid-${reactId}`;
 
     getMermaid().then(async (m) => {
       if (cancelled || !ref.current) return;
@@ -49,7 +49,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     });
 
     return () => { cancelled = true; };
-  }, [chart]);
+  }, [chart, reactId]);
 
   if (error) {
     return (

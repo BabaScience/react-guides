@@ -122,10 +122,9 @@ export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
             automaticLayout: true,
             padding: { top: 12 },
           }}
-          onMount={(editor) => {
+          onMount={(editor, monaco) => {
             editor.addCommand(
-              // eslint-disable-next-line no-bitwise
-              2048 | 3, // CtrlCmd + Enter
+              monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter,
               () => onRunTests?.()
             );
           }}

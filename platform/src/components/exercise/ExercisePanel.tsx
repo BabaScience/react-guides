@@ -17,9 +17,12 @@ export function ExercisePanel({ exercise, moduleName, moduleId }: ExercisePanelP
   const name = moduleId ? t(`${exKey}.name`, exercise.name) : exercise.name;
   const description = moduleId ? t(`${exKey}.description`, exercise.description) : exercise.description;
   const angularEq = moduleId ? t(`${exKey}.angularEquivalent`, exercise.angularEquivalent) : exercise.angularEquivalent;
-  const hints: string[] = moduleId
-    ? (t(`${exKey}.hints`, { returnObjects: true, defaultValue: exercise.hints }) as string[])
+  const rawHints = moduleId
+    ? t(`${exKey}.hints`, { returnObjects: true, defaultValue: exercise.hints })
     : exercise.hints;
+  // i18next returns the defaultValue if the key is missing, but a malformed
+  // translation can yield a non-array. Coerce to array of strings.
+  const hints: string[] = Array.isArray(rawHints) ? rawHints : exercise.hints ?? [];
 
   return (
     <div className="p-4 space-y-4 overflow-y-auto h-full bg-white dark:bg-gray-950">
@@ -50,7 +53,7 @@ export function ExercisePanel({ exercise, moduleName, moduleId }: ExercisePanelP
         >
           {showHints ? t('exercise.hideHints') : t('exercise.showHints', { count: hints.length })}
         </button>
-        {showHints && Array.isArray(hints) && (
+        {showHints && hints.length > 0 && (
           <ul className="mt-2 space-y-1">
             {hints.map((hint, i) => (
               <li key={i} className="text-sm text-gray-500 dark:text-gray-400 flex items-start gap-2">

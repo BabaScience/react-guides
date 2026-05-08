@@ -105,8 +105,8 @@ function buildBreadcrumbs(pathname: string, t: (key: string) => string): Crumb[]
           crumbs.push({ label: `${t('step.exercise')} ${ex.number}: ${ex.name}` });
         }
       } else if (parts[2] === 'step' && parts[3]) {
-        const stepIdx = parseInt(parts[3]);
-        const step = mod.steps[stepIdx];
+        const stepIdx = parseInt(parts[3], 10);
+        const step = Number.isInteger(stepIdx) ? mod.steps[stepIdx] : undefined;
         if (step) {
           crumbs.push({ label: step.title });
         }

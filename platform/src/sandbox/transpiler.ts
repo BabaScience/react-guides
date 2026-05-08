@@ -24,7 +24,10 @@ export async function transpile(code: string, filename = 'index.tsx'): Promise<s
     plugins: [],
   });
 
-  return result.code ?? '';
+  if (result.code == null) {
+    throw new Error(`Babel produced no output for ${filename}`);
+  }
+  return result.code;
 }
 
 /**

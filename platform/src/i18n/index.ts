@@ -4,12 +4,18 @@ import en from './locales/en.json';
 import it from './locales/it.json';
 import fr from './locales/fr.json';
 
+const SUPPORTED_LANGS = ['en', 'it', 'fr'] as const;
 const stored = localStorage.getItem('react-mastery-ui');
-let savedLang = 'en';
+let savedLang: (typeof SUPPORTED_LANGS)[number] = 'en';
 if (stored) {
   try {
     const { state } = JSON.parse(stored);
-    if (state?.language) savedLang = state.language;
+    if (
+      typeof state?.language === 'string' &&
+      (SUPPORTED_LANGS as readonly string[]).includes(state.language)
+    ) {
+      savedLang = state.language;
+    }
   } catch { /* ignore */ }
 }
 

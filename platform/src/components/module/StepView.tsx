@@ -13,10 +13,15 @@ export function StepView() {
   }>();
 
   const mod = moduleId ? getModule(moduleId) : undefined;
-  const stepIndex = stepIndexStr ? parseInt(stepIndexStr) : -1;
+  const stepIndex = stepIndexStr ? parseInt(stepIndexStr, 10) : -1;
   const isUnlocked = useProgressStore((s) => moduleId ? s.isModuleUnlocked(moduleId) : false);
 
-  if (!mod || stepIndex < 0 || stepIndex >= mod.steps.length) {
+  if (
+    !mod ||
+    !Number.isInteger(stepIndex) ||
+    stepIndex < 0 ||
+    stepIndex >= mod.steps.length
+  ) {
     return <Navigate to="/" replace />;
   }
   if (!isUnlocked) return <Navigate to="/" replace />;

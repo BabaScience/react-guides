@@ -8,6 +8,7 @@ import { SplitPane } from '@/components/exercise/SplitPane';
 import { CodeEditor } from '@/components/exercise/CodeEditor';
 import { ExercisePanel } from '@/components/exercise/ExercisePanel';
 import { TestResultsPanel } from '@/components/exercise/TestResultsPanel';
+import { LivePreview } from '@/components/exercise/LivePreview';
 import { runTestsInSandbox } from '@/sandbox/sandbox-iframe';
 import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
 import type { TestRunResult } from '@/types/exercise';
@@ -17,6 +18,29 @@ interface ExerciseStepViewProps {
   exerciseId: string;
   stepIndex: number;
   totalSteps: number;
+}
+
+function TabButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-4 py-2 text-xs font-medium transition-colors ${
+        active
+          ? 'text-gray-900 dark:text-white border-b-2 border-primary-500 bg-white dark:bg-gray-950'
+          : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+      }`}
+    >
+      {label}
+    </button>
+  );
 }
 
 function stripImports(code: string): string {
@@ -57,6 +81,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<TestRunResult | null>(progress?.testResults ?? null);
   const [running, setRunning] = useState(false);
+  const [leftTab, setLeftTab] = useState<'code' | 'preview'>('code');
 
   useEffect(() => {
     if (!exercise) return;
@@ -154,7 +179,28 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
       <div className="flex-1 min-h-0">
         <SplitPane
           left={
-            <CodeEditor value={code} onChange={handleCodeChange} onRunTests={handleRunTests} />
+            <div className="h-full flex flex-col">
+              <div className="flex border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
+                <TabButton
+                  label={t('exercise.code')}
+                  active={leftTab === 'code'}
+                  onClick={() => setLeftTab('code')}
+                />
+                <TabButton
+                  label={t('exercise.preview')}
+                  active={leftTab === 'preview'}
+                  onClick={() => setLeftTab('preview')}
+                />
+              </div>
+              <div className="flex-1 min-h-0">
+                <div className={leftTab === 'code' ? 'h-full' : 'hidden'}>
+                  <CodeEditor value={code} onChange={handleCodeChange} onRunTests={handleRunTests} />
+                </div>
+                {leftTab === 'preview' && (
+                  <LivePreview code={code} componentName={exercise.componentName} />
+                )}
+              </div>
+            </div>
           }
           right={
             <div className="h-full flex flex-col">

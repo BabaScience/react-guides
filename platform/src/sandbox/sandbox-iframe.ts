@@ -36,7 +36,11 @@ export async function runTestsInSandbox(
   const UserEvent = await lazyLoad('@testing-library/user-event', () => import('@testing-library/user-event'));
 
   // 3. Create test environment
-  const harness = createTestHarness();
+  const cleanup =
+    typeof (TestingLib as { cleanup?: () => void }).cleanup === 'function'
+      ? (TestingLib as { cleanup: () => void }).cleanup
+      : undefined;
+  const harness = createTestHarness({ afterEachTest: cleanup });
   const container = document.createElement('div');
   container.id = 'test-root';
   document.body.appendChild(container);
@@ -104,6 +108,11 @@ export async function runTestsInSandbox(
       cases: results,
     };
   } finally {
+    try {
+      cleanup?.();
+    } catch {
+      // ignore cleanup errors
+    }
     container.remove();
   }
 }

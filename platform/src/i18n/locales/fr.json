@@ -59,7 +59,15 @@
     "exerciseNotFound": "Exercice non trouvé",
     "fileName": "index.tsx",
     "ctrlEnter": "Ctrl+Entrée pour lancer les tests",
-    "code": "Code"
+    "code": "Code",
+    "preview": "Aperçu"
+  },
+  "preview": {
+    "compiling": "Compilation…",
+    "live": "Actif",
+    "error": "Erreur",
+    "notExported": "Le composant \"{{name}}\" n'est pas encore exporté",
+    "runtimeError": "Erreur de rendu"
   },
   "status": {
     "passed": "Réussi",

@@ -3,7 +3,12 @@
  * Implements: describe, it, expect, beforeEach, jest.fn, jest.spyOn, waitFor
  */
 
-export function createTestHarness() {
+export interface TestHarnessOptions {
+  /** Called after every test, success or failure. Use for testing-library cleanup. */
+  afterEachTest?: () => void | Promise<void>;
+}
+
+export function createTestHarness(options: TestHarnessOptions = {}) {
   const results: Array<{
     name: string;
     status: 'passed' | 'failed';
@@ -465,6 +470,16 @@ export function createTestHarness() {
             error: e instanceof Error ? e.message : String(e),
             duration: Math.round(performance.now() - start),
           });
+        } finally {
+          // Unmount components rendered by @testing-library/react so state
+          // does not leak into the next test in the suite.
+          if (options.afterEachTest) {
+            try {
+              await options.afterEachTest();
+            } catch {
+              // cleanup failures should not mask test results
+            }
+          }
         }
       }
     }

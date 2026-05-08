@@ -8,6 +8,7 @@ import { SplitPane } from './SplitPane';
 import { CodeEditor } from './CodeEditor';
 import { ExercisePanel } from './ExercisePanel';
 import { TestResultsPanel } from './TestResultsPanel';
+import { LivePreview } from './LivePreview';
 import { runTestsInSandbox } from '@/sandbox/sandbox-iframe';
 import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
 import type { TestRunResult } from '@/types/exercise';
@@ -37,6 +38,7 @@ export function ExerciseView() {
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<TestRunResult | null>(progress?.testResults ?? null);
   const [running, setRunning] = useState(false);
+  const [leftTab, setLeftTab] = useState<'code' | 'preview'>('code');
 
   useEffect(() => {
     if (!mod || !exercise) return;
@@ -173,14 +175,29 @@ export function ExerciseView() {
           left={
             <div className="h-full flex flex-col">
               <div className="flex border-b border-gray-200 dark:border-gray-800">
-                <TabButton label={t('exercise.code')} active />
+                <TabButton
+                  label={t('exercise.code')}
+                  active={leftTab === 'code'}
+                  onClick={() => setLeftTab('code')}
+                />
+                <TabButton
+                  label={t('exercise.preview')}
+                  active={leftTab === 'preview'}
+                  onClick={() => setLeftTab('preview')}
+                />
               </div>
               <div className="flex-1 min-h-0">
-                <CodeEditor
-                  value={code}
-                  onChange={handleCodeChange}
-                  onRunTests={handleRunTests}
-                />
+                {/* Keep CodeEditor mounted so editor state (cursor, undo) survives tab switches */}
+                <div className={leftTab === 'code' ? 'h-full' : 'hidden'}>
+                  <CodeEditor
+                    value={code}
+                    onChange={handleCodeChange}
+                    onRunTests={handleRunTests}
+                  />
+                </div>
+                {leftTab === 'preview' && (
+                  <LivePreview code={code} componentName={exercise.componentName} />
+                )}
               </div>
             </div>
           }
@@ -241,9 +258,18 @@ function stripImports(code: string): string {
   return result.join('\n');
 }
 
-function TabButton({ label, active }: { label: string; active?: boolean }) {
+function TabButton({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active?: boolean;
+  onClick?: () => void;
+}) {
   return (
     <button
+      onClick={onClick}
       className={`px-4 py-2 text-xs font-medium transition-colors ${
         active
           ? 'text-gray-900 dark:text-white border-b-2 border-primary-500 bg-gray-50 dark:bg-gray-900/50'
