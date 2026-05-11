@@ -42,7 +42,6 @@
     "title": "Exercice {{number}}",
     "reset": "Réinitialiser",
     "resetCode": "Réinitialiser le Code",
-    "angularEquivalent": "Équivalent Angular",
     "showHints": "Afficher les Indices ({{count}})",
     "hideHints": "Masquer les Indices",
     "runTests": "Lancer les Tests ▶",
@@ -69,7 +68,9 @@
     "live": "Actif",
     "error": "Erreur",
     "notExported": "Le composant \"{{name}}\" n'est pas encore exporté",
-    "runtimeError": "Erreur de rendu"
+    "runtimeError": "Erreur de rendu",
+    "props": "Props",
+    "reset": "Réinitialiser"
   },
   "status": {
     "passed": "Réussi",
@@ -192,94 +193,147 @@
       "greeting": {
         "name": "Composant Salutation de Base",
         "description": "Créez un composant Greeting qui affiche un message personnalisé avec une prop nom optionnelle.",
-        "hints": ["Acceptez une prop nom optionnelle avec la valeur par défaut \"Guest\"", "Affichez : \"Hello, [nom] !\""],
-        "angularEquivalent": "@Component avec @Input() nom et interpolation dans le template"
+        "hints": [
+          "Acceptez une prop `name` optionnelle avec la valeur par défaut \"Guest\"",
+          "Affichez le texte complet `Hello, [name]!` dans un seul élément",
+          "Les tests utilisent `getByText('Hello, Alice!')` — la chaîne exacte doit apparaître dans un élément"
+        ]
       },
       "user-card": {
         "name": "Carte Utilisateur avec Props Multiples",
         "description": "Créez un composant UserCard qui affiche le nom, l'email et l'âge avec des props typées.",
-        "hints": ["Définissez une interface TypeScript pour les props", "Affichez les trois champs"],
-        "angularEquivalent": "Décorateurs @Input() multiples avec types"
+        "hints": [
+          "Affichez `name`, `email` et `age` — **chacun dans son propre élément** (ex. trois `<span>` séparés)",
+          "L'âge doit inclure le préfixe `Age: ` — utilisez `Age: {age}`",
+          "Les tests utilisent `getByText('John Doe')`, qui exige que le texte entier de l'élément soit exactement `John Doe` (rien d'autre)"
+        ]
       },
       "todo-list": {
         "name": "Liste Todo (Tableaux et Clés)",
         "description": "Affichez une liste de tâches avec une gestion correcte des clés et l'état de complétion.",
-        "hints": ["Utilisez .map() pour afficher chaque todo", "Chaque élément de liste nécessite une prop key unique", "Affichez l'état de complétion"],
-        "angularEquivalent": "*ngFor avec trackBy"
+        "hints": [
+          "Affichez un `<ul>` — les tests utilisent `getByRole('list')` qui attend un `<ul>` (ou `<ol>`)",
+          "Affichez le `text` de chaque todo dans son propre `<li>` avec une prop `key` unique",
+          "Chaque todo a un booléen `completed` — React saute les booléens lors du rendu, mappez-le à une valeur visible (ex. `{completed ? '✓' : '⏳'}`)",
+          "Quand `todos` est vide, le `<ul>` doit avoir zéro enfant"
+        ]
       },
       "counter": {
         "name": "Compteur avec État",
         "description": "Créez un compteur avec des boutons incrémenter et décrémenter en utilisant le hook useState.",
-        "hints": ["Utilisez useState pour gérer le compteur", "Créez des gestionnaires d'incrémentation et de décrémentation", "Affichez \"Count: [nombre]\""],
-        "angularEquivalent": "Propriété de classe avec méthodes"
+        "hints": [
+          "Utilisez `useState<number>(0)` pour le compteur",
+          "Affichez le compteur comme `Count: {n}` — le préfixe `Count: ` est requis",
+          "Deux éléments `<button>` dont le **texte** contient `increment` et `decrement` (insensible à la casse)"
+        ]
       },
       "status-message": {
         "name": "Rendu Conditionnel",
         "description": "Implémentez le rendu conditionnel pour les états de chargement, d'erreur et de données.",
-        "hints": ["Priorité : chargement > erreur > données", "Utilisez des retours anticipés ou des opérateurs ternaires", "Gérez les trois états"],
-        "angularEquivalent": "Directive *ngIf"
+        "hints": [
+          "Priorité : `isLoading` > `error` > `data`. Retournez `null` si aucun n'est défini",
+          "État de chargement : affichez un élément dont le texte contient `loading` (ex. `Loading...`)",
+          "États error & data : affichez la valeur de la prop **sans texte autour**. Les tests font des matches exacts comme `getByText('Something went wrong')` — `<div>Error: {error}</div>` échouerait car le texte de l'élément devient 'Error: Something went wrong'"
+        ]
       },
       "action-button": {
         "name": "Bouton avec Gestionnaire d'Événements",
         "description": "Créez un bouton qui gère les événements de clic via une prop callback.",
-        "hints": ["Acceptez les props text et onClick", "Reliez onClick à l'élément button"],
-        "angularEquivalent": "Liaison événement (click)=\"onClick()\""
+        "hints": [
+          "Affichez un vrai élément `<button>` (les tests utilisent `getByRole('button')`)",
+          "Le texte du bouton doit être exactement la valeur de la prop `text`",
+          "Reliez `onClick={onClick}` directement sur le `<button>` — sans le wrapper"
+        ]
       },
       "contact-form": {
         "name": "Formulaire avec Entrées Contrôlées",
         "description": "Créez un formulaire avec des entrées contrôlées pour le nom et l'email, gérant la soumission.",
-        "hints": ["Utilisez useState pour chaque champ", "Utilisez value + onChange pour les entrées contrôlées", "Gérez la soumission du formulaire avec preventDefault"],
-        "angularEquivalent": "Liaison bidirectionnelle [(ngModel)]=\"value\""
+        "hints": [
+          "Utilisez `<label htmlFor=\"x\">` associé à `<input id=\"x\" />` pour que `getByLabelText` trouve chaque input par name/email",
+          "Ajoutez `role=\"form\"` à votre élément `<form>` — `getByRole('form')` en a besoin",
+          "Le bouton submit doit avoir un texte contenant `submit` (ex. `<button type=\"submit\">Submit</button>`)",
+          "À la soumission : appelez `e.preventDefault()`, puis `onSubmit({ name, email })`"
+        ]
       },
       "filtered-list": {
         "name": "Liste Filtrée avec État",
         "description": "Créez une liste filtrable qui filtre les éléments en fonction d'un terme de recherche.",
-        "hints": ["Utilisez useState pour le terme de recherche", "Filtrez les éléments avec .filter() et .includes()", "Recherche insensible à la casse"],
-        "angularEquivalent": "*ngFor avec filter pipe"
+        "hints": [
+          "L'input de recherche doit avoir un `placeholder` contenant `search` (ex. `placeholder=\"Search\"`)",
+          "Affichez le `name` de chaque élément filtré dans son propre élément pour que `getByText('Apple')` le trouve",
+          "Filtrez : gardez les éléments dont `name.toLowerCase()` inclut `searchTerm.toLowerCase()`"
+        ]
       }
     },
     "02-hooks": {
       "counter-functional": {
         "name": "useState avec Mises à Jour Fonctionnelles",
         "description": "Créez un compteur avec des mises à jour fonctionnelles pour éviter un état obsolète.",
-        "hints": ["Utilisez le pattern setCount(prev => prev + 1)", "Les mises à jour fonctionnelles garantissent la valeur correcte lors du batching"],
-        "angularEquivalent": "Propriétés du composant avec méthodes"
+        "hints": [
+          "Utilisez `useState<number>(0)` pour le compteur",
+          "Affichez le compteur comme `Count: {n}` — le préfixe `Count: ` est requis",
+          "Deux éléments `<button>` dont le **texte** contient `increment` et `decrement` (insensible à la casse)",
+          "Utilisez les **mises à jour fonctionnelles** pour que les clics rapides s'appliquent tous : `setCount(c => c + 1)`"
+        ]
       },
       "data-fetching": {
         "name": "Récupération de Données avec useEffect",
         "description": "Récupérez des données au montage avec des états de chargement, d'erreur et de succès.",
-        "hints": ["Utilisez useEffect avec un tableau de dépendances vide pour le montage", "Suivez les états chargement/erreur/données", "Implémentez un cleanup pour éviter les fuites mémoire"],
-        "angularEquivalent": "Hooks de cycle de vie ngOnInit + ngOnDestroy"
+        "hints": [
+          "Trois états : `loading`, `data`, `error` — gérés via `useState`. Priorité de rendu : loading → error → data",
+          "Loading : affichez un élément dont le texte contient `loading` (ex. `Loading...`)",
+          "Succès : affichez `name` et `email` de l'utilisateur — chacun dans son propre élément pour `getByText`",
+          "Erreur : affichez un élément dont le texte contient `error`",
+          "Cleanup : dans le return de `useEffect`, mettez un drapeau `cancelled = true` pour ne pas `setState` après unmount"
+        ]
       },
       "theme-context": {
         "name": "Fournisseur de Thème avec useContext",
         "description": "Créez un contexte de thème avec fournisseur, hook consommateur et composant de bascule.",
-        "hints": ["Utilisez createContext + useContext", "ThemeProvider gère l'état et fournit la valeur", "Le hook useTheme lance une erreur s'il est utilisé en dehors du fournisseur"],
-        "angularEquivalent": "Service injectable avec injection de dépendances"
+        "hints": [
+          "ThemeProvider : `useState<'light' | 'dark'>('light')`, exposez `{ theme, toggleTheme }` via `ThemeContext.Provider`",
+          "useTheme : lisez le context avec `useContext(ThemeContext)`. S'il est `undefined`, `throw new Error(...)` pour que l'usage hors provider échoue clairement",
+          "ThemeToggle : affichez le texte du thème courant (contenant `light` ou `dark`) et un bouton dont le texte contient `toggle`"
+        ]
       },
       "focus-input": {
         "name": "Gestion du Focus avec useRef",
         "description": "Utilisez useRef pour créer une référence à un input et un bouton qui le met en focus.",
-        "hints": ["Créez la ref avec useRef<HTMLInputElement>(null)", "Appelez ref.current?.focus() au clic du bouton"],
-        "angularEquivalent": "@ViewChild pour l'accès aux éléments DOM"
+        "hints": [
+          "Utilisez `useRef<HTMLInputElement>(null)` et attachez-le : `<input ref={inputRef} />`",
+          "Affichez un bouton dont le texte contient `focus` (ex. `Focus the input`) qui appelle `inputRef.current?.focus()`",
+          "Les tests utilisent `getByRole('textbox')` pour l'input et `getByText(/focus/i)` pour le bouton"
+        ]
       },
       "filtered-list-memo": {
         "name": "Données Dérivées avec useMemo",
         "description": "Utilisez useMemo pour optimiser le filtrage et le tri d'une liste.",
-        "hints": ["Mémoïsez le résultat filtré+trié", "Dépendances : items, filter, sortBy", "Filtrez par catégorie, triez par nom ou valeur"],
-        "angularEquivalent": "Propriétés calculées ou OnPush change detection"
+        "hints": [
+          "Acceptez trois props : `items: Item[]`, `filter: string`, `sortBy: 'name' | 'value'`",
+          "Filtrez : gardez les éléments où `item.category === filter`",
+          "Triez : par `name` utilisez `a.name.localeCompare(b.name)` ; par `value` utilisez `a.value - b.value`",
+          "Enveloppez filtre+tri dans `useMemo(() => …, [items, filter, sortBy])` et affichez chaque résultat comme `<li>` dans un `<ul>`"
+        ]
       },
       "callback-parent": {
         "name": "Références Stables avec useCallback",
         "description": "Utilisez useCallback pour éviter les re-rendus inutiles des enfants mémoïsés.",
-        "hints": ["Enveloppez les gestionnaires dans useCallback", "L'enfant utilise React.memo", "Vérifiez que l'enfant ne se re-rend pas quand un état non lié change"],
-        "angularEquivalent": "Fonctions fléchées dans les templates (optimisation des performances)"
+        "hints": [
+          "MemoizedChild : `React.memo` autour d'un composant qui rend `<button onClick={onClick}>{label}</button>`",
+          "ParentWithCallback : deux `useState` (ex. `count` et `otherState`). Deux boutons qui les modifient",
+          "Enveloppez le handler dans `useCallback(() => {…}, [])` pour que sa référence reste stable, et passez-le à `MemoizedChild` comme `onClick`"
+        ]
       },
       "todo-reducer": {
         "name": "Gestion Todo avec useReducer",
         "description": "Implémentez une application todo complète avec useReducer pour une gestion d'état complexe.",
-        "hints": ["Définissez les actions : ADD_TODO, TOGGLE_TODO, DELETE_TODO, CLEAR_COMPLETED", "Le reducer est une fonction pure", "Utilisez dispatch pour envoyer des actions"],
-        "angularEquivalent": "Store NgRx avec reducers et actions"
+        "hints": [
+          "Reducer : gérez quatre actions — `ADD_TODO`, `TOGGLE_TODO`, `DELETE_TODO`, `CLEAR_COMPLETED`. Retournez toujours un nouvel objet d'état",
+          "ADD_TODO : ajoutez `{ id: state.nextId, text: action.payload, completed: false }` et incrémentez `nextId`",
+          "TOGGLE_TODO : inversez `completed` sur le todo dont l'id correspond. DELETE_TODO : filtre cet id. CLEAR_COMPLETED : ne garde que `!completed`",
+          "TodoApp : l'input doit avoir un `placeholder` contenant `add todo` (ex. `placeholder=\"Add todo\"`). N'envoyez pas ADD_TODO si l'input est vide/whitespace",
+          "Chaque ligne todo a besoin d'un `<input type=\"checkbox\">` (pour `getByRole('checkbox')`) et d'un bouton avec texte contenant `delete`. Plus un bouton avec texte contenant `clear completed`"
+        ]
       }
     }
   }

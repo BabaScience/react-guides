@@ -16,7 +16,6 @@ export function ExercisePanel({ exercise, moduleName, moduleId }: ExercisePanelP
   const exKey = moduleId ? `exercises.${moduleId}.${exercise.id}` : '';
   const name = moduleId ? t(`${exKey}.name`, exercise.name) : exercise.name;
   const description = moduleId ? t(`${exKey}.description`, exercise.description) : exercise.description;
-  const angularEq = moduleId ? t(`${exKey}.angularEquivalent`, exercise.angularEquivalent) : exercise.angularEquivalent;
   const rawHints = moduleId
     ? t(`${exKey}.hints`, { returnObjects: true, defaultValue: exercise.hints })
     : exercise.hints;
@@ -36,15 +35,6 @@ export function ExercisePanel({ exercise, moduleName, moduleId }: ExercisePanelP
       <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
         {description}
       </p>
-
-      {angularEq && (
-        <div className="bg-orange-50 dark:bg-gray-900/50 border border-orange-200 dark:border-gray-800 rounded-lg p-3">
-          <div className="text-xs font-semibold text-orange-600 dark:text-orange-400 mb-1">
-            {t('exercise.angularEquivalent')}
-          </div>
-          <code className="text-xs text-gray-700 dark:text-gray-300">{angularEq}</code>
-        </div>
-      )}
 
       <div>
         <button

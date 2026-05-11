@@ -127,9 +127,13 @@ interface StatusMessageProps {
 export const StatusMessage: React.FC<StatusMessageProps> = ({ isLoading, error, data }) => {
   // TODO: Implement conditional rendering
   // Priority: loading > error > data
+  // Tests expect:
+  //   - loading: any element whose text contains "loading" (e.g. "Loading...")
+  //   - error: the error string rendered exactly as received (no prefix!)
+  //   - data:  the data string rendered exactly as received
   // Suggested forms:
   //   if (isLoading) return <div>Loading...</div>;
-  //   if (error)     return <div>Error: {error}</div>;
+  //   if (error)     return <div>{error}</div>;
   //   if (data)      return <div>{data}</div>;
   //   return null;
   return null;

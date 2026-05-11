@@ -42,7 +42,6 @@
     "title": "Exercise {{number}}",
     "reset": "Reset",
     "resetCode": "Reset Code",
-    "angularEquivalent": "Angular Equivalent",
     "showHints": "Show Hints ({{count}})",
     "hideHints": "Hide Hints",
     "runTests": "Run Tests ▶",
@@ -69,7 +68,9 @@
     "live": "Live",
     "error": "Error",
     "notExported": "Component \"{{name}}\" is not exported yet",
-    "runtimeError": "Render error"
+    "runtimeError": "Render error",
+    "props": "Props",
+    "reset": "Reset"
   },
   "status": {
     "passed": "Passed",
@@ -192,94 +193,147 @@
       "greeting": {
         "name": "Basic Greeting Component",
         "description": "Create a Greeting component that displays a personalized message with an optional name prop.",
-        "hints": ["Accept an optional name prop with default \"Guest\"", "Render: \"Hello, [name]!\""],
-        "angularEquivalent": "@Component with @Input() name and template interpolation"
+        "hints": [
+          "Accept an optional `name` prop with default \"Guest\"",
+          "Render the full text `Hello, [name]!` inside a single element",
+          "Tests use `getByText('Hello, Alice!')` — the exact string must appear in one element"
+        ]
       },
       "user-card": {
         "name": "User Card with Multiple Props",
         "description": "Create a UserCard component that displays name, email, and age with typed props.",
-        "hints": ["Define a TypeScript interface for props", "Display all three fields"],
-        "angularEquivalent": "Multiple @Input() decorators with types"
+        "hints": [
+          "Render `name`, `email`, and `age` — **each in its own element** (e.g. three separate `<span>`s)",
+          "The age must include the prefix `Age: ` — render `Age: {age}`",
+          "Tests use `getByText('John Doe')`, which requires the whole element's text to equal `John Doe` (nothing else)"
+        ]
       },
       "todo-list": {
         "name": "Todo List (Arrays & Keys)",
         "description": "Render a list of todos with proper key management and completion status.",
-        "hints": ["Use .map() to render each todo", "Each list item needs a unique key prop", "Show completion status"],
-        "angularEquivalent": "*ngFor with trackBy"
+        "hints": [
+          "Render a `<ul>` — tests use `getByRole('list')` which expects a `<ul>` (or `<ol>`)",
+          "Render each todo's `text` inside its own `<li>` with a unique `key` prop",
+          "Each todo has a `completed` boolean — React skips booleans when rendering, so map it to a visible value (e.g. `{completed ? '✓' : '⏳'}`)",
+          "When `todos` is empty, the `<ul>` must have zero children"
+        ]
       },
       "counter": {
         "name": "Counter with State",
         "description": "Create a counter with increment and decrement buttons using the useState hook.",
-        "hints": ["Use useState to manage count", "Create increment and decrement handlers", "Display \"Count: [number]\""],
-        "angularEquivalent": "Class property with methods"
+        "hints": [
+          "Use `useState<number>(0)` for the count",
+          "Display the count as `Count: {n}` — the `Count: ` prefix is required",
+          "Two `<button>` elements whose **text** contains `increment` and `decrement` (case-insensitive)"
+        ]
       },
       "status-message": {
         "name": "Conditional Rendering",
         "description": "Implement conditional rendering for loading, error, and data states.",
-        "hints": ["Priority: loading > error > data", "Use early returns or ternary operators", "Handle all three states"],
-        "angularEquivalent": "*ngIf directive"
+        "hints": [
+          "Priority: `isLoading` > `error` > `data`. Return `null` if none are set",
+          "Loading state: render any element whose text contains `loading` (e.g. `Loading...`)",
+          "Error & data states: render the prop's string value **with no extra text around it**. The tests do exact matches like `getByText('Something went wrong')` — `<div>Error: {error}</div>` would fail because the element's text becomes 'Error: Something went wrong'"
+        ]
       },
       "action-button": {
         "name": "Event Handler Button",
         "description": "Create a button that handles click events via a callback prop.",
-        "hints": ["Accept text and onClick props", "Wire onClick to the button element"],
-        "angularEquivalent": "(click)=\"onClick()\" event binding"
+        "hints": [
+          "Render a real `<button>` element (tests use `getByRole('button')`)",
+          "The button's text must be exactly the `text` prop value",
+          "Wire `onClick={onClick}` directly on the `<button>` — don't wrap it"
+        ]
       },
       "contact-form": {
         "name": "Controlled Input Form",
         "description": "Create a form with controlled inputs for name and email, handling submission.",
-        "hints": ["Use useState for each field", "Use value + onChange for controlled inputs", "Handle form submission with preventDefault"],
-        "angularEquivalent": "[(ngModel)]=\"value\" two-way binding"
+        "hints": [
+          "Use `<label htmlFor=\"x\">` paired with `<input id=\"x\" />` so `getByLabelText` finds each input by name/email",
+          "Add `role=\"form\"` to your `<form>` element — `getByRole('form')` needs it",
+          "Submit button must have text containing `submit` (e.g. `<button type=\"submit\">Submit</button>`)",
+          "On submit: call `e.preventDefault()`, then `onSubmit({ name, email })`"
+        ]
       },
       "filtered-list": {
         "name": "Filtered List with State",
         "description": "Create a searchable list that filters items based on a search term.",
-        "hints": ["Use useState for the search term", "Filter items using .filter() and .includes()", "Case-insensitive search"],
-        "angularEquivalent": "*ngFor with filter pipe"
+        "hints": [
+          "Search input must have a `placeholder` containing `search` (e.g. `placeholder=\"Search\"`)",
+          "Render each filtered item's `name` in its own element so `getByText('Apple')` can find it",
+          "Filter: keep items whose `name.toLowerCase()` includes `searchTerm.toLowerCase()`"
+        ]
       }
     },
     "02-hooks": {
       "counter-functional": {
         "name": "useState with Functional Updates",
         "description": "Create a counter using functional updates to prevent stale state.",
-        "hints": ["Use setCount(prev => prev + 1) pattern", "Functional updates ensure correct value when batching"],
-        "angularEquivalent": "Component properties with methods"
+        "hints": [
+          "Use `useState<number>(0)` for the count",
+          "Display the count as `Count: {n}` — the `Count: ` prefix is required",
+          "Two `<button>` elements whose **text** contains `increment` and `decrement` (case-insensitive)",
+          "Use **functional updates** so rapid clicks all apply: `setCount(c => c + 1)`"
+        ]
       },
       "data-fetching": {
         "name": "useEffect Data Fetching",
         "description": "Fetch data on mount with loading, error, and success states.",
-        "hints": ["Use useEffect with empty dependency array for mount", "Track loading/error/data states", "Implement cleanup to prevent memory leaks"],
-        "angularEquivalent": "ngOnInit + ngOnDestroy lifecycle hooks"
+        "hints": [
+          "Three states: `loading`, `data`, `error` — track with `useState`. Render-time priority: loading → error → data",
+          "Loading: render any element whose text contains `loading` (e.g. `Loading...`)",
+          "Success: render the fetched user's `name` and `email` — each in its own element so `getByText` finds them exactly",
+          "Error: render any element whose text contains `error`",
+          "Cleanup: in `useEffect` return, set a `cancelled = true` flag so you don't `setState` after unmount"
+        ]
       },
       "theme-context": {
         "name": "useContext Theme Provider",
         "description": "Create a theme context with provider, consumer hook, and toggle component.",
-        "hints": ["Use createContext + useContext", "ThemeProvider manages state and provides value", "useTheme hook throws if used outside provider"],
-        "angularEquivalent": "Injectable service with dependency injection"
+        "hints": [
+          "ThemeProvider: `useState<'light' | 'dark'>('light')`, expose `{ theme, toggleTheme }` via the `ThemeContext.Provider`",
+          "useTheme: read the context with `useContext(ThemeContext)`. If it's `undefined`, `throw new Error(...)` so misuse outside the provider crashes loudly",
+          "ThemeToggle: render the current theme text (containing `light` or `dark`) and a button whose text contains `toggle`"
+        ]
       },
       "focus-input": {
         "name": "useRef Focus Management",
         "description": "Use useRef to create an input reference and a button that focuses it.",
-        "hints": ["Create ref with useRef<HTMLInputElement>(null)", "Call ref.current?.focus() on button click"],
-        "angularEquivalent": "@ViewChild for DOM element access"
+        "hints": [
+          "Use `useRef<HTMLInputElement>(null)` and attach it: `<input ref={inputRef} />`",
+          "Render a button whose text contains `focus` (e.g. `Focus the input`) that calls `inputRef.current?.focus()`",
+          "Tests use `getByRole('textbox')` for the input and `getByText(/focus/i)` for the button"
+        ]
       },
       "filtered-list-memo": {
         "name": "useMemo Derived Data",
         "description": "Use useMemo to optimize filtering and sorting of a list.",
-        "hints": ["Memoize the filtered+sorted result", "Dependencies: items, filter, sortBy", "Filter by category, sort by name or value"],
-        "angularEquivalent": "Computed properties or OnPush change detection"
+        "hints": [
+          "Accept three props: `items: Item[]`, `filter: string`, `sortBy: 'name' | 'value'`",
+          "Filter: keep items where `item.category === filter`",
+          "Sort: by `name` use `a.name.localeCompare(b.name)`; by `value` use `a.value - b.value`",
+          "Wrap the filter+sort in `useMemo(() => …, [items, filter, sortBy])` and render each result as `<li>` inside a `<ul>`"
+        ]
       },
       "callback-parent": {
         "name": "useCallback Stable References",
         "description": "Use useCallback to prevent unnecessary re-renders of memoized children.",
-        "hints": ["Wrap handlers in useCallback", "Child uses React.memo", "Verify child does not re-render when unrelated state changes"],
-        "angularEquivalent": "Arrow functions in templates (performance optimization)"
+        "hints": [
+          "MemoizedChild: `React.memo` around a component that renders `<button onClick={onClick}>{label}</button>`",
+          "ParentWithCallback: two `useState` slices (e.g. `count` and `otherState`). Two buttons that toggle each",
+          "Wrap the handler in `useCallback(() => {…}, [])` so its reference stays stable across renders, and pass it to `MemoizedChild` as `onClick`"
+        ]
       },
       "todo-reducer": {
         "name": "useReducer Todo Management",
         "description": "Implement a full todo app with useReducer for complex state management.",
-        "hints": ["Define actions: ADD_TODO, TOGGLE_TODO, DELETE_TODO, CLEAR_COMPLETED", "Reducer is a pure function", "Use dispatch to send actions"],
-        "angularEquivalent": "NgRx store with reducers and actions"
+        "hints": [
+          "Reducer: handle four action types — `ADD_TODO`, `TOGGLE_TODO`, `DELETE_TODO`, `CLEAR_COMPLETED`. Always return a new state object",
+          "ADD_TODO: append `{ id: state.nextId, text: action.payload, completed: false }` and increment `nextId`",
+          "TOGGLE_TODO: flip `completed` on the todo whose id matches `action.payload`. DELETE_TODO: filter that id out. CLEAR_COMPLETED: keep only `!completed`",
+          "TodoApp: input must have a `placeholder` containing `add todo` (e.g. `placeholder=\"Add todo\"`). Don't dispatch ADD_TODO if the input is empty/whitespace",
+          "Each todo row needs a `<input type=\"checkbox\">` (for `getByRole('checkbox')`) and a button whose text contains `delete`. Plus one button whose text contains `clear completed`"
+        ]
       }
     }
   }

@@ -70,56 +70,63 @@ export async function extractExampleProps(
     }
   });
 
-  // 2. Find the first JSXElement whose opening tag matches componentName.
-  let target: AnyNode | null = null;
+  // 2. Find ALL JSXElements whose opening tag matches componentName, in
+  //    document order. We merge their props (first-occurrence wins for each
+  //    key) so a single test that uses `<Comp a={...} />` and another test
+  //    that uses `<Comp b={...} />` together expose BOTH `a` and `b` in the
+  //    Props panel.
+  const targets: AnyNode[] = [];
   walk(ast, (node) => {
-    if (target) return;
     if (node.type === 'JSXElement') {
       const name = node.openingElement?.name;
       if (name?.type === 'JSXIdentifier' && name.name === componentName) {
-        target = node;
+        targets.push(node);
       }
     }
   });
 
-  if (!target) return {};
+  if (targets.length === 0) return {};
 
-  // 3. Collect attributes, including spreads.
-  const attrs: AnyNode[] = (target as AnyNode).openingElement?.attributes || [];
+  // 3. Walk each instance's attributes (and spreads), merging into `out`.
+  //    `out[key]` is set only once — subsequent occurrences are ignored.
   const out: Record<string, unknown> = {};
-
-  for (const attr of attrs) {
-    if (attr.type === 'JSXSpreadAttribute') {
-      try {
-        const spread = evalNode(attr.argument, scope);
-        if (spread && typeof spread === 'object') {
-          Object.assign(out, spread as Record<string, unknown>);
+  for (const target of targets) {
+    const attrs: AnyNode[] = target.openingElement?.attributes || [];
+    for (const attr of attrs) {
+      if (attr.type === 'JSXSpreadAttribute') {
+        try {
+          const spread = evalNode(attr.argument, scope);
+          if (spread && typeof spread === 'object') {
+            for (const [k, v] of Object.entries(spread as Record<string, unknown>)) {
+              if (!(k in out)) out[k] = v;
+            }
+          }
+        } catch {
+          // skip
         }
-      } catch {
-        // skip
+        continue;
       }
-      continue;
-    }
-    if (attr.type !== 'JSXAttribute') continue;
-    const aname = attr.name?.name;
-    if (!aname) continue;
+      if (attr.type !== 'JSXAttribute') continue;
+      const aname = attr.name?.name;
+      if (!aname || aname in out) continue;
 
-    const value = attr.value;
-    if (value == null) {
-      // <Comp flag /> → flag === true
-      out[aname] = true;
-      continue;
-    }
-    if (value.type === 'StringLiteral') {
-      out[aname] = value.value;
-      continue;
-    }
-    if (value.type === 'JSXExpressionContainer') {
-      try {
-        out[aname] = evalNode(value.expression, scope);
-      } catch {
-        // For typed callback props, leave a no-op so the component doesn't crash.
-        if (/^on[A-Z]/.test(aname)) out[aname] = () => {};
+      const value = attr.value;
+      if (value == null) {
+        // <Comp flag /> → flag === true
+        out[aname] = true;
+        continue;
+      }
+      if (value.type === 'StringLiteral') {
+        out[aname] = value.value;
+        continue;
+      }
+      if (value.type === 'JSXExpressionContainer') {
+        try {
+          out[aname] = evalNode(value.expression, scope);
+        } catch {
+          // For typed callback props, leave a no-op so the component doesn't crash.
+          if (/^on[A-Z]/.test(aname)) out[aname] = () => {};
+        }
       }
     }
   }

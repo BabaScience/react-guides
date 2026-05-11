@@ -5,7 +5,6 @@ export interface Exercise {
   componentName: string;
   description: string;
   hints: string[];
-  angularEquivalent: string;
 }
 
 export interface LessonStep {

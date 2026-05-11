@@ -40,6 +40,10 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
   );
   const [error, setError] = useState<string | null>(null);
   const [exampleProps, setExampleProps] = useState<Record<string, unknown>>({});
+  // The props actually passed to the rendered component. Starts as a clone of
+  // exampleProps, but the user can edit them via the Props panel below.
+  const [currentProps, setCurrentProps] = useState<Record<string, unknown>>({});
+  const [showProps, setShowProps] = useState(true);
 
   // Pull example props from the test file so the preview renders something
   // meaningful even when the component requires props.
@@ -47,11 +51,20 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
     let cancelled = false;
     if (!testSource) {
       setExampleProps({});
+      setCurrentProps({});
       return;
     }
     extractExampleProps(testSource, componentName)
-      .then((p) => { if (!cancelled) setExampleProps(p); })
-      .catch(() => { if (!cancelled) setExampleProps({}); });
+      .then((p) => {
+        if (cancelled) return;
+        setExampleProps(p);
+        setCurrentProps(p);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setExampleProps({});
+        setCurrentProps({});
+      });
     return () => { cancelled = true; };
   }, [testSource, componentName]);
 
@@ -107,7 +120,7 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
         }
         rootRef.current.render(
           <PreviewErrorBoundary key={code} fallbackLabel={t('preview.runtimeError')}>
-            <Component {...(exampleProps as Record<string, unknown>)} />
+            <Component {...(currentProps as Record<string, unknown>)} />
           </PreviewErrorBoundary>
         );
         setError(null);
@@ -123,7 +136,7 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
       cancelled = true;
       window.clearTimeout(handle);
     };
-  }, [code, componentName, exampleProps, t]);
+  }, [code, componentName, currentProps, t]);
 
   // Unmount the React root when the LivePreview itself unmounts.
   useEffect(() => {
@@ -138,6 +151,9 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
     };
   }, []);
 
+  const propNames = Object.keys(currentProps);
+  const hasProps = propNames.length > 0;
+
   return (
     <div className="h-full flex flex-col bg-white dark:bg-gray-950">
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
@@ -150,6 +166,32 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
           {status === 'error' && t('preview.error')}
         </span>
       </div>
+
+      {hasProps && (
+        <div className="border-b border-gray-200 dark:border-gray-800">
+          <div className="flex items-center px-4 py-1.5 text-xs text-gray-500 dark:text-gray-400">
+            <button
+              onClick={() => setShowProps((s) => !s)}
+              className="flex-1 text-left font-medium uppercase tracking-wide hover:text-gray-900 dark:hover:text-white transition-colors"
+            >
+              {showProps ? '▾' : '▸'} {t('preview.props')} ({propNames.length})
+            </button>
+            <button
+              onClick={() => setCurrentProps(exampleProps)}
+              className="text-xs text-primary-600 dark:text-primary-400 hover:underline"
+            >
+              {t('preview.reset')}
+            </button>
+          </div>
+          {showProps && (
+            <PropsEditor
+              props={currentProps}
+              onChange={(name, value) => setCurrentProps((p) => ({ ...p, [name]: value }))}
+            />
+          )}
+        </div>
+      )}
+
       {error && (
         <div className="px-4 py-2 bg-red-50 dark:bg-red-950/30 border-b border-red-200 dark:border-red-900 text-xs text-red-700 dark:text-red-400 font-mono whitespace-pre-wrap">
           {error}
@@ -159,6 +201,163 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
         ref={containerRef}
         className="flex-1 overflow-auto p-4 text-gray-900 dark:text-gray-100"
       />
+    </div>
+  );
+}
+
+// --- PropsEditor -----------------------------------------------------------
+
+/**
+ * Editable controls for the live preview's props. Picks a control based on the
+ * value's runtime type:
+ *   string  → <input type="text">
+ *   number  → <input type="number">
+ *   boolean → checkbox
+ *   function → read-only "ƒ (stub)" label
+ *   array/object → JSON <textarea>
+ */
+function PropsEditor({
+  props,
+  onChange,
+}: {
+  props: Record<string, unknown>;
+  onChange: (name: string, value: unknown) => void;
+}) {
+  return (
+    <div className="px-4 py-2 space-y-1.5 bg-gray-50 dark:bg-gray-900/30 max-h-56 overflow-y-auto">
+      {Object.entries(props).map(([name, value]) => (
+        <PropControl
+          key={name}
+          name={name}
+          value={value}
+          onChange={(v) => onChange(name, v)}
+        />
+      ))}
+    </div>
+  );
+}
+
+function PropControl({
+  name,
+  value,
+  onChange,
+}: {
+  name: string;
+  value: unknown;
+  onChange: (next: unknown) => void;
+}) {
+  const labelClass = 'w-24 shrink-0 text-xs font-mono text-gray-600 dark:text-gray-400';
+  const inputBase =
+    'flex-1 min-w-0 text-xs font-mono px-2 py-1 rounded border bg-white dark:bg-gray-950 ' +
+    'border-gray-300 dark:border-gray-700 text-gray-900 dark:text-gray-100 ' +
+    'focus:outline-none focus:ring-1 focus:ring-primary-500';
+
+  if (typeof value === 'string') {
+    return (
+      <div className="flex items-center gap-2">
+        <label className={labelClass}>{name}</label>
+        <input
+          className={inputBase}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </div>
+    );
+  }
+  if (typeof value === 'number') {
+    return (
+      <div className="flex items-center gap-2">
+        <label className={labelClass}>{name}</label>
+        <input
+          type="number"
+          className={inputBase}
+          value={Number.isFinite(value) ? value : ''}
+          onChange={(e) => {
+            const n = e.target.value === '' ? 0 : Number(e.target.value);
+            onChange(Number.isNaN(n) ? value : n);
+          }}
+        />
+      </div>
+    );
+  }
+  if (typeof value === 'boolean') {
+    return (
+      <label className="flex items-center gap-2 cursor-pointer">
+        <span className={labelClass}>{name}</span>
+        <input
+          type="checkbox"
+          checked={value}
+          onChange={(e) => onChange(e.target.checked)}
+          className="accent-primary-500"
+        />
+        <span className="text-xs font-mono text-gray-500">{String(value)}</span>
+      </label>
+    );
+  }
+  if (typeof value === 'function') {
+    return (
+      <div className="flex items-center gap-2">
+        <label className={labelClass}>{name}</label>
+        <span className="text-xs font-mono text-gray-400 italic">ƒ (stub)</span>
+      </div>
+    );
+  }
+  // arrays + objects → JSON textarea
+  return <JsonControl name={name} value={value} onChange={onChange} />;
+}
+
+function JsonControl({
+  name,
+  value,
+  onChange,
+}: {
+  name: string;
+  value: unknown;
+  onChange: (next: unknown) => void;
+}) {
+  const [draft, setDraft] = useState(() => JSON.stringify(value, null, 2));
+  const [err, setErr] = useState<string | null>(null);
+
+  // Re-sync the textarea when the parent value changes (e.g. on Reset).
+  useEffect(() => {
+    setDraft(JSON.stringify(value, null, 2));
+    setErr(null);
+  }, [value]);
+
+  return (
+    <div className="flex items-start gap-2">
+      <label className="w-24 shrink-0 text-xs font-mono text-gray-600 dark:text-gray-400 pt-1">
+        {name}
+      </label>
+      <div className="flex-1 min-w-0">
+        <textarea
+          className={
+            'w-full text-xs font-mono px-2 py-1 rounded border bg-white dark:bg-gray-950 ' +
+            'text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-1 focus:ring-primary-500 ' +
+            (err
+              ? 'border-amber-400 dark:border-amber-700'
+              : 'border-gray-300 dark:border-gray-700')
+          }
+          rows={Math.min(8, draft.split('\n').length)}
+          value={draft}
+          onChange={(e) => {
+            const next = e.target.value;
+            setDraft(next);
+            try {
+              const parsed = JSON.parse(next);
+              setErr(null);
+              onChange(parsed);
+            } catch (parseErr) {
+              setErr(parseErr instanceof Error ? parseErr.message : String(parseErr));
+            }
+          }}
+        />
+        {err && (
+          <div className="text-[10px] text-amber-700 dark:text-amber-400 mt-0.5 font-mono">
+            {err}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
