@@ -122,12 +122,12 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
       setResults({
         timestamp: Date.now(),
         passed: 0, failed: 1, total: 1,
-        cases: [{ name: 'Sandbox Error', status: 'failed', error: String(e), duration: 0 }],
+        cases: [{ name: t('exercise.sandboxError'), status: 'failed', error: String(e), duration: 0 }],
       });
     } finally {
       setRunning(false);
     }
-  }, [code, fullFile, testFileContent, exercise, module.id, exerciseId, running, saveTestResults]);
+  }, [code, fullFile, testFileContent, exercise, module.id, exerciseId, running, saveTestResults, t]);
 
   const handleReset = useCallback(() => {
     setCode(defaultCode);

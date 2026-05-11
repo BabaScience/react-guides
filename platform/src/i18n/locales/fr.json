@@ -50,6 +50,8 @@
     "testResults": "Résultats des Tests",
     "allPassed": "Tous Réussis !",
     "failed": "{{count}} Échoué(s)",
+    "notYet": "{{count}} pas encore réussi(s)",
+    "didNotPass": "Ce test n'est pas encore passé",
     "passing": "{{passed}}/{{total}} réussis",
     "runPrompt": "Cliquez sur \"Lancer les Tests\" ou appuyez sur",
     "toRun": "pour exécuter",
@@ -86,11 +88,104 @@
   },
   "errors": {
     "failedToLoadLesson": "Impossible de charger le contenu de la leçon",
-    "exerciseNotFound": "Exercice non trouvé"
+    "exerciseNotFound": "Exercice non trouvé",
+    "noGuideFile": "Aucun fichier de guide pour ce module",
+    "sectionNotFound": "Section \"{{section}}\" introuvable dans le guide"
   },
   "theme": {
     "switchToLight": "Passer en mode clair",
     "switchToDark": "Passer en mode sombre"
+  },
+  "modules": {
+    "01-fundamentals": {
+      "name": "Fondamentaux de React",
+      "description": "JSX, composants, props, état, événements et rendu conditionnel"
+    },
+    "02-hooks": {
+      "name": "Hooks React en Profondeur",
+      "description": "useState, useEffect, useContext, useRef, useMemo, useCallback, useReducer"
+    },
+    "03-component-patterns": {
+      "name": "Patterns de Composants et Bonnes Pratiques",
+      "description": "Composition, HOC, render props, composants composés"
+    },
+    "04-styling": {
+      "name": "Style avec React",
+      "description": "CSS Modules, styled-components, Tailwind, CSS-in-JS"
+    },
+    "05-routing": {
+      "name": "Routage",
+      "description": "React Router, routage dynamique, routes protégées, navigation"
+    },
+    "06-state-management": {
+      "name": "Gestion d'État",
+      "description": "Context API, Redux, Zustand, Jotai, patterns d'état"
+    },
+    "07-data-fetching": {
+      "name": "Récupération de Données",
+      "description": "Fetch API, Axios, React Query, SWR, stratégies de cache"
+    },
+    "08-forms": {
+      "name": "Formulaires et Validation",
+      "description": "React Hook Form, validation Yup et Zod, contrôlés vs non contrôlés"
+    },
+    "09-performance": {
+      "name": "Optimisation des Performances",
+      "description": "React.memo, useMemo, useCallback, code splitting, profilage"
+    },
+    "10-testing": {
+      "name": "Tests",
+      "description": "Jest, React Testing Library, stratégies de tests unitaires et d'intégration"
+    },
+    "11-typescript": {
+      "name": "TypeScript avec React",
+      "description": "Types avancés, génériques, composants type-safe, types utilitaires"
+    },
+    "12-advanced-patterns": {
+      "name": "Patterns Avancés",
+      "description": "Portals, error boundaries, suspense, fonctionnalités concurrentes"
+    }
+  },
+  "steps": {
+    "01-fundamentals": {
+      "understanding-react": "Comprendre React",
+      "setup-environment": "Configurer un Environnement de Développement",
+      "jsx-syntax": "Syntaxe JSX",
+      "components": "Composants : Blocs de Construction",
+      "props": "Props : Passer les Données",
+      "greeting": "Exercice : Composant Salutation",
+      "user-card": "Exercice : User Card",
+      "lists-keys": "Listes et Clés",
+      "todo-list": "Exercice : Liste Todo",
+      "state-usestate": "Gestion de l'État avec useState",
+      "counter": "Exercice : Compteur avec État",
+      "conditional-rendering": "Rendu Conditionnel",
+      "status-message": "Exercice : StatusMessage",
+      "event-handling": "Gestion des Événements",
+      "action-button": "Exercice : ActionButton",
+      "forms-controlled": "Formulaires et Composants Contrôlés",
+      "contact-form": "Exercice : ContactForm",
+      "filtered-list": "Exercice : FilteredList"
+    },
+    "02-hooks": {
+      "understanding-hooks": "Comprendre les Hooks",
+      "usestate": "useState : Fondamentaux de l'État",
+      "counter-functional": "Exercice : Compteur useState",
+      "useeffect": "useEffect : Effets de Bord",
+      "data-fetching": "Exercice : Récupération de Données",
+      "usecontext": "useContext : État Global",
+      "theme-context": "Exercice : Context de Thème",
+      "useref": "useRef : DOM et Persistance",
+      "focus-input": "Exercice : Focus Input",
+      "usememo": "useMemo : Mémoïsation",
+      "filtered-list-memo": "Exercice : Liste Filtrée (useMemo)",
+      "usecallback": "useCallback : Mémoïsation de Fonctions",
+      "callback-parent": "Exercice : Callbacks Stables",
+      "usereducer": "useReducer : État Complexe",
+      "todo-reducer": "Exercice : App Todo (useReducer)",
+      "custom-hooks": "Hooks Personnalisés",
+      "advanced-patterns": "Patterns Avancés"
+    }
   },
   "exercises": {
     "01-fundamentals": {

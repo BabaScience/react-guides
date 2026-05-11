@@ -6,6 +6,18 @@
 
 ## 1. Understanding React: What It Is and Why It's Used
 
+### How React Updates the Screen
+
+```mermaid
+graph LR
+    JSX[Your JSX] --> VDOM[Virtual DOM]
+    VDOM --> Diff[Diff against previous]
+    Diff --> Patch[Minimal DOM patch]
+    Patch --> Browser[Browser repaints]
+```
+
+Instead of touching the real DOM directly (the way you'd `document.querySelector` in vanilla JS, or rely on Angular's change detection), React builds an in-memory tree from your JSX, diffs it against the previous tree, and only writes the difference to the browser. This is what "declarative UI" means in practice.
+
 ### What is React?
 
 React is a **JavaScript library** (not a framework like Angular) for building user interfaces, created by Facebook in 2013. It focuses on the **view layer** of your application.
@@ -41,6 +53,18 @@ React is a **JavaScript library** (not a framework like Angular) for building us
 ---
 
 ## 2. Setting Up a React Development Environment
+
+### The Modern React Build Pipeline
+
+```mermaid
+graph LR
+    Files["Your .tsx files"] --> Vite[Vite dev server]
+    Vite -->|ESM on the fly| Browser[Browser]
+    Vite -.->|HMR| Browser
+    Files -.->|on save| Vite
+```
+
+Vite serves your source as native ES modules during development and patches the browser on every save (Hot Module Replacement). For production it switches to a bundler (esbuild/Rollup) to produce a minified, tree-shaken artifact.
 
 ### Option 1: Create React App (CRA) - Traditional Approach
 
@@ -94,6 +118,18 @@ package.json                package.json
 ---
 
 ## 3. JSX Syntax: The React Template Language
+
+### From JSX to JavaScript
+
+```mermaid
+graph LR
+    JSX["&lt;Greeting name='Mario' /&gt;"] --> Babel[Babel / Vite]
+    Babel --> Call["React.createElement(Greeting, &#123; name: 'Mario' &#125;)"]
+    Call --> VNode["Virtual DOM node"]
+```
+
+JSX is not a new language — it's syntax sugar. Every JSX element compiles down to a `React.createElement` call. That's why curly braces inside JSX run real JavaScript: you're already inside a function call.
+
 
 ### What is JSX?
 
@@ -172,6 +208,21 @@ return (
 
 ## 4. Components: Building Blocks of React
 
+### How a Component Tree Renders
+
+```mermaid
+graph TD
+    App[App] --> Header[Header]
+    App --> Main[Main]
+    App --> Footer[Footer]
+    Main --> Sidebar[Sidebar]
+    Main --> Article[Article]
+    Article --> Comments[Comments]
+    Article --> Likes[Likes]
+```
+
+A React app is just a tree of components. Each node renders children, and data flows downward through props.
+
 ### Functional Components (Modern Approach)
 
 ```jsx
@@ -236,6 +287,17 @@ export class UserComponent {      <div className="user-profile">
 ---
 
 ## 5. Props: Passing Data Between Components
+
+### Props Flow Down, Events Flow Up
+
+```mermaid
+graph TD
+    Parent[Parent component<br/>holds the data] -->|props| Child[Child component<br/>reads the data]
+    Child -.->|callback prop| Parent
+```
+
+Props are how a parent hands data to its children. Children never reach up — if they need to tell the parent something happened (a click, a value change), the parent passes them a **callback function** as a prop. This single-direction rule is the heart of React's "unidirectional data flow".
+
 
 Props (properties) are **read-only** data passed from parent to child components.
 
@@ -362,6 +424,22 @@ const TodoItem = ({ id, onDelete }) => {
 ---
 
 ## 6. State Management with useState Hook
+
+### The State → Render Loop
+
+```mermaid
+graph LR
+    Init["useState(0)"] --> Render1[Initial render]
+    Render1 --> Idle[Wait for user]
+    Idle --> Click[User clicks button]
+    Click --> Set["setCount(prev =&gt; prev + 1)"]
+    Set --> Schedule[React schedules update]
+    Schedule --> Render2[Re-render with new value]
+    Render2 --> Idle
+```
+
+A component's render is just a function call. Calling the setter from `useState` tells React: "the next time you call my function, give me a different value." React then re-renders that component (and its subtree), computes the new Virtual DOM, and patches what changed.
+
 
 State represents data that **changes over time** and triggers re-renders.
 
@@ -502,6 +580,20 @@ const increment = () => {
 
 ## 7. Event Handling in React
 
+### What Happens When the User Clicks
+
+```mermaid
+graph LR
+    User[User clicks] --> Synth[React synthetic event]
+    Synth --> Handler[onClick handler]
+    Handler --> SetState["setState(...)"]
+    SetState --> Rerender[Component re-renders]
+    Rerender --> UI[New UI on screen]
+```
+
+React wraps DOM events in a cross-browser **SyntheticEvent**, then routes them to the handler you wrote in JSX. The handler usually calls a state setter, which feeds back into the render loop — same loop as the previous section.
+
+
 ### Basic Event Handling
 
 ```jsx
@@ -620,6 +712,22 @@ const TodoList = () => {
 ---
 
 ## 8. Conditional Rendering Techniques
+
+### The Priority Ladder
+
+```mermaid
+graph TD
+    Start[Render call] --> Q1{loading?}
+    Q1 -->|yes| Spinner[Show spinner]
+    Q1 -->|no| Q2{error?}
+    Q2 -->|yes| ErrorMsg[Show error]
+    Q2 -->|no| Q3{has data?}
+    Q3 -->|yes| Content[Show content]
+    Q3 -->|no| Empty[Show empty state]
+```
+
+Real UIs almost always need to express "if loading show A, if error show B, otherwise show C". In React there's no `*ngIf` — you just write the conditional in JavaScript with early returns, ternaries, or `&&`. Ordering matters: check the most specific state first.
+
 
 React doesn't have directives like Angular's `*ngIf`. Instead, use JavaScript expressions.
 
@@ -749,6 +857,21 @@ Angular                         React
 ---
 
 ## 9. Lists and Keys: Rendering Multiple Elements
+
+### Why Keys Matter
+
+```mermaid
+graph TD
+    subgraph WithoutKeys["Without keys"]
+        A1["[A, B, C] -&gt; [X, A, B, C]"] --> A2[React re-creates A, B, C as if new]
+    end
+    subgraph WithKeys["With stable keys"]
+        B1["[A, B, C] -&gt; [X, A, B, C]"] --> B2[React reuses A, B, C; only mounts X]
+    end
+```
+
+Keys let React match up items between renders. Without keys, inserting at the top of a list causes React to rebuild every item; with keys, it reuses the unchanged ones and only mounts the new one. Use a stable identifier from your data — never the array index if the list can be reordered.
+
 
 ### Basic List Rendering
 
@@ -931,6 +1054,23 @@ Angular                         React
 ---
 
 ## 10. Forms and Controlled Components
+
+### Controlled vs Uncontrolled — Where Does the Value Live?
+
+```mermaid
+graph LR
+    subgraph Controlled
+        State[React state] -->|value| Input1[input]
+        Input1 -->|onChange| State
+    end
+    subgraph Uncontrolled
+        DOM[DOM input] --> Ref[useRef]
+        Ref -.->|read on submit| Code[Your handler]
+    end
+```
+
+In a **controlled** input the source of truth is React state — every keystroke goes through `setState`. In an **uncontrolled** input the DOM owns the value, and you read it from a ref when you need it. Controlled is the default for forms with validation; uncontrolled is the escape hatch for performance-sensitive flows.
+
 
 In React, form elements can be either **controlled** (React manages state) or **uncontrolled** (DOM manages state). **Controlled components** are preferred.
 

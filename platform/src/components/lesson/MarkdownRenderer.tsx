@@ -1,9 +1,9 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
 import rehypeRaw from 'rehype-raw';
 import type { Components } from 'react-markdown';
 import { MermaidDiagram } from './MermaidDiagram';
+import { ShikiCode } from './ShikiCode';
 
 interface MarkdownRendererProps {
   content: string;
@@ -27,18 +27,13 @@ const components: Components = {
       return <MermaidDiagram chart={codeStr} />;
     }
 
-    return (
-      <code className={className} {...props}>
-        {children}
-      </code>
-    );
+    // Fenced code block — render with Shiki for IDE-quality highlighting.
+    return <ShikiCode code={codeStr} language={match?.[1]} />;
   },
+  // <pre> is now rendered by ShikiCode itself; markdown's default <pre>
+  // wrapper would only wrap our card chrome, so we render it transparently.
   pre({ children }) {
-    return (
-      <pre className="bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-lg overflow-x-auto p-4 my-4 text-sm">
-        {children}
-      </pre>
-    );
+    return <>{children}</>;
   },
   table({ children }) {
     return (
@@ -114,7 +109,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     <div className="max-w-4xl mx-auto">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
-        rehypePlugins={[rehypeHighlight, rehypeRaw]}
+        rehypePlugins={[rehypeRaw]}
         components={components}
       >
         {content}

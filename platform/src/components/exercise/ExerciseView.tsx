@@ -102,7 +102,7 @@ export function ExerciseView() {
         total: 1,
         cases: [
           {
-            name: 'Sandbox Error',
+            name: t('exercise.sandboxError'),
             status: 'failed',
             error: String(e),
             duration: 0,
@@ -112,7 +112,7 @@ export function ExerciseView() {
     } finally {
       setRunning(false);
     }
-  }, [code, testFileContent, exercise, moduleId, exId, running, saveTestResults]);
+  }, [code, testFileContent, exercise, moduleId, exId, running, saveTestResults, t]);
 
   const handleReset = useCallback(() => {
     setCode(defaultCode);

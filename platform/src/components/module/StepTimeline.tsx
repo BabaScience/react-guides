@@ -89,7 +89,7 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
                   : 'text-gray-500'
             }`}
           >
-            {step.title}
+            {t(`steps.${moduleId}.${step.id}`, step.title)}
           </span>
           <span
             className={`text-[10px] px-1.5 py-0.5 rounded ${

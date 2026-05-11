@@ -75,7 +75,7 @@ export function Sidebar() {
                       <span className="text-gray-400 dark:text-gray-500 mr-1 font-mono text-xs">
                         {String(mod.number).padStart(2, '0')}
                       </span>
-                      {mod.name}
+                      {t(`modules.${mod.id}.name`, mod.name)}
                     </span>
                     {isComingSoon && (
                       <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded">

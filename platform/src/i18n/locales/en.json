@@ -50,6 +50,8 @@
     "testResults": "Test Results",
     "allPassed": "All Passed!",
     "failed": "{{count}} Failed",
+    "notYet": "{{count}} not passing yet",
+    "didNotPass": "This test didn't pass yet",
     "passing": "{{passed}}/{{total}} passing",
     "runPrompt": "Click \"Run Tests\" or press",
     "toRun": "to run",
@@ -86,11 +88,104 @@
   },
   "errors": {
     "failedToLoadLesson": "Failed to load lesson content",
-    "exerciseNotFound": "Exercise not found"
+    "exerciseNotFound": "Exercise not found",
+    "noGuideFile": "No guide file for this module",
+    "sectionNotFound": "Section \"{{section}}\" not found in guide"
   },
   "theme": {
     "switchToLight": "Switch to light mode",
     "switchToDark": "Switch to dark mode"
+  },
+  "modules": {
+    "01-fundamentals": {
+      "name": "React Fundamentals",
+      "description": "JSX, components, props, state, events, and conditional rendering"
+    },
+    "02-hooks": {
+      "name": "React Hooks Deep Dive",
+      "description": "useState, useEffect, useContext, useRef, useMemo, useCallback, useReducer"
+    },
+    "03-component-patterns": {
+      "name": "Component Patterns & Best Practices",
+      "description": "Composition, HOCs, render props, compound components"
+    },
+    "04-styling": {
+      "name": "React Styling",
+      "description": "CSS Modules, styled-components, Tailwind, CSS-in-JS"
+    },
+    "05-routing": {
+      "name": "Routing",
+      "description": "React Router, dynamic routing, protected routes, navigation"
+    },
+    "06-state-management": {
+      "name": "State Management",
+      "description": "Context API, Redux, Zustand, Jotai, state patterns"
+    },
+    "07-data-fetching": {
+      "name": "Data Fetching",
+      "description": "Fetch API, Axios, React Query, SWR, caching strategies"
+    },
+    "08-forms": {
+      "name": "Forms & Validation",
+      "description": "React Hook Form, Yup, Zod validation, controlled vs uncontrolled"
+    },
+    "09-performance": {
+      "name": "Performance Optimization",
+      "description": "React.memo, useMemo, useCallback, code splitting, profiling"
+    },
+    "10-testing": {
+      "name": "Testing",
+      "description": "Jest, React Testing Library, integration and unit testing strategies"
+    },
+    "11-typescript": {
+      "name": "TypeScript with React",
+      "description": "Advanced types, generics, type-safe components, utility types"
+    },
+    "12-advanced-patterns": {
+      "name": "Advanced Patterns",
+      "description": "Portals, error boundaries, suspense, concurrent features"
+    }
+  },
+  "steps": {
+    "01-fundamentals": {
+      "understanding-react": "Understanding React",
+      "setup-environment": "Setting Up a Dev Environment",
+      "jsx-syntax": "JSX Syntax",
+      "components": "Components: Building Blocks",
+      "props": "Props: Passing Data",
+      "greeting": "Exercise: Greeting Component",
+      "user-card": "Exercise: User Card",
+      "lists-keys": "Lists and Keys",
+      "todo-list": "Exercise: Todo List",
+      "state-usestate": "State Management with useState",
+      "counter": "Exercise: Counter with State",
+      "conditional-rendering": "Conditional Rendering",
+      "status-message": "Exercise: StatusMessage",
+      "event-handling": "Event Handling",
+      "action-button": "Exercise: ActionButton",
+      "forms-controlled": "Forms and Controlled Components",
+      "contact-form": "Exercise: ContactForm",
+      "filtered-list": "Exercise: FilteredList"
+    },
+    "02-hooks": {
+      "understanding-hooks": "Understanding Hooks",
+      "usestate": "useState: State Fundamentals",
+      "counter-functional": "Exercise: useState Counter",
+      "useeffect": "useEffect: Side Effects",
+      "data-fetching": "Exercise: Data Fetching",
+      "usecontext": "useContext: Global State",
+      "theme-context": "Exercise: Theme Context",
+      "useref": "useRef: DOM & Persistence",
+      "focus-input": "Exercise: Focus Input",
+      "usememo": "useMemo: Memoization",
+      "filtered-list-memo": "Exercise: Filtered List (useMemo)",
+      "usecallback": "useCallback: Function Memoization",
+      "callback-parent": "Exercise: Stable Callbacks",
+      "usereducer": "useReducer: Complex State",
+      "todo-reducer": "Exercise: Todo App (useReducer)",
+      "custom-hooks": "Custom Hooks",
+      "advanced-patterns": "Advanced Patterns"
+    }
   },
   "exercises": {
     "01-fundamentals": {

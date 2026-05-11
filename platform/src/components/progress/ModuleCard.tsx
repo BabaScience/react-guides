@@ -39,8 +39,12 @@ export function ModuleCard({ module }: ModuleCardProps) {
         </span>
       </div>
 
-      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{module.name}</h3>
-      <p className="text-sm text-gray-500 dark:text-gray-400 flex-1 mb-3">{module.description}</p>
+      <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+        {t(`modules.${module.id}.name`, module.name)}
+      </h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400 flex-1 mb-3">
+        {t(`modules.${module.id}.description`, module.description)}
+      </p>
 
       {isComingSoon ? (
         <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 px-2 py-1 rounded-md self-start">

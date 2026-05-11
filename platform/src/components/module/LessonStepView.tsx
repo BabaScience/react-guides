@@ -25,7 +25,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
 
   useEffect(() => {
     if (!module.guideFile) {
-      setError('No guide file for this module');
+      setError(t('errors.noGuideFile'));
       setLoading(false);
       return;
     }
@@ -38,7 +38,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
         if (section) {
           setContent(section.content);
         } else {
-          setError(`Section "${step.sectionHeading}" not found in guide`);
+          setError(t('errors.sectionNotFound', { section: step.sectionHeading }));
         }
       })
       .catch((e) => setError(String(e)))
@@ -89,7 +89,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
           to={`/module/${module.id}`}
           className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
         >
-          ← Back to module
+          {t('nav.backToModule')}
         </Link>
 
         {hasNext && (

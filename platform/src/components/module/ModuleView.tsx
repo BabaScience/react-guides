@@ -30,8 +30,12 @@ export function ModuleView() {
           <span>/</span>
           <span>{t('dashboard.modules')}</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{mod.name}</h1>
-        <p className="text-gray-500 dark:text-gray-400">{mod.description}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          {t(`modules.${mod.id}.name`, mod.name)}
+        </h1>
+        <p className="text-gray-500 dark:text-gray-400">
+          {t(`modules.${mod.id}.description`, mod.description)}
+        </p>
       </div>
 
       <div className="flex items-center gap-4 mb-8">

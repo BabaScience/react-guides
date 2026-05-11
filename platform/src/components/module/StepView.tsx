@@ -45,7 +45,7 @@ export function StepView() {
             {t('step.stepProgress', { current: stepIndex + 1, total: mod.steps.length })}
           </span>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-            {step.title}
+            {t(`steps.${mod.id}.${step.id}`, step.title)}
           </span>
         </div>
         <div className="flex items-center gap-2">

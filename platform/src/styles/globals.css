@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Shiki code blocks — inherit a comfortable IDE-style layout regardless of theme.
+   Shiki emits inline `background-color` and `color` styles; we only adjust spacing
+   and font so the output sits nicely inside our card chrome. */
+.shiki-container pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.shiki-container pre code {
+  display: block;
+  background: transparent !important;
+}
+
 @layer base {
   html {
     @apply antialiased;

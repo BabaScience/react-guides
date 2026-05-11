@@ -1393,6 +1393,22 @@ const MeasuredComponent = ({ items }) => {
 
 ## 7. useCallback: Function Memoization
 
+### Why a Stable Reference Matters
+
+```mermaid
+graph TD
+    Parent[Parent re-renders] --> Q{Deps changed?}
+    Q -->|no| Same[Return same function reference]
+    Q -->|yes| New[Create new function]
+    Same --> MemoChild[React.memo child compares props]
+    New --> MemoChild
+    MemoChild --> Q2{Reference unchanged?}
+    Q2 -->|yes| Skip[Skip child re-render ✓]
+    Q2 -->|no| Rerender[Re-render child]
+```
+
+Every render creates new function objects unless you opt out. `useCallback` returns the **same** function reference until its dependencies change. This only matters when the function is passed to a `React.memo`-wrapped child or used as a dependency of another hook — for plain DOM event handlers, `useCallback` is overhead with no benefit.
+
 ### Fundamental Concept
 
 The `useCallback` hook returns a memoized version of a callback function, maintaining referential equality across renders unless dependencies change. This prevents child component re-renders caused by prop function reference changes.

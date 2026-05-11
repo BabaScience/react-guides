@@ -1,5 +1,6 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { useUIStore, type Language } from '@/store/ui-store';
 import { modules } from '@/data/modules';
 
@@ -84,7 +85,7 @@ interface Crumb {
   href?: string;
 }
 
-function buildBreadcrumbs(pathname: string, t: (key: string) => string): Crumb[] {
+function buildBreadcrumbs(pathname: string, t: TFunction): Crumb[] {
   const crumbs: Crumb[] = [{ label: t('nav.home'), href: '/' }];
 
   const parts = pathname.split('/').filter(Boolean);
@@ -92,8 +93,9 @@ function buildBreadcrumbs(pathname: string, t: (key: string) => string): Crumb[]
   if (parts[0] === 'module' && parts[1]) {
     const mod = modules.find((m) => m.id === parts[1]);
     if (mod) {
+      const modName = t(`modules.${mod.id}.name`, mod.name);
       crumbs.push({
-        label: `${String(mod.number).padStart(2, '0')} ${mod.name}`,
+        label: `${String(mod.number).padStart(2, '0')} ${modName}`,
         href: `/module/${mod.id}`,
       });
 
@@ -102,13 +104,14 @@ function buildBreadcrumbs(pathname: string, t: (key: string) => string): Crumb[]
       } else if (parts[2] === 'exercise' && parts[3]) {
         const ex = mod.exercises.find((e) => e.id === parts[3]);
         if (ex) {
-          crumbs.push({ label: `${t('step.exercise')} ${ex.number}: ${ex.name}` });
+          const exName = t(`exercises.${mod.id}.${ex.id}.name`, ex.name);
+          crumbs.push({ label: `${t('step.exercise')} ${ex.number}: ${exName}` });
         }
       } else if (parts[2] === 'step' && parts[3]) {
         const stepIdx = parseInt(parts[3], 10);
         const step = Number.isInteger(stepIdx) ? mod.steps[stepIdx] : undefined;
         if (step) {
-          crumbs.push({ label: step.title });
+          crumbs.push({ label: t(`steps.${mod.id}.${step.id}`, step.title) });
         }
       }
     }
