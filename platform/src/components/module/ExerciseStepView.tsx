@@ -197,7 +197,11 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
                   <CodeEditor value={code} onChange={handleCodeChange} onRunTests={handleRunTests} />
                 </div>
                 {leftTab === 'preview' && (
-                  <LivePreview code={code} componentName={exercise.componentName} />
+                  <LivePreview
+                    code={code}
+                    componentName={exercise.componentName}
+                    testSource={testFileContent}
+                  />
                 )}
               </div>
             </div>

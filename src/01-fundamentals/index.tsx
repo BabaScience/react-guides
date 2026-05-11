@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 
 /**
  * MODULE 01: React Fundamentals
- * 
- * ANGULAR DEVELOPER NOTES:
- * - No @Component decorator needed
- * - Functional components are pure functions
- * - Props replace @Input() decorators
- * - TypeScript interfaces define prop types
- * - useState replaces class properties
- * - JSX replaces template strings
  */
 
 // ============================================
@@ -17,21 +9,12 @@ import React, { useState } from 'react';
 // ============================================
 
 /**
- * OBJECTIVE: Create a Greeting component that displays a personalized message
- * 
- * ANGULAR EQUIVALENT:
- * @Component({
- *   selector: 'app-greeting',
- *   template: '<h1>Hello, {{name}}!</h1>'
- * })
- * export class GreetingComponent {
- *   @Input() name: string = 'Guest';
- * }
- * 
+ * OBJECTIVE: Create a Greeting component that displays a personalized message.
+ *
  * INSTRUCTIONS:
- * - Accept a 'name' prop (optional, defaults to 'Guest')
+ * - Accept a 'name' prop (optional, defaults to 'Guest').
  * - Render: "Hello, [name]!"
- * - Use TypeScript for type safety
+ * - Use TypeScript for type safety.
  */
 
 interface GreetingProps {
@@ -50,14 +33,12 @@ export const Greeting: React.FC<GreetingProps> = ({ name = 'Guest' }) => {
 // ============================================
 
 /**
- * OBJECTIVE: Create a UserCard component with multiple typed props
- * 
- * ANGULAR EQUIVALENT: Multiple @Input() decorators with types
- * 
+ * OBJECTIVE: Create a UserCard component with multiple typed props.
+ *
  * INSTRUCTIONS:
- * - Accept name, email, and age props
- * - Display user information in a card format
- * - Use proper TypeScript interfaces
+ * - Accept name, email, and age props.
+ * - Display user information in a card format.
+ * - Use proper TypeScript interfaces.
  */
 
 interface UserCardProps {
@@ -78,14 +59,12 @@ export const UserCard: React.FC<UserCardProps> = ({ name, email, age }) => {
 // ============================================
 
 /**
- * OBJECTIVE: Render a list of items with proper key management
- * 
- * ANGULAR EQUIVALENT: *ngFor with trackBy
- * 
+ * OBJECTIVE: Render a list of items with proper key management.
+ *
  * INSTRUCTIONS:
- * - Accept an array of todos
- * - Render each todo with a unique key
- * - Display todo text and completion status
+ * - Accept an array of todos.
+ * - Render each todo with a unique key.
+ * - Display todo text and completion status.
  */
 
 interface Todo {
@@ -110,14 +89,12 @@ export const TodoList: React.FC<TodoListProps> = ({ todos }) => {
 // ============================================
 
 /**
- * OBJECTIVE: Create a counter component using useState hook
- * 
- * ANGULAR EQUIVALENT: Class property with methods
- * 
+ * OBJECTIVE: Create a counter component using the useState hook.
+ *
  * INSTRUCTIONS:
- * - Use useState to manage count state
- * - Provide increment and decrement buttons
- * - Display current count value
+ * - Use useState to manage the count.
+ * - Provide an increment and a decrement button.
+ * - Display the current count value.
  */
 
 export const Counter: React.FC = () => {
@@ -132,15 +109,13 @@ export const Counter: React.FC = () => {
 // ============================================
 
 /**
- * OBJECTIVE: Implement conditional rendering based on props
- * 
- * ANGULAR EQUIVALENT: *ngIf directive
- * 
+ * OBJECTIVE: Implement conditional rendering based on props.
+ *
  * INSTRUCTIONS:
- * - Show loading state when isLoading is true
- * - Show error message when error exists
- * - Show data when available
- * - Prioritize: loading > error > data
+ * - Show loading state when isLoading is true.
+ * - Show error message when error exists.
+ * - Show data when available.
+ * - Priority: loading > error > data.
  */
 
 interface StatusMessageProps {
@@ -165,14 +140,12 @@ export const StatusMessage: React.FC<StatusMessageProps> = ({ isLoading, error, 
 // ============================================
 
 /**
- * OBJECTIVE: Create a button that handles click events
- * 
- * ANGULAR EQUIVALENT: (click)="onClick()"
- * 
+ * OBJECTIVE: Create a button that handles click events.
+ *
  * INSTRUCTIONS:
- * - Accept onClick callback prop
- * - Handle button click events
- * - Display button text
+ * - Accept onClick callback prop.
+ * - Handle button click events.
+ * - Display button text.
  */
 
 interface ActionButtonProps {
@@ -191,15 +164,13 @@ export const ActionButton: React.FC<ActionButtonProps> = ({ text, onClick }) => 
 // ============================================
 
 /**
- * OBJECTIVE: Create a form with controlled input components
- * 
- * ANGULAR EQUIVALENT: [(ngModel)]="value"
- * 
+ * OBJECTIVE: Create a form with controlled input components.
+ *
  * INSTRUCTIONS:
- * - Use useState to manage form state
- * - Create controlled input fields
- * - Handle form submission
- * - Display form data
+ * - Use useState to manage form state.
+ * - Create controlled input fields.
+ * - Handle form submission.
+ * - Display form data.
  */
 
 interface ContactFormProps {
@@ -221,15 +192,13 @@ export const ContactForm: React.FC<ContactFormProps> = ({ onSubmit }) => {
 // ============================================
 
 /**
- * OBJECTIVE: Create a list with filtering capabilities
- * 
- * ANGULAR EQUIVALENT: *ngFor with filter pipe
- * 
+ * OBJECTIVE: Create a list with filtering capabilities.
+ *
  * INSTRUCTIONS:
- * - Use useState to manage filter state
- * - Filter items based on search term
- * - Display filtered results
- * - Provide search input
+ * - Use useState to manage filter state.
+ * - Filter items based on a search term.
+ * - Display filtered results.
+ * - Provide a search input.
  */
 
 interface Item {

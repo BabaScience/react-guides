@@ -2,15 +2,6 @@ import React, { useState, useEffect, useContext, useRef, useMemo, useCallback, u
 
 /**
  * MODULE 02: React Hooks Deep Dive
- * 
- * ANGULAR DEVELOPER NOTES:
- * - Hooks replace Angular lifecycle methods (ngOnInit, ngOnDestroy, etc.)
- * - useState replaces component properties and state management
- * - useEffect handles side effects like data fetching and subscriptions
- * - useContext replaces Angular services for dependency injection
- * - useRef replaces @ViewChild for DOM access
- * - useMemo/useCallback optimize performance (similar to Angular OnPush)
- * - useReducer replaces complex state logic (similar to NgRx reducers)
  */
 
 // ============================================
@@ -19,9 +10,7 @@ import React, { useState, useEffect, useContext, useRef, useMemo, useCallback, u
 
 /**
  * OBJECTIVE: Create a counter component using useState with functional updates
- * 
- * ANGULAR EQUIVALENT: Component properties with methods
- * 
+ *
  * INSTRUCTIONS:
  * - Use useState to manage count state
  * - Provide increment and decrement buttons
@@ -43,9 +32,7 @@ export const CounterWithFunctionalUpdates: React.FC = () => {
 
 /**
  * OBJECTIVE: Implement data fetching with useEffect and proper cleanup
- * 
- * ANGULAR EQUIVALENT: ngOnInit + ngOnDestroy lifecycle hooks
- * 
+ *
  * INSTRUCTIONS:
  * - Use useEffect to fetch data on component mount
  * - Handle loading, success, and error states
@@ -73,9 +60,7 @@ export const DataFetchingComponent: React.FC = () => {
 
 /**
  * OBJECTIVE: Create a theme context provider and consumer
- * 
- * ANGULAR EQUIVALENT: Injectable service with dependency injection
- * 
+ *
  * INSTRUCTIONS:
  * - Create ThemeContext with createContext
  * - Create ThemeProvider component with useState
@@ -117,9 +102,7 @@ export const ThemeToggle: React.FC = () => {
 
 /**
  * OBJECTIVE: Use useRef to manage focus on input elements
- * 
- * ANGULAR EQUIVALENT: @ViewChild for DOM element access
- * 
+ *
  * INSTRUCTIONS:
  * - Use useRef to create input reference
  * - Create button that focuses the input when clicked
@@ -139,9 +122,7 @@ export const FocusInput: React.FC = () => {
 
 /**
  * OBJECTIVE: Use useMemo to optimize expensive calculations
- * 
- * ANGULAR EQUIVALENT: Computed properties or OnPush change detection
- * 
+ *
  * INSTRUCTIONS:
  * - Create component that filters and sorts data
  * - Use useMemo to memoize filtered/sorted results
@@ -176,9 +157,7 @@ export const FilteredList: React.FC<FilteredListProps> = ({ items, filter, sortB
 
 /**
  * OBJECTIVE: Use useCallback to create stable function references
- * 
- * ANGULAR EQUIVALENT: Arrow functions in templates (performance optimization)
- * 
+ *
  * INSTRUCTIONS:
  * - Create parent component with multiple state variables
  * - Create memoized child component
@@ -212,9 +191,7 @@ export const ParentWithCallback: React.FC = () => {
 
 /**
  * OBJECTIVE: Implement todo management using useReducer
- * 
- * ANGULAR EQUIVALENT: NgRx store with reducers and actions
- * 
+ *
  * INSTRUCTIONS:
  * - Create todo reducer with add, toggle, delete actions
  * - Use useReducer to manage todo state

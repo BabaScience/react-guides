@@ -10,10 +10,14 @@ import * as React from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { useTranslation } from 'react-i18next';
 import { preprocessTypeScript, transpile } from '@/sandbox/transpiler';
+import { extractExampleProps } from '@/sandbox/preview-props-extractor';
 
 interface LivePreviewProps {
   code: string;
   componentName: string;
+  /** Test source — used to pull example props so components with required
+   *  props render with realistic data instead of `undefined` everywhere. */
+  testSource?: string;
 }
 
 const DEBOUNCE_MS = 500;
@@ -27,7 +31,7 @@ const DEBOUNCE_MS = 500;
  * will render with `undefined` values, which is intentional: it lets the user
  * see the markup shape without us having to invent props per exercise.
  */
-export function LivePreview({ code, componentName }: LivePreviewProps) {
+export function LivePreview({ code, componentName, testSource }: LivePreviewProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<Root | null>(null);
@@ -35,6 +39,21 @@ export function LivePreview({ code, componentName }: LivePreviewProps) {
     'idle'
   );
   const [error, setError] = useState<string | null>(null);
+  const [exampleProps, setExampleProps] = useState<Record<string, unknown>>({});
+
+  // Pull example props from the test file so the preview renders something
+  // meaningful even when the component requires props.
+  useEffect(() => {
+    let cancelled = false;
+    if (!testSource) {
+      setExampleProps({});
+      return;
+    }
+    extractExampleProps(testSource, componentName)
+      .then((p) => { if (!cancelled) setExampleProps(p); })
+      .catch(() => { if (!cancelled) setExampleProps({}); });
+    return () => { cancelled = true; };
+  }, [testSource, componentName]);
 
   useEffect(() => {
     let cancelled = false;
@@ -88,7 +107,7 @@ export function LivePreview({ code, componentName }: LivePreviewProps) {
         }
         rootRef.current.render(
           <PreviewErrorBoundary key={code} fallbackLabel={t('preview.runtimeError')}>
-            <Component />
+            <Component {...(exampleProps as Record<string, unknown>)} />
           </PreviewErrorBoundary>
         );
         setError(null);
@@ -104,7 +123,7 @@ export function LivePreview({ code, componentName }: LivePreviewProps) {
       cancelled = true;
       window.clearTimeout(handle);
     };
-  }, [code, componentName, t]);
+  }, [code, componentName, exampleProps, t]);
 
   // Unmount the React root when the LivePreview itself unmounts.
   useEffect(() => {

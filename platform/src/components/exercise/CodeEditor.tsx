@@ -9,38 +9,50 @@ interface CodeEditorProps {
   onRunTests?: () => void;
 }
 
-const REACT_TYPES = `
-declare module 'react' {
-  export function useState<T>(initial: T | (() => T)): [T, (value: T | ((prev: T) => T)) => void];
-  export function useEffect(effect: () => void | (() => void), deps?: any[]): void;
-  export function useContext<T>(context: React.Context<T>): T;
-  export function useRef<T>(initial: T): { current: T };
-  export function useMemo<T>(factory: () => T, deps: any[]): T;
-  export function useCallback<T extends (...args: any[]) => any>(callback: T, deps: any[]): T;
-  export function useReducer<S, A>(reducer: (state: S, action: A) => S, initial: S): [S, (action: A) => void];
-  export function createContext<T>(defaultValue: T): React.Context<T>;
-  export function memo<T extends React.FC<any>>(component: T): T;
-  export const Fragment: symbol;
-  export type ReactNode = string | number | boolean | null | undefined | JSX.Element | ReactNode[];
-  export type FC<P = {}> = (props: P) => JSX.Element | null;
-  export type Context<T> = { Provider: FC<{ value: T; children?: ReactNode }>; Consumer: FC<{ children: (value: T) => ReactNode }> };
-  export default React;
-  namespace React {
-    type ReactNode = string | number | boolean | null | undefined | JSX.Element | ReactNode[];
-    type FC<P = {}> = (props: P) => JSX.Element | null;
-    type Context<T> = { Provider: FC<{ value: T; children?: ReactNode }>; Consumer: FC<{ children: (value: T) => ReactNode }> };
-  }
-}
+// Synthetic package.json entries so Monaco's module resolver maps
+// `import x from 'react'` to the .d.ts files we fetch below.
+const REACT_PACKAGE_JSON = JSON.stringify({
+  name: 'react',
+  version: '18.0.0',
+  types: 'index.d.ts',
+});
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      [elemName: string]: any;
-    }
-    interface Element {}
+const REACT_DOM_PACKAGE_JSON = JSON.stringify({
+  name: 'react-dom',
+  version: '18.0.0',
+  types: 'index.d.ts',
+});
+
+/**
+ * Fetch the real React + ReactDOM type declarations from node_modules via the
+ * /raw/ middleware. These are the same .d.ts files VSCode ships, so once they're
+ * loaded into Monaco, the editor offers IDE-quality completions for every JSX
+ * intrinsic element, every HTML attribute, every React hook, and every DOM event.
+ *
+ * Cached in module scope so the network round-trips only happen once per page load.
+ */
+const TYPE_FILES = [
+  { path: 'platform/node_modules/@types/react/index.d.ts',           target: 'file:///node_modules/@types/react/index.d.ts' },
+  { path: 'platform/node_modules/@types/react/global.d.ts',          target: 'file:///node_modules/@types/react/global.d.ts' },
+  { path: 'platform/node_modules/@types/react/jsx-runtime.d.ts',     target: 'file:///node_modules/@types/react/jsx-runtime.d.ts' },
+  { path: 'platform/node_modules/@types/react-dom/index.d.ts',       target: 'file:///node_modules/@types/react-dom/index.d.ts' },
+  { path: 'platform/node_modules/@types/react-dom/client.d.ts',      target: 'file:///node_modules/@types/react-dom/client.d.ts' },
+] as const;
+
+let typesPromise: Promise<{ target: string; content: string }[]> | null = null;
+
+function loadReactTypes() {
+  if (!typesPromise) {
+    typesPromise = Promise.all(
+      TYPE_FILES.map(async ({ path, target }) => {
+        const res = await fetch(`/raw/${path}`);
+        if (!res.ok) throw new Error(`failed to load types: ${path}`);
+        return { target, content: await res.text() };
+      })
+    );
   }
+  return typesPromise;
 }
-`;
 
 export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
   const { t } = useTranslation();
@@ -65,34 +77,41 @@ export function CodeEditor({ value, onChange, onRunTests }: CodeEditorProps) {
       strict: false,
       skipLibCheck: true,
       moduleResolution: monaco.languages.typescript.ModuleResolutionKind.NodeJs,
+      types: ['react'],
     });
 
-    // Suppress semantic diagnostics for simpler experience
     monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: false,
       noSyntaxValidation: false,
-      // Suppress specific error codes that are noisy in sandbox context
+      // With the real @types/react now loaded, most of the previous suppressions
+      // become unnecessary. Keep only the diagnostics that are genuinely noisy
+      // in a learner-facing exercise context.
       diagnosticCodesToIgnore: [
-        2307, // Cannot find module
-        2304, // Cannot find name
+        2307, // Cannot find module (other modules we don't ship types for)
         7016, // Could not find declaration file
-        1259, // Module can only be default-imported using esModuleInterop
-        2686, // 'React' refers to a UMD global
-        2792, // Cannot find module
-        1005, // ';' expected (sometimes false positive in JSX)
-        7044, // Parameter implicitly has an 'any' type
         7006, // Parameter implicitly has an 'any' type
-        2708, // Cannot use namespace 'React' as a value
-        2503, // Cannot find namespace
-        2339, // Property does not exist on type
+        7044, // Parameter implicitly has an 'any' type (in arrow fn)
+        6133, // Variable is declared but never used (annoying while typing)
       ],
     });
 
-    // Add React type declarations
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      REACT_TYPES,
-      'file:///node_modules/@types/react/index.d.ts'
-    );
+    const addLib = (content: string, path: string) =>
+      monaco.languages.typescript.typescriptDefaults.addExtraLib(content, path);
+
+    // Plant the package.json shims synchronously so Monaco's resolver finds
+    // `react` and `react-dom` even before the .d.ts files arrive.
+    addLib(REACT_PACKAGE_JSON, 'file:///node_modules/react/package.json');
+    addLib(REACT_DOM_PACKAGE_JSON, 'file:///node_modules/react-dom/package.json');
+
+    // Then load the real .d.ts files asynchronously and register them.
+    // Monaco will re-validate open models once the libs are added.
+    loadReactTypes()
+      .then((files) => {
+        for (const { content, target } of files) addLib(content, target);
+      })
+      .catch((e) => {
+        console.warn('[CodeEditor] could not load React types for autocomplete:', e);
+      });
   };
 
   return (

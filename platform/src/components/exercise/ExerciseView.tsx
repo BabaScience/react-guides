@@ -196,7 +196,11 @@ export function ExerciseView() {
                   />
                 </div>
                 {leftTab === 'preview' && (
-                  <LivePreview code={code} componentName={exercise.componentName} />
+                  <LivePreview
+                    code={code}
+                    componentName={exercise.componentName}
+                    testSource={testFileContent}
+                  />
                 )}
               </div>
             </div>
