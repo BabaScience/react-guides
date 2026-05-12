@@ -29,7 +29,11 @@ export async function runTestsInSandbox(
     return errorResult('Compilation Error in test file', e);
   }
 
-  // 2. Load all dependencies
+  // 2. Load all dependencies.
+  // Note: in production builds, React's `act()` throws. The fix is in
+  // vite.config.ts — a build-time alias routes @testing-library/react's
+  // `react` import to `src/sandbox/react-act-shim.ts`, which provides a
+  // pass-through `act`. See that file for the full story.
   const React = await lazyLoad('react', () => import('react'));
   const ReactDOM = await lazyLoad('react-dom', () => import('react-dom'));
   const TestingLib = await lazyLoad('@testing-library/react', () => import('@testing-library/react'));
