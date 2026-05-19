@@ -83,31 +83,6 @@ graph TD
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### Angular Forms vs React
-
-```
-Angular                          React
-───────                         ─────
-
-Template-Driven Forms           Controlled Components
-[(ngModel)]="value"             value={value} onChange={...}
-
-Reactive Forms                  React Hook Form
-FormGroup, FormControl          useForm() hook
-
-Built-in Validators             External Libraries
-Validators.required             Yup / Zod / Custom
-
-FormBuilder                     useForm({ defaultValues })
-this.fb.group({...})            
-
-Async Validators                Custom async validation
-validate: (control) => {...}    validate: async (value) => {...}
-
-valueChanges Observable         watch() / useWatch()
-form.valueChanges.subscribe()   watch('fieldName')
-```
-
 ---
 
 ## 2. Controlled vs Uncontrolled Components

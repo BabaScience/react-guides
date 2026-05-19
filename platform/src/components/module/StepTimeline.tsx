@@ -20,7 +20,9 @@ export function StepTimeline({ module }: StepTimelineProps) {
       {module.steps.map((step, index) => {
         const complete = isStepComplete(module.id, step.id);
         const isCurrent = index === firstIncomplete;
-        const isLocked = index > firstIncomplete && firstIncomplete !== -1;
+        // No more "locked" steps — users can jump ahead freely. We only need
+        // the "current" highlight to mark where the recommended next stop is.
+        const isLocked = false;
 
         return (
           <StepItem

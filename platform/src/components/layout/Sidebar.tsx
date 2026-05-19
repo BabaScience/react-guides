@@ -10,7 +10,6 @@ export function Sidebar() {
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
   const getStepProgress = useProgressStore((s) => s.getStepProgress);
   const getModuleProgress = useProgressStore((s) => s.getModuleProgress);
-  const isModuleUnlocked = useProgressStore((s) => s.isModuleUnlocked);
 
   return (
     <aside
@@ -41,26 +40,25 @@ export function Sidebar() {
           const hasSteps = mod.steps.length > 0;
           const passed = hasSteps ? stepProgress.completed : exProgress.passed;
           const total = hasSteps ? stepProgress.total : exProgress.total;
-          const unlocked = isModuleUnlocked(mod.id);
           const isComingSoon = mod.status === 'coming-soon';
           const progressPct = total > 0 ? (passed / total) * 100 : 0;
 
           return (
             <NavLink
               key={mod.id}
-              to={isComingSoon || !unlocked ? '#' : `/module/${mod.id}`}
-              onClick={(e) => {
-                if (isComingSoon || !unlocked) e.preventDefault();
-              }}
+              // Every module is clickable now — coming-soon ones land on the
+              // module page which renders a friendly "not yet available"
+              // message instead of an exercise list.
+              to={`/module/${mod.id}`}
               className={({ isActive }) =>
                 `block px-4 py-3 mx-2 my-0.5 rounded-lg text-sm transition-colors ${
                   isComingSoon
-                    ? 'opacity-40 cursor-not-allowed'
-                    : !unlocked
-                      ? 'opacity-50 cursor-not-allowed'
-                      : isActive
-                        ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                    ? isActive
+                      ? 'opacity-70 bg-gray-100 dark:bg-gray-800/60 text-gray-600 dark:text-gray-400'
+                      : 'opacity-60 text-gray-500 dark:text-gray-400 hover:opacity-90 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    : isActive
+                      ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400'
+                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                 }`
               }
             >
@@ -81,9 +79,6 @@ export function Sidebar() {
                       <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded">
                         {t('module.soon')}
                       </span>
-                    )}
-                    {!isComingSoon && !unlocked && (
-                      <span className="text-gray-400 dark:text-gray-500">🔒</span>
                     )}
                   </div>
                   {!isComingSoon && total > 0 && (

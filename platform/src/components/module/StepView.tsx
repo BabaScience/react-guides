@@ -14,7 +14,9 @@ export function StepView() {
 
   const mod = moduleId ? getModule(moduleId) : undefined;
   const stepIndex = stepIndexStr ? parseInt(stepIndexStr, 10) : -1;
-  const isUnlocked = useProgressStore((s) => moduleId ? s.isModuleUnlocked(moduleId) : false);
+  // isModuleUnlocked now only refuses coming-soon / unknown modules, so this
+  // redirect is essentially a 404 guard rather than a progression gate.
+  const isUnlocked = useProgressStore((s) => (moduleId ? s.isModuleUnlocked(moduleId) : false));
 
   if (
     !mod ||

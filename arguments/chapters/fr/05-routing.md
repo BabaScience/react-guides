@@ -10,16 +10,6 @@
 
 Dans une Single Page Application, le routage est géré côté client : l'URL change mais la page n'est pas rechargée. React Router intercepte la navigation et rend le composant associé à l'URL.
 
-### Angular Router vs React Router
-
-| Angular | React Router |
-|---------|--------------|
-| `RouterModule.forRoot([...])` | `<BrowserRouter>` avec `<Routes>` |
-| `routerLink` | `<Link>` ou `<NavLink>` |
-| `ActivatedRoute` | `useParams()`, `useLocation()` |
-| `CanActivate` guard | Conditional rendering / wrapper |
-| `loadChildren` (lazy) | `React.lazy()` + `Suspense` |
-
 ---
 
 ## 2. React Router Fundamentals

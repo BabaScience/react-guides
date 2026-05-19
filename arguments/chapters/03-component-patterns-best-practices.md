@@ -261,30 +261,6 @@ const UserList = () => {
 };
 ```
 
-### Angular Directives vs React Composition
-
-```
-Angular                          React
-───────                         ─────
-
-<ng-content select=             const Component = ({ 
-  "[slot='header']">              header, 
-</ng-content>                     content 
-                                }) => (
-<ng-container *ngIf=              <>
-  "condition">                      {header}
-</ng-container>                     {content}
-                                  </>
-Structural Directives            );
-
-<div *ngTemplateOutlet=         {renderFunction()}
-  "template">
-</div>                          {children}
-
-Directive Composition           Component Composition
-Template References             Prop Functions
-```
-
 ---
 
 ## 2. Prop Drilling: Problem and Solutions
@@ -830,29 +806,6 @@ const ProductCard = ({ product, onAddToCart }) => {
     </div>
   );
 };
-```
-
-### Angular Parent-Child Communication vs React
-
-```
-Angular                          React
-───────                         ─────
-
-// Parent to Child                // Parent to Child
-@Input() data: any;              <Child data={data} />
-
-// Child to Parent                // Child to Parent
-@Output() event =                <Child onChange={handleChange} />
-  new EventEmitter();
-
-// Two-way binding               // Controlled component pattern
-[(ngModel)]="value"              value={value} 
-                                 onChange={(e) => setValue(e)}
-
-// Service for sharing           // Lifted state or Context
-Injectable service               const [state, setState] = useState()
-                                 <Child state={state} 
-                                   setState={setState} />
 ```
 
 ---

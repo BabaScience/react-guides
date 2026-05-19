@@ -23,6 +23,14 @@ mkdirSync(DEST, { recursive: true });
 const sources = [
   'src/01-fundamentals',
   'src/02-hooks',
+  'src/03-component-patterns',
+  'src/04-styling',
+  'src/05-routing',
+  'src/06-state-management',
+  'src/07-data-fetching',
+  'src/08-forms',
+  'src/09-performance',
+  'src/10-testing',
   'arguments/chapters',
 ];
 

@@ -5,6 +5,15 @@ interface TestResultsPanelProps {
   results: TestRunResult | null;
   running: boolean;
   onRun: () => void;
+  /**
+   * Manual escape hatch shown when tests didn't pass. Lets the learner
+   * advance even if the in-browser runner is misbehaving (e.g. a
+   * production-only React/Vite regression). Optional — when not provided,
+   * the button just doesn't appear.
+   */
+  onMarkComplete?: () => void;
+  /** Whether this exercise has already been flagged as manually complete. */
+  completedManually?: boolean;
 }
 
 /**
@@ -43,8 +52,22 @@ function sanitizeError(raw: string | undefined): string | null {
   return msg;
 }
 
-export function TestResultsPanel({ results, running, onRun }: TestResultsPanelProps) {
+export function TestResultsPanel({
+  results,
+  running,
+  onRun,
+  onMarkComplete,
+  completedManually = false,
+}: TestResultsPanelProps) {
   const { t } = useTranslation();
+  const hasResults = !!results;
+  const allPassed = !!results && results.failed === 0 && results.total > 0;
+  // The escape hatch is offered whenever tests have run and not everything
+  // passes — that's also the shape we get from sandbox/compilation errors
+  // (which sandbox-iframe.ts coerces into a single failed case). It hides
+  // once everything passes naturally, or once the user has already used it.
+  const showMarkComplete =
+    !!onMarkComplete && hasResults && !running && !allPassed && !completedManually;
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-950">
@@ -88,7 +111,26 @@ export function TestResultsPanel({ results, running, onRun }: TestResultsPanelPr
               <div className="text-sm text-gray-500">
                 {t('exercise.passing', { passed: results.passed, total: results.total })}
               </div>
+              {completedManually && (
+                <span className="ml-auto text-[11px] px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">
+                  {t('exercise.manuallyCompleted')}
+                </span>
+              )}
             </div>
+
+            {showMarkComplete && (
+              <div className="border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-3 bg-gray-50 dark:bg-gray-900/40">
+                <div className="text-xs text-gray-600 dark:text-gray-400 mb-2">
+                  {t('exercise.manualCompleteHint')}
+                </div>
+                <button
+                  onClick={onMarkComplete}
+                  className="px-3 py-1.5 text-xs font-medium border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded transition-colors"
+                >
+                  {t('exercise.markCompleteManually')}
+                </button>
+              </div>
+            )}
 
             {results.cases.map((tc, i) => {
               const cleanError = sanitizeError(tc.error);

@@ -15,18 +15,18 @@ const moduleIcons: Record<number, string> = {
 export function ModuleCard({ module }: ModuleCardProps) {
   const { t } = useTranslation();
   const { completed, total } = useProgressStore((s) => s.getStepProgress(module.id));
-  const unlocked = useProgressStore((s) => s.isModuleUnlocked(module.id));
   const isComingSoon = module.status === 'coming-soon';
   const progressPct = total > 0 ? (completed / total) * 100 : 0;
   const isComplete = completed === total && total > 0;
 
-  const disabled = isComingSoon || !unlocked;
-
+  // Coming-soon cards are still clickable — they land on the module page
+  // which renders a "not yet available" message. We keep a muted style so
+  // they're visually distinct from in-progress modules.
   const content = (
     <div
       className={`rounded-xl border p-5 transition-all h-full flex flex-col ${
-        disabled
-          ? 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30 opacity-50'
+        isComingSoon
+          ? 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30 opacity-70 hover:opacity-90'
           : isComplete
             ? 'border-emerald-300 dark:border-emerald-600/30 bg-emerald-50 dark:bg-emerald-950/20 hover:border-emerald-400 dark:hover:border-emerald-500/50'
             : 'border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 hover:border-primary-300 dark:hover:border-primary-500/50 hover:bg-gray-50 dark:hover:bg-gray-900/80'
@@ -50,8 +50,6 @@ export function ModuleCard({ module }: ModuleCardProps) {
         <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 px-2 py-1 rounded-md self-start">
           {t('module.comingSoon')}
         </span>
-      ) : !unlocked ? (
-        <span className="text-xs text-gray-400 dark:text-gray-500">{t('module.locked')}</span>
       ) : (
         <div>
           <div className="flex items-center justify-between text-xs mb-1">
@@ -72,8 +70,6 @@ export function ModuleCard({ module }: ModuleCardProps) {
       )}
     </div>
   );
-
-  if (disabled) return <div className="cursor-not-allowed">{content}</div>;
 
   return (
     <Link to={`/module/${module.id}`} className="block">

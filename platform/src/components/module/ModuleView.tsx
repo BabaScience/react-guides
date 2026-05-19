@@ -8,12 +8,14 @@ export function ModuleView() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const mod = id ? getModule(id) : undefined;
-  const isUnlocked = useProgressStore((s) => id ? s.isModuleUnlocked(id) : false);
+  // We intentionally do NOT gate navigation on `isModuleUnlocked` here.
+  // Coming-soon modules have empty `steps[]` / `exercises[]` and the JSX
+  // below already renders the "coming soon" message in that case — landing
+  // the user there is friendlier than bouncing back to the dashboard.
   const { completed, total } = useProgressStore((s) => id ? s.getStepProgress(id) : { completed: 0, total: 0 });
   const isStepComplete = useProgressStore((s) => s.isStepComplete);
 
   if (!mod) return <Navigate to="/" replace />;
-  if (!isUnlocked) return <Navigate to="/" replace />;
 
   const progressPct = total > 0 ? (completed / total) * 100 : 0;
   const firstIncompleteIndex = mod.steps.findIndex(

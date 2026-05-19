@@ -17,6 +17,14 @@ interface ProgressStore {
   markLessonComplete: (moduleId: string, stepId: string) => void;
   saveCode: (moduleId: string, exerciseId: string, code: string) => void;
   saveTestResults: (moduleId: string, exerciseId: string, results: TestRunResult) => void;
+  /**
+   * Manually flip an exercise to `'passed'` — used by the "Mark as completed
+   * manually" escape hatch when the in-browser test runner itself is acting
+   * up (e.g. a production-only Vite/React-DOM regression) and the user is
+   * confident their code is correct. Preserves the most recent testResults
+   * so the panel can still show what actually happened.
+   */
+  markExerciseComplete: (moduleId: string, exerciseId: string) => void;
   resetExercise: (moduleId: string, exerciseId: string) => void;
 }
 
@@ -42,49 +50,35 @@ export const useProgressStore = create<ProgressStore>()(
       },
 
       getExerciseStatus: (moduleId, exerciseId) => {
+        // We intentionally no longer gate exercise access on whether the
+        // previous exercise passed. Originally we returned 'locked' to force
+        // sequential progression, but that turned the in-browser test runner
+        // into a single point of failure: when it had a production-only bug
+        // (e.g. React 18's prod `act()` throwing), users with correct code
+        // were stranded. Now `'locked'` only means "this exercise or its
+        // module doesn't exist" — see also `isModuleUnlocked`.
         const mod = modules.find((m) => m.id === moduleId);
         if (!mod) return 'locked';
 
         const exercise = mod.exercises.find((e) => e.id === exerciseId);
         if (!exercise) return 'locked';
 
-        // Check if module is unlocked
         if (!get().isModuleUnlocked(moduleId)) return 'locked';
 
-        // First exercise in module is always available when module is unlocked
-        if (exercise.number === 1) {
-          const progress = get().exercises[getKey(moduleId, exerciseId)];
-          return progress?.status === 'passed' ? 'passed' : 'available';
-        }
-
-        // Check if previous exercise is passed
-        const prevExercise = mod.exercises.find((e) => e.number === exercise.number - 1);
-        if (prevExercise) {
-          const prevProgress = get().exercises[getKey(moduleId, prevExercise.id)];
-          if (prevProgress?.status !== 'passed') return 'locked';
-        }
-
         const progress = get().exercises[getKey(moduleId, exerciseId)];
-        return progress?.status === 'passed' ? 'passed' : 'available';
+        if (progress?.status === 'passed') return 'passed';
+        if (progress?.status === 'in-progress') return 'in-progress';
+        return 'available';
       },
 
       isModuleUnlocked: (moduleId) => {
+        // Coming-soon modules are still hidden — there's nothing to show.
+        // Everything else is reachable; we no longer require the previous
+        // module to be fully passed (see comment in getExerciseStatus).
         const mod = modules.find((m) => m.id === moduleId);
         if (!mod) return false;
-
-        // Module 1 is always unlocked
-        if (mod.number === 1) return true;
-
-        // Find previous module
-        const prevModule = modules.find((m) => m.number === mod.number - 1);
-        if (!prevModule || prevModule.status === 'coming-soon') return false;
-        if (prevModule.exercises.length === 0) return false;
-
-        // All exercises in previous module must be passed
-        return prevModule.exercises.every((ex) => {
-          const progress = get().exercises[getKey(prevModule.id, ex.id)];
-          return progress?.status === 'passed';
-        });
+        if (mod.status === 'coming-soon') return false;
+        return true;
       },
 
       getModuleProgress: (moduleId) => {
@@ -151,15 +145,43 @@ export const useProgressStore = create<ProgressStore>()(
       saveTestResults: (moduleId, exerciseId, results) => {
         const key = getKey(moduleId, exerciseId);
         const allPassed = results.failed === 0 && results.total > 0;
+        set((state) => {
+          const prev = state.exercises[key];
+          // Don't demote a manually-completed exercise to 'in-progress' when
+          // the user re-runs tests — they explicitly accepted the result and
+          // should stay completed unless they reset the exercise.
+          const wasManual = prev?.completedManually === true;
+          const status = allPassed || wasManual ? 'passed' : 'in-progress';
+          const completedAt = allPassed
+            ? new Date().toISOString()
+            : prev?.completedAt ?? null;
+          return {
+            exercises: {
+              ...state.exercises,
+              [key]: {
+                ...defaultProgress,
+                ...prev,
+                testResults: results,
+                status,
+                completedAt,
+              },
+            },
+          };
+        });
+      },
+
+      markExerciseComplete: (moduleId, exerciseId) => {
+        const key = getKey(moduleId, exerciseId);
         set((state) => ({
           exercises: {
             ...state.exercises,
             [key]: {
               ...defaultProgress,
               ...state.exercises[key],
-              testResults: results,
-              status: allPassed ? 'passed' : 'in-progress',
-              completedAt: allPassed ? new Date().toISOString() : state.exercises[key]?.completedAt ?? null,
+              status: 'passed',
+              completedManually: true,
+              completedAt:
+                state.exercises[key]?.completedAt ?? new Date().toISOString(),
             },
           },
         }));

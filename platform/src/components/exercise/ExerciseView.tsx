@@ -27,6 +27,7 @@ export function ExerciseView() {
   );
   const saveCode = useProgressStore((s) => s.saveCode);
   const saveTestResults = useProgressStore((s) => s.saveTestResults);
+  const markExerciseComplete = useProgressStore((s) => s.markExerciseComplete);
 
   // The code the user edits (single exercise only)
   const [code, setCode] = useState('');
@@ -122,11 +123,14 @@ export function ExerciseView() {
   }, [defaultCode, moduleId, exId, saveCode]);
 
   if (!mod || !exercise) return <Navigate to="/" replace />;
+  // 'locked' now only fires when the module or exercise id is unknown.
   if (status === 'locked') return <Navigate to={`/module/${moduleId}`} replace />;
 
   // Find next exercise
   const nextExercise = mod.exercises.find((e) => e.number === exercise.number + 1);
   const allPassed = results && results.failed === 0 && results.total > 0;
+  const isManuallyComplete = progress?.completedManually === true;
+  const canAdvance = Boolean(allPassed || isManuallyComplete);
 
   if (loading) {
     return (
@@ -158,10 +162,19 @@ export function ExerciseView() {
           >
             {t('exercise.resetCode')}
           </button>
-          {allPassed && nextExercise && (
+          {nextExercise && (
             <Link
               to={`/module/${moduleId}/exercise/${nextExercise.id}`}
-              className="px-3 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
+              className={`px-3 py-1 text-xs rounded transition-colors text-white ${
+                canAdvance
+                  ? 'bg-emerald-600 hover:bg-emerald-700'
+                  : 'bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600'
+              }`}
+              title={
+                canAdvance
+                  ? undefined
+                  : t('nav.nextExerciseTooltipUnverified')
+              }
             >
               {t('nav.nextExercise')}
             </Link>
@@ -216,6 +229,12 @@ export function ExerciseView() {
                     results={results}
                     running={running}
                     onRun={handleRunTests}
+                    completedManually={isManuallyComplete}
+                    onMarkComplete={
+                      moduleId && exId
+                        ? () => markExerciseComplete(moduleId, exId)
+                        : undefined
+                    }
                   />
                 </div>
               </div>

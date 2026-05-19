@@ -188,28 +188,6 @@ const Component = ({ data }) => {
 };
 ```
 
-### Angular vs React Rendering
-
-```
-Angular                          React
-───────                         ─────
-
-Zone.js (Change Detection)      Virtual DOM Reconciliation
-Runs on all events              Triggered by setState/hooks
-
-OnPush Strategy                 React.memo
-Change detection optimization   Prevent re-renders
-
-Pure Pipes                      useMemo
-Cached transformations          Memoized values
-
-trackBy function                key prop
-List optimization               Reconciliation hints
-
-NgZone.runOutsideAngular()     No React equivalent
-Skip change detection           (setState is explicit)
-```
-
 ---
 
 ## 2. React.memo: Preventing Re-renders

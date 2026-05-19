@@ -10,15 +10,9 @@
 
 In una Single Page Application il routing è gestito lato client: l'URL cambia ma la pagina non viene ricaricata. React Router intercetta la navigazione e renderizza il componente associato all'URL.
 
-### Angular Router vs React Router
+### Componenti, non configurazione
 
-| Angular | React Router |
-|---------|--------------|
-| `RouterModule.forRoot([...])` | `<BrowserRouter>` con `<Routes>` |
-| `routerLink` | `<Link>` o `<NavLink>` |
-| `ActivatedRoute` | `useParams()`, `useLocation()` |
-| `CanActivate` guard | Conditional rendering / wrapper |
-| `loadChildren` (lazy) | `React.lazy()` + `Suspense` |
+In React Router le route sono dichiarate come componenti (`<Route path="..." element={...} />`), non come oggetti di configurazione statici. Puoi comporle, annidarle e proteggerle con wrapper come qualsiasi altro componente React.
 
 ---
 

@@ -82,28 +82,6 @@ graph TD
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### Angular vs React Data Fetching
-
-```
-Angular                          React
-───────                         ─────
-
-HttpClient (Injectable)         Fetch API / Axios
-Observables (RxJS)              Promises / Async/Await
-
-Services with HttpClient        Custom Hooks
-@Injectable()                   function useData() {}
-
-HTTP Interceptors               Axios Interceptors
-                                React Query onRequest
-
-Resolvers                       React Query / SWR
-(pre-fetch route data)          (automatic fetching)
-
-AsyncPipe in templates          useQuery hook
-*ngIf="data$ | async"           const { data } = useQuery()
-```
-
 ---
 
 ## 2. Native Fetch API and Axios

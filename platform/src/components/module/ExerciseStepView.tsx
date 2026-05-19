@@ -73,6 +73,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   const progress = useProgressStore((s) => s.getExerciseProgress(module.id, exerciseId));
   const saveCode = useProgressStore((s) => s.saveCode);
   const saveTestResults = useProgressStore((s) => s.saveTestResults);
+  const markExerciseComplete = useProgressStore((s) => s.markExerciseComplete);
 
   const [code, setCode] = useState('');
   const [defaultCode, setDefaultCode] = useState('');
@@ -137,6 +138,8 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   if (!exercise) return <div className="p-8 text-red-400">{t('errors.exerciseNotFound')}</div>;
 
   const allPassed = results && results.failed === 0 && results.total > 0;
+  const isManuallyComplete = progress?.completedManually === true;
+  const canAdvance = Boolean(allPassed || isManuallyComplete);
   const hasNext = stepIndex < totalSteps - 1;
 
   if (loading) {
@@ -164,10 +167,19 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
           >
             {t('exercise.reset')}
           </button>
-          {allPassed && hasNext && (
+          {hasNext && (
             <Link
               to={`/module/${module.id}/step/${stepIndex + 1}`}
-              className="px-3 py-1 text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-colors"
+              className={`px-3 py-1 text-xs rounded transition-colors text-white ${
+                canAdvance
+                  ? 'bg-emerald-600 hover:bg-emerald-700'
+                  : 'bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600'
+              }`}
+              title={
+                canAdvance
+                  ? undefined
+                  : t('nav.nextExerciseTooltipUnverified')
+              }
             >
               {t('nav.nextStep')}
             </Link>
@@ -212,7 +224,13 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
                 <ExercisePanel exercise={exercise} moduleName={module.name} moduleId={module.id} />
               </div>
               <div className="flex-1 min-h-0">
-                <TestResultsPanel results={results} running={running} onRun={handleRunTests} />
+                <TestResultsPanel
+                  results={results}
+                  running={running}
+                  onRun={handleRunTests}
+                  completedManually={isManuallyComplete}
+                  onMarkComplete={() => markExerciseComplete(module.id, exerciseId)}
+                />
               </div>
             </div>
           }

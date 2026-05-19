@@ -13,6 +13,7 @@
     "continue": "Continue →",
     "nextStep": "Next Step →",
     "nextExercise": "Next Exercise →",
+    "nextExerciseTooltipUnverified": "Tests haven't passed yet — you can still continue, but progress for this exercise won't be marked.",
     "completeModule": "Complete Module ✓",
     "startLearning": "Start Learning",
     "readLesson": "Read Lesson",
@@ -56,6 +57,9 @@
     "toRun": "to run",
     "runningTests": "Running tests...",
     "sandboxError": "Sandbox Error",
+    "markCompleteManually": "Mark as completed manually",
+    "manuallyCompleted": "Marked complete manually",
+    "manualCompleteHint": "If you're confident the code is correct and the test runner itself is having an issue, you can mark this exercise complete and move on.",
     "loadingExercise": "Loading exercise...",
     "exerciseNotFound": "Exercise not found",
     "fileName": "index.tsx",
@@ -186,6 +190,120 @@
       "todo-reducer": "Exercise: Todo App (useReducer)",
       "custom-hooks": "Custom Hooks",
       "advanced-patterns": "Advanced Patterns"
+    },
+    "03-component-patterns": {
+      "composition-reusability": "Component Composition & Reusability",
+      "card": "Exercise: Card (Composition)",
+      "prop-drilling": "Prop Drilling: Problem and Solutions",
+      "button-variant": "Exercise: Button Variants",
+      "presentational-container": "Presentational vs Container Components",
+      "slot-card": "Exercise: Slot Card",
+      "hoc-pattern": "Higher-Order Components",
+      "with-logger": "Exercise: withLogger HOC",
+      "render-props": "Render Props Pattern",
+      "toggle": "Exercise: Toggle (Render Props)",
+      "compound-components": "Compound Components",
+      "tabs": "Exercise: Tabs (Compound)"
+    },
+    "04-styling": {
+      "styling-paradigms": "Styling Paradigms",
+      "inline-styles": "Inline Styles",
+      "inline-styled": "Exercise: InlineStyled",
+      "css-modules": "CSS Modules",
+      "badge": "Exercise: Badge",
+      "css-in-js": "CSS-in-JS",
+      "padded-box": "Exercise: PaddedBox",
+      "theming-design-systems": "Theming & Design Systems",
+      "themed-text": "Exercise: ThemedText",
+      "tailwind-utility-first": "Tailwind: Utility-First CSS",
+      "responsive-grid": "Exercise: ResponsiveGrid",
+      "css-frameworks": "CSS Frameworks Integration",
+      "alert": "Exercise: Alert"
+    },
+    "05-routing": {
+      "routing-paradigms": "Routing Paradigms and Architecture",
+      "react-router-fundamentals": "React Router Fundamentals",
+      "route-configuration": "Route Configuration and Navigation",
+      "match": "Exercise: match (Pattern Matching)",
+      "parse-query": "Exercise: parseQuery (Query Strings)",
+      "link": "Exercise: Link",
+      "route": "Exercise: Route",
+      "dynamic-routing": "Dynamic Routing with Parameters",
+      "programmatic-navigation": "Programmatic Navigation",
+      "use-navigate": "Exercise: useNavigate",
+      "protected-routes": "Protected Routes and Authentication",
+      "protected-route": "Exercise: ProtectedRoute"
+    },
+    "06-state-management": {
+      "paradigms": "State Management Paradigms",
+      "local-vs-global": "Local vs Global State",
+      "create-store": "Exercise: createStore (Observable Store)",
+      "context-api": "Context API: Simple Global State",
+      "count-context": "Exercise: CountContext + Provider + useCount",
+      "redux-toolkit": "Redux Toolkit: Modern Redux",
+      "use-counter-reducer": "Exercise: useCounterReducer",
+      "redux-core": "Redux Core Concepts Deep Dive",
+      "combine-reducers": "Exercise: combineReducers",
+      "zustand": "Zustand: Minimalist State Management",
+      "use-toggle": "Exercise: useToggle",
+      "use-local-storage": "Exercise: useLocalStorage"
+    },
+    "07-data-fetching": {
+      "fetching-paradigms": "Data Fetching Paradigms",
+      "native-fetch": "Native Fetch API",
+      "use-fetch": "Exercise: useFetch",
+      "loading-error-states": "Loading & Error States",
+      "use-debounce": "Exercise: useDebounce",
+      "polling": "Polling and Real-Time Updates",
+      "use-interval": "Exercise: useInterval",
+      "cancellation": "Cancellation with AbortController",
+      "use-abortable": "Exercise: useAbortable",
+      "optimistic-updates": "Optimistic Updates",
+      "use-optimistic": "Exercise: useOptimistic",
+      "cache-strategies": "Cache Management Strategies",
+      "create-cache": "Exercise: createCache"
+    },
+    "08-forms": {
+      "form-paradigms": "Form Management Paradigms",
+      "controlled-uncontrolled": "Controlled vs Uncontrolled Components",
+      "validate-email": "Exercise: validateEmail",
+      "validate-min-length": "Exercise: validateMinLength",
+      "custom-field-hook": "Reusable Field State with Custom Hooks",
+      "use-field": "Exercise: useField (custom hook)",
+      "form-validation": "Validating Forms Without a Library",
+      "login-form": "Exercise: LoginForm",
+      "multi-step-forms": "Multi-Step Forms",
+      "multi-step-form": "Exercise: MultiStepForm",
+      "advanced-patterns": "Advanced Form Patterns",
+      "form-errors": "Exercise: FormErrors"
+    },
+    "09-performance": {
+      "rendering-behavior": "React Rendering Behavior",
+      "react-memo": "React.memo: Preventing Re-renders",
+      "memoized-child": "Exercise: MemoizedChild",
+      "usememo-usecallback": "useMemo and useCallback Patterns",
+      "use-expensive-calc": "Exercise: useExpensiveCalc",
+      "use-stable-callback": "Exercise: useStableCallback",
+      "render-introspection": "Render Introspection with useRef",
+      "use-render-count": "Exercise: useRenderCount",
+      "debouncing": "Debouncing Expensive Work",
+      "use-debounced-value": "Exercise: useDebouncedValue",
+      "virtualization": "Virtual Scrolling for Large Lists",
+      "virtual-list": "Exercise: VirtualList"
+    },
+    "10-testing": {
+      "testing-fundamentals": "Testing Fundamentals & Philosophy",
+      "unit-testing-jest": "Unit Testing with Jest",
+      "sum": "Exercise: sum (toBe)",
+      "capitalize": "Exercise: capitalize (edge cases)",
+      "component-testing-rtl": "Component Testing with React Testing Library",
+      "greeting": "Exercise: Greeting (render + toBeInTheDocument)",
+      "effective-test-cases": "Writing Effective Test Cases",
+      "use-counter": "Exercise: useCounter (hook testing)",
+      "mocking-dependencies": "Mocking Dependencies",
+      "event-emitter": "Exercise: EventEmitter (jest.fn)",
+      "best-practices": "Testing Best Practices & Patterns",
+      "fetch-user-name": "Exercise: fetchUserName (mocked fetch)"
     }
   },
   "exercises": {
@@ -333,6 +451,501 @@
           "TOGGLE_TODO: flip `completed` on the todo whose id matches `action.payload`. DELETE_TODO: filter that id out. CLEAR_COMPLETED: keep only `!completed`",
           "TodoApp: input must have a `placeholder` containing `add todo` (e.g. `placeholder=\"Add todo\"`). Don't dispatch ADD_TODO if the input is empty/whitespace",
           "Each todo row needs a `<input type=\"checkbox\">` (for `getByRole('checkbox')`) and a button whose text contains `delete`. Plus one button whose text contains `clear completed`"
+        ]
+      }
+    },
+    "03-component-patterns": {
+      "card": {
+        "name": "Card (Composition)",
+        "description": "Build a Card component that wraps arbitrary children below a title.",
+        "hints": [
+          "Accept `title: string` and `children: React.ReactNode`",
+          "Render `<h2>{title}</h2>` then `{children}` inside one wrapper element",
+          "Tests use `getByRole('heading', { level: 2 })` — make sure the title uses an `<h2>`"
+        ]
+      },
+      "button-variant": {
+        "name": "Button Variants",
+        "description": "Render a button whose className is derived from a `variant` prop.",
+        "hints": [
+          "Accept `variant: 'primary' | 'secondary' | 'danger'`",
+          "Set ``className={`btn-${variant}`}`` on the `<button>`",
+          "Wire `onClick` straight on the button"
+        ]
+      },
+      "slot-card": {
+        "name": "Slot Card (Named Slots)",
+        "description": "A card with three named slots (header, body, footer) tagged via `data-slot`.",
+        "hints": [
+          "Accept three ReactNode props: `header`, `body`, `footer`",
+          "Render three children with `data-slot=\"header\" | \"body\" | \"footer\"` in that order",
+          "Tests use `container.querySelector('[data-slot=\"header\"]')` so the attribute name matters"
+        ]
+      },
+      "with-logger": {
+        "name": "withLogger (HOC)",
+        "description": "A higher-order component that wraps a component and counts its renders.",
+        "hints": [
+          "`withLogger(Component)` should return a new functional component",
+          "On every render, increment the module-level `RENDER_COUNT` variable",
+          "Forward all props with `<Component {...props} />`",
+          "Tests reset the counter via `resetRenderCount()` in `beforeEach`"
+        ]
+      },
+      "toggle": {
+        "name": "Toggle (Render Props)",
+        "description": "A Toggle that gives the consumer access to `on` state and a toggle fn via a function child.",
+        "hints": [
+          "Use `useState(false)` for the boolean `on`",
+          "`children` is a function — call it with `{ on, toggle }`",
+          "`toggle` should flip the boolean (use `setOn((v) => !v)`)"
+        ]
+      },
+      "tabs": {
+        "name": "Tabs (Compound Components)",
+        "description": "Build a `Tabs` + `Tab` + `TabPanel` set where parent and children share state via context.",
+        "hints": [
+          "`Tabs` manages `active` state with useState, initial value = `defaultActive`",
+          "Wrap children in `<TabsContext.Provider value={{ active, setActive }}>`",
+          "`Tab` reads context and renders a `<button>` whose className contains `\"active\"` when `active === id`",
+          "`TabPanel` reads context and renders its children only when `active === id`"
+        ]
+      }
+    },
+    "04-styling": {
+      "inline-styled": {
+        "name": "InlineStyled (Inline Style Prop)",
+        "description": "Render a <div> whose text color is driven entirely by an inline style prop.",
+        "hints": [
+          "Accept `color: string` and `children: React.ReactNode`",
+          "Render `<div style={{ color }}>{children}</div>` — a single wrapper element",
+          "Tests grab the element via `getByText(children)` then read `el.style.color`, so the `color` value must land on the element that holds the text",
+          "Don't normalize the colour — pass it through exactly as received (e.g. `red`, `rgb(10,20,30)`)"
+        ]
+      },
+      "badge": {
+        "name": "Badge (Variant className)",
+        "description": "A <span> badge whose CSS class is built from the `variant` prop.",
+        "hints": [
+          "Render a `<span>` (not a `<div>`) so it's inline",
+          "The element's className must literally include `badge-${variant}` — tests check `className.includes('badge-success')` etc.",
+          "Build it with a template literal: `` `badge-${variant}` ``",
+          "The children must be rendered as the span's text content"
+        ]
+      },
+      "padded-box": {
+        "name": "PaddedBox (Dynamic Inline Style)",
+        "description": "Render a <div> whose `padding` inline style is derived from a numeric prop.",
+        "hints": [
+          "Render `<div style={{ padding: `${padding}px` }}>{children}</div>`",
+          "Note the `px` suffix — tests expect `el.style.padding === '16px'`, not `'16'`",
+          "Even `padding={0}` must serialize to `'0px'` — the template literal handles that automatically",
+          "Tests find the element via `getByText(children)`, so the padding style must be on the element that holds the text"
+        ]
+      },
+      "themed-text": {
+        "name": "ThemedText (Theming via Context)",
+        "description": "Consume a theme from React Context and apply it as the inline color and background of a <p>.",
+        "hints": [
+          "`ThemeProvider` just wraps `children` in `<ThemeContext.Provider value={theme}>` — no extra DOM",
+          "`ThemedText` reads the theme with `useContext(ThemeContext)`",
+          "Render `<p style={{ color: theme.color, background: theme.background }}>{children}</p>`",
+          "Tests assert on `el.style.color` (exact match) and `el.style.background` (substring containing the value), so apply both on the same `<p>` that holds the text"
+        ]
+      },
+      "responsive-grid": {
+        "name": "ResponsiveGrid (CSS Grid Inline Style)",
+        "description": "Render a CSS-grid <div> whose column count comes from the `columns` prop.",
+        "hints": [
+          "Inline style must be `{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)` }`",
+          "Tests check `el.style.display === 'grid'`",
+          "Tests also check that the `style` attribute string contains the substring `repeat(3, 1fr)` for `columns={3}` — note the **space after the comma** matters",
+          "The grid element wraps `children`; tests reach it via `screen.getByText('cell').parentElement`"
+        ]
+      },
+      "alert": {
+        "name": "Alert (Role + Variant className)",
+        "description": "An accessible alert box whose styling comes from a className and whose semantics come from `role=\"alert\"`.",
+        "hints": [
+          "Render a `<div>` with `role=\"alert\"` so tests can find it with `getByRole('alert')`",
+          "The className must literally include `alert-${type}` — tests check `className.includes('alert-success')` etc.",
+          "Render the `message` string as the div's text content — `<div ...>{message}</div>`",
+          "Don't wrap the message in any extra elements — `toHaveTextContent(message)` needs the text directly on the alert div"
+        ]
+      }
+    },
+    "05-routing": {
+      "match": {
+        "name": "match (Pattern Matching)",
+        "description": "A pure function that matches a URL pattern with `:param` segments against a path and returns the captured parameters (or null on mismatch).",
+        "hints": [
+          "Signature is `match(pattern, path): Record<string, string> | null` — return null, NOT an empty object, when the path does not match",
+          "Split both `pattern` and `path` on '/' and compare segment-by-segment; a different segment count is an automatic null",
+          "A pattern segment starting with ':' captures the path segment; strip the leading ':' to get the param name",
+          "Static segments must equal their path counterpart exactly — `match('/x', '/y')` is null"
+        ]
+      },
+      "parse-query": {
+        "name": "parseQuery (Query Strings)",
+        "description": "A pure function that parses a query string (with or without a leading `?`) into a `Record<string, string>`. Empty string returns `{}`.",
+        "hints": [
+          "Signature is `parseQuery(qs): Record<string, string>` — never coerce values to numbers, keep them as strings",
+          "Strip a leading '?' if present before splitting on '&'",
+          "Return `{}` for an empty input string — do not return `null` or `undefined`",
+          "Each pair splits on '=' into a key and a value; assign into an accumulator object"
+        ]
+      },
+      "link": {
+        "name": "Link",
+        "description": "An anchor that performs client-side navigation: renders `<a href={to}>`, but intercepts clicks to call a `navigate` callback instead of letting the browser follow the link.",
+        "hints": [
+          "Props are `to: string`, `navigate: (to: string) => void`, and `children` — the rendered element is `<a href={to}>{children}</a>`",
+          "The onClick handler MUST call `e.preventDefault()` before calling `navigate(to)` — otherwise the browser follows the href and reloads",
+          "After preventDefault, call `navigate(to)` with the exact `to` prop value (not a derived value)",
+          "Tests check the `defaultPrevented` flag on the event AND assert `navigate` was called once with `to`"
+        ]
+      },
+      "route": {
+        "name": "Route",
+        "description": "Renders its children only when the `path` prop matches the `currentPath` prop (exact string comparison).",
+        "hints": [
+          "Props are `path: string`, `currentPath: string`, `children` — render `{children}` when `path === currentPath`, otherwise return `null`",
+          "Use strict equality (`===`) — no pattern matching, no startsWith",
+          "Returning `null` (not an empty fragment) is what hides the content from the rendered output",
+          "The component is presentational only; it does not own any state"
+        ]
+      },
+      "use-navigate": {
+        "name": "useNavigate",
+        "description": "A custom hook that owns the current path with useState and returns a `[path, navigate]` tuple.",
+        "hints": [
+          "Signature is `useNavigate(initial): [string, (to: string) => void]` — note the return is a TUPLE (array), not an object",
+          "Use `useState(initial)` internally; the tuple's first element is the state, the second is a function that calls the setter",
+          "The navigate function just sets the path — it does not need to validate or transform the input",
+          "Tests render a probe component, read the path via `data-testid=\"p\"`, and click buttons that call `navigate('/x')`"
+        ]
+      },
+      "protected-route": {
+        "name": "ProtectedRoute",
+        "description": "A wrapper component that renders its children when `isAuthenticated` is true and renders a `fallback` node otherwise.",
+        "hints": [
+          "Props are `isAuthenticated: boolean`, `children: React.ReactNode`, `fallback: React.ReactNode`",
+          "Return `{children}` when `isAuthenticated` is true; otherwise return `{fallback}` — both must be ReactNode, not strings",
+          "Do not call hooks or own any state — this is a pure render-time switch",
+          "Tests pass `<p>DASHBOARD</p>` as children and `<p>LOGIN</p>` as fallback and assert exactly one of them is in the document"
+        ]
+      }
+    },
+    "06-state-management": {
+      "create-store": {
+        "name": "createStore (Observable Store)",
+        "description": "Build a tiny pub/sub store with getState, setState (value or updater), and subscribe — the engine behind every external state library.",
+        "hints": [
+          "Keep `state` and a Set (or array) of listener callbacks in closure",
+          "`setState(next)`: if `typeof next === 'function'`, call `next(state)`; else use `next` directly",
+          "After updating state, call every listener with no args",
+          "`subscribe(fn)` returns an unsubscribe fn that removes `fn` from the listener set"
+        ]
+      },
+      "use-counter-reducer": {
+        "name": "useCounterReducer (useReducer Hook)",
+        "description": "Wrap useReducer in a hook that returns [state, dispatch] for a counter with increment / decrement / reset actions.",
+        "hints": [
+          "State shape is `{ count: number }`, initial `{ count: 0 }`",
+          "Reducer must be pure — return a NEW object, never mutate `state`",
+          "Handle action types `'increment'`, `'decrement'`, `'reset'`; return `state` for unknown types",
+          "Return the tuple `useReducer(reducer, initial)` produces, unchanged"
+        ]
+      },
+      "combine-reducers": {
+        "name": "combineReducers (Reducer Composition)",
+        "description": "Reproduce Redux's combineReducers: take a map of slice reducers and return a single root reducer that runs each on its own slice.",
+        "hints": [
+          "Return a NEW function `(state, action) => nextState`",
+          "Iterate over each key in the input map and call `reducers[key](state[key], action)`",
+          "Assemble the results into a fresh object — never mutate the input `state`",
+          "Unknown actions: each sub-reducer returns its slice unchanged, so the root returns an equal-shaped object"
+        ]
+      },
+      "use-toggle": {
+        "name": "useToggle (Boolean Hook)",
+        "description": "A reusable hook that returns [on, toggle] for a boolean value.",
+        "hints": [
+          "`const [on, setOn] = useState(initial)`",
+          "Use the functional updater: `setOn(v => !v)` to stay safe in event handlers",
+          "Return the tuple `[on, toggle]` — order matters for destructuring"
+        ]
+      },
+      "count-context": {
+        "name": "CountContext + Provider + useCount",
+        "description": "A typed Context API setup: CountProvider owns the state; useCount reads context and throws when used outside a provider.",
+        "hints": [
+          "`createContext<CountContextValue | null>(null)` so a missing provider is detectable",
+          "`CountProvider` uses `useState(0)` and defines `increment = () => setCount(c => c + 1)`",
+          "Pass `{ count, increment }` as the context value",
+          "`useCount` calls `useContext`, then `if (!ctx) throw new Error(...)` before returning"
+        ]
+      },
+      "use-local-storage": {
+        "name": "useLocalStorage (Persistent State)",
+        "description": "A useState-like hook that hydrates from localStorage on mount and writes JSON on every set.",
+        "hints": [
+          "Use the lazy form of useState: `useState<T>(() => readFromLocalStorage())`",
+          "Wrap the read in `try/catch` — return `initial` if the key is missing OR JSON.parse throws",
+          "The setter must update React state AND call `localStorage.setItem(key, JSON.stringify(next))`",
+          "Clear localStorage in test setup so each test starts clean"
+        ]
+      }
+    },
+    "07-data-fetching": {
+      "use-fetch": {
+        "name": "useFetch (basic data hook)",
+        "description": "Build a generic hook `useFetch<T>(url)` that exposes `{ data, loading, error }` and refetches when the URL changes.",
+        "hints": [
+          "Initial state: `{ data: null, loading: true, error: null }`",
+          "Use `useEffect` with `[url]` so the request re-runs whenever the URL prop changes",
+          "Reset to loading=true at the START of every fetch — not just on mount",
+          "On success call `r.json()` and put the result in `data`; on rejection put the error message in `error`",
+          "End every code path with `loading = false`"
+        ]
+      },
+      "use-debounce": {
+        "name": "useDebounce",
+        "description": "Return a debounced version of a value that only updates after `ms` milliseconds of no change.",
+        "hints": [
+          "`useState(value)` for the debounced copy",
+          "`useEffect(() => { const id = setTimeout(...); return () => clearTimeout(id); }, [value, ms])`",
+          "The cleanup is what cancels the pending update when `value` changes again",
+          "Return the initial value immediately on the first render"
+        ]
+      },
+      "use-interval": {
+        "name": "useInterval",
+        "description": "Run `callback` every `ms` ms; pause when `ms === null`; always use the latest callback (no stale closures).",
+        "hints": [
+          "Store `callback` in a `useRef` and update `ref.current = callback` in an effect on every render",
+          "In a second effect (dependency `[ms]`), call `setInterval(() => ref.current(), ms)`",
+          "Return early from the interval effect when `ms === null` so no interval is created",
+          "Always return a cleanup that calls `clearInterval`"
+        ]
+      },
+      "use-abortable": {
+        "name": "useAbortable",
+        "description": "Like useFetch, but cancels the in-flight request on unmount and on URL change using AbortController.",
+        "hints": [
+          "Inside the effect, create `const controller = new AbortController()`",
+          "Pass `{ signal: controller.signal }` as the second arg to `fetch`",
+          "Cleanup: `return () => controller.abort()`",
+          "In `.catch`, ignore errors where `err.name === 'AbortError'` — don't update state for those"
+        ]
+      },
+      "use-optimistic": {
+        "name": "useOptimistic",
+        "description": "Immediately reflect a tentative value, await the real commit, swap in the result, or revert on failure.",
+        "hints": [
+          "Return `[state, apply]` where `apply(optimistic, commit)` is async",
+          "Capture the CURRENT state into `previous` BEFORE you setState(optimistic) — otherwise rollback is wrong",
+          "On success: `setState(await commit())`",
+          "On rejection: `setState(previous)` and re-throw the error so callers can handle it"
+        ]
+      },
+      "create-cache": {
+        "name": "createCache",
+        "description": "A small framework-free in-memory cache: `get`, `set`, `has`, `clear` — used as a building block for request caching.",
+        "hints": [
+          "A closed-over `Map<string, T>` is the simplest backing store",
+          "`get` returns `map.get(key)` — `undefined` for missing keys is fine",
+          "`has` returns `map.has(key)`",
+          "`clear` calls `map.clear()`",
+          "Each call to `createCache()` must return a fresh independent instance (don't share state at module scope)"
+        ]
+      }
+    },
+    "08-forms": {
+      "validate-email": {
+        "name": "validateEmail (pure)",
+        "description": "Write a pure boolean validator that returns true when a string looks like a basic email address.",
+        "hints": [
+          "Signature: `validateEmail(s: string): boolean`",
+          "Regex: `/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/` — non-space-or-@ chars, then `@`, then non-space-or-@ chars, then `.`, then non-space-or-@ chars",
+          "Pure function: no trimming, no side effects",
+          "Tests cover valid addresses, missing `@`, missing TLD, embedded whitespace, and the empty string"
+        ]
+      },
+      "validate-min-length": {
+        "name": "validateMinLength (pure)",
+        "description": "Write a pure validator that returns true iff a string is at least `min` characters long.",
+        "hints": [
+          "Signature: `validateMinLength(s: string, min: number): boolean`",
+          "Return `s.length >= min`",
+          "Do NOT trim whitespace — the caller decides whether whitespace counts",
+          "Edge case: `validateMinLength('', 0)` is `true`"
+        ]
+      },
+      "use-field": {
+        "name": "useField (custom hook)",
+        "description": "Build a reusable controlled-field hook that returns `{ value, onChange, error }`.",
+        "hints": [
+          "Signature: `useField(initial: string, validate: (v: string) => string | null)`",
+          "Manage `value` with `useState(initial)`",
+          "`onChange` must be a `React.ChangeEventHandler<HTMLInputElement>` that reads `e.target.value`",
+          "`error` is just `validate(value)` recomputed each render",
+          "Consumers should be able to write `<input value={f.value} onChange={f.onChange} />`"
+        ]
+      },
+      "login-form": {
+        "name": "LoginForm",
+        "description": "A controlled login form that validates email + password (min 6 chars) and surfaces errors before calling onSubmit.",
+        "hints": [
+          "Props: `onSubmit: (data: { email: string; password: string }) => void`",
+          "Render `<form role=\"form\">` — tests look it up with `getByRole('form')`",
+          "Use `<label htmlFor>` + `<input id>` with label text exactly \"Email\" and \"Password\" so `getByLabelText('Email')` works",
+          "Submit `<button>` text must be \"Log in\"",
+          "On submit: call `e.preventDefault()`, then validate with `validateEmail` and `validateMinLength(password, 6)`",
+          "If any check fails, render a `<ul role=\"alert\">` with one `<li>` per error message",
+          "If both pass, call `onSubmit({ email, password })`"
+        ]
+      },
+      "multi-step-form": {
+        "name": "MultiStepForm",
+        "description": "A 3-step wizard with Back / Next buttons and a final Submit button on the last step.",
+        "hints": [
+          "Track the current step with `useState<1 | 2 | 3>(1)`",
+          "Render the heading as `<h2>Step {step}</h2>` — text must be exactly \"Step 1\", \"Step 2\", or \"Step 3\"",
+          "\"Back\" button is `disabled` on step 1",
+          "On steps 1 and 2, show a \"Next\" button that increments the step",
+          "On step 3, hide \"Next\" and render a \"Submit\" button instead — tests check both with `getByRole('button', { name: 'Submit' })` and `queryByRole('button', { name: 'Next' })`"
+        ]
+      },
+      "form-errors": {
+        "name": "FormErrors",
+        "description": "A presentational component that renders a list of field errors, or nothing when there are none.",
+        "hints": [
+          "Props: `errors: Record<string, string>`",
+          "If `Object.keys(errors).length === 0`, return `null`",
+          "Otherwise render `<ul role=\"alert\">` with one `<li data-error-key=\"{key}\">{message}</li>` per entry",
+          "Tests query items via `container.querySelector('[data-error-key=\"email\"]')`"
+        ]
+      }
+    },
+    "09-performance": {
+      "memoized-child": {
+        "name": "MemoizedChild (React.memo)",
+        "description": "Wrap a component in React.memo so identical `value` props short-circuit re-renders. Track render count via a module-level counter for assertions.",
+        "hints": [
+          "Wrap the component definition in `React.memo(...)`",
+          "On every render, increment the exported `MEMOIZED_RENDERS` counter",
+          "Render `<span>{value}</span>` so the test can locate the output",
+          "Tests reset the counter via `resetMemoizedRenders()` in `beforeEach`",
+          "If the parent's unrelated state bumps but `value` is unchanged, the counter must stay flat"
+        ]
+      },
+      "use-expensive-calc": {
+        "name": "useExpensiveCalc (useMemo)",
+        "description": "A hook that memoizes an expensive calculation, only re-running it when the numeric input changes.",
+        "hints": [
+          "Signature: `useExpensiveCalc(n: number, calc: (n: number) => number): number`",
+          "Return `useMemo(() => calc(n), [n])` — do NOT add `calc` to the deps",
+          "Tests pass a `jest.fn()` for `calc` and assert it's called once per distinct `n`"
+        ]
+      },
+      "use-stable-callback": {
+        "name": "useStableCallback",
+        "description": "Return a callback whose reference is stable across renders but which always invokes the latest closure.",
+        "hints": [
+          "Hold the latest `fn` in a `useRef` and update it on every render",
+          "Return a `useCallback` with empty deps that delegates to `ref.current(...args)`",
+          "Tests assert the returned function is `===` across renders AND that it sees the latest closed-over state"
+        ]
+      },
+      "use-render-count": {
+        "name": "useRenderCount",
+        "description": "A hook that returns how many times the host component has rendered.",
+        "hints": [
+          "Use `useRef(0)` so the counter survives across renders without triggering one",
+          "Increment `ref.current` on every render BEFORE returning it",
+          "Return `ref.current` directly — do not use `useState`, which would loop"
+        ]
+      },
+      "use-debounced-value": {
+        "name": "useDebouncedValue",
+        "description": "Return a debounced version of `value` that only updates after `ms` milliseconds of stability.",
+        "hints": [
+          "Hold the debounced value in `useState(value)`",
+          "Inside `useEffect` keyed on `[value, ms]`, schedule `setDebounced(value)` via `setTimeout`",
+          "Return a cleanup function that calls `clearTimeout(id)` — this is what resets the timer when `value` changes again",
+          "Tests use fake timers — initial render must produce the initial value synchronously"
+        ]
+      },
+      "virtual-list": {
+        "name": "VirtualList (windowing)",
+        "description": "Render only the visible slice of a long list so the DOM stays small no matter how many items.",
+        "hints": [
+          "`startIndex = Math.floor(scrollTop / itemHeight)`",
+          "`endIndex = startIndex + Math.ceil(windowHeight / itemHeight) + 1` (the `+1` is the overscan buffer)",
+          "Render a single `<ul>` with `items.slice(start, end).map(...)` — `Array.slice` already clamps at `items.length`",
+          "Each `<li>` text content is the item string; `key={start + i}` is fine"
+        ]
+      }
+    },
+    "10-testing": {
+      "sum": {
+        "name": "sum (toBe)",
+        "description": "A pure function adding two numbers. Teaches the most basic assertion: `expect(actual).toBe(expected)`.",
+        "hints": [
+          "Signature: `sum(a: number, b: number): number`",
+          "Just `return a + b` — nothing else",
+          "Tests use `expect(sum(2, 3)).toBe(5)` — primitive `===` equality"
+        ]
+      },
+      "capitalize": {
+        "name": "capitalize (edge cases)",
+        "description": "A pure function that upper-cases the first character of a string. Teaches handling edge cases (empty string) with multiple assertions.",
+        "hints": [
+          "Signature: `capitalize(s: string): string`",
+          "Guard the empty string first: `if (!s) return ''`",
+          "Otherwise: `s[0].toUpperCase() + s.slice(1)`",
+          "Already-capitalized inputs (e.g. 'ABC') must stay unchanged"
+        ]
+      },
+      "greeting": {
+        "name": "Greeting (render + jest-dom)",
+        "description": "Render `<p>Hello, {name}!</p>`. Teaches `render()`, `screen.getByText`, and `toBeInTheDocument`.",
+        "hints": [
+          "Accept `name: string`",
+          "Return exactly `<p>Hello, {name}!</p>` — note the comma, space, and `!`",
+          "Tests rely on `screen.getByText('Hello, Ada!')` — the text must be a single, exact match"
+        ]
+      },
+      "use-counter": {
+        "name": "useCounter (hook testing)",
+        "description": "A counter hook exposing `{ count, increment, decrement }`. Teaches hook testing via a wrapper component that surfaces the hook through the DOM.",
+        "hints": [
+          "Use `useState(initial)` for the count",
+          "`increment` should be `() => setCount((c) => c + 1)`",
+          "`decrement` should be `() => setCount((c) => c - 1)`",
+          "Return `{ count, increment, decrement }` — exact field names, the test harness component reads them"
+        ]
+      },
+      "event-emitter": {
+        "name": "EventEmitter (jest.fn + unsubscribe)",
+        "description": "A tiny pub/sub class with `on`, `off`, `emit`. Teaches `jest.fn()` for spies plus `toHaveBeenCalledTimes` / `toHaveBeenCalledWith` for multiple subscribers and unsubscription.",
+        "hints": [
+          "Store listeners in a `Map<string, Listener[]>`",
+          "`on(event, fn)` appends fn to the array (create the array if missing)",
+          "`off(event, fn)` removes that exact fn reference — `array.filter(l => l !== fn)` works",
+          "`emit(event, ...args)` calls every listener; if no listeners exist, do nothing (don't throw)"
+        ]
+      },
+      "fetch-user-name": {
+        "name": "fetchUserName (mocked fetch)",
+        "description": "Async function that fetches `/api/users/{id}` and returns the `name` field. Teaches mocking `global.fetch` with `jest.fn().mockResolvedValue(...)` and asserting on the URL the function called.",
+        "hints": [
+          "`const res = await fetch('/api/users/' + id)`",
+          "`const user = await res.json()`",
+          "`return user.name`",
+          "Tests replace `global.fetch` with a mock that resolves to `{ json: () => Promise.resolve({ name: 'Alice' }) }`",
+          "The URL must be exactly `/api/users/<id>` — the test checks via `toHaveBeenCalledWith('/api/users/42')`"
         ]
       }
     }

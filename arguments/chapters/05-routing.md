@@ -80,31 +80,6 @@ graph TD
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### Angular Router vs React Router Philosophy
-
-```
-Angular Router                  React Router
-──────────────                 ─────────────
-
-Opinionated Configuration      Flexible Component-Based
-RouterModule.forRoot([])       <Routes><Route /></Routes>
-
-Built-in Lazy Loading          Code-splitting via React.lazy()
-loadChildren: () => import()   const Comp = lazy(() => import())
-
-Route Guards                   Custom Components/Hooks
-CanActivate, CanDeactivate     <ProtectedRoute>, useAuth()
-
-Resolvers                      Data Loaders (v6.4+)
-resolve: DataResolver          loader: async () => {}
-
-Nested Routes (Outlets)        Nested <Routes> + <Outlet>
-<router-outlet>                <Outlet />
-
-Imperative Navigation          Declarative + Imperative
-router.navigate(['/path'])     <Link to="/path" /> or navigate()
-```
-
 ---
 
 ## 2. React Router Fundamentals

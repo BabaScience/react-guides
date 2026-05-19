@@ -102,27 +102,6 @@ graph TD
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### Angular vs React State Management
-
-```
-Angular                          React
-───────                         ─────
-
-Services (Injectable)           Context API
-RxJS Observables                useState + useEffect
-BehaviorSubject                 Custom hooks
-
-NgRx (Redux-inspired)           Redux Toolkit
-@ngrx/store                     @reduxjs/toolkit
-Actions, Reducers, Effects      Actions, Reducers, Thunks
-
-Component State                 useState
-@Input() / @Output()            Props / Callbacks
-
-Signals (Angular 16+)           Jotai / Recoil atoms
-computed(), effect()            derived atoms, selectors
-```
-
 ---
 
 ## 2. Local vs Global State: Decision Framework

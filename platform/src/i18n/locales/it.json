@@ -13,6 +13,7 @@
     "continue": "Continua →",
     "nextStep": "Passo Successivo →",
     "nextExercise": "Esercizio Successivo →",
+    "nextExerciseTooltipUnverified": "I test non sono ancora superati — puoi comunque proseguire, ma questo esercizio non sarà segnato come completato.",
     "completeModule": "Completa Modulo ✓",
     "startLearning": "Inizia a Imparare",
     "readLesson": "Leggi Lezione",
@@ -56,6 +57,9 @@
     "toRun": "per eseguire",
     "runningTests": "Esecuzione test...",
     "sandboxError": "Errore Sandbox",
+    "markCompleteManually": "Segna come completato manualmente",
+    "manuallyCompleted": "Completato manualmente",
+    "manualCompleteHint": "Se sei sicuro che il codice sia corretto e il problema è del motore di test, puoi segnare questo esercizio come completato e continuare.",
     "loadingExercise": "Caricamento esercizio...",
     "exerciseNotFound": "Esercizio non trovato",
     "fileName": "index.tsx",
@@ -186,6 +190,120 @@
       "todo-reducer": "Esercizio: App Todo (useReducer)",
       "custom-hooks": "Hook Personalizzati",
       "advanced-patterns": "Pattern Avanzati"
+    },
+    "03-component-patterns": {
+      "composition-reusability": "Composizione e Riusabilità dei Componenti",
+      "card": "Esercizio: Card (Composizione)",
+      "prop-drilling": "Prop Drilling: Problema e Soluzioni",
+      "button-variant": "Esercizio: Varianti di Pulsante",
+      "presentational-container": "Componenti Presentazionali vs Container",
+      "slot-card": "Esercizio: Slot Card",
+      "hoc-pattern": "Higher-Order Components (HOC)",
+      "with-logger": "Esercizio: HOC withLogger",
+      "render-props": "Pattern Render Props",
+      "toggle": "Esercizio: Toggle (Render Props)",
+      "compound-components": "Compound Components",
+      "tabs": "Esercizio: Tabs (Compound)"
+    },
+    "04-styling": {
+      "styling-paradigms": "Paradigmi di Stilizzazione",
+      "inline-styles": "Stili Inline",
+      "inline-styled": "Esercizio: InlineStyled",
+      "css-modules": "CSS Modules",
+      "badge": "Esercizio: Badge",
+      "css-in-js": "CSS-in-JS",
+      "padded-box": "Esercizio: PaddedBox",
+      "theming-design-systems": "Theming e Design System",
+      "themed-text": "Esercizio: ThemedText",
+      "tailwind-utility-first": "Tailwind: CSS Utility-First",
+      "responsive-grid": "Esercizio: ResponsiveGrid",
+      "css-frameworks": "Integrazione di Framework CSS",
+      "alert": "Esercizio: Alert"
+    },
+    "05-routing": {
+      "routing-paradigms": "Paradigmi di Routing e Architettura",
+      "react-router-fundamentals": "Fondamenti di React Router",
+      "route-configuration": "Configurazione delle Route e Navigazione",
+      "match": "Esercizio: match (Pattern Matching)",
+      "parse-query": "Esercizio: parseQuery (Query String)",
+      "link": "Esercizio: Link",
+      "route": "Esercizio: Route",
+      "dynamic-routing": "Routing Dinamico con Parametri",
+      "programmatic-navigation": "Navigazione Programmatica",
+      "use-navigate": "Esercizio: useNavigate",
+      "protected-routes": "Route Protette e Autenticazione",
+      "protected-route": "Esercizio: ProtectedRoute"
+    },
+    "06-state-management": {
+      "paradigms": "Paradigmi di Gestione dello Stato",
+      "local-vs-global": "Stato Locale vs Globale",
+      "create-store": "Esercizio: createStore (Store Observable)",
+      "context-api": "Context API: Stato Globale Semplice",
+      "count-context": "Esercizio: CountContext + Provider + useCount",
+      "redux-toolkit": "Redux Toolkit: Redux Moderno",
+      "use-counter-reducer": "Esercizio: useCounterReducer",
+      "redux-core": "Approfondimento sui Concetti Fondamentali di Redux",
+      "combine-reducers": "Esercizio: combineReducers",
+      "zustand": "Zustand: Gestione Stato Minimalista",
+      "use-toggle": "Esercizio: useToggle",
+      "use-local-storage": "Esercizio: useLocalStorage"
+    },
+    "07-data-fetching": {
+      "fetching-paradigms": "Paradigmi di Recupero Dati",
+      "native-fetch": "API Fetch Nativa",
+      "use-fetch": "Esercizio: useFetch",
+      "loading-error-states": "Stati di Caricamento ed Errore",
+      "use-debounce": "Esercizio: useDebounce",
+      "polling": "Polling e Aggiornamenti in Tempo Reale",
+      "use-interval": "Esercizio: useInterval",
+      "cancellation": "Cancellazione con AbortController",
+      "use-abortable": "Esercizio: useAbortable",
+      "optimistic-updates": "Aggiornamenti Ottimistici",
+      "use-optimistic": "Esercizio: useOptimistic",
+      "cache-strategies": "Strategie di Gestione della Cache",
+      "create-cache": "Esercizio: createCache"
+    },
+    "08-forms": {
+      "form-paradigms": "Paradigmi di Gestione dei Form",
+      "controlled-uncontrolled": "Componenti Controllati vs Non Controllati",
+      "validate-email": "Esercizio: validateEmail",
+      "validate-min-length": "Esercizio: validateMinLength",
+      "custom-field-hook": "Stato di Campo Riutilizzabile con Hook Personalizzati",
+      "use-field": "Esercizio: useField (hook personalizzato)",
+      "form-validation": "Validare Form senza una Libreria",
+      "login-form": "Esercizio: LoginForm",
+      "multi-step-forms": "Form Multi-Step",
+      "multi-step-form": "Esercizio: MultiStepForm",
+      "advanced-patterns": "Pattern Avanzati per i Form",
+      "form-errors": "Esercizio: FormErrors"
+    },
+    "09-performance": {
+      "rendering-behavior": "Comportamento di Rendering di React",
+      "react-memo": "React.memo: Prevenire i Re-render",
+      "memoized-child": "Esercizio: MemoizedChild",
+      "usememo-usecallback": "Pattern useMemo e useCallback",
+      "use-expensive-calc": "Esercizio: useExpensiveCalc",
+      "use-stable-callback": "Esercizio: useStableCallback",
+      "render-introspection": "Introspezione del Rendering con useRef",
+      "use-render-count": "Esercizio: useRenderCount",
+      "debouncing": "Debouncing del Lavoro Costoso",
+      "use-debounced-value": "Esercizio: useDebouncedValue",
+      "virtualization": "Scrolling Virtuale per Liste Grandi",
+      "virtual-list": "Esercizio: VirtualList"
+    },
+    "10-testing": {
+      "testing-fundamentals": "Fondamenti e Filosofia del Testing",
+      "unit-testing-jest": "Test Unitari con Jest",
+      "sum": "Esercizio: sum (toBe)",
+      "capitalize": "Esercizio: capitalize (casi limite)",
+      "component-testing-rtl": "Test dei Componenti con React Testing Library",
+      "greeting": "Esercizio: Greeting (render + toBeInTheDocument)",
+      "effective-test-cases": "Scrivere Test Case Efficaci",
+      "use-counter": "Esercizio: useCounter (test di hook)",
+      "mocking-dependencies": "Mocking delle Dipendenze",
+      "event-emitter": "Esercizio: EventEmitter (jest.fn)",
+      "best-practices": "Best Practice e Pattern di Testing",
+      "fetch-user-name": "Esercizio: fetchUserName (fetch mockato)"
     }
   },
   "exercises": {
@@ -333,6 +451,501 @@
           "TOGGLE_TODO: inverte `completed` sul todo con id corrispondente. DELETE_TODO: rimuove quel id. CLEAR_COMPLETED: mantiene solo `!completed`",
           "TodoApp: l'input deve avere un `placeholder` contenente `add todo` (es. `placeholder=\"Add todo\"`). Non fare dispatch ADD_TODO se l'input è vuoto/whitespace",
           "Ogni riga todo necessita di un `<input type=\"checkbox\">` (per `getByRole('checkbox')`) e un pulsante con testo contenente `delete`. Più un pulsante con testo contenente `clear completed`"
+        ]
+      }
+    },
+    "03-component-patterns": {
+      "card": {
+        "name": "Card (Composizione)",
+        "description": "Costruisci un componente Card che avvolge children arbitrari sotto un titolo.",
+        "hints": [
+          "Accetta `title: string` e `children: React.ReactNode`",
+          "Renderizza `<h2>{title}</h2>` poi `{children}` dentro un singolo elemento wrapper",
+          "I test usano `getByRole('heading', { level: 2 })` — assicurati che il titolo usi un `<h2>`"
+        ]
+      },
+      "button-variant": {
+        "name": "Varianti di Pulsante",
+        "description": "Renderizza un pulsante il cui className è derivato da una prop `variant`.",
+        "hints": [
+          "Accetta `variant: 'primary' | 'secondary' | 'danger'`",
+          "Imposta ``className={`btn-${variant}`}`` sul `<button>`",
+          "Collega `onClick` direttamente sul pulsante"
+        ]
+      },
+      "slot-card": {
+        "name": "Slot Card (Slot Nominati)",
+        "description": "Una card con tre slot nominati (header, body, footer) marcati tramite `data-slot`.",
+        "hints": [
+          "Accetta tre prop ReactNode: `header`, `body`, `footer`",
+          "Renderizza tre children con `data-slot=\"header\" | \"body\" | \"footer\"` in quell'ordine",
+          "I test usano `container.querySelector('[data-slot=\"header\"]')` quindi il nome dell'attributo conta"
+        ]
+      },
+      "with-logger": {
+        "name": "withLogger (HOC)",
+        "description": "Un higher-order component che avvolge un componente e ne conta i render.",
+        "hints": [
+          "`withLogger(Component)` deve restituire un nuovo componente funzionale",
+          "Ad ogni render, incrementa la variabile `RENDER_COUNT` a livello di modulo",
+          "Inoltra tutte le prop con `<Component {...props} />`",
+          "I test resettano il contatore tramite `resetRenderCount()` in `beforeEach`"
+        ]
+      },
+      "toggle": {
+        "name": "Toggle (Render Props)",
+        "description": "Un Toggle che dà al consumer accesso allo stato `on` e a una funzione toggle tramite un child funzione.",
+        "hints": [
+          "Usa `useState(false)` per il booleano `on`",
+          "`children` è una funzione — chiamala con `{ on, toggle }`",
+          "`toggle` deve invertire il booleano (usa `setOn((v) => !v)`)"
+        ]
+      },
+      "tabs": {
+        "name": "Tabs (Compound Components)",
+        "description": "Costruisci un insieme `Tabs` + `Tab` + `TabPanel` dove genitore e figli condividono lo stato tramite context.",
+        "hints": [
+          "`Tabs` gestisce lo stato `active` con useState, valore iniziale = `defaultActive`",
+          "Avvolgi i children in `<TabsContext.Provider value={{ active, setActive }}>`",
+          "`Tab` legge il context e renderizza un `<button>` il cui className contiene `\"active\"` quando `active === id`",
+          "`TabPanel` legge il context e renderizza i suoi children solo quando `active === id`"
+        ]
+      }
+    },
+    "04-styling": {
+      "inline-styled": {
+        "name": "InlineStyled (Prop Style Inline)",
+        "description": "Renderizza un <div> il cui colore del testo è guidato interamente da una prop style inline.",
+        "hints": [
+          "Accetta `color: string` e `children: React.ReactNode`",
+          "Renderizza `<div style={{ color }}>{children}</div>` — un singolo elemento wrapper",
+          "I test recuperano l'elemento con `getByText(children)` poi leggono `el.style.color`, quindi il valore `color` deve trovarsi sull'elemento che contiene il testo",
+          "Non normalizzare il colore — passalo esattamente come ricevuto (es. `red`, `rgb(10,20,30)`)"
+        ]
+      },
+      "badge": {
+        "name": "Badge (className Variante)",
+        "description": "Un badge <span> la cui classe CSS è costruita dalla prop `variant`.",
+        "hints": [
+          "Renderizza un `<span>` (non un `<div>`) così è inline",
+          "Il className dell'elemento deve contenere letteralmente `badge-${variant}` — i test verificano `className.includes('badge-success')` ecc.",
+          "Costruiscilo con un template literal: `` `badge-${variant}` ``",
+          "I children devono essere renderizzati come contenuto testuale dello span"
+        ]
+      },
+      "padded-box": {
+        "name": "PaddedBox (Style Inline Dinamico)",
+        "description": "Renderizza un <div> il cui style inline `padding` è derivato da una prop numerica.",
+        "hints": [
+          "Renderizza `<div style={{ padding: `${padding}px` }}>{children}</div>`",
+          "Nota il suffisso `px` — i test si aspettano `el.style.padding === '16px'`, non `'16'`",
+          "Anche `padding={0}` deve serializzarsi in `'0px'` — il template literal lo gestisce automaticamente",
+          "I test trovano l'elemento con `getByText(children)`, quindi lo style padding deve essere sull'elemento che contiene il testo"
+        ]
+      },
+      "themed-text": {
+        "name": "ThemedText (Theming tramite Context)",
+        "description": "Consuma un tema da React Context e applicalo come colore inline e background di un <p>.",
+        "hints": [
+          "`ThemeProvider` si limita ad avvolgere `children` in `<ThemeContext.Provider value={theme}>` — nessun DOM extra",
+          "`ThemedText` legge il tema con `useContext(ThemeContext)`",
+          "Renderizza `<p style={{ color: theme.color, background: theme.background }}>{children}</p>`",
+          "I test verificano `el.style.color` (match esatto) e `el.style.background` (sottostringa contenente il valore), quindi applica entrambi sullo stesso `<p>` che contiene il testo"
+        ]
+      },
+      "responsive-grid": {
+        "name": "ResponsiveGrid (Style Inline CSS Grid)",
+        "description": "Renderizza un <div> in CSS grid il cui numero di colonne proviene dalla prop `columns`.",
+        "hints": [
+          "Lo style inline deve essere `{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)` }`",
+          "I test verificano `el.style.display === 'grid'`",
+          "I test verificano anche che la stringa dell'attributo `style` contenga la sottostringa `repeat(3, 1fr)` per `columns={3}` — nota che **lo spazio dopo la virgola** conta",
+          "L'elemento grid avvolge `children`; i test vi accedono tramite `screen.getByText('cell').parentElement`"
+        ]
+      },
+      "alert": {
+        "name": "Alert (Role + className Variante)",
+        "description": "Una alert box accessibile il cui stile proviene da un className e la cui semantica proviene da `role=\"alert\"`.",
+        "hints": [
+          "Renderizza un `<div>` con `role=\"alert\"` così i test possono trovarlo con `getByRole('alert')`",
+          "Il className deve contenere letteralmente `alert-${type}` — i test verificano `className.includes('alert-success')` ecc.",
+          "Renderizza la stringa `message` come contenuto testuale del div — `<div ...>{message}</div>`",
+          "Non avvolgere il messaggio in elementi extra — `toHaveTextContent(message)` ha bisogno del testo direttamente sul div alert"
+        ]
+      }
+    },
+    "05-routing": {
+      "match": {
+        "name": "match (Pattern Matching)",
+        "description": "Una funzione pura che fa il match di un pattern URL con segmenti `:param` contro un path e restituisce i parametri catturati (o null in caso di mancata corrispondenza).",
+        "hints": [
+          "Signature: `match(pattern, path): Record<string, string> | null` — restituisci null, NON un oggetto vuoto, quando il path non corrisponde",
+          "Spezza sia `pattern` che `path` su '/' e confronta segmento per segmento; un numero di segmenti diverso è automaticamente null",
+          "Un segmento di pattern che inizia con ':' cattura il segmento del path; rimuovi il ':' iniziale per ottenere il nome del parametro",
+          "I segmenti statici devono essere esattamente uguali al loro corrispettivo nel path — `match('/x', '/y')` è null"
+        ]
+      },
+      "parse-query": {
+        "name": "parseQuery (Query String)",
+        "description": "Una funzione pura che fa il parse di una query string (con o senza `?` iniziale) in un `Record<string, string>`. La stringa vuota restituisce `{}`.",
+        "hints": [
+          "Signature: `parseQuery(qs): Record<string, string>` — non convertire mai i valori in numeri, mantienili come stringhe",
+          "Rimuovi un '?' iniziale se presente prima di splittare su '&'",
+          "Restituisci `{}` per una stringa di input vuota — non restituire `null` o `undefined`",
+          "Ogni coppia viene splittata su '=' in una chiave e un valore; assegna a un oggetto accumulatore"
+        ]
+      },
+      "link": {
+        "name": "Link",
+        "description": "Un'ancora che esegue navigazione client-side: renderizza `<a href={to}>`, ma intercetta i click per chiamare un callback `navigate` invece di lasciare che il browser segua il link.",
+        "hints": [
+          "Le prop sono `to: string`, `navigate: (to: string) => void` e `children` — l'elemento renderizzato è `<a href={to}>{children}</a>`",
+          "L'handler onClick DEVE chiamare `e.preventDefault()` prima di chiamare `navigate(to)` — altrimenti il browser segue l'href e ricarica",
+          "Dopo preventDefault, chiama `navigate(to)` con il valore esatto della prop `to` (non un valore derivato)",
+          "I test verificano il flag `defaultPrevented` sull'evento E che `navigate` sia stato chiamato una volta con `to`"
+        ]
+      },
+      "route": {
+        "name": "Route",
+        "description": "Renderizza i suoi children solo quando la prop `path` corrisponde alla prop `currentPath` (confronto esatto tra stringhe).",
+        "hints": [
+          "Le prop sono `path: string`, `currentPath: string`, `children` — renderizza `{children}` quando `path === currentPath`, altrimenti restituisci `null`",
+          "Usa uguaglianza stretta (`===`) — niente pattern matching, niente startsWith",
+          "Restituire `null` (non un fragment vuoto) è ciò che nasconde il contenuto dall'output renderizzato",
+          "Il componente è solo presentazionale; non possiede alcuno stato"
+        ]
+      },
+      "use-navigate": {
+        "name": "useNavigate",
+        "description": "Un hook personalizzato che possiede il path corrente con useState e restituisce una tupla `[path, navigate]`.",
+        "hints": [
+          "Signature: `useNavigate(initial): [string, (to: string) => void]` — nota che il ritorno è una TUPLA (array), non un oggetto",
+          "Usa `useState(initial)` internamente; il primo elemento della tupla è lo stato, il secondo è una funzione che chiama il setter",
+          "La funzione navigate si limita a impostare il path — non deve validare o trasformare l'input",
+          "I test renderizzano un componente sonda, leggono il path tramite `data-testid=\"p\"`, e cliccano pulsanti che chiamano `navigate('/x')`"
+        ]
+      },
+      "protected-route": {
+        "name": "ProtectedRoute",
+        "description": "Un componente wrapper che renderizza i suoi children quando `isAuthenticated` è true e renderizza un nodo `fallback` altrimenti.",
+        "hints": [
+          "Le prop sono `isAuthenticated: boolean`, `children: React.ReactNode`, `fallback: React.ReactNode`",
+          "Restituisci `{children}` quando `isAuthenticated` è true; altrimenti restituisci `{fallback}` — entrambi devono essere ReactNode, non stringhe",
+          "Non chiamare hook e non possedere stato — è uno switch puro al momento del render",
+          "I test passano `<p>DASHBOARD</p>` come children e `<p>LOGIN</p>` come fallback e verificano che esattamente uno dei due sia nel documento"
+        ]
+      }
+    },
+    "06-state-management": {
+      "create-store": {
+        "name": "createStore (Store Observable)",
+        "description": "Costruisci un piccolo store pub/sub con getState, setState (valore o updater) e subscribe — il motore dietro ogni libreria di stato esterna.",
+        "hints": [
+          "Mantieni `state` e un Set (o array) di callback listener in closure",
+          "`setState(next)`: se `typeof next === 'function'`, chiama `next(state)`; altrimenti usa `next` direttamente",
+          "Dopo aver aggiornato lo stato, chiama ogni listener senza argomenti",
+          "`subscribe(fn)` restituisce una funzione di unsubscribe che rimuove `fn` dal set di listener"
+        ]
+      },
+      "use-counter-reducer": {
+        "name": "useCounterReducer (Hook useReducer)",
+        "description": "Avvolgi useReducer in un hook che restituisce [state, dispatch] per un contatore con action increment / decrement / reset.",
+        "hints": [
+          "Forma dello stato: `{ count: number }`, iniziale `{ count: 0 }`",
+          "Il reducer deve essere puro — restituisci un NUOVO oggetto, non mutare mai `state`",
+          "Gestisci i tipi di action `'increment'`, `'decrement'`, `'reset'`; restituisci `state` per tipi sconosciuti",
+          "Restituisci la tupla prodotta da `useReducer(reducer, initial)`, invariata"
+        ]
+      },
+      "combine-reducers": {
+        "name": "combineReducers (Composizione di Reducer)",
+        "description": "Riproduci il combineReducers di Redux: prendi una map di slice reducer e restituisci un singolo reducer root che esegue ciascuno sulla propria slice.",
+        "hints": [
+          "Restituisci una NUOVA funzione `(state, action) => nextState`",
+          "Itera su ogni chiave della map di input e chiama `reducers[key](state[key], action)`",
+          "Assembla i risultati in un nuovo oggetto — non mutare mai lo `state` di input",
+          "Action sconosciute: ogni sotto-reducer restituisce la propria slice invariata, quindi il root restituisce un oggetto di forma equivalente"
+        ]
+      },
+      "use-toggle": {
+        "name": "useToggle (Hook Booleano)",
+        "description": "Un hook riutilizzabile che restituisce [on, toggle] per un valore booleano.",
+        "hints": [
+          "`const [on, setOn] = useState(initial)`",
+          "Usa l'updater funzionale: `setOn(v => !v)` per restare sicuri negli event handler",
+          "Restituisci la tupla `[on, toggle]` — l'ordine conta per il destructuring"
+        ]
+      },
+      "count-context": {
+        "name": "CountContext + Provider + useCount",
+        "description": "Un setup tipizzato di Context API: CountProvider possiede lo stato; useCount legge il context e lancia un errore quando viene usato fuori da un provider.",
+        "hints": [
+          "`createContext<CountContextValue | null>(null)` così un provider mancante è rilevabile",
+          "`CountProvider` usa `useState(0)` e definisce `increment = () => setCount(c => c + 1)`",
+          "Passa `{ count, increment }` come valore del context",
+          "`useCount` chiama `useContext`, poi `if (!ctx) throw new Error(...)` prima di restituire"
+        ]
+      },
+      "use-local-storage": {
+        "name": "useLocalStorage (Stato Persistente)",
+        "description": "Un hook tipo useState che si idrata da localStorage al mount e scrive JSON ad ogni set.",
+        "hints": [
+          "Usa la forma lazy di useState: `useState<T>(() => readFromLocalStorage())`",
+          "Avvolgi la lettura in un `try/catch` — restituisci `initial` se la chiave manca OPPURE se JSON.parse lancia",
+          "Il setter deve aggiornare lo stato React E chiamare `localStorage.setItem(key, JSON.stringify(next))`",
+          "Svuota localStorage nel setup dei test così ogni test parte pulito"
+        ]
+      }
+    },
+    "07-data-fetching": {
+      "use-fetch": {
+        "name": "useFetch (hook di dati basico)",
+        "description": "Costruisci un hook generico `useFetch<T>(url)` che espone `{ data, loading, error }` e fa refetch quando l'URL cambia.",
+        "hints": [
+          "Stato iniziale: `{ data: null, loading: true, error: null }`",
+          "Usa `useEffect` con `[url]` così la richiesta viene rilanciata ogni volta che la prop URL cambia",
+          "Resetta a loading=true all'INIZIO di ogni fetch — non solo al mount",
+          "In caso di successo chiama `r.json()` e metti il risultato in `data`; in caso di rejection metti il messaggio di errore in `error`",
+          "Termina ogni percorso di codice con `loading = false`"
+        ]
+      },
+      "use-debounce": {
+        "name": "useDebounce",
+        "description": "Restituisci una versione debounced di un valore che si aggiorna solo dopo `ms` millisecondi senza cambiamenti.",
+        "hints": [
+          "`useState(value)` per la copia debounced",
+          "`useEffect(() => { const id = setTimeout(...); return () => clearTimeout(id); }, [value, ms])`",
+          "Il cleanup è ciò che cancella l'aggiornamento pendente quando `value` cambia di nuovo",
+          "Restituisci il valore iniziale immediatamente al primo render"
+        ]
+      },
+      "use-interval": {
+        "name": "useInterval",
+        "description": "Esegue `callback` ogni `ms` ms; mette in pausa quando `ms === null`; usa sempre l'ultimo callback (niente closure stantie).",
+        "hints": [
+          "Memorizza `callback` in un `useRef` e aggiorna `ref.current = callback` in un effetto ad ogni render",
+          "In un secondo effetto (dipendenza `[ms]`), chiama `setInterval(() => ref.current(), ms)`",
+          "Esci subito dall'effetto interval quando `ms === null` così non viene creato alcun interval",
+          "Restituisci sempre un cleanup che chiama `clearInterval`"
+        ]
+      },
+      "use-abortable": {
+        "name": "useAbortable",
+        "description": "Come useFetch, ma cancella la richiesta in corso al unmount e al cambio di URL usando AbortController.",
+        "hints": [
+          "Dentro l'effetto, crea `const controller = new AbortController()`",
+          "Passa `{ signal: controller.signal }` come secondo argomento a `fetch`",
+          "Cleanup: `return () => controller.abort()`",
+          "Nel `.catch`, ignora gli errori in cui `err.name === 'AbortError'` — non aggiornare lo stato per quelli"
+        ]
+      },
+      "use-optimistic": {
+        "name": "useOptimistic",
+        "description": "Rifletti immediatamente un valore tentativo, attendi il commit reale, sostituisci con il risultato o fai rollback in caso di fallimento.",
+        "hints": [
+          "Restituisci `[state, apply]` dove `apply(optimistic, commit)` è async",
+          "Cattura lo stato CORRENTE in `previous` PRIMA di fare setState(optimistic) — altrimenti il rollback è sbagliato",
+          "In caso di successo: `setState(await commit())`",
+          "In caso di rejection: `setState(previous)` e rilancia l'errore così i chiamanti possono gestirlo"
+        ]
+      },
+      "create-cache": {
+        "name": "createCache",
+        "description": "Una piccola cache in memoria senza framework: `get`, `set`, `has`, `clear` — usata come mattone per il caching delle richieste.",
+        "hints": [
+          "Una `Map<string, T>` chiusa in closure è il backing store più semplice",
+          "`get` restituisce `map.get(key)` — `undefined` per chiavi mancanti va bene",
+          "`has` restituisce `map.has(key)`",
+          "`clear` chiama `map.clear()`",
+          "Ogni chiamata a `createCache()` deve restituire una nuova istanza indipendente (non condividere stato a livello di modulo)"
+        ]
+      }
+    },
+    "08-forms": {
+      "validate-email": {
+        "name": "validateEmail (pura)",
+        "description": "Scrivi un validatore booleano puro che restituisce true quando una stringa assomiglia a un indirizzo email basico.",
+        "hints": [
+          "Signature: `validateEmail(s: string): boolean`",
+          "Regex: `/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/` — caratteri non-spazio-né-@, poi `@`, poi caratteri non-spazio-né-@, poi `.`, poi caratteri non-spazio-né-@",
+          "Funzione pura: niente trim, nessun effetto collaterale",
+          "I test coprono indirizzi validi, `@` mancante, TLD mancante, whitespace interno e la stringa vuota"
+        ]
+      },
+      "validate-min-length": {
+        "name": "validateMinLength (pura)",
+        "description": "Scrivi un validatore puro che restituisce true se e solo se una stringa è lunga almeno `min` caratteri.",
+        "hints": [
+          "Signature: `validateMinLength(s: string, min: number): boolean`",
+          "Restituisci `s.length >= min`",
+          "Non fare trim del whitespace — decide il chiamante se gli spazi contano",
+          "Caso limite: `validateMinLength('', 0)` è `true`"
+        ]
+      },
+      "use-field": {
+        "name": "useField (hook personalizzato)",
+        "description": "Costruisci un hook di campo controllato riutilizzabile che restituisce `{ value, onChange, error }`.",
+        "hints": [
+          "Signature: `useField(initial: string, validate: (v: string) => string | null)`",
+          "Gestisci `value` con `useState(initial)`",
+          "`onChange` deve essere un `React.ChangeEventHandler<HTMLInputElement>` che legge `e.target.value`",
+          "`error` è semplicemente `validate(value)` ricalcolato ad ogni render",
+          "I consumer devono poter scrivere `<input value={f.value} onChange={f.onChange} />`"
+        ]
+      },
+      "login-form": {
+        "name": "LoginForm",
+        "description": "Un form di login controllato che valida email + password (min 6 caratteri) e fa emergere gli errori prima di chiamare onSubmit.",
+        "hints": [
+          "Prop: `onSubmit: (data: { email: string; password: string }) => void`",
+          "Renderizza `<form role=\"form\">` — i test lo cercano con `getByRole('form')`",
+          "Usa `<label htmlFor>` + `<input id>` con testo del label esattamente \"Email\" e \"Password\" così `getByLabelText('Email')` funziona",
+          "Il testo del `<button>` di submit deve essere \"Log in\"",
+          "Al submit: chiama `e.preventDefault()`, poi valida con `validateEmail` e `validateMinLength(password, 6)`",
+          "Se un controllo fallisce, renderizza un `<ul role=\"alert\">` con un `<li>` per ogni messaggio di errore",
+          "Se entrambi passano, chiama `onSubmit({ email, password })`"
+        ]
+      },
+      "multi-step-form": {
+        "name": "MultiStepForm",
+        "description": "Un wizard a 3 step con pulsanti Back / Next e un pulsante Submit finale nell'ultimo step.",
+        "hints": [
+          "Traccia lo step corrente con `useState<1 | 2 | 3>(1)`",
+          "Renderizza l'intestazione come `<h2>Step {step}</h2>` — il testo deve essere esattamente \"Step 1\", \"Step 2\" o \"Step 3\"",
+          "Il pulsante \"Back\" è `disabled` allo step 1",
+          "Agli step 1 e 2, mostra un pulsante \"Next\" che incrementa lo step",
+          "Allo step 3, nascondi \"Next\" e renderizza un pulsante \"Submit\" al suo posto — i test verificano entrambi con `getByRole('button', { name: 'Submit' })` e `queryByRole('button', { name: 'Next' })`"
+        ]
+      },
+      "form-errors": {
+        "name": "FormErrors",
+        "description": "Un componente presentazionale che renderizza una lista di errori di campo, o niente quando non ce ne sono.",
+        "hints": [
+          "Prop: `errors: Record<string, string>`",
+          "Se `Object.keys(errors).length === 0`, restituisci `null`",
+          "Altrimenti renderizza `<ul role=\"alert\">` con un `<li data-error-key=\"{key}\">{message}</li>` per ogni voce",
+          "I test cercano gli elementi tramite `container.querySelector('[data-error-key=\"email\"]')`"
+        ]
+      }
+    },
+    "09-performance": {
+      "memoized-child": {
+        "name": "MemoizedChild (React.memo)",
+        "description": "Avvolgi un componente in React.memo così prop `value` identiche cortocircuitano i re-render. Traccia il numero di render tramite un contatore a livello di modulo per le asserzioni.",
+        "hints": [
+          "Avvolgi la definizione del componente in `React.memo(...)`",
+          "Ad ogni render, incrementa il contatore esportato `MEMOIZED_RENDERS`",
+          "Renderizza `<span>{value}</span>` così il test può localizzare l'output",
+          "I test resettano il contatore tramite `resetMemoizedRenders()` in `beforeEach`",
+          "Se lo stato non correlato del genitore cambia ma `value` è invariato, il contatore deve restare fermo"
+        ]
+      },
+      "use-expensive-calc": {
+        "name": "useExpensiveCalc (useMemo)",
+        "description": "Un hook che memoizza un calcolo costoso, rieseguendolo solo quando l'input numerico cambia.",
+        "hints": [
+          "Signature: `useExpensiveCalc(n: number, calc: (n: number) => number): number`",
+          "Restituisci `useMemo(() => calc(n), [n])` — NON aggiungere `calc` alle deps",
+          "I test passano un `jest.fn()` per `calc` e verificano che venga chiamato una volta per ogni `n` distinto"
+        ]
+      },
+      "use-stable-callback": {
+        "name": "useStableCallback",
+        "description": "Restituisci un callback la cui reference è stabile tra i render ma che invoca sempre l'ultima closure.",
+        "hints": [
+          "Mantieni l'ultimo `fn` in un `useRef` e aggiornalo ad ogni render",
+          "Restituisci un `useCallback` con deps vuote che delega a `ref.current(...args)`",
+          "I test verificano che la funzione restituita sia `===` tra i render E che veda l'ultima state catturata"
+        ]
+      },
+      "use-render-count": {
+        "name": "useRenderCount",
+        "description": "Un hook che restituisce quante volte il componente host è stato renderizzato.",
+        "hints": [
+          "Usa `useRef(0)` così il contatore sopravvive ai render senza scatenarne uno",
+          "Incrementa `ref.current` ad ogni render PRIMA di restituirlo",
+          "Restituisci `ref.current` direttamente — non usare `useState`, che farebbe un loop"
+        ]
+      },
+      "use-debounced-value": {
+        "name": "useDebouncedValue",
+        "description": "Restituisci una versione debounced di `value` che si aggiorna solo dopo `ms` millisecondi di stabilità.",
+        "hints": [
+          "Mantieni il valore debounced in `useState(value)`",
+          "Dentro `useEffect` con chiave `[value, ms]`, pianifica `setDebounced(value)` tramite `setTimeout`",
+          "Restituisci una funzione di cleanup che chiama `clearTimeout(id)` — è ciò che resetta il timer quando `value` cambia di nuovo",
+          "I test usano fake timer — il render iniziale deve produrre il valore iniziale in modo sincrono"
+        ]
+      },
+      "virtual-list": {
+        "name": "VirtualList (windowing)",
+        "description": "Renderizza solo la fetta visibile di una lunga lista così il DOM resta piccolo indipendentemente da quanti elementi.",
+        "hints": [
+          "`startIndex = Math.floor(scrollTop / itemHeight)`",
+          "`endIndex = startIndex + Math.ceil(windowHeight / itemHeight) + 1` (il `+1` è il buffer di overscan)",
+          "Renderizza un singolo `<ul>` con `items.slice(start, end).map(...)` — `Array.slice` già limita a `items.length`",
+          "Il contenuto testuale di ogni `<li>` è la stringa dell'elemento; `key={start + i}` va bene"
+        ]
+      }
+    },
+    "10-testing": {
+      "sum": {
+        "name": "sum (toBe)",
+        "description": "Una funzione pura che somma due numeri. Insegna l'asserzione più basica: `expect(actual).toBe(expected)`.",
+        "hints": [
+          "Signature: `sum(a: number, b: number): number`",
+          "Solo `return a + b` — nient'altro",
+          "I test usano `expect(sum(2, 3)).toBe(5)` — uguaglianza primitiva `===`"
+        ]
+      },
+      "capitalize": {
+        "name": "capitalize (casi limite)",
+        "description": "Una funzione pura che mette in maiuscolo il primo carattere di una stringa. Insegna a gestire i casi limite (stringa vuota) con più asserzioni.",
+        "hints": [
+          "Signature: `capitalize(s: string): string`",
+          "Per prima cosa proteggi la stringa vuota: `if (!s) return ''`",
+          "Altrimenti: `s[0].toUpperCase() + s.slice(1)`",
+          "Gli input già in maiuscolo (es. 'ABC') devono restare invariati"
+        ]
+      },
+      "greeting": {
+        "name": "Greeting (render + jest-dom)",
+        "description": "Renderizza `<p>Hello, {name}!</p>`. Insegna `render()`, `screen.getByText` e `toBeInTheDocument`.",
+        "hints": [
+          "Accetta `name: string`",
+          "Restituisci esattamente `<p>Hello, {name}!</p>` — nota la virgola, lo spazio e il `!`",
+          "I test si basano su `screen.getByText('Hello, Ada!')` — il testo deve essere un match unico ed esatto"
+        ]
+      },
+      "use-counter": {
+        "name": "useCounter (test di hook)",
+        "description": "Un hook contatore che espone `{ count, increment, decrement }`. Insegna il testing degli hook tramite un componente wrapper che fa emergere l'hook attraverso il DOM.",
+        "hints": [
+          "Usa `useState(initial)` per il conteggio",
+          "`increment` deve essere `() => setCount((c) => c + 1)`",
+          "`decrement` deve essere `() => setCount((c) => c - 1)`",
+          "Restituisci `{ count, increment, decrement }` — nomi di campo esatti, il componente di test li legge"
+        ]
+      },
+      "event-emitter": {
+        "name": "EventEmitter (jest.fn + unsubscribe)",
+        "description": "Una piccola classe pub/sub con `on`, `off`, `emit`. Insegna `jest.fn()` per le spy più `toHaveBeenCalledTimes` / `toHaveBeenCalledWith` per più sottoscrittori e per la unsubscribe.",
+        "hints": [
+          "Memorizza i listener in una `Map<string, Listener[]>`",
+          "`on(event, fn)` appende fn all'array (crea l'array se manca)",
+          "`off(event, fn)` rimuove quella reference esatta di fn — `array.filter(l => l !== fn)` funziona",
+          "`emit(event, ...args)` chiama ogni listener; se non ci sono listener, non fare nulla (non lanciare)"
+        ]
+      },
+      "fetch-user-name": {
+        "name": "fetchUserName (fetch mockato)",
+        "description": "Funzione async che fa fetch di `/api/users/{id}` e restituisce il campo `name`. Insegna a mockare `global.fetch` con `jest.fn().mockResolvedValue(...)` e a fare asserzioni sull'URL chiamato dalla funzione.",
+        "hints": [
+          "`const res = await fetch('/api/users/' + id)`",
+          "`const user = await res.json()`",
+          "`return user.name`",
+          "I test sostituiscono `global.fetch` con un mock che risolve a `{ json: () => Promise.resolve({ name: 'Alice' }) }`",
+          "L'URL deve essere esattamente `/api/users/<id>` — il test verifica tramite `toHaveBeenCalledWith('/api/users/42')`"
         ]
       }
     }

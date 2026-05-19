@@ -99,28 +99,6 @@ graph TD
 └────────────────────────────────────────────────────────────────┘
 ```
 
-### Angular vs React Styling Paradigms
-
-```
-Angular                          React
-───────                         ─────
-
-Component Styles                Multiple Approaches
-(Encapsulated by Default)       (Developer's Choice)
-
-@Component({                    // Various options:
-  styleUrls: ['./style.css'],   import './style.css';
-  styles: [`...`]               import styles from './style.module.css';
-})                              const Styled = styled.div`...`;
-                                className="tailwind-classes"
-
-ViewEncapsulation.Emulated      CSS Modules (similar)
-ViewEncapsulation.None          Global CSS
-ViewEncapsulation.ShadowDOM     Not commonly used in React
-
-::ng-deep selector              Global CSS or :global() in modules
-```
-
 ---
 
 ## 2. Inline Styles: Mechanisms and Constraints
