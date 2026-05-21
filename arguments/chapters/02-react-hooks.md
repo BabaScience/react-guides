@@ -2071,6 +2071,28 @@ A custom hook is just a function that uses other hooks. The convention — and a
 
 What custom hooks do not do: they do not share state between components that call them. Each call creates its own state instance. If two components call `useToggle(false)`, they get two independent toggles. Custom hooks share *logic*, not state. To share state, use context (or a state library).
 
+Visually, the move from "duplicated logic in every component" to "one shared hook" looks like this:
+
+```mermaid
+flowchart LR
+    subgraph Before["Without a custom hook"]
+        A1["Component A"] --> S1["useState (same logic)"]
+        A1 --> E1["useEffect (same logic)"]
+        B1["Component B"] --> S2["useState (duplicated)"]
+        B1 --> E2["useEffect (duplicated)"]
+    end
+    subgraph After["With useFeature()"]
+        A2["Component A"] --> H["useFeature()"]
+        B2["Component B"] --> H
+        H --> S3["useState"]
+        H --> E3["useEffect"]
+        H --> R["returns { value, actions }"]
+    end
+    Before -. refactor .-> After
+```
+
+The hook owns the `useState` and `useEffect`; the components just call it and consume the return value. Each call still gets its own independent state — only the *logic* is shared.
+
 ### useToggle
 
 The classic "first custom hook." Boolean state with a toggle handler.

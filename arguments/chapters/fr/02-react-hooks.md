@@ -2070,6 +2070,28 @@ Un hook personnalisé n'est qu'une fonction qui utilise d'autres hooks. La conve
 
 Ce que les hooks personnalisés ne font pas : ils ne partagent pas d'état entre les composants qui les appellent. Chaque appel crée sa propre instance d'état. Si deux composants appellent `useToggle(false)`, ils obtiennent deux toggles indépendants. Les hooks personnalisés partagent la *logique*, pas l'état. Pour partager l'état, utilisez le contexte (ou une bibliothèque d'état).
 
+Visuellement, le passage de « logique dupliquée dans chaque composant » à « un seul hook partagé » ressemble à ceci :
+
+```mermaid
+flowchart LR
+    subgraph Avant["Sans hook personnalisé"]
+        A1["Composant A"] --> S1["useState (même logique)"]
+        A1 --> E1["useEffect (même logique)"]
+        B1["Composant B"] --> S2["useState (dupliqué)"]
+        B1 --> E2["useEffect (dupliqué)"]
+    end
+    subgraph Apres["Avec useFeature()"]
+        A2["Composant A"] --> H["useFeature()"]
+        B2["Composant B"] --> H
+        H --> S3["useState"]
+        H --> E3["useEffect"]
+        H --> R["retourne { value, actions }"]
+    end
+    Avant -. refactorisation .-> Apres
+```
+
+Le hook possède le `useState` et le `useEffect` ; les composants se contentent de l'appeler et de consommer la valeur de retour. Chaque appel obtient toujours son propre état indépendant — seule la *logique* est partagée.
+
 ### useToggle
 
 Le « premier hook personnalisé » classique. État booléen avec un handler toggle.

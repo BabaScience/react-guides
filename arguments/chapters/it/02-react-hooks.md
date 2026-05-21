@@ -2071,6 +2071,28 @@ Un custom hook è semplicemente una funzione che usa altri hook. La convenzione 
 
 Quello che i custom hook *non* fanno: non condividono stato tra i componenti che li chiamano. Ogni chiamata crea la propria istanza di stato. Se due componenti chiamano `useToggle(false)`, ottengono due toggle indipendenti. I custom hook condividono *logica*, non stato. Per condividere stato, usa il context (o una libreria di stato).
 
+Visivamente, il passaggio da "logica duplicata in ogni componente" a "un solo hook condiviso" appare così:
+
+```mermaid
+flowchart LR
+    subgraph Prima["Senza custom hook"]
+        A1["Componente A"] --> S1["useState (stessa logica)"]
+        A1 --> E1["useEffect (stessa logica)"]
+        B1["Componente B"] --> S2["useState (duplicato)"]
+        B1 --> E2["useEffect (duplicato)"]
+    end
+    subgraph Dopo["Con useFeature()"]
+        A2["Componente A"] --> H["useFeature()"]
+        B2["Componente B"] --> H
+        H --> S3["useState"]
+        H --> E3["useEffect"]
+        H --> R["restituisce { value, actions }"]
+    end
+    Prima -. refactoring .-> Dopo
+```
+
+Il hook possiede `useState` e `useEffect`; i componenti si limitano a chiamarlo e a consumare il valore di ritorno. Ogni chiamata ottiene comunque il proprio stato indipendente — viene condivisa solo la *logica*.
+
 ### useToggle
 
 Il classico "primo custom hook". Stato booleano con un handler di toggle.
