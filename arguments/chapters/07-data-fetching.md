@@ -370,6 +370,22 @@ const newUser = await api.post('/users', { name: 'Marco', email: 'marco@example.
 
 ## 3. Loading States and Error Handling
 
+### Request Lifecycle as a State Machine
+
+Modeling a fetch request as a finite-state machine makes the four exclusive states explicit and prevents impossible UI like "loading + error showing at the same time".
+
+```mermaid
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Loading: "trigger fetch"
+    Loading --> Success: "response ok"
+    Loading --> Error: "response failed"
+    Success --> Loading: "refetch"
+    Error --> Loading: "retry"
+    Success --> [*]: "unmount"
+    Error --> [*]: "unmount"
+```
+
 ### Basic useEffect Pattern
 
 ```jsx
@@ -1224,6 +1240,30 @@ const InfiniteList = () => {
 
 ## 6. Optimistic Updates
 
+### Optimistic Update Flow
+
+The UI commits the change locally before the network resolves, then either confirms with the server response or rolls back on failure. This is what makes interactions feel instantaneous.
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant C as Component
+    participant Cache as Local Cache
+    participant S as Server
+    U->>C: "click action"
+    C->>Cache: "apply optimistic update"
+    Cache-->>U: "UI reflects change immediately"
+    C->>S: "send mutation request"
+    alt success
+        S-->>C: "200 OK + canonical data"
+        C->>Cache: "replace with server data"
+    else failure
+        S-->>C: "error"
+        C->>Cache: "rollback to snapshot"
+        Cache-->>U: "UI reverts"
+    end
+```
+
 ### React Query Optimistic Updates
 
 ```jsx
@@ -1406,6 +1446,25 @@ const useUpdatePost = () => {
 
 ## 7. Cache Management Strategies
 
+### Cache Hit/Miss Decision
+
+Every query first consults the cache by its key. A fresh hit returns instantly with zero network cost; a miss (or stale entry) triggers a real fetch and populates the cache for next time.
+
+```mermaid
+flowchart TD
+    A["Component requests data by queryKey"] --> B{"Cache has entry for key?"}
+    B -->|No| C["Fetch from server"]
+    B -->|Yes| D{"Entry is fresh?"}
+    D -->|Yes| E["Return cached data"]
+    D -->|No - stale| F["Return cached data immediately"]
+    F --> G["Revalidate in background"]
+    G --> H["Update cache with new data"]
+    C --> I["Store response in cache"]
+    I --> J["Return data to component"]
+    E --> J
+    H --> J
+```
+
 ### React Query Cache Configuration
 
 ```javascript
@@ -1587,6 +1646,21 @@ persistQueryClient({
 ---
 
 ## 8. Polling and Real-Time Updates
+
+### Polling Cycle
+
+Polling is a loop: fetch, update UI, wait, repeat — until a stop signal (unmount, success condition, or tab blur) breaks the cycle.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Fetching
+    Fetching --> UpdatingUI: "data received"
+    UpdatingUI --> Waiting: "render complete"
+    Waiting --> Fetching: "interval elapsed"
+    Waiting --> [*]: "unmount or stop condition"
+    Fetching --> [*]: "unmount"
+    Fetching --> Waiting: "request error - back off"
+```
 
 ### Polling with React Query
 

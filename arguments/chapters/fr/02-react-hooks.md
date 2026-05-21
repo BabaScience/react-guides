@@ -29,6 +29,21 @@ Un composant sans hooks est pur : mêmes props en entrée, même JSX en sortie. 
 
 Le nom « hook » vient de l'idée que vous vous accrochez aux internes de React — sa boucle de rendu, son stockage d'état, son ordonnancement — depuis l'intérieur d'un appel de fonction par ailleurs ordinaire. React 16.8 les a introduits en 2019, et ils sont depuis la façon par défaut d'écrire des composants.
 
+Le schéma ci-dessous montre où les hooks s'insèrent dans le cycle de rendu. Votre fonction de composant n'est qu'une étape dans une boucle pilotée par React — les hooks sont la façon de vous y brancher.
+
+```mermaid
+flowchart TD
+    A["Le composant est monté"] --> B["React appelle la fonction"]
+    B --> C["Les hooks enregistrent l'état et les effets"]
+    C --> D["Le JSX est retourné"]
+    D --> E["React valide le DOM"]
+    E --> F["Les effets s'exécutent après le paint"]
+    F --> G{"setState appelé ?"}
+    G -- "Oui" --> B
+    G -- "Non" --> H["Inactif, en attente d'événements"]
+    H --> G
+```
+
 ### Comment les hooks se rattachent à ce que vous connaissez déjà
 
 Si vous avez écrit du JavaScript avant React, les hooks peuvent sembler étranges au début. Une fonction simple en JavaScript repart de zéro à chaque appel. Les variables locales disparaissent dès que la fonction retourne. Alors comment `useState` peut-il « se souvenir » d'une valeur entre les appels ?
@@ -46,6 +61,19 @@ Il y a deux règles, et toutes deux découlent de la façon dont React relie cha
 2. **N'appelez les hooks que depuis des fonctions React.** C'est-à-dire depuis un composant ou depuis un autre hook (qui par convention commence par `use`). Appeler un hook depuis une fonction utilitaire classique ne fonctionne pas, parce que React ne suit pas cet appel.
 
 Le plugin ESLint officiel `eslint-plugin-react-hooks` applique les deux règles. Gardez-le actif.
+
+Pour voir pourquoi la règle d'ordre compte, imaginez deux rendus côte à côte. React identifie chaque hook par sa position dans la séquence d'appels. Sautez un appel à un rendu, et tous les hooks suivants se décalent — ils lisent tous le mauvais emplacement.
+
+```mermaid
+flowchart LR
+    subgraph R1["Rendu 1 (condition vraie)"]
+        A1["1. useState count"] --> A2["2. useState name"] --> A3["3. useEffect"]
+    end
+    subgraph R2["Rendu 2 (condition fausse)"]
+        B1["1. useState count"] --> B2["2. useEffect (était #3 !)"]
+    end
+    R1 -. "emplacement 2 incohérent" .-> R2
+```
 
 ```tsx
 function Good({ user }) {
@@ -101,6 +129,18 @@ const [state, setState] = useState(initialValue);
 La paire que vous récupérez est juste un tableau, déstructuré pour le confort. Le premier élément est la valeur courante pendant ce rendu ; le second est une fonction setter. Appeler le setter fait deux choses : il stocke la nouvelle valeur, et il dit à React de rendre à nouveau le composant. À ce prochain rendu, `useState` vous redonnera la nouvelle valeur.
 
 Point de confusion habituel : le setter ne change pas `state` immédiatement. La variable `state` courante est capturée pour ce rendu. Vous ne verrez la nouvelle valeur qu'au rendu suivant.
+
+Ce schéma montre le modèle mental : React possède la valeur stockée, vous remet un instantané pour le rendu, et reconstruit un nouvel instantané au tour suivant.
+
+```mermaid
+flowchart TD
+    A["Cellule d'état gérée par React"] -->|"lit la valeur stockée"| B["Rendu N : count = 0"]
+    B --> C["La closure capture count = 0"]
+    C --> D["setCount(1) appelé"]
+    D -->|"écrit la nouvelle valeur, planifie un rendu"| A
+    A -->|"lit la valeur stockée"| E["Rendu N+1 : count = 1"]
+    E --> F["Nouvelle closure capture count = 1"]
+```
 
 ```tsx
 function Counter() {
@@ -343,6 +383,26 @@ Trois morceaux :
 - La **fonction de cleanup** optionnelle qu'elle retourne s'exécute avant la prochaine exécution de l'effet, et une dernière fois quand le composant est retiré.
 - Le **tableau de dépendances** contrôle quand l'effet se ré-exécute.
 
+Le timing compte. Les effets ne s'exécutent pas pendant le rendu — ils s'exécutent après que le navigateur a peint la nouvelle UI. Le cleanup s'exécute avant le prochain effet et de nouveau au démontage.
+
+```mermaid
+sequenceDiagram
+    participant C as Composant
+    participant R as React
+    participant E as Effet
+    C->>R: Le rendu retourne le JSX
+    R->>R: Commit au DOM
+    R->>R: Le navigateur peint
+    R->>E: Exécute l'effet
+    Note over E: Travail de mise en place (abonnement, fetch)
+    C->>R: Re-rendu (dépendances changées)
+    R->>R: Commit du nouveau DOM
+    R->>E: Exécute le cleanup de l'effet précédent
+    R->>E: Exécute le nouvel effet
+    C->>R: Démontage
+    R->>E: Exécute le cleanup final
+```
+
 ### Le tableau de dépendances
 
 Le tableau de dépendances est la seule chose la plus importante à bien gérer avec `useEffect`. Il contrôle quand l'effet se ré-exécute.
@@ -378,6 +438,19 @@ function EffectPatterns() {
 ```
 
 La règle : incluez toute valeur du scope du composant que l'effet lit. Si votre effet utilise `userId`, `userId` appartient au tableau. La règle de lint `react-hooks/exhaustive-deps` vous avertira quand vous en manquerez une. Résistez à l'envie de la faire taire en retirant une dépendance — ce chemin mène à des données obsolètes et à des bugs confus.
+
+Voici l'arbre de décision de ce que le tableau de dépendances indique à React :
+
+```mermaid
+flowchart TD
+    A["useEffect(fn, ???)"] --> B{"Qu'avez-vous passé ?"}
+    B -->|"rien"| C["S'exécute après chaque rendu"]
+    B -->|"[]"| D["S'exécute une fois au montage, cleanup au démontage"]
+    B -->|"[a, b]"| E{"a ou b a-t-il changé ?"}
+    E -->|"Oui"| F["Exécute le cleanup, puis l'effet à nouveau"]
+    E -->|"Non"| G["Saute ce rendu"]
+    C -.->|"presque toujours faux"| H["À reconsidérer"]
+```
 
 ### Récupération de données
 
@@ -681,6 +754,22 @@ const App = () => {
 ```
 
 Envelopper l'appel brut `useContext(ThemeContext)` dans un hook personnalisé `useTheme` est une petite habitude utile. Elle centralise la vérification « est-ce utilisé dans un Provider ? », et offre aux consommateurs un import propre.
+
+Visuellement, le Provider se trouve au-dessus de l'arbre, et n'importe quel descendant — peu importe sa profondeur — peut atteindre la valeur directement, sans que les composants intermédiaires aient à la transmettre en prop.
+
+```mermaid
+flowchart TD
+    P["ThemeProvider (détient la valeur)"] --> L["Layout"]
+    L --> H["Header"]
+    L --> M["Main"]
+    L --> F["Footer"]
+    M --> S["Sidebar"]
+    S --> D["Dialog"]
+    D --> B["ThemedButton (useContext)"]
+    H -.->|"useContext"| P
+    F -.->|"useContext"| P
+    B -.->|"useContext, évite le drilling"| P
+```
 
 ### Un exemple plus gros : l'authentification
 
@@ -1635,6 +1724,22 @@ function reducer(state, action) {
 
 `useReducer` retourne l'état courant et une fonction `dispatch`. Pour changer l'état, vous appelez `dispatch(action)`. React appelle votre reducer avec l'état précédent et l'action, prend la valeur de retour comme nouvel état et re-rend.
 
+Le cycle complet est une boucle à sens unique : l'UI dispatche des actions, le reducer est le seul endroit où l'état change, et le nouvel état redescend vers l'UI.
+
+```mermaid
+sequenceDiagram
+    participant UI as UI (Composant)
+    participant D as dispatch
+    participant R as reducer(state, action)
+    participant S as Store d'état React
+    UI->>D: dispatch({ type: 'INCREMENT' })
+    D->>R: reducer(prevState, action)
+    R->>R: Calcule l'état suivant
+    R->>S: Retourne le nouvel état
+    S->>UI: Re-rendu avec le nouvel état
+    Note over UI: L'utilisateur voit le compteur mis à jour
+```
+
 ### Un compteur simple
 
 Le plus petit exemple, pour montrer les pièces mobiles.
@@ -2316,6 +2421,22 @@ function UserDashboard({ userId }) {
 ```
 
 `useUser` est construit à partir de `useFetch`, `useLocalStorage`, `useState` et `useEffect` — et le composant côté réception obtient une API propre et un seul appel.
+
+Le schéma ci-dessous montre la composition : un hook personnalisé enveloppe plusieurs hooks primitifs et expose une API unique et nommée au composant.
+
+```mermaid
+flowchart LR
+    C["Composant : UserDashboard"] --> U["useUser(userId)"]
+    U --> F["useFetch"]
+    U --> L["useLocalStorage"]
+    U --> S["useState (isOnline)"]
+    U --> E["useEffect (écouteur online)"]
+    F --> API["{ user, loading, error, preferences, isOnline }"]
+    L --> API
+    S --> API
+    E --> API
+    API --> C
+```
 
 ---
 

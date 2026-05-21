@@ -332,6 +332,25 @@ const MemoizedChild = memo(({ onClick, user }) => {
 });
 ```
 
+### React.memo Decision Flow
+
+When the parent re-renders, React walks through this decision to decide if a memoized child should also render. The shallow-equal check is the critical gate — inline objects/functions defeat it.
+
+```mermaid
+flowchart TD
+    A["Parent re-renders"] --> B{"Child wrapped<br/>in React.memo?"}
+    B -->|No| C["Child re-renders"]
+    B -->|Yes| D{"Props shallow-equal<br/>to previous?"}
+    D -->|Yes| E["Skip render<br/>(reuse output)"]
+    D -->|No| F["Child re-renders<br/>with new props"]
+    F --> G{"New props from<br/>inline obj/fn?"}
+    G -->|Yes| H["memo defeated:<br/>wrap with useMemo / useCallback"]
+    G -->|No| I["Expected re-render"]
+
+    style E fill:#51cf66
+    style H fill:#ff6b6b
+```
+
 ### When to Use React.memo
 
 ```
@@ -532,6 +551,26 @@ const TodoItem = memo(({ todo, onDelete, onToggle }) => {
     </li>
   );
 });
+```
+
+### useMemo vs useCallback: Which One?
+
+Both cache something across renders, but they cache different things. Use this tree to pick the right tool — and remember that the wrong answer is often "neither".
+
+```mermaid
+flowchart TD
+    A["Need to preserve<br/>something across renders?"] --> B{"What are<br/>you caching?"}
+    B -->|"A value<br/>(array, object, computed)"| C{"Computation<br/>expensive OR<br/>identity matters?"}
+    B -->|"A function"| D{"Passed to memoized<br/>child OR used as<br/>effect dependency?"}
+    C -->|Yes| E["useMemo(() => compute, deps)"]
+    C -->|No| F["Inline value<br/>(no hook needed)"]
+    D -->|Yes| G["useCallback(fn, deps)"]
+    D -->|No| H["Inline arrow function<br/>(no hook needed)"]
+
+    style E fill:#4dabf7
+    style G fill:#845ef7
+    style F fill:#ffd43b
+    style H fill:#ffd43b
 ```
 
 ### When to Use useMemo and useCallback
@@ -1140,6 +1179,23 @@ module.exports = {
 ---
 
 ## 6. Virtual Scrolling for Large Lists
+
+### How Virtualization Works
+
+Instead of rendering all 10,000 rows up front, a virtualizer measures the viewport, calculates which slice of the list is visible (plus a small buffer for smooth scrolling), and only mounts those rows. The rest are represented by a single tall spacer.
+
+```mermaid
+flowchart LR
+    A["Full dataset<br/>(10,000 items)"] --> B["Virtualizer"]
+    B --> C["Scroll position +<br/>viewport height"]
+    C --> D["Compute visible<br/>start / end index"]
+    D --> E["Add overscan buffer<br/>(5-10 rows)"]
+    E --> F["Render ~20 rows<br/>in DOM"]
+    F --> G["Spacer div fakes<br/>total scroll height"]
+
+    style A fill:#ff6b6b
+    style F fill:#51cf66
+```
 
 ### Problem with Large Lists
 

@@ -6,6 +6,37 @@
 
 ## 1. Form Management Paradigms
 
+### Classification de l'état d'un formulaire
+
+L'état d'un formulaire n'est pas monolithique : valeurs, validation, statut d'envoi et UI sont des dimensions distinctes qui s'orchestrent différemment.
+
+```mermaid
+graph TD
+    A["État du formulaire"] --> B["Valeurs des champs"]
+    A --> C["État de validation"]
+    A --> D["État d'envoi"]
+    A --> E["État UI"]
+
+    B --> B1["Valeurs saisies"]
+    B --> B2["Valeurs par défaut"]
+    B --> B3["Champs modifiés (dirty)"]
+
+    C --> C1["Erreurs par champ"]
+    C --> C2["Règles de validation"]
+    C --> C3["Champs touchés"]
+
+    D --> D1["isSubmitting"]
+    D --> D2["isValid"]
+    D --> D3["submitCount"]
+
+    E --> E1["Focus"]
+    E --> E2["Champs désactivés"]
+
+    style A fill:#845ef7
+    style C fill:#ff6b6b
+    style D fill:#51cf66
+```
+
 ### Approches
 
 1. **Contrôlés avec `useState`** : chaque champ est un état. Adapté aux petits formulaires.
@@ -22,6 +53,29 @@
 ---
 
 ## 2. Controlled vs Uncontrolled Components
+
+### Flux de données : contrôlés vs non contrôlés
+
+Les deux patterns diffèrent par **l'endroit où réside la source de vérité**. Les composants contrôlés gardent l'état dans React ; les non contrôlés le gardent dans le DOM et le récupèrent via des refs uniquement au besoin.
+
+```mermaid
+flowchart LR
+    subgraph Controlled["Contrôlé (React possède l'état)"]
+        direction TB
+        U1["Frappe utilisateur"] --> E1["Événement onChange"]
+        E1 --> S1["setState"]
+        S1 --> R1["Re-rendu"]
+        R1 --> V1["prop value -> input"]
+    end
+
+    subgraph Uncontrolled["Non contrôlé (DOM possède l'état)"]
+        direction TB
+        U2["Frappe utilisateur"] --> D2["DOM met à jour l'input"]
+        D2 -.->|"aucun re-rendu"| D2
+        SB["Envoi / lecture"] --> RF["ref.current.value"]
+        RF --> APP["L'app lit la valeur"]
+    end
+```
 
 ### Contrôlés
 
@@ -109,6 +163,21 @@ Yup est mature, simple et répandu. Pour ceux qui ne veulent pas gérer la valid
 
 ## 5. Validation with Zod
 
+### Flux de validation par schéma
+
+Les validateurs par schéma comme Zod et Yup suivent un modèle simple « parse ou échoue » : les valeurs du formulaire entrent, soit un objet typé et validé en sort, soit une liste structurée d'erreurs.
+
+```mermaid
+flowchart LR
+    A["Valeurs du formulaire<br/>(saisie brute)"] --> B["schema.parse(values)"]
+    B --> C{"Valides ?"}
+    C -->|Oui| D["Données typées et validées"]
+    D --> E["onSubmit(data)"]
+    C -->|Non| F["ZodError / ValidationError"]
+    F --> G["Mapper les erreurs aux champs"]
+    G --> H["Afficher les messages d'erreur"]
+```
+
 ### Schéma typé
 
 ```tsx
@@ -172,6 +241,25 @@ Utilisez les événements `onDragOver`, `onDrop` et `event.dataTransfer.files`. 
 ---
 
 ## 7. Multi-Step Forms
+
+### Machine à états du formulaire multi-étapes
+
+Un wizard est essentiellement une machine à états finie : chaque étape est un état, et `Suivant`/`Retour` sont des transitions gardées par la validation. Modéliser cela explicitement évite les branches `if (etape === 2)` enchevêtrées.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Etape1_Personnel
+    Etape1_Personnel --> Etape2_Adresse: Suivant (valide)
+    Etape1_Personnel --> Etape1_Personnel: Suivant (invalide)
+    Etape2_Adresse --> Etape1_Personnel: Retour
+    Etape2_Adresse --> Etape3_Paiement: Suivant (valide)
+    Etape2_Adresse --> Etape2_Adresse: Suivant (invalide)
+    Etape3_Paiement --> Etape2_Adresse: Retour
+    Etape3_Paiement --> EnvoiEnCours: Envoyer (valide)
+    EnvoiEnCours --> Succes: API ok
+    EnvoiEnCours --> Etape3_Paiement: Erreur API
+    Succes --> [*]
+```
 
 ### Pattern
 
@@ -246,6 +334,31 @@ const schema = z.object({
 ---
 
 ## 10. Form Strategy Selection Matrix
+
+### Arbre de décision
+
+```mermaid
+graph TD
+    A["Choisir la stratégie de formulaire"] --> B{"Complexité du formulaire ?"}
+
+    B -->|Simple| C["useState + validation"]
+    B -->|Moyenne| D{"Performance critique ?"}
+    B -->|Complexe| E["React Hook Form"]
+
+    D -->|Oui| F["React Hook Form"]
+    D -->|Non| G["useState ou Formik"]
+
+    E --> H{"Validation par schéma ?"}
+    H -->|Oui| I{"Projet TypeScript ?"}
+    H -->|Non| J["Validation personnalisée"]
+
+    I -->|Oui| K["Zod"]
+    I -->|Non| L["Yup ou Zod"]
+
+    style C fill:#51cf66
+    style F fill:#845ef7
+    style K fill:#4dabf7
+```
 
 ### Quelle approche ?
 

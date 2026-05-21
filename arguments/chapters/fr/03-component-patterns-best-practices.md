@@ -10,6 +10,21 @@
 
 React privilégie la **composition** plutôt que l'héritage. On construit des UI complexes en combinant de petits composants ciblés.
 
+```mermaid
+graph TD
+    A[Composant Monolithique] --> B[❌ Difficile à maintenir]
+    A --> C[❌ Difficile à tester]
+    A --> D[❌ Pas de réutilisabilité]
+    
+    E[Composants Composés] --> F[✅ Séparation des responsabilités]
+    E --> G[✅ Tests faciles]
+    E --> H[✅ Forte réutilisabilité]
+    E --> I[✅ Architecture flexible]
+    
+    style A fill:#ff6b6b
+    style E fill:#51cf66
+```
+
 ```tsx
 function Card({ titre, children }: { titre: string; children: ReactNode }) {
   return (
@@ -38,6 +53,35 @@ Quand plusieurs points d'insertion sont nécessaires, passez des éléments Reac
 <Layout header={<Header />} sidebar={<Sidebar />} main={<Main />} />
 ```
 
+### Hiérarchie de composition
+
+L'arborescence des composants montre comment l'application se décompose en sous-systèmes :
+
+```mermaid
+graph TD
+    A[App] --> B[Layout]
+    B --> C[Header]
+    B --> D[Sidebar]
+    B --> E[MainContent]
+    B --> F[Footer]
+    
+    C --> C1[Logo]
+    C --> C2[Navigation]
+    C --> C3[UserMenu]
+    
+    D --> D1[MenuItems]
+    D --> D2[SearchBox]
+    
+    E --> E1[Dashboard]
+    E1 --> E2[StatCard]
+    E1 --> E3[Chart]
+    E1 --> E4[DataTable]
+    
+    style A fill:#845ef7
+    style B fill:#4dabf7
+    style E1 fill:#51cf66
+```
+
 ---
 
 ## 2. Prop Drilling: Problem and Solutions
@@ -45,6 +89,24 @@ Quand plusieurs points d'insertion sont nécessaires, passez des éléments Reac
 ### Le problème
 
 Faire passer une prop à travers de nombreux niveaux de composants qui ne l'utilisent pas conduit à du code fragile et couplé.
+
+```mermaid
+graph TD
+    A[App - données user] -->|props.user| B[Dashboard]
+    B -->|props.user| C[Sidebar]
+    C -->|props.user| D[UserMenu]
+    D -->|props.user| E[UserAvatar]
+    
+    style A fill:#ff6b6b
+    style B fill:#ffd43b
+    style C fill:#ffd43b
+    style D fill:#ffd43b
+    style E fill:#51cf66
+    
+    F[App avec Context] -.Context.-> G[UserAvatar]
+    style F fill:#51cf66
+    style G fill:#51cf66
+```
 
 ### Solutions
 
@@ -70,6 +132,21 @@ Faire passer une prop à travers de nombreux niveaux de composants qui ne l'util
 - **Local** : l'état vit dans le composant qui l'utilise.
 - **Élevé** : l'état se trouve dans l'ancêtre commun des composants qui en ont besoin.
 
+```mermaid
+graph TD
+    A[Composant Parent - État partagé] --> B[Enfant A]
+    A --> C[Enfant B]
+    
+    B -.setState via callback.-> A
+    C -.setState via callback.-> A
+    
+    D[Avant : États séparés] --> E[Enfant A - État local]
+    D --> F[Enfant B - État local]
+    
+    style A fill:#51cf66
+    style D fill:#ff6b6b
+```
+
 ### Règle pratique
 
 Gardez l'état aussi proche que possible de son utilisation. Élevez-le uniquement quand deux branches ou plus de l'arbre ont besoin de la même source de vérité.
@@ -90,11 +167,61 @@ function Parent() {
 
 Si un état doit être contrôlable de l'extérieur, exposez-le comme prop optionnelle : on parle de **composants contrôlés/non contrôlés**.
 
+### Arbre de décision pour l'élévation d'état
+
+```mermaid
+graph TD
+    A[Besoin de partager l'état ?] -->|Oui| B[Trouver l'ancêtre commun]
+    A -->|Non| C[Garder l'état local]
+    
+    B --> D[Élever l'état vers l'ancêtre]
+    D --> E[Passer l'état en props]
+    D --> F[Passer les setters en callbacks]
+    
+    C --> G[useState dans le composant]
+    
+    H{Plusieurs niveaux de profondeur ?} -->|Oui| I[Envisager Context]
+    H -->|Non| J[Les props suffisent]
+    
+    style B fill:#ffd43b
+    style D fill:#51cf66
+    style I fill:#4dabf7
+```
+
 ---
 
 ## 4. Component Architecture and Organization
 
 ### Organisation des dossiers
+
+Une architecture solide repose sur la séparation des responsabilités et une structure de dossiers prévisible :
+
+```mermaid
+graph TD
+    A[Racine du projet] --> B[src/]
+    B --> C[components/]
+    B --> D[features/]
+    B --> E[hooks/]
+    B --> F[utils/]
+    B --> G[contexts/]
+    B --> H[services/]
+    B --> I[types/]
+    
+    C --> C1[common/]
+    C --> C2[layout/]
+    
+    D --> D1[auth/]
+    D --> D2[dashboard/]
+    D --> D3[products/]
+    
+    D2 --> D2A[components/]
+    D2 --> D2B[hooks/]
+    D2 --> D2C[utils/]
+    
+    style A fill:#845ef7
+    style B fill:#4dabf7
+    style D fill:#51cf66
+```
 
 ```
 src/
@@ -123,6 +250,22 @@ N'exportez que ce qui appartient à l'API publique de la feature. Utilisez un `i
 - **Presentational** : UI uniquement, reçoit données et callbacks via props.
 - **Container** : gère état, fetch, effets de bord ; transmet les données au presentational.
 
+```mermaid
+graph LR
+    A[Composant Container] -->|Données & Logique| B[Composant Presentational]
+    
+    C[Appels API] --> A
+    D[Gestion d'état] --> A
+    E[Logique métier] --> A
+    
+    B --> F[Rendu pur]
+    B --> G[Style & Mise en page]
+    B --> H[Aucun effet de bord]
+    
+    style A fill:#ff6b6b
+    style B fill:#51cf66
+```
+
 ### État actuel
 
 Avec les hooks, la séparation stricte est moins nécessaire : on écrit souvent des composants mixtes, et on extrait la logique dans des custom hooks.
@@ -139,6 +282,16 @@ Avec les hooks, la séparation stricte est moins nécessaire : on écrit souvent
 ### Définition
 
 Une fonction qui prend un composant et en retourne un nouveau, enrichi de fonctionnalités :
+
+```mermaid
+graph LR
+    A[Composant] --> B[Fonction HOC]
+    C[Props/Logique supplémentaires] --> B
+    B --> D[Composant enrichi]
+    
+    style B fill:#845ef7
+    style D fill:#51cf66
+```
 
 ```tsx
 function withLogger<P>(Composant: React.ComponentType<P>) {
@@ -160,6 +313,16 @@ Les HOCs restent utiles pour intégrer des bibliothèques legacy (`withRouter`, 
 ### Concept
 
 Un composant accepte une fonction comme prop (ou comme `children`) qui décrit *quoi* afficher, en recevant des données du composant lui-même.
+
+```mermaid
+graph LR
+    A[Composant avec logique] -->|fonction render| B[Rendu dynamique]
+    C[Props] --> B
+    D[État] --> A
+    
+    style A fill:#4dabf7
+    style B fill:#51cf66
+```
 
 ```tsx
 function PositionSouris({ children }: { children: (pos: { x: number; y: number }) => ReactNode }) {
@@ -188,6 +351,22 @@ Quand vous voulez que le consommateur décide comment afficher les données expo
 ### Concept
 
 Plusieurs composants reliés qui travaillent ensemble, en partageant un état implicite via context.
+
+```mermaid
+graph TD
+    A[Composant Parent - État partagé] --> B[Enfant 1]
+    A --> C[Enfant 2]
+    A --> D[Enfant 3]
+    
+    B -.Context implicite.-> A
+    C -.Context implicite.-> A
+    D -.Context implicite.-> A
+    
+    style A fill:#845ef7
+    style B fill:#51cf66
+    style C fill:#51cf66
+    style D fill:#51cf66
+```
 
 ```tsx
 const TabsContext = createContext<{ actif: string; setActif: (id: string) => void } | null>(null);
@@ -255,6 +434,25 @@ function Box<E extends ElementType = 'div'>({ as, ...rest }: AsProp<E> & Compone
 
 ### Quel pattern quand ?
 
+```mermaid
+graph TD
+    A[Besoin de partager de la logique ?] -->|Oui| B{Statique ou dynamique ?}
+    A -->|Non| C[Composant simple]
+    
+    B -->|Statique| D[Custom Hook]
+    B -->|Dynamique| E{Éléments UI liés ?}
+    
+    E -->|Oui| F[Compound Components]
+    E -->|Non| G{Besoin de flexibilité ?}
+    
+    G -->|Élevée| H[Render Props]
+    G -->|Faible| I[HOC ou Hook]
+    
+    style D fill:#51cf66
+    style F fill:#4dabf7
+    style H fill:#ffd43b
+```
+
 | Besoin | Pattern recommandé |
 |--------|--------------------|
 | Logique avec état réutilisable | Custom hook |
@@ -267,6 +465,28 @@ function Box<E extends ElementType = 'div'>({ as, ...rest }: AsProp<E> & Compone
 ---
 
 ## Conclusion: Architecting Excellence
+
+### Trajectoire de maturation
+
+```mermaid
+graph TD
+    A[Débutant] --> B[Apprendre la composition de base]
+    B --> C[Maîtriser props et état]
+    C --> D[Comprendre Context]
+    
+    D --> E[Intermédiaire]
+    E --> F[Custom Hooks]
+    E --> G[Patterns de composants]
+    
+    G --> H[Avancé]
+    H --> I[Compound Components]
+    H --> J[Optimisation des performances]
+    H --> K[Conception d'architecture]
+    
+    style A fill:#ff6b6b
+    style E fill:#ffd43b
+    style H fill:#51cf66
+```
 
 ### Conclusion
 

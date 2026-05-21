@@ -279,6 +279,29 @@ const UncontrolledForm = () => {
 };
 ```
 
+### Data Flow: Controlled vs Uncontrolled
+
+The two patterns differ in **where the source of truth lives**. Controlled components keep state in React; uncontrolled components keep it in the DOM and pull it out via refs only when needed.
+
+```mermaid
+flowchart LR
+    subgraph Controlled["Controlled (React owns state)"]
+        direction TB
+        U1["User keystroke"] --> E1["onChange event"]
+        E1 --> S1["setState"]
+        S1 --> R1["Re-render"]
+        R1 --> V1["value prop -> input"]
+    end
+
+    subgraph Uncontrolled["Uncontrolled (DOM owns state)"]
+        direction TB
+        U2["User keystroke"] --> D2["DOM updates input"]
+        D2 -.->|"no re-render"| D2
+        SB["Submit / read"] --> RF["ref.current.value"]
+        RF --> APP["App reads value"]
+    end
+```
+
 ### Controlled vs Uncontrolled Comparison
 
 ```
@@ -1118,6 +1141,21 @@ const schema = yup.object({
 
 ## 5. Validation with Zod
 
+### Schema Validation Flow
+
+Schema validators like Zod and Yup follow a simple parse-or-fail mental model: form values go in, either a typed, validated object comes out, or a structured list of field errors does.
+
+```mermaid
+flowchart LR
+    A["Form values<br/>(raw input)"] --> B["schema.parse(values)"]
+    B --> C{"Valid?"}
+    C -->|Yes| D["Typed, validated data"]
+    D --> E["onSubmit(data)"]
+    C -->|No| F["ZodError / ValidationError"]
+    F --> G["Map errors to fields"]
+    G --> H["Render error messages"]
+```
+
 ### Installation
 
 ```bash
@@ -1695,6 +1733,25 @@ const DragDropUpload = () => {
 ---
 
 ## 7. Multi-Step Forms
+
+### Multi-Step Form State Machine
+
+A wizard is essentially a finite state machine: each step is a state, and `Next`/`Back` are transitions guarded by validation. Modeling it explicitly avoids tangled `if (step === 2)` branches.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Step1_Personal
+    Step1_Personal --> Step2_Address: Next (valid)
+    Step1_Personal --> Step1_Personal: Next (invalid)
+    Step2_Address --> Step1_Personal: Back
+    Step2_Address --> Step3_Payment: Next (valid)
+    Step2_Address --> Step2_Address: Next (invalid)
+    Step3_Payment --> Step2_Address: Back
+    Step3_Payment --> Submitting: Submit (valid)
+    Submitting --> Success: API ok
+    Submitting --> Step3_Payment: API error
+    Success --> [*]
+```
 
 ### Basic Multi-Step Form
 

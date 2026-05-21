@@ -6,6 +6,30 @@
 
 ## 1. React Rendering Behavior
 
+### Il processo di rendering
+
+Il processo di rendering di React si compone di due fasi principali: **render** (creazione del Virtual DOM) e **commit** (aggiornamento del DOM reale).
+
+```mermaid
+graph TD
+    A["Cambio di state/props"] --> B["Fase Render"]
+    B --> C["Creazione del Virtual DOM"]
+    C --> D["Riconciliazione"]
+    D --> E["Algoritmo di diff"]
+    E --> F{"Cambiamenti rilevati?"}
+
+    F -->|Sì| G["Fase Commit"]
+    F -->|No| H["Commit saltato"]
+
+    G --> I["Aggiornamento del DOM reale"]
+    I --> J["Paint del browser"]
+
+    style A fill:#ff6b6b
+    style B fill:#ffd43b
+    style G fill:#4dabf7
+    style J fill:#51cf66
+```
+
 ### Quando React Renderizza
 
 Un componente si renderizza di nuovo quando:
@@ -25,6 +49,25 @@ Un render senza differenze nel DOM è economico ma non gratis: i calcoli costosi
 ---
 
 ## 2. React.memo: Preventing Re-renders
+
+### Albero decisionale di React.memo
+
+Quando il padre si re-renderizza, React attraversa questa decisione per capire se un figlio memoizzato debba renderizzarsi. Il confronto superficiale è la porta critica: oggetti/funzioni inline lo vanificano.
+
+```mermaid
+flowchart TD
+    A["Il padre si re-renderizza"] --> B{"Figlio avvolto<br/>in React.memo?"}
+    B -->|No| C["Il figlio si re-renderizza"]
+    B -->|Sì| D{"Props uguali superficialmente<br/>alle precedenti?"}
+    D -->|Sì| E["Render saltato<br/>(output riusato)"]
+    D -->|No| F["Il figlio si re-renderizza<br/>con nuove props"]
+    F --> G{"Nuove props da<br/>obj/fn inline?"}
+    G -->|Sì| H["memo vanificato:<br/>avvolgere con useMemo / useCallback"]
+    G -->|No| I["Re-render atteso"]
+
+    style E fill:#51cf66
+    style H fill:#ff6b6b
+```
 
 ### Come Funziona
 
@@ -51,6 +94,26 @@ const Pesante = React.memo(function Pesante({ dati }: { dati: Dati }) {
 ---
 
 ## 3. useMemo and useCallback Patterns
+
+### useMemo vs useCallback: quale usare?
+
+Entrambi memorizzano qualcosa tra render, ma cose diverse. Quest'albero aiuta a scegliere lo strumento giusto — e ricorda che la risposta giusta è spesso "nessuno dei due".
+
+```mermaid
+flowchart TD
+    A["Serve preservare<br/>qualcosa tra render?"] --> B{"Cosa stai<br/>memorizzando?"}
+    B -->|"Un valore<br/>(array, oggetto, calcolo)"| C{"Calcolo costoso<br/>OPPURE identità<br/>importante?"}
+    B -->|"Una funzione"| D{"Passata a figlio<br/>memoizzato OPPURE usata come<br/>dipendenza di effect?"}
+    C -->|Sì| E["useMemo(() => compute, deps)"]
+    C -->|No| F["Valore inline<br/>(nessun hook)"]
+    D -->|Sì| G["useCallback(fn, deps)"]
+    D -->|No| H["Arrow function inline<br/>(nessun hook)"]
+
+    style E fill:#4dabf7
+    style G fill:#845ef7
+    style F fill:#ffd43b
+    style H fill:#ffd43b
+```
 
 ### useMemo per Valori
 
@@ -111,6 +174,23 @@ Tool: `vite-bundle-visualizer`, `webpack-bundle-analyzer`, `rollup-plugin-visual
 ---
 
 ## 6. Virtual Scrolling for Large Lists
+
+### Come funziona la virtualizzazione
+
+Invece di renderizzare in anticipo tutte le 10.000 righe, un virtualizzatore misura il viewport, calcola quale fetta della lista è visibile (più un piccolo buffer per uno scroll fluido) e monta solo quelle righe. Il resto è rappresentato da un singolo spaziatore alto.
+
+```mermaid
+flowchart LR
+    A["Dataset completo<br/>(10.000 elementi)"] --> B["Virtualizzatore"]
+    B --> C["Posizione di scroll +<br/>altezza viewport"]
+    C --> D["Calcolo degli indici<br/>start / end visibili"]
+    D --> E["Aggiungi buffer di overscan<br/>(5-10 righe)"]
+    E --> F["Renderizza ~20 righe<br/>nel DOM"]
+    F --> G["Un div spaziatore simula<br/>l'altezza totale"]
+
+    style A fill:#ff6b6b
+    style F fill:#51cf66
+```
 
 ### Problema
 
@@ -192,6 +272,32 @@ Imposta soglie nel CI:
 ---
 
 ## 10. Optimization Strategy Selection
+
+### Matrice decisionale
+
+```mermaid
+graph TD
+    A["Problema di performance?"] --> B{"Identifica il problema"}
+
+    B -->|Render lento| C["Profila il componente"]
+    B -->|Bundle grande| D["Analizza il bundle"]
+    B -->|Scroll lento| E["Lista virtuale"]
+    B -->|Caricamento iniziale lento| F["Code splitting"]
+
+    C --> G{"Causa?"}
+    G -->|Calcolo costoso| H["useMemo"]
+    G -->|Re-render del padre| I["React.memo"]
+    G -->|Nuove funzioni| J["useCallback"]
+
+    D --> K["Rimuovi codice morto"]
+    D --> L["Suddividi in chunk"]
+    D --> M["Lazy load"]
+
+    style A fill:#ff6b6b
+    style H fill:#51cf66
+    style I fill:#51cf66
+    style J fill:#51cf66
+```
 
 ### Quando Usare Cosa
 

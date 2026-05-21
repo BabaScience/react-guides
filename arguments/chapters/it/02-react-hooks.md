@@ -29,6 +29,21 @@ Un componente senza hook è puro: stesse props in ingresso, stesso JSX in uscita
 
 Il nome "hook" viene dall'idea che ti stai "agganciando" alle interiora di React — il suo loop di render, il suo storage di stato, il suo scheduling — dall'interno di una chiamata di funzione altrimenti ordinaria. React 16.8 li ha introdotti nel 2019, e da allora sono il modo di default per scrivere componenti.
 
+Il diagramma qui sotto mostra dove si inseriscono gli hook nel ciclo di render. La tua funzione componente è solo un passo in un ciclo guidato da React — gli hook sono il modo in cui ti colleghi a esso.
+
+```mermaid
+flowchart TD
+    A["Il componente si monta"] --> B["React chiama la funzione"]
+    B --> C["Gli hook registrano stato ed effetti"]
+    C --> D["JSX restituito"]
+    D --> E["React effettua il commit nel DOM"]
+    E --> F["Gli effetti vengono eseguiti dopo il paint"]
+    F --> G{"setState chiamato?"}
+    G -- "Sì" --> B
+    G -- "No" --> H["Inattivo, in attesa di eventi"]
+    H --> G
+```
+
 ### Come si collegano gli hook a quello che già sai
 
 Se hai scritto JavaScript prima di React, gli hook all'inizio possono sembrare strani. Una funzione normale in JavaScript ricomincia da capo a ogni chiamata. Le variabili locali scompaiono nel momento in cui la funzione restituisce un valore. Allora come fa `useState` a "ricordare" un valore tra una chiamata e l'altra?
@@ -46,6 +61,19 @@ Ci sono due regole, ed entrambe seguono da come React traccia quale valore appar
 2. **Chiama gli hook solo da funzioni React.** Cioè da un componente o da un altro hook (che per convenzione inizia con `use`). Chiamare un hook da una normale funzione di utility non funziona, perché React non sta tracciando quella chiamata.
 
 Il plugin ESLint ufficiale `eslint-plugin-react-hooks` impone entrambe le regole. Tienilo attivo.
+
+Per capire perché conta la regola dell'ordine, immagina due render affiancati. React identifica ogni hook in base alla sua posizione nella sequenza di chiamate. Salta una chiamata su un render, e ogni hook successivo si sposta — leggono tutti lo slot sbagliato.
+
+```mermaid
+flowchart LR
+    subgraph R1["Render 1 (condizione vera)"]
+        A1["1. useState count"] --> A2["2. useState name"] --> A3["3. useEffect"]
+    end
+    subgraph R2["Render 2 (condizione falsa)"]
+        B1["1. useState count"] --> B2["2. useEffect (era il #3!)"]
+    end
+    R1 -. "mismatch sullo slot 2" .-> R2
+```
 
 ```tsx
 function Good({ user }) {
@@ -101,6 +129,18 @@ const [state, setState] = useState(initialValue);
 La coppia che ricevi è solo un array, destrutturato per comodità. Il primo elemento è il valore corrente durante questo render; il secondo è una funzione setter. Chiamare il setter fa due cose: salva il nuovo valore, e dice a React di renderizzare di nuovo il componente. A quel prossimo render, `useState` ti restituisce il nuovo valore.
 
 Un punto comune di confusione: il setter non cambia `state` immediatamente. La variabile `state` corrente è catturata per questo render. Vedi il nuovo valore solo al prossimo render.
+
+Questo diagramma mostra il modello mentale: React possiede il valore conservato, te ne consegna uno snapshot per il render, e ricostruisce uno snapshot fresco alla prossima occasione.
+
+```mermaid
+flowchart TD
+    A["Cella di stato gestita da React"] -->|"legge il valore conservato"| B["Render N: count = 0"]
+    B --> C["La closure cattura count = 0"]
+    C --> D["setCount(1) chiamato"]
+    D -->|"scrive il nuovo valore, pianifica il render"| A
+    A -->|"legge il valore conservato"| E["Render N+1: count = 1"]
+    E --> F["Nuova closure cattura count = 1"]
+```
 
 ```tsx
 function Counter() {
@@ -343,6 +383,26 @@ Tre parti:
 - La **funzione di cleanup** opzionale che restituisce viene eseguita prima della prossima esecuzione dell'effetto, e una volta finale quando il componente viene rimosso.
 - L'**array di dipendenze** controlla quando l'effetto viene rieseguito.
 
+Il timing è importante. Gli effetti non vengono eseguiti durante il render — vengono eseguiti dopo che il browser ha dipinto la nuova UI. Il cleanup viene eseguito prima del prossimo effetto e di nuovo all'unmount.
+
+```mermaid
+sequenceDiagram
+    participant C as Componente
+    participant R as React
+    participant E as Effetto
+    C->>R: Il render restituisce JSX
+    R->>R: Commit nel DOM
+    R->>R: Il browser dipinge
+    R->>E: Esegui l'effetto
+    Note over E: Lavoro di setup (subscribe, fetch)
+    C->>R: Re-render (le dipendenze sono cambiate)
+    R->>R: Commit del nuovo DOM
+    R->>E: Esegui il cleanup dell'effetto precedente
+    R->>E: Esegui il nuovo effetto
+    C->>R: Unmount
+    R->>E: Esegui il cleanup finale
+```
+
 ### L'array di dipendenze
 
 L'array di dipendenze è la singola cosa più importante da fare bene con `useEffect`. Controlla quando l'effetto viene rieseguito.
@@ -378,6 +438,19 @@ function EffectPatterns() {
 ```
 
 La regola: includi ogni valore dallo scope del componente che l'effetto legge. Se il tuo effetto usa `userId`, `userId` va nell'array. La regola lint `react-hooks/exhaustive-deps` ti avviserà quando ne dimentichi una. Resisti alla tentazione di silenziarla rimuovendo una dipendenza — quella strada porta a dati stale e bug confusi.
+
+Ecco l'albero decisionale di cosa l'array di dipendenze dice a React di fare:
+
+```mermaid
+flowchart TD
+    A["useEffect(fn, ???)"] --> B{"Cosa hai passato?"}
+    B -->|"niente"| C["Esegui dopo ogni render"]
+    B -->|"[]"| D["Esegui una volta al mount, cleanup all'unmount"]
+    B -->|"[a, b]"| E{"a o b sono cambiati?"}
+    E -->|"Sì"| F["Esegui il cleanup, poi di nuovo l'effetto"]
+    E -->|"No"| G["Salta questo render"]
+    C -.->|"quasi sempre sbagliato"| H["Riconsidera"]
+```
 
 ### Fetch di dati
 
@@ -681,6 +754,22 @@ const App = () => {
 ```
 
 Avvolgere la chiamata grezza `useContext(ThemeContext)` in un custom hook `useTheme` è un'abitudine piccola ma utile. Centralizza il check "è usato dentro un Provider?" e dà ai consumer un import pulito.
+
+Visivamente, il Provider si trova sopra l'albero, e qualunque discendente — non importa quanto profondamente annidato — può raggiungere il valore direttamente senza che i componenti intermedi lo passino come prop.
+
+```mermaid
+flowchart TD
+    P["ThemeProvider (mantiene il valore)"] --> L["Layout"]
+    L --> H["Header"]
+    L --> M["Main"]
+    L --> F["Footer"]
+    M --> S["Sidebar"]
+    S --> D["Dialog"]
+    D --> B["ThemedButton (useContext)"]
+    H -.->|"useContext"| P
+    F -.->|"useContext"| P
+    B -.->|"useContext, salta il drilling"| P
+```
 
 ### Un esempio più grande: Autenticazione
 
@@ -1635,6 +1724,23 @@ function reducer(state, action) {
 
 `useReducer` restituisce lo stato corrente e una funzione `dispatch`. Per cambiare lo stato, chiami `dispatch(action)`. React chiama il tuo reducer con lo stato precedente e l'azione, prende il valore di ritorno come nuovo stato, e rirenderizza.
 
+Il ciclo completo è un loop a senso unico: la UI dispatch-a azioni, il reducer è l'unico posto in cui lo stato cambia, il nuovo stato torna a fluire nella UI.
+
+```mermaid
+sequenceDiagram
+    participant UI as UI (Componente)
+    participant D as dispatch
+    participant R as reducer(state, action)
+    participant S as Store di stato di React
+    UI->>D: dispatch({ type: 'INCREMENT' })
+    D->>R: reducer(prevState, action)
+    R->>R: Calcola lo stato successivo
+    R->>S: Restituisce il nuovo stato
+    S->>UI: Re-render con il nuovo stato
+    Note over UI: L'utente vede il count aggiornato
+```
+
+
 ### Un semplice contatore
 
 L'esempio più piccolo, per mostrare i pezzi che si muovono.
@@ -2316,6 +2422,22 @@ function UserDashboard({ userId }) {
 ```
 
 `useUser` è costruito a partire da `useFetch`, `useLocalStorage`, `useState` e `useEffect` — e il componente che lo riceve ottiene un'API pulita, a una sola chiamata.
+
+Il diagramma qui sotto mostra la composizione: un custom hook avvolge diversi hook primitivi ed espone una singola API con un nome al componente.
+
+```mermaid
+flowchart LR
+    C["Componente: UserDashboard"] --> U["useUser(userId)"]
+    U --> F["useFetch"]
+    U --> L["useLocalStorage"]
+    U --> S["useState (isOnline)"]
+    U --> E["useEffect (listener online)"]
+    F --> API["{ user, loading, error, preferences, isOnline }"]
+    L --> API
+    S --> API
+    E --> API
+    API --> C
+```
 
 ---
 

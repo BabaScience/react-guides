@@ -332,6 +332,32 @@ const ProductList = ({ category }) => {
 
 ## 3. Context API: Simple Global State
 
+### Provider Tree and Consumer Reach
+
+Each `Provider` injects a value into the subtree below it. Consumers reach upward through the tree to the nearest matching provider — composition order matters because inner providers can override outer ones.
+
+```mermaid
+flowchart TD
+    A["App"] --> B["AuthProvider"]
+    B --> C["ThemeProvider"]
+    C --> D["NotificationProvider"]
+    D --> E["Router"]
+    E --> F["Dashboard"]
+    E --> G["Profile"]
+    E --> H["Settings"]
+
+    F -.useAuth.-> B
+    F -.useTheme.-> C
+    G -.useAuth.-> B
+    G -.useTheme.-> C
+    H -.useNotification.-> D
+    H -.useTheme.-> C
+
+    style B fill:#845ef7
+    style C fill:#4dabf7
+    style D fill:#51cf66
+```
+
 ### Basic Context Implementation
 
 ```jsx
@@ -1166,6 +1192,34 @@ const TodoDetails = ({ todoId }) => {
 
 ## 6. Middleware and Async Operations
 
+### Async Thunk Lifecycle End-to-End
+
+`createAsyncThunk` automatically dispatches `pending`, `fulfilled`, or `rejected` actions around your async function. Middleware sits between dispatch and reducer, which is where the thunk function is actually executed instead of being forwarded as a plain action.
+
+```mermaid
+sequenceDiagram
+    participant UI as Component
+    participant D as dispatch
+    participant M as Thunk Middleware
+    participant API as Backend
+    participant S as Store / Reducer
+    participant V as View
+
+    UI->>D: dispatch(fetchUser(id))
+    D->>M: action is a function
+    M->>S: dispatch(fetchUser.pending)
+    S->>V: state.loading = true
+    M->>API: fetch('/api/users/:id')
+    API-->>M: JSON response
+    alt success
+        M->>S: dispatch(fetchUser.fulfilled, payload)
+        S->>V: state.user = payload, loading = false
+    else failure
+        M->>S: dispatch(fetchUser.rejected, error)
+        S->>V: state.error = msg, loading = false
+    end
+```
+
 ### Redux Thunk Basics
 
 ```javascript
@@ -1512,6 +1566,31 @@ const PostsList = () => {
 ---
 
 ## 7. Zustand: Minimalist State Management
+
+### How a Store Outside React Re-Renders Components
+
+Zustand keeps state in a plain JavaScript store that lives outside the React tree. Components subscribe through a selector; when the store changes, only components whose selected slice changed are re-rendered.
+
+```mermaid
+sequenceDiagram
+    participant C as Component
+    participant H as useStore selector
+    participant St as Zustand Store
+    participant L as Subscribers list
+
+    C->>H: useStore(state => state.count)
+    H->>St: subscribe(selector)
+    St->>L: register listener
+    Note over C,St: User clicks increment
+    C->>St: store.setState(s => ({ count: s.count + 1 }))
+    St->>L: notify all listeners
+    L->>H: run selector with new state
+    alt selected value changed
+        H-->>C: trigger re-render
+    else value unchanged
+        H-->>C: skip re-render
+    end
+```
 
 ### Basic Zustand Store
 

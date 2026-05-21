@@ -15,6 +15,32 @@
 5. **État d'URL** : filtres, pages, query string.
 6. **État de formulaire** : local ou géré par des bibliothèques (React Hook Form).
 
+```mermaid
+graph TD
+    A["État de l'application"] --> B["État UI"]
+    A --> C["État serveur"]
+    A --> D["État de formulaire"]
+    A --> E["État d'URL"]
+
+    B --> B1["État local de composant"]
+    B --> B2["État UI global"]
+
+    C --> C1["Données en cache"]
+    C --> C2["États de chargement"]
+    C --> C3["États d'erreur"]
+
+    D --> D1["Valeurs du formulaire"]
+    D --> D2["État de validation"]
+    D --> D3["État de soumission"]
+
+    E --> E1["Paramètres de route"]
+    E --> E2["Paramètres de query"]
+
+    style A fill:#845ef7
+    style B2 fill:#4dabf7
+    style C fill:#51cf66
+```
+
 ### Règle pratique
 
 Commencez toujours au **niveau le plus bas possible**. Ne montez que lorsque l'état doit être partagé ou persistant.
@@ -35,6 +61,25 @@ L'état est-il utilisé par un seul composant ?
               └─ Non → Context API ou store global
 ```
 
+```mermaid
+graph TD
+    A{"L'état doit-il être partagé ?"} -->|Non| B["État local — useState"]
+    A -->|Oui| C{"Entre parent-enfant ?"}
+
+    C -->|Oui| D["Élever l'état"]
+    C -->|Non| E{"Combien de composants ?"}
+
+    E -->|2-3 proches| F["Élever à l'ancêtre commun"]
+    E -->|Nombreux/Éloignés| G{"Quelle complexité ?"}
+
+    G -->|Simple| H["Context API"]
+    G -->|Complexe| I["Redux/Zustand"]
+
+    style B fill:#51cf66
+    style H fill:#4dabf7
+    style I fill:#845ef7
+```
+
 ### Erreurs courantes
 
 - Mettre trop de choses dans un Context global → re-rendus excessifs.
@@ -44,6 +89,32 @@ L'état est-il utilisé par un seul composant ?
 ---
 
 ## 3. Context API: Simple Global State
+
+### Arbre des Providers et portée des consommateurs
+
+Chaque `Provider` injecte une valeur dans le sous-arbre situé en dessous. Les consommateurs remontent dans l'arbre jusqu'au `Provider` correspondant le plus proche — l'ordre de composition compte car un provider interne peut masquer un provider externe.
+
+```mermaid
+flowchart TD
+    A["App"] --> B["AuthProvider"]
+    B --> C["ThemeProvider"]
+    C --> D["NotificationProvider"]
+    D --> E["Router"]
+    E --> F["Dashboard"]
+    E --> G["Profil"]
+    E --> H["Paramètres"]
+
+    F -.useAuth.-> B
+    F -.useTheme.-> C
+    G -.useAuth.-> B
+    G -.useTheme.-> C
+    H -.useNotification.-> D
+    H -.useTheme.-> C
+
+    style B fill:#845ef7
+    style C fill:#4dabf7
+    style D fill:#51cf66
+```
 
 ### Quand l'utiliser
 
@@ -113,6 +184,26 @@ dispatch(incrementer());
 
 ## 5. Redux Core Concepts Deep Dive
 
+### Flux de données Redux
+
+Redux applique un flux unidirectionnel : un composant `dispatch` une action, le store invoque le reducer, qui produit un nouvel état, et les composants abonnés sont notifiés.
+
+```mermaid
+graph LR
+    A["Composant"] -->|dispatch action| B["Store"]
+    B -->|action| C["Reducer"]
+    C -->|nouvel état| B
+    B -->|état| A
+
+    D["Middleware"] -.intercepte.-> B
+    D -.modifie.-> C
+
+    style A fill:#4dabf7
+    style B fill:#845ef7
+    style C fill:#51cf66
+    style D fill:#ffd43b
+```
+
 ### Concepts clés
 
 - **Store** : unique source de vérité.
@@ -128,6 +219,34 @@ Dans RTK vous pouvez écrire des « mutations » dans le reducer : Immer se char
 ---
 
 ## 6. Middleware and Async Operations
+
+### Cycle de vie d'un thunk asynchrone de bout en bout
+
+`createAsyncThunk` dispatche automatiquement les actions `pending`, `fulfilled` ou `rejected` autour de votre fonction async. Le middleware se trouve entre `dispatch` et le reducer : c'est là que la fonction thunk est réellement exécutée au lieu d'être transmise comme action ordinaire.
+
+```mermaid
+sequenceDiagram
+    participant UI as Composant
+    participant D as dispatch
+    participant M as Middleware Thunk
+    participant API as Backend
+    participant S as Store / Reducer
+    participant V as Vue
+
+    UI->>D: dispatch(fetchUser(id))
+    D->>M: l'action est une fonction
+    M->>S: dispatch(fetchUser.pending)
+    S->>V: state.loading = true
+    M->>API: fetch('/api/users/:id')
+    API-->>M: réponse JSON
+    alt succès
+        M->>S: dispatch(fetchUser.fulfilled, payload)
+        S->>V: state.user = payload, loading = false
+    else échec
+        M->>S: dispatch(fetchUser.rejected, error)
+        S->>V: state.error = msg, loading = false
+    end
+```
 
 ### Thunk
 
@@ -160,6 +279,31 @@ const utilisateurSlice = createSlice({
 ---
 
 ## 7. Zustand: Minimalist State Management
+
+### Comment un store hors de React déclenche le re-rendu des composants
+
+Zustand garde l'état dans un store JavaScript ordinaire qui vit hors de l'arbre React. Les composants s'abonnent via un sélecteur ; quand le store change, seuls les composants dont la tranche sélectionnée a changé sont re-rendus.
+
+```mermaid
+sequenceDiagram
+    participant C as Composant
+    participant H as Sélecteur useStore
+    participant St as Store Zustand
+    participant L as Liste des abonnés
+
+    C->>H: useStore(state => state.count)
+    H->>St: subscribe(selector)
+    St->>L: enregistrer l'écouteur
+    Note over C,St: L'utilisateur clique sur incrémenter
+    C->>St: store.setState(s => ({ count: s.count + 1 }))
+    St->>L: notifier tous les écouteurs
+    L->>H: exécuter le sélecteur avec le nouvel état
+    alt valeur sélectionnée modifiée
+        H-->>C: déclencher un nouveau rendu
+    else valeur inchangée
+        H-->>C: ignorer le rendu
+    end
+```
 
 ### API très simple
 
@@ -224,6 +368,32 @@ Recoil a été pionnier mais on le choisit moins souvent aujourd'hui au profit d
 ---
 
 ## 10. State Management Selection Matrix
+
+### Arbre de décision
+
+```mermaid
+graph TD
+    A["Choisir une solution d'état"] --> B{"Complexité de l'app ?"}
+
+    B -->|Petite| C["useState + Props"]
+    B -->|Moyenne| D{"Besoin de DevTools ?"}
+    B -->|Grande| E["Redux Toolkit ou Zustand"]
+
+    D -->|Non| F{"État async ?"}
+    D -->|Oui| G["Redux Toolkit"]
+
+    F -->|Simple| H["Context API"]
+    F -->|Complexe| I["Zustand"]
+
+    E --> J{"Expérience de l'équipe ?"}
+    J -->|Connaît Redux| K["Redux Toolkit"]
+    J -->|Veut du simple| L["Zustand"]
+    J -->|Patterns modernes| M["Jotai ou Recoil"]
+
+    style C fill:#51cf66
+    style H fill:#4dabf7
+    style K fill:#845ef7
+```
 
 ### Quelle bibliothèque ?
 

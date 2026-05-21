@@ -15,6 +15,32 @@
 5. **Stato dell'URL**: filtri, pagine, query string.
 6. **Stato del form**: locale o gestito da librerie (React Hook Form).
 
+```mermaid
+graph TD
+    A["Stato dell'applicazione"] --> B["Stato UI"]
+    A --> C["Stato del server"]
+    A --> D["Stato del form"]
+    A --> E["Stato dell'URL"]
+
+    B --> B1["Stato locale di componente"]
+    B --> B2["Stato UI globale"]
+
+    C --> C1["Dati in cache"]
+    C --> C2["Stati di caricamento"]
+    C --> C3["Stati di errore"]
+
+    D --> D1["Valori del form"]
+    D --> D2["Stato di validazione"]
+    D --> D3["Stato di invio"]
+
+    E --> E1["Parametri di route"]
+    E --> E2["Parametri di query"]
+
+    style A fill:#845ef7
+    style B2 fill:#4dabf7
+    style C fill:#51cf66
+```
+
 ### Regola Pratica
 
 Inizia sempre dal **livello più basso possibile**. Sali solo quando lo stato deve essere condiviso o persistente.
@@ -35,6 +61,25 @@ Lo stato è usato da un solo componente?
               └─ No → Context API o store globale
 ```
 
+```mermaid
+graph TD
+    A{"Lo stato deve essere condiviso?"} -->|No| B["Stato locale — useState"]
+    A -->|Sì| C{"Tra padre e figlio?"}
+
+    C -->|Sì| D["Sollevare lo stato"]
+    C -->|No| E{"Quanti componenti?"}
+
+    E -->|2-3 vicini| F["Sollevare all'antenato comune"]
+    E -->|Molti/Distanti| G{"Quanto è complesso?"}
+
+    G -->|Semplice| H["Context API"]
+    G -->|Complesso| I["Redux/Zustand"]
+
+    style B fill:#51cf66
+    style H fill:#4dabf7
+    style I fill:#845ef7
+```
+
 ### Errori Comuni
 
 - Mettere troppe cose in Context globale → re-render eccessivi.
@@ -44,6 +89,32 @@ Lo stato è usato da un solo componente?
 ---
 
 ## 3. Context API: Simple Global State
+
+### Albero dei Provider e portata dei consumatori
+
+Ogni `Provider` inietta un valore nel sottoalbero al di sotto. I consumatori risalgono nell'albero fino al `Provider` corrispondente più vicino — l'ordine di composizione conta perché un provider interno può sovrascrivere uno esterno.
+
+```mermaid
+flowchart TD
+    A["App"] --> B["AuthProvider"]
+    B --> C["ThemeProvider"]
+    C --> D["NotificationProvider"]
+    D --> E["Router"]
+    E --> F["Dashboard"]
+    E --> G["Profilo"]
+    E --> H["Impostazioni"]
+
+    F -.useAuth.-> B
+    F -.useTheme.-> C
+    G -.useAuth.-> B
+    G -.useTheme.-> C
+    H -.useNotification.-> D
+    H -.useTheme.-> C
+
+    style B fill:#845ef7
+    style C fill:#4dabf7
+    style D fill:#51cf66
+```
 
 ### Quando Usarlo
 
@@ -113,6 +184,26 @@ dispatch(incrementa());
 
 ## 5. Redux Core Concepts Deep Dive
 
+### Flusso dei dati in Redux
+
+Redux impone un flusso unidirezionale: un componente fa `dispatch` di un'azione, lo store invoca il reducer, che produce un nuovo stato, e i componenti sottoscritti vengono notificati.
+
+```mermaid
+graph LR
+    A["Componente"] -->|dispatch azione| B["Store"]
+    B -->|azione| C["Reducer"]
+    C -->|nuovo stato| B
+    B -->|stato| A
+
+    D["Middleware"] -.intercetta.-> B
+    D -.modifica.-> C
+
+    style A fill:#4dabf7
+    style B fill:#845ef7
+    style C fill:#51cf66
+    style D fill:#ffd43b
+```
+
 ### Concetti Chiave
 
 - **Store**: singola fonte di verità.
@@ -128,6 +219,34 @@ In RTK puoi scrivere "mutazioni" nel reducer: Immer si occupa di produrre un nuo
 ---
 
 ## 6. Middleware and Async Operations
+
+### Ciclo di vita di un thunk asincrono da capo a fondo
+
+`createAsyncThunk` dispatcha automaticamente le azioni `pending`, `fulfilled` o `rejected` attorno alla tua funzione async. Il middleware si trova tra `dispatch` e il reducer: è qui che la funzione thunk viene effettivamente eseguita invece di essere inoltrata come azione ordinaria.
+
+```mermaid
+sequenceDiagram
+    participant UI as Componente
+    participant D as dispatch
+    participant M as Middleware Thunk
+    participant API as Backend
+    participant S as Store / Reducer
+    participant V as Vista
+
+    UI->>D: dispatch(fetchUser(id))
+    D->>M: l'azione è una funzione
+    M->>S: dispatch(fetchUser.pending)
+    S->>V: state.loading = true
+    M->>API: fetch('/api/users/:id')
+    API-->>M: risposta JSON
+    alt successo
+        M->>S: dispatch(fetchUser.fulfilled, payload)
+        S->>V: state.user = payload, loading = false
+    else fallimento
+        M->>S: dispatch(fetchUser.rejected, error)
+        S->>V: state.error = msg, loading = false
+    end
+```
 
 ### Thunk
 
@@ -160,6 +279,31 @@ const utenteSlice = createSlice({
 ---
 
 ## 7. Zustand: Minimalist State Management
+
+### Come uno store fuori da React innesca il re-render dei componenti
+
+Zustand mantiene lo stato in uno store JavaScript ordinario che vive fuori dall'albero React. I componenti si sottoscrivono tramite un selettore; quando lo store cambia, vengono ri-renderizzati solo i componenti il cui slice selezionato è cambiato.
+
+```mermaid
+sequenceDiagram
+    participant C as Componente
+    participant H as Selettore useStore
+    participant St as Store Zustand
+    participant L as Lista degli iscritti
+
+    C->>H: useStore(state => state.count)
+    H->>St: subscribe(selector)
+    St->>L: registra il listener
+    Note over C,St: L'utente clicca su incrementa
+    C->>St: store.setState(s => ({ count: s.count + 1 }))
+    St->>L: notifica tutti i listener
+    L->>H: esegue il selettore con il nuovo stato
+    alt valore selezionato cambiato
+        H-->>C: innesca un nuovo render
+    else valore invariato
+        H-->>C: salta il render
+    end
+```
 
 ### API Semplicissima
 
@@ -224,6 +368,32 @@ Recoil è stato pionieristico ma oggi viene scelto meno spesso a favore di Jotai
 ---
 
 ## 10. State Management Selection Matrix
+
+### Albero decisionale
+
+```mermaid
+graph TD
+    A["Scegliere una soluzione di stato"] --> B{"Complessità dell'app?"}
+
+    B -->|Piccola| C["useState + Props"]
+    B -->|Media| D{"Servono DevTools?"}
+    B -->|Grande| E["Redux Toolkit o Zustand"]
+
+    D -->|No| F{"Stato async?"}
+    D -->|Sì| G["Redux Toolkit"]
+
+    F -->|Semplice| H["Context API"]
+    F -->|Complesso| I["Zustand"]
+
+    E --> J{"Esperienza del team?"}
+    J -->|Conosce Redux| K["Redux Toolkit"]
+    J -->|Vuole il semplice| L["Zustand"]
+    J -->|Pattern moderni| M["Jotai o Recoil"]
+
+    style C fill:#51cf66
+    style H fill:#4dabf7
+    style K fill:#845ef7
+```
 
 ### Quale Libreria?
 

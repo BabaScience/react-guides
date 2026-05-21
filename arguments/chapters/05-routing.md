@@ -458,6 +458,25 @@ const Routes = () => {
 
 ## 4. Dynamic Routing with Parameters
 
+### How Pattern Matching Produces a Params Object
+
+When the router sees a URL like `/users/42`, it walks the registered routes and matches each pattern segment by segment. Tokens beginning with `:` are captured into the `params` object that `useParams` returns.
+
+```mermaid
+flowchart LR
+    A["URL: /users/42/posts/9"] --> B["Route pattern: /users/:userId/posts/:postId"]
+    B --> C["Match segments"]
+    C --> D["Extract :userId = 42"]
+    C --> E["Extract :postId = 9"]
+    D --> F["params object"]
+    E --> F
+    F --> G["useParams returns { userId, postId }"]
+
+    style A fill:#4dabf7
+    style F fill:#ffd43b
+    style G fill:#51cf66
+```
+
 ### URL Parameters (Path Params)
 
 ```jsx
@@ -1032,6 +1051,28 @@ const AuthLayout = () => {
 
 ## 6. Protected Routes and Authentication
 
+### The Protection Decision Tree
+
+A protected route runs a small decision tree on every render: is the auth check still loading, is the user authenticated, do they have the required role? The diagram below shows the branches and where each one terminates.
+
+```mermaid
+flowchart TD
+    A["User navigates to /dashboard"] --> B{"Auth state loaded?"}
+    B -->|No| C["Render LoadingSpinner"]
+    B -->|Yes| D{"isAuthenticated?"}
+    D -->|No| E["Navigate to /login, save 'from' location"]
+    D -->|Yes| F{"Role required?"}
+    F -->|No| G["Render Outlet - protected page"]
+    F -->|Yes| H{"User has role?"}
+    H -->|Yes| G
+    H -->|No| I["Navigate to /unauthorized"]
+
+    style C fill:#ffd43b
+    style E fill:#ff6b6b
+    style G fill:#51cf66
+    style I fill:#ff6b6b
+```
+
 ### Basic Protected Route Implementation
 
 ```jsx
@@ -1329,6 +1370,26 @@ const routes = (isAuthenticated, user) => [
 ---
 
 ## 7. Programmatic Navigation
+
+### How `useNavigate` Drives a Re-Render
+
+Calling `navigate('/profile')` is not a direct render — it pushes onto the browser history stack, which triggers the router to re-match the URL and render the new component subtree.
+
+```mermaid
+sequenceDiagram
+    participant C as Component
+    participant N as useNavigate
+    participant H as History API
+    participant R as Router
+    participant V as View
+
+    C->>N: navigate('/profile')
+    N->>H: history.pushState(...)
+    H-->>R: popstate / location change
+    R->>R: Match new URL against routes
+    R->>V: Unmount old route, mount Profile
+    V-->>C: Updated tree rendered
+```
 
 ### useNavigate Hook
 

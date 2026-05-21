@@ -29,6 +29,21 @@ A component without hooks is pure: same props in, same JSX out. That's enough fo
 
 The name "hook" comes from the idea that you are hooking into React's internals — its rendering loop, its state storage, its scheduling — from inside an otherwise ordinary function call. React 16.8 introduced them in 2019, and they have been the default way to write components ever since.
 
+The diagram below shows where hooks fit in the render cycle. Your component function is just one step in a loop that React drives — hooks are how you plug into it.
+
+```mermaid
+flowchart TD
+    A["Component mounts"] --> B["React calls function"]
+    B --> C["Hooks register state and effects"]
+    C --> D["JSX returned"]
+    D --> E["React commits to DOM"]
+    E --> F["Effects run after paint"]
+    F --> G{"setState called?"}
+    G -- "Yes" --> B
+    G -- "No" --> H["Idle, waiting for events"]
+    H --> G
+```
+
 ### How Hooks Relate to What You Already Know
 
 If you have written JavaScript before React, hooks may feel strange at first. A plain function in JavaScript starts fresh every time you call it. Local variables are gone the moment the function returns. So how can `useState` "remember" a value between calls?
@@ -46,6 +61,19 @@ There are two rules, and both follow from how React tracks which value belongs t
 2. **Only call hooks from React functions.** That means from a component or from another hook (which by convention starts with `use`). Calling a hook from a regular utility function does not work, because React is not tracking that call.
 
 The official ESLint plugin `eslint-plugin-react-hooks` enforces both rules. Keep it on.
+
+To see why the order rule matters, picture two renders side by side. React identifies each hook by its position in the call sequence. Skip a call on one render, and every hook after it shifts — they all read the wrong slot.
+
+```mermaid
+flowchart LR
+    subgraph R1["Render 1 (condition true)"]
+        A1["1. useState count"] --> A2["2. useState name"] --> A3["3. useEffect"]
+    end
+    subgraph R2["Render 2 (condition false)"]
+        B1["1. useState count"] --> B2["2. useEffect (was #3!)"]
+    end
+    R1 -. "slot 2 mismatch" .-> R2
+```
 
 ```tsx
 function Good({ user }) {
@@ -101,6 +129,18 @@ const [state, setState] = useState(initialValue);
 The pair you get back is just an array, destructured for convenience. The first element is the current value during this render; the second is a setter function. Calling the setter does two things: it stores the new value, and it tells React to render the component again. On that next render, `useState` hands you back the new value.
 
 A common point of confusion: the setter does not change `state` immediately. The current `state` variable is captured for this render. You only see the new value on the next render.
+
+This diagram shows the mental model: React owns the stored value, hands you a snapshot for the render, and rebuilds a fresh snapshot the next time around.
+
+```mermaid
+flowchart TD
+    A["React-owned state cell"] -->|"reads stored value"| B["Render N: count = 0"]
+    B --> C["Closure captures count = 0"]
+    C --> D["setCount(1) called"]
+    D -->|"writes new value, schedules render"| A
+    A -->|"reads stored value"| E["Render N+1: count = 1"]
+    E --> F["New closure captures count = 1"]
+```
 
 ```tsx
 function Counter() {
@@ -343,6 +383,26 @@ Three pieces:
 - The optional **cleanup function** it returns runs before the next time the effect runs, and one final time when the component is removed.
 - The **dependency array** controls when the effect runs again.
 
+The timing matters. Effects do not run during render — they run after the browser has painted the new UI. Cleanup runs before the next effect and again at unmount.
+
+```mermaid
+sequenceDiagram
+    participant C as Component
+    participant R as React
+    participant E as Effect
+    C->>R: Render returns JSX
+    R->>R: Commit to DOM
+    R->>R: Browser paints
+    R->>E: Run effect
+    Note over E: Setup work (subscribe, fetch)
+    C->>R: Re-render (deps changed)
+    R->>R: Commit new DOM
+    R->>E: Run cleanup from previous effect
+    R->>E: Run new effect
+    C->>R: Unmount
+    R->>E: Run final cleanup
+```
+
 ### The Dependency Array
 
 The dependency array is the single most important thing to get right with `useEffect`. It controls when the effect re-runs.
@@ -378,6 +438,19 @@ function EffectPatterns() {
 ```
 
 The rule: include every value from the component scope that the effect reads. If your effect uses `userId`, `userId` belongs in the array. The `react-hooks/exhaustive-deps` lint rule will warn you when you miss one. Resist the urge to silence it by removing a dependency — that path leads to stale data and confused bugs.
+
+Here is the decision tree for what the dependency array tells React to do:
+
+```mermaid
+flowchart TD
+    A["useEffect(fn, ???)"] --> B{"What did you pass?"}
+    B -->|"nothing"| C["Run after every render"]
+    B -->|"[]"| D["Run once on mount, cleanup on unmount"]
+    B -->|"[a, b]"| E{"Did a or b change?"}
+    E -->|"Yes"| F["Run cleanup, then effect again"]
+    E -->|"No"| G["Skip this render"]
+    C -.->|"almost always wrong"| H["Reconsider"]
+```
 
 ### Data Fetching
 
@@ -681,6 +754,22 @@ const App = () => {
 ```
 
 Wrapping the raw `useContext(ThemeContext)` call in a custom `useTheme` hook is a small but useful habit. It centralises the "is this used inside a Provider?" check, and gives consumers a clean import.
+
+Visually, the Provider sits above the tree, and any descendant — no matter how deeply nested — can reach the value directly without intermediate components passing it as a prop.
+
+```mermaid
+flowchart TD
+    P["ThemeProvider (holds value)"] --> L["Layout"]
+    L --> H["Header"]
+    L --> M["Main"]
+    L --> F["Footer"]
+    M --> S["Sidebar"]
+    S --> D["Dialog"]
+    D --> B["ThemedButton (useContext)"]
+    H -.->|"useContext"| P
+    F -.->|"useContext"| P
+    B -.->|"useContext, skips drilling"| P
+```
 
 ### A Larger Example: Authentication
 
@@ -1635,6 +1724,23 @@ function reducer(state, action) {
 
 `useReducer` returns the current state and a `dispatch` function. To change state, you call `dispatch(action)`. React calls your reducer with the previous state and the action, takes the return value as the new state, and re-renders.
 
+The full cycle is a one-way loop: the UI dispatches actions, the reducer is the only place state changes, the new state flows back into the UI.
+
+```mermaid
+sequenceDiagram
+    participant UI as UI (Component)
+    participant D as dispatch
+    participant R as reducer(state, action)
+    participant S as React state store
+    UI->>D: dispatch({ type: 'INCREMENT' })
+    D->>R: reducer(prevState, action)
+    R->>R: Compute next state
+    R->>S: Return new state
+    S->>UI: Re-render with new state
+    Note over UI: User sees updated count
+```
+
+
 ### A Simple Counter
 
 The smallest example, to show the moving parts.
@@ -2316,6 +2422,22 @@ function UserDashboard({ userId }) {
 ```
 
 `useUser` is built out of `useFetch`, `useLocalStorage`, `useState`, and `useEffect` — and the component on the receiving end gets a clean, single-call API.
+
+The diagram below shows the composition: a custom hook wraps several primitive hooks and exposes a single, named API to the component.
+
+```mermaid
+flowchart LR
+    C["Component: UserDashboard"] --> U["useUser(userId)"]
+    U --> F["useFetch"]
+    U --> L["useLocalStorage"]
+    U --> S["useState (isOnline)"]
+    U --> E["useEffect (online listener)"]
+    F --> API["{ user, loading, error, preferences, isOnline }"]
+    L --> API
+    S --> API
+    E --> API
+    API --> C
+```
 
 ---
 

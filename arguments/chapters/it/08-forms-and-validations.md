@@ -6,6 +6,37 @@
 
 ## 1. Form Management Paradigms
 
+### Classificazione dello stato del form
+
+Lo stato di un form non è monolitico: valori, validazione, stato di invio e UI sono dimensioni distinte che si orchestrano in modo diverso.
+
+```mermaid
+graph TD
+    A["Stato del form"] --> B["Valori dei campi"]
+    A --> C["Stato di validazione"]
+    A --> D["Stato di invio"]
+    A --> E["Stato UI"]
+
+    B --> B1["Valori inseriti"]
+    B --> B2["Valori di default"]
+    B --> B3["Campi modificati (dirty)"]
+
+    C --> C1["Errori per campo"]
+    C --> C2["Regole di validazione"]
+    C --> C3["Campi toccati"]
+
+    D --> D1["isSubmitting"]
+    D --> D2["isValid"]
+    D --> D3["submitCount"]
+
+    E --> E1["Focus"]
+    E --> E2["Campi disabilitati"]
+
+    style A fill:#845ef7
+    style C fill:#ff6b6b
+    style D fill:#51cf66
+```
+
 ### Approcci
 
 1. **Controllati con `useState`**: ogni campo è uno stato. Adatto a form piccoli.
@@ -22,6 +53,29 @@
 ---
 
 ## 2. Controlled vs Uncontrolled Components
+
+### Flusso dei dati: controllati vs non controllati
+
+I due pattern differiscono per **dove risiede la fonte di verità**. I componenti controllati tengono lo stato in React; i non controllati lo tengono nel DOM e lo leggono tramite ref solo quando serve.
+
+```mermaid
+flowchart LR
+    subgraph Controlled["Controllato (React possiede lo stato)"]
+        direction TB
+        U1["Digitazione utente"] --> E1["Evento onChange"]
+        E1 --> S1["setState"]
+        S1 --> R1["Re-render"]
+        R1 --> V1["prop value -> input"]
+    end
+
+    subgraph Uncontrolled["Non controllato (DOM possiede lo stato)"]
+        direction TB
+        U2["Digitazione utente"] --> D2["Il DOM aggiorna l'input"]
+        D2 -.->|"nessun re-render"| D2
+        SB["Invio / lettura"] --> RF["ref.current.value"]
+        RF --> APP["L'app legge il valore"]
+    end
+```
 
 ### Controllati
 
@@ -109,6 +163,21 @@ Yup è maturo, semplice e diffuso. Per chi non vuole gestire validazione manuale
 
 ## 5. Validation with Zod
 
+### Flusso di validazione tramite schema
+
+I validatori a schema come Zod e Yup seguono un semplice modello "parse o fallisci": i valori del form entrano, e ne esce o un oggetto tipizzato e validato, o un elenco strutturato di errori.
+
+```mermaid
+flowchart LR
+    A["Valori del form<br/>(input grezzo)"] --> B["schema.parse(values)"]
+    B --> C{"Validi?"}
+    C -->|Sì| D["Dati tipizzati e validati"]
+    D --> E["onSubmit(data)"]
+    C -->|No| F["ZodError / ValidationError"]
+    F --> G["Mappa gli errori sui campi"]
+    G --> H["Mostra i messaggi di errore"]
+```
+
 ### Schema Tipizzato
 
 ```tsx
@@ -172,6 +241,25 @@ Usa eventi `onDragOver`, `onDrop` e `event.dataTransfer.files`. Librerie come `r
 ---
 
 ## 7. Multi-Step Forms
+
+### Macchina a stati del form multi-step
+
+Un wizard è essenzialmente una macchina a stati finita: ogni step è uno stato, e `Avanti`/`Indietro` sono transizioni protette dalla validazione. Modellarlo esplicitamente evita i rami `if (step === 2)` aggrovigliati.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Step1_Personali
+    Step1_Personali --> Step2_Indirizzo: Avanti (valido)
+    Step1_Personali --> Step1_Personali: Avanti (non valido)
+    Step2_Indirizzo --> Step1_Personali: Indietro
+    Step2_Indirizzo --> Step3_Pagamento: Avanti (valido)
+    Step2_Indirizzo --> Step2_Indirizzo: Avanti (non valido)
+    Step3_Pagamento --> Step2_Indirizzo: Indietro
+    Step3_Pagamento --> InvioInCorso: Invia (valido)
+    InvioInCorso --> Successo: API ok
+    InvioInCorso --> Step3_Pagamento: Errore API
+    Successo --> [*]
+```
 
 ### Pattern
 
@@ -246,6 +334,31 @@ const schema = z.object({
 ---
 
 ## 10. Form Strategy Selection Matrix
+
+### Albero decisionale
+
+```mermaid
+graph TD
+    A["Scegli la strategia del form"] --> B{"Complessità del form?"}
+
+    B -->|Semplice| C["useState + validazione"]
+    B -->|Media| D{"Performance critica?"}
+    B -->|Complessa| E["React Hook Form"]
+
+    D -->|Sì| F["React Hook Form"]
+    D -->|No| G["useState o Formik"]
+
+    E --> H{"Validazione tramite schema?"}
+    H -->|Sì| I{"Progetto TypeScript?"}
+    H -->|No| J["Validazione personalizzata"]
+
+    I -->|Sì| K["Zod"]
+    I -->|No| L["Yup o Zod"]
+
+    style C fill:#51cf66
+    style F fill:#845ef7
+    style K fill:#4dabf7
+```
 
 ### Quale Approccio?
 

@@ -13,6 +13,34 @@
 3. **Suspense** (React 18+): integrazione nativa con `<Suspense>` per loading boundary.
 4. **Server Components** (Next.js, ecc.): fetch direttamente lato server.
 
+### Stato server vs stato client
+
+Lo stato server è asincrono, potenzialmente obsoleto ed esiste all'esterno dell'applicazione. Gli approcci moderni lo separano esplicitamente dallo stato client.
+
+```mermaid
+graph TD
+    A["Stato dell'applicazione"] --> B["Stato client"]
+    A --> C["Stato server"]
+
+    B --> B1["Stato UI"]
+    B --> B2["Stato dei form"]
+    B --> B3["Stato di navigazione"]
+
+    C --> C1["Dati remoti"]
+    C --> C2["Risposte in cache"]
+    C --> C3["Stati di caricamento"]
+    C --> C4["Stati di errore"]
+    C --> C5["Logica di revalidazione"]
+
+    D["Approccio tradizionale"] --> E["Redux/Context per tutto"]
+    F["Approccio moderno"] --> G["React Query/SWR per lo stato server"]
+    F --> H["useState per lo stato client"]
+
+    style C fill:#ff6b6b
+    style F fill:#51cf66
+    style D fill:#ffd43b
+```
+
 ### Quando Cosa
 
 - Progetti piccoli, una sola chiamata: `fetch` + `useEffect`.
@@ -55,6 +83,22 @@ api.interceptors.request.use((cfg) => {
 ---
 
 ## 3. Loading States and Error Handling
+
+### Ciclo di vita di una richiesta come macchina a stati
+
+Modellare una richiesta fetch come macchina a stati finiti rende espliciti i quattro stati esclusivi e impedisce UI impossibili come "caricamento + errore mostrati insieme".
+
+```mermaid
+stateDiagram-v2
+    [*] --> Inattivo
+    Inattivo --> Caricamento: "attiva fetch"
+    Caricamento --> Successo: "risposta ok"
+    Caricamento --> Errore: "risposta fallita"
+    Successo --> Caricamento: "refetch"
+    Errore --> Caricamento: "riprova"
+    Successo --> [*]: "smontaggio"
+    Errore --> [*]: "smontaggio"
+```
 
 ### Pattern Comune
 
@@ -171,6 +215,30 @@ function Utenti() {
 
 ## 6. Optimistic Updates
 
+### Flusso di aggiornamento ottimistico
+
+L'UI applica il cambiamento localmente prima che la rete risolva, poi conferma con la risposta del server o fa rollback in caso di errore. È ciò che rende le interazioni istantanee.
+
+```mermaid
+sequenceDiagram
+    participant U as Utente
+    participant C as Componente
+    participant Cache as Cache locale
+    participant S as Server
+    U->>C: "click sull'azione"
+    C->>Cache: "applica aggiornamento ottimistico"
+    Cache-->>U: "l'UI riflette il cambiamento subito"
+    C->>S: "invia richiesta di mutation"
+    alt successo
+        S-->>C: "200 OK + dati canonici"
+        C->>Cache: "sostituisci con dati dal server"
+    else fallimento
+        S-->>C: "errore"
+        C->>Cache: "rollback allo snapshot"
+        Cache-->>U: "l'UI torna indietro"
+    end
+```
+
 ### Concetto
 
 Aggiornare l'UI **prima** della conferma del server, rollback in caso di errore.
@@ -199,6 +267,25 @@ const mutazione = useMutation({
 
 ## 7. Cache Management Strategies
 
+### Decisione hit/miss della cache
+
+Ogni query consulta prima la cache tramite la sua chiave. Un hit fresco restituisce istantaneamente senza costo di rete; un miss (o voce stale) attiva un fetch reale e popola la cache per la prossima volta.
+
+```mermaid
+flowchart TD
+    A["Il componente richiede dati tramite queryKey"] --> B{"La cache ha una voce per la chiave?"}
+    B -->|No| C["Fetch dal server"]
+    B -->|Sì| D{"La voce è fresca?"}
+    D -->|Sì| E["Restituisci dati dalla cache"]
+    D -->|No - stale| F["Restituisci dati dalla cache subito"]
+    F --> G["Revalida in background"]
+    G --> H["Aggiorna cache con nuovi dati"]
+    C --> I["Salva la risposta in cache"]
+    I --> J["Restituisci dati al componente"]
+    E --> J
+    H --> J
+```
+
 ### Politiche di Cache
 
 - **staleTime**: dopo quanto tempo una query diventa "stale" (default 0).
@@ -214,6 +301,21 @@ const mutazione = useMutation({
 ---
 
 ## 8. Polling and Real-Time Updates
+
+### Ciclo di polling
+
+Il polling è un loop: fetch, aggiorna UI, attendi, ripeti — finché un segnale di stop (smontaggio, condizione di successo, o perdita di focus della tab) interrompe il ciclo.
+
+```mermaid
+stateDiagram-v2
+    [*] --> Fetch
+    Fetch --> AggiornamentoUI: "dati ricevuti"
+    AggiornamentoUI --> Attesa: "render completato"
+    Attesa --> Fetch: "intervallo trascorso"
+    Attesa --> [*]: "smontaggio o condizione di stop"
+    Fetch --> [*]: "smontaggio"
+    Fetch --> Attesa: "errore richiesta - back off"
+```
 
 ### Polling
 
@@ -272,6 +374,32 @@ useSuspenseQuery({ queryKey: ['utente', id], queryFn: () => fetchUtente(id) });
 ---
 
 ## 10. Data Fetching Strategy Selection
+
+### Albero di decisione
+
+Una guida rapida per scegliere una strategia in base alla complessità dell'app e ai requisiti.
+
+```mermaid
+graph TD
+    A["Scegli una strategia di data fetching"] --> B{"Complessità dell'app?"}
+
+    B -->|Semplice| C["useEffect + fetch"]
+    B -->|Media| D{"Serve la cache?"}
+    B -->|Complessa| E{"Richiesto tempo reale?"}
+
+    D -->|No| F["Hook useFetch personalizzato"]
+    D -->|Sì| G{"Preferenza di libreria?"}
+
+    G -->|Ricca di funzionalità| H["React Query"]
+    G -->|Leggera| I["SWR"]
+
+    E -->|Sì| J["React Query + WebSocket"]
+    E -->|No| K["React Query"]
+
+    style C fill:#51cf66
+    style H fill:#845ef7
+    style I fill:#4dabf7
+```
 
 ### Matrice di Decisione
 
