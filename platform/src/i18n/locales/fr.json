@@ -21,7 +21,7 @@
   },
   "dashboard": {
     "stepsCompleted": "{{completed}}/{{total}} étapes complétées",
-    "modules": "12 Modules"
+    "modules": "{{count}} Modules"
   },
   "module": {
     "progress": "Progression",

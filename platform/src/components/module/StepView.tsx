@@ -1,7 +1,9 @@
 import { useParams, Navigate, Link } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getModule } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
+import { useUIStore } from '@/store/ui-store';
 import { LessonStepView } from './LessonStepView';
 import { ExerciseStepView } from './ExerciseStepView';
 
@@ -13,6 +15,11 @@ export function StepView() {
   }>();
 
   const mod = moduleId ? getModule(moduleId) : undefined;
+  const setActiveTrack = useUIStore((s) => s.setActiveTrack);
+
+  useEffect(() => {
+    if (mod) setActiveTrack(mod.track);
+  }, [mod, setActiveTrack]);
   const stepIndex = stepIndexStr ? parseInt(stepIndexStr, 10) : -1;
   // isModuleUnlocked now only refuses coming-soon / unknown modules, so this
   // redirect is essentially a 404 guard rather than a progression gate.

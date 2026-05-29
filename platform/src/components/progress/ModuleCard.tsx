@@ -7,10 +7,20 @@ interface ModuleCardProps {
   module: Module;
 }
 
-const moduleIcons: Record<number, string> = {
+const reactIcons: Record<number, string> = {
   1: '🧱', 2: '🪝', 3: '🧩', 4: '🎨', 5: '🧭', 6: '📦',
   7: '🌐', 8: '📝', 9: '⚡', 10: '🧪', 11: '🔷', 12: '🚀',
 };
+
+const rnIcons: Record<number, string> = {
+  1: '✅', 2: '📱', 3: '🛠️', 4: '🧱', 5: '🎨', 6: '🧭',
+  7: '📦', 8: '📝', 9: '🌐', 10: '📡', 11: '💾', 12: '✨',
+  13: '⚡', 14: '🔧', 15: '🔐', 16: '🧪', 17: '🔔', 18: '📦',
+  19: '🔄', 20: '📊', 21: '🚀',
+};
+
+const moduleIcons = (track: string, num: number) =>
+  track === 'react-native' ? (rnIcons[num] ?? '📘') : (reactIcons[num] ?? '📘');
 
 export function ModuleCard({ module }: ModuleCardProps) {
   const { t } = useTranslation();
@@ -33,7 +43,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
       }`}
     >
       <div className="flex items-start justify-between mb-3">
-        <span className="text-2xl">{moduleIcons[module.number] ?? '📘'}</span>
+        <span className="text-2xl">{moduleIcons(module.track, module.number)}</span>
         <span className="font-mono text-xs text-gray-400 dark:text-gray-500">
           {String(module.number).padStart(2, '0')}
         </span>

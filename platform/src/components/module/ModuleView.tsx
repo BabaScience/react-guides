@@ -1,13 +1,20 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getModule } from '@/data/modules';
+import { getModule, getModulesByTrack } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
+import { useUIStore } from '@/store/ui-store';
 import { StepTimeline } from './StepTimeline';
 
 export function ModuleView() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const mod = id ? getModule(id) : undefined;
+  const setActiveTrack = useUIStore((s) => s.setActiveTrack);
+
+  useEffect(() => {
+    if (mod) setActiveTrack(mod.track);
+  }, [mod, setActiveTrack]);
   // We intentionally do NOT gate navigation on `isModuleUnlocked` here.
   // Coming-soon modules have empty `steps[]` / `exercises[]` and the JSX
   // below already renders the "coming soon" message in that case — landing
@@ -30,7 +37,7 @@ export function ModuleView() {
         <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
           <span className="font-mono">{String(mod.number).padStart(2, '0')}</span>
           <span>/</span>
-          <span>{t('dashboard.modules')}</span>
+          <span>{t('dashboard.modules', { count: mod ? getModulesByTrack(mod.track).length : 0 })}</span>
         </div>
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
           {t(`modules.${mod.id}.name`, mod.name)}

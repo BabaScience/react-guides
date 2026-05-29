@@ -22,6 +22,8 @@ export interface ExerciseStep {
 
 export type Step = LessonStep | ExerciseStep;
 
+export type Track = 'react' | 'react-native';
+
 export interface Module {
   id: string;
   number: number;
@@ -30,6 +32,7 @@ export interface Module {
   guideFile: string;
   exerciseDir: string;
   status: 'available' | 'coming-soon';
+  track: Track;
   exercises: Exercise[];
   steps: Step[];
 }

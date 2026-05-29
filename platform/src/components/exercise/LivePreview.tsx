@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import * as React from 'react';
+import * as ReactNativeWeb from 'react-native-web';
 import { createRoot, type Root } from 'react-dom/client';
 import { useTranslation } from 'react-i18next';
 import { preprocessTypeScript, transpile } from '@/sandbox/transpiler';
@@ -83,7 +84,7 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
         const moduleExports: Record<string, unknown> = {};
         const requireFn = (id: string): unknown => {
           if (id === 'react') return React;
-          // Block other imports — preview is intentionally minimal.
+          if (id === 'react-native') return ReactNativeWeb;
           return {};
         };
 

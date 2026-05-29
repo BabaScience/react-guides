@@ -1,4 +1,5 @@
-import type { Module, Step } from '@/types/exercise';
+import type { Module, Step, Track } from '@/types/exercise';
+import { rnModules } from './rn-modules';
 
 // --- Step definitions for Module 01: Fundamentals ---
 const fundamentalsSteps: Step[] = [
@@ -166,7 +167,7 @@ const hooksSteps: Step[] = [
   { type: 'lesson', id: 'advanced-patterns', title: 'Advanced Patterns', sectionHeading: '10. Advanced Patterns' },
 ];
 
-export const modules: Module[] = [
+const reactModules: Module[] = [
   {
     id: '01-fundamentals',
     number: 1,
@@ -175,6 +176,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/01-fundamentals.md',
     exerciseDir: 'src/01-fundamentals',
     status: 'available',
+    track: 'react',
     steps: fundamentalsSteps,
     exercises: [
       {
@@ -251,6 +253,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/02-react-hooks.md',
     exerciseDir: 'src/02-hooks',
     status: 'available',
+    track: 'react',
     steps: hooksSteps,
     exercises: [
       {
@@ -319,6 +322,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/03-component-patterns-best-practices.md',
     exerciseDir: 'src/03-component-patterns',
     status: 'available',
+    track: 'react',
     steps: patternsSteps,
     exercises: [
       {
@@ -405,6 +409,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/04-react-styling.md',
     exerciseDir: 'src/04-styling',
     status: 'available',
+    track: 'react',
     steps: stylingSteps,
     exercises: [
       {
@@ -495,6 +500,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/05-routing.md',
     exerciseDir: 'src/05-routing',
     status: 'available',
+    track: 'react',
     steps: routingSteps,
     exercises: [
       {
@@ -585,6 +591,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/06-state-management.md',
     exerciseDir: 'src/06-state-management',
     status: 'available',
+    track: 'react',
     steps: stateMgmtSteps,
     exercises: [
       {
@@ -674,6 +681,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/07-data-fetching.md',
     exerciseDir: 'src/07-data-fetching',
     status: 'available',
+    track: 'react',
     steps: dataFetchingSteps,
     exercises: [
       {
@@ -766,6 +774,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/08-forms-and-validations.md',
     exerciseDir: 'src/08-forms',
     status: 'available',
+    track: 'react',
     steps: formsSteps,
     exercises: [
       {
@@ -861,6 +870,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/09-performance-optimization.md',
     exerciseDir: 'src/09-performance',
     status: 'available',
+    track: 'react',
     steps: performanceSteps,
     exercises: [
       {
@@ -949,6 +959,7 @@ export const modules: Module[] = [
     guideFile: 'arguments/chapters/10-testing.md',
     exerciseDir: 'src/10-testing',
     status: 'available',
+    track: 'react',
     steps: testingSteps,
     exercises: [
       {
@@ -1038,6 +1049,7 @@ export const modules: Module[] = [
     guideFile: '',
     exerciseDir: 'src/11-typescript',
     status: 'coming-soon',
+    track: 'react',
     steps: [],
     exercises: [],
   },
@@ -1049,15 +1061,23 @@ export const modules: Module[] = [
     guideFile: '',
     exerciseDir: 'src/12-advanced-patterns',
     status: 'coming-soon',
+    track: 'react',
     steps: [],
     exercises: [],
   },
 ];
 
+export const modules: Module[] = [...reactModules, ...rnModules];
+
 export function getModule(id: string): Module | undefined {
   return modules.find((m) => m.id === id);
 }
 
-export function getModuleByNumber(num: number): Module | undefined {
+export function getModuleByNumber(num: number, track?: Track): Module | undefined {
+  if (track) return modules.find((m) => m.number === num && m.track === track);
   return modules.find((m) => m.number === num);
+}
+
+export function getModulesByTrack(track: Track): Module[] {
+  return modules.filter((m) => m.track === track);
 }

@@ -31,6 +31,7 @@ const sources = [
   'src/08-forms',
   'src/09-performance',
   'src/10-testing',
+  'src/rn-04-core-components',
   'arguments/chapters',
 ];
 

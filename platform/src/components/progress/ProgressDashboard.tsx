@@ -1,22 +1,58 @@
 import { useTranslation } from 'react-i18next';
-import { modules } from '@/data/modules';
+import { getModulesByTrack } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
+import { useUIStore } from '@/store/ui-store';
 import { ModuleCard } from './ModuleCard';
+import type { Track } from '@/types/exercise';
+
+const trackMeta: Record<Track, { icon: string; title: string; subtitle: string }> = {
+  react: {
+    icon: '⚛️',
+    title: 'React Mastery',
+    subtitle: 'Interactive learning platform for mastering React',
+  },
+  'react-native': {
+    icon: '📱',
+    title: 'React Native Mastery',
+    subtitle: 'From React developer to production-grade mobile engineer',
+  },
+};
 
 export function ProgressDashboard() {
   const { t } = useTranslation();
+  const activeTrack = useUIStore((s) => s.activeTrack);
+  const setActiveTrack = useUIStore((s) => s.setActiveTrack);
+  const trackModules = getModulesByTrack(activeTrack);
 
-  const totalCompleted = modules.reduce((sum, mod) => {
+  const totalCompleted = trackModules.reduce((sum, mod) => {
     const { completed } = useProgressStore.getState().getStepProgress(mod.id);
     return sum + completed;
   }, 0);
-  const totalSteps = modules.reduce((sum, mod) => sum + mod.steps.length, 0);
+  const totalSteps = trackModules.reduce((sum, mod) => sum + mod.steps.length, 0);
+  const meta = trackMeta[activeTrack];
 
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{t('app.title')}</h1>
-        <p className="text-gray-500 dark:text-gray-400 text-lg">{t('app.subtitle')}</p>
+        <div className="flex items-center gap-3 mb-4">
+          {(Object.keys(trackMeta) as Track[]).map((track) => (
+            <button
+              key={track}
+              onClick={() => setActiveTrack(track)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                activeTrack === track
+                  ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 ring-1 ring-primary-300 dark:ring-primary-500/30'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
+              }`}
+            >
+              <span className="text-lg">{trackMeta[track].icon}</span>
+              <span>{trackMeta[track].title.replace(' Mastery', '')}</span>
+            </button>
+          ))}
+        </div>
+
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{meta.title}</h1>
+        <p className="text-gray-500 dark:text-gray-400 text-lg">{meta.subtitle}</p>
         <div className="mt-4 flex items-center gap-4">
           <div className="flex items-center gap-2">
             <div className="h-2 w-32 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
@@ -33,7 +69,7 @@ export function ProgressDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {modules.map((mod) => (
+        {trackModules.map((mod) => (
           <ModuleCard key={mod.id} module={mod} />
         ))}
       </div>

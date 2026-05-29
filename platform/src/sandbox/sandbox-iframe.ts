@@ -36,6 +36,7 @@ export async function runTestsInSandbox(
   // pass-through `act`. See that file for the full story.
   const React = await lazyLoad('react', () => import('react'));
   const ReactDOM = await lazyLoad('react-dom', () => import('react-dom'));
+  const ReactNativeWeb = await lazyLoad('react-native-web', () => import('react-native-web'));
   const TestingLib = await lazyLoad('@testing-library/react', () => import('@testing-library/react'));
   const UserEvent = await lazyLoad('@testing-library/user-event', () => import('@testing-library/user-event'));
 
@@ -116,6 +117,7 @@ export async function runTestsInSandbox(
     const userRequire = (id: string): unknown => {
       if (id === 'react') return React;
       if (id === 'react-dom') return ReactDOM;
+      if (id === 'react-native') return ReactNativeWeb;
       console.warn(`[user code] Unknown require: ${id}`);
       return {};
     };
@@ -139,6 +141,7 @@ export async function runTestsInSandbox(
         case 'react': return asEsm(React);
         case 'react-dom': return asEsm(ReactDOM);
         case 'react-dom/client': return asEsm(ReactDOM);
+        case 'react-native': return asEsm(ReactNativeWeb);
         case '@testing-library/react': return asEsm(wrappedTL);
         case '@testing-library/jest-dom': return { __esModule: true };
         case '@testing-library/user-event': return asEsm(UserEvent);

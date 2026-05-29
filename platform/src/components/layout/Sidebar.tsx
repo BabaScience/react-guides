@@ -1,15 +1,25 @@
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { modules } from '@/data/modules';
+import { getModulesByTrack } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
 import { useUIStore } from '@/store/ui-store';
+import type { Track } from '@/types/exercise';
+
+const trackConfig: Record<Track, { icon: string; label: string }> = {
+  react: { icon: '⚛️', label: 'React' },
+  'react-native': { icon: '📱', label: 'React Native' },
+};
 
 export function Sidebar() {
   const { t } = useTranslation();
   const collapsed = useUIStore((s) => s.sidebarCollapsed);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+  const activeTrack = useUIStore((s) => s.activeTrack);
+  const setActiveTrack = useUIStore((s) => s.setActiveTrack);
   const getStepProgress = useProgressStore((s) => s.getStepProgress);
   const getModuleProgress = useProgressStore((s) => s.getModuleProgress);
+
+  const trackModules = getModulesByTrack(activeTrack);
 
   return (
     <aside
@@ -20,8 +30,10 @@ export function Sidebar() {
       <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
         {!collapsed && (
           <NavLink to="/" className="flex items-center gap-2">
-            <span className="text-xl">⚛️</span>
-            <span className="font-bold text-gray-900 dark:text-white text-sm">{t('app.title')}</span>
+            <span className="text-xl">{trackConfig[activeTrack].icon}</span>
+            <span className="font-bold text-gray-900 dark:text-white text-sm">
+              {trackConfig[activeTrack].label}
+            </span>
           </NavLink>
         )}
         <button
@@ -33,8 +45,46 @@ export function Sidebar() {
         </button>
       </div>
 
+      {!collapsed && (
+        <div className="px-2 pt-2 pb-1 flex gap-1">
+          {(Object.keys(trackConfig) as Track[]).map((track) => (
+            <button
+              key={track}
+              onClick={() => setActiveTrack(track)}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                activeTrack === track
+                  ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400'
+                  : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300'
+              }`}
+            >
+              <span>{trackConfig[track].icon}</span>
+              <span>{trackConfig[track].label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {collapsed && (
+        <div className="px-1 pt-2 pb-1 flex flex-col gap-1 items-center">
+          {(Object.keys(trackConfig) as Track[]).map((track) => (
+            <button
+              key={track}
+              onClick={() => setActiveTrack(track)}
+              className={`p-1.5 rounded-md text-sm transition-colors ${
+                activeTrack === track
+                  ? 'bg-primary-100 dark:bg-primary-600/20'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`}
+              title={trackConfig[track].label}
+            >
+              {trackConfig[track].icon}
+            </button>
+          ))}
+        </div>
+      )}
+
       <nav className="flex-1 overflow-y-auto py-2">
-        {modules.map((mod) => {
+        {trackModules.map((mod) => {
           const stepProgress = getStepProgress(mod.id);
           const exProgress = getModuleProgress(mod.id);
           const hasSteps = mod.steps.length > 0;
@@ -46,9 +96,6 @@ export function Sidebar() {
           return (
             <NavLink
               key={mod.id}
-              // Every module is clickable now — coming-soon ones land on the
-              // module page which renders a friendly "not yet available"
-              // message instead of an exercise list.
               to={`/module/${mod.id}`}
               className={({ isActive }) =>
                 `block px-4 py-3 mx-2 my-0.5 rounded-lg text-sm transition-colors ${
