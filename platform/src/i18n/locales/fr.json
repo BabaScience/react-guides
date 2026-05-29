@@ -149,7 +149,28 @@
     "12-advanced-patterns": {
       "name": "Patterns Avancés",
       "description": "Portals, error boundaries, suspense, fonctionnalités concurrentes"
-    }
+    },
+    "rn-01-prerequisites": { "name": "Prérequis", "description": "React, JavaScript/TypeScript, outillage et concepts mobiles nécessaires avant de commencer" },
+    "rn-02-fundamentals": { "name": "Fondamentaux de React Native", "description": "Ce qu'est réellement RN, changement de modèle mental par rapport au web, vue d'ensemble de l'architecture" },
+    "rn-03-environment-setup": { "name": "Configuration de l'Environnement", "description": "Expo vs Bare CLI, installations requises, amorçage du projet" },
+    "rn-04-core-components": { "name": "Composants & APIs Essentiels", "description": "View, Text, Image, FlatList, Pressable et les APIs de plateforme essentielles" },
+    "rn-05-styling-layout": { "name": "Style & Mise en Page", "description": "StyleSheet, Flexbox, design responsive, NativeWind, théming" },
+    "rn-06-navigation": { "name": "Navigation", "description": "React Navigation v7, Expo Router, deep linking, flux d'authentification" },
+    "rn-07-state-management": { "name": "Gestion d'État", "description": "État local, Zustand, Jotai, Redux Toolkit, TanStack Query" },
+    "rn-08-forms-input": { "name": "Formulaires & Saisie", "description": "TextInput, gestion du clavier, React Hook Form, pickers spécialisés" },
+    "rn-09-networking-data": { "name": "Réseau & Données", "description": "fetch, TanStack Query, GraphQL, WebSockets, patterns offline-first" },
+    "rn-10-native-device-apis": { "name": "APIs Natives de l'Appareil", "description": "Caméra, localisation, biométrie, capteurs, médias, permissions" },
+    "rn-11-storage-persistence": { "name": "Stockage & Persistance", "description": "MMKV, stockage sécurisé, SQLite, WatermelonDB, quand utiliser quoi" },
+    "rn-12-animations-gestures": { "name": "Animations & Gestes", "description": "Reanimated 3, Gesture Handler, Lottie, Skia, motion design" },
+    "rn-13-performance": { "name": "Ingénierie des Performances", "description": "Modèle à deux threads, FlashList, re-renders, Hermes, profilage" },
+    "rn-14-native-modules": { "name": "Modules Natifs & Nouvelle Architecture", "description": "JSI, Fabric, TurboModules, Codegen, Expo Modules API" },
+    "rn-15-auth-security": { "name": "Authentification & Sécurité", "description": "OAuth, gestion des tokens, déverrouillage biométrique, certificate pinning, durcissement" },
+    "rn-16-testing": { "name": "Tests", "description": "Jest, RNTL, Maestro, Detox, régression visuelle, Reassure" },
+    "rn-17-push-background": { "name": "Push & Tâches en Arrière-Plan", "description": "Notifications push, APNs/FCM, background fetch, headless JS" },
+    "rn-18-build-deploy": { "name": "Build & Déploiement", "description": "EAS Build, soumission aux stores, versioning, pipelines CI/CD" },
+    "rn-19-ota-updates": { "name": "Mises à Jour OTA", "description": "EAS Update, mises à jour delta, versioning runtime, conformité" },
+    "rn-20-monitoring-production": { "name": "Monitoring & Production", "description": "Sentry, analytics, feature flags, logging, tests A/B" },
+    "rn-21-advanced-topics": { "name": "Sujets Avancés", "description": "Monorepo, i18n, accessibilité, cartes, paiements, architecture à grande échelle" }
   },
   "steps": {
     "01-fundamentals": {
@@ -304,7 +325,28 @@
       "event-emitter": "Exercice : EventEmitter (jest.fn)",
       "best-practices": "Bonnes Pratiques et Patterns de Test",
       "fetch-user-name": "Exercice : fetchUserName (fetch mocké)"
-    }
+    },
+    "rn-01-prerequisites": { "react-prerequisites": "React (Incontournable)", "js-ts-prerequisites": "JavaScript / TypeScript", "tooling-prerequisites": "Outillage", "mobile-concepts": "Concepts Mobiles" },
+    "rn-02-fundamentals": { "what-rn-is": "Ce qu'est Réellement React Native", "mental-model-shift": "Changement de Modèle Mental", "architecture-overview": "Vue d'Ensemble de l'Architecture" },
+    "rn-03-environment-setup": { "expo-vs-bare": "Expo vs Bare React Native CLI", "required-installs": "Installations Requises", "project-bootstrap": "Amorçage du Projet" },
+    "rn-04-core-components": { "building-block-components": "Composants de Base", "profile-card": "Exercice : ProfileCard", "counter-button": "Exercice : CounterButton", "core-apis": "APIs Essentielles à Maîtriser", "contact-list": "Exercice : ContactList", "toggle-card": "Exercice : ToggleCard" },
+    "rn-05-styling-layout": { "core-mechanics": "Mécanismes Fondamentaux", "responsive-design": "Design Responsive", "styling-libraries": "Bibliothèques de Style", "theming": "Théming", "icons-and-assets": "Icônes et Ressources" },
+    "rn-06-navigation": { "react-navigation-v7": "React Navigation v7", "navigation-concepts": "Concepts à Maîtriser", "expo-router": "Expo Router" },
+    "rn-07-state-management": { "local-state": "État Local", "global-state": "État Global", "server-state": "État Serveur" },
+    "rn-08-forms-input": { "core-inputs": "Primitives de Saisie", "form-libraries": "Bibliothèques de Formulaires", "specialized-inputs": "Saisies Spécialisées" },
+    "rn-09-networking-data": { "http": "HTTP", "tanstack-query": "État Serveur avec TanStack Query", "graphql": "GraphQL", "realtime": "Temps Réel", "offline-first": "Patterns Offline-First" },
+    "rn-10-native-device-apis": { "hardware-sensors": "Matériel et Capteurs", "media": "Médias", "system-apis": "APIs Système", "permissions-philosophy": "Philosophie des Permissions" },
+    "rn-11-storage-persistence": { "key-value-storage": "Stockage Clé-Valeur", "secure-storage": "Stockage Sécurisé", "relational-document": "Stockage Relationnel et Document", "when-to-use-what": "Quand Utiliser Quoi" },
+    "rn-12-animations-gestures": { "reanimated-3": "Reanimated 3", "gesture-handler": "Gesture Handler", "other-animation-tools": "Autres Outils d'Animation", "when-to-reach-for-what": "Quand Utiliser Quoi" },
+    "rn-13-performance": { "two-thread-model": "Le Modèle Mental à Deux Threads", "lists-performance": "Listes", "re-renders": "Re-Renders", "images-performance": "Images", "js-engine": "Moteur JS", "perf-tools": "Outils de Performance", "bundle-size": "Taille du Bundle" },
+    "rn-14-native-modules": { "new-architecture": "La Nouvelle Architecture", "when-to-write-native": "Quand Écrire un Module Natif", "native-skills-needed": "Compétences Requises", "recommended-path": "Parcours Recommandé" },
+    "rn-15-auth-security": { "auth-patterns": "Patterns d'Authentification", "auth-providers": "Fournisseurs d'Authentification", "token-handling": "Gestion des Tokens", "security-hardening": "Durcissement de la Sécurité" },
+    "rn-16-testing": { "unit-component-testing": "Tests Unitaires et de Composants", "integration-testing": "Tests d'Intégration", "e2e-testing": "Tests End-to-End", "visual-regression": "Régression Visuelle", "performance-regression": "Régression de Performance" },
+    "rn-17-push-background": { "push-notifications": "Notifications Push", "backend-services": "Services Backend", "background-work": "Tâches en Arrière-Plan", "background-limits": "Limites de l'Arrière-Plan" },
+    "rn-18-build-deploy": { "eas-build": "EAS Build", "local-builds": "Builds Locaux", "ios-submission": "Soumission iOS", "android-submission": "Soumission Android", "versioning": "Versioning", "ci-cd": "CI/CD" },
+    "rn-19-ota-updates": { "eas-update": "EAS Update", "what-can-be-ota": "Ce Qui Peut Être Mis à Jour en OTA", "update-strategy": "Stratégie de Mise à Jour", "versioning-ota": "Versioning OTA avec le Natif", "compliance": "Conformité" },
+    "rn-20-monitoring-production": { "crash-reporting": "Rapports de Crash", "analytics": "Analytics", "performance-monitoring": "Monitoring de Performance", "feature-flags": "Feature Flags et Config à Distance", "logging": "Logging", "ab-testing": "Tests A/B" },
+    "rn-21-advanced-topics": { "monorepo": "Monorepo", "cross-platform-sharing": "Partage de Code Multi-Plateforme", "internationalization": "Internationalisation", "accessibility": "Accessibilité", "animations-at-scale": "Animations à Grande Échelle", "audio-video-at-scale": "Audio / Vidéo à Grande Échelle", "maps": "Cartes", "bluetooth-nfc": "Bluetooth / NFC / Matériel", "payments": "Paiements", "architecture-patterns": "Patterns d'Architecture", "multi-environment": "Multi-Environnement", "app-size-optimization": "Optimisation de la Taille de l'App", "app-store-optimization": "Optimisation App Store" }
   },
   "exercises": {
     "01-fundamentals": {
@@ -946,6 +988,46 @@
           "`return user.name`",
           "Les tests remplacent `global.fetch` par un mock qui résout `{ json: () => Promise.resolve({ name: 'Alice' }) }`",
           "L'URL doit être exactement `/api/users/<id>` — le test vérifie via `toHaveBeenCalledWith('/api/users/42')`"
+        ]
+      }
+    },
+    "rn-04-core-components": {
+      "profile-card": {
+        "name": "ProfileCard (View + Text + Image)",
+        "description": "Construisez une carte de profil avec View, Text et Image — les trois composants RN les plus fondamentaux.",
+        "hints": [
+          "Enveloppez le tout dans `<View testID=\"profile-card\">`",
+          "Utilisez `<Image testID=\"avatar\" source={{ uri: avatarUrl }} style={{ width: 60, height: 60 }} />`",
+          "Utilisez `<Text testID=\"name\">{name}</Text>` pour le nom",
+          "Utilisez `<Text testID=\"role\">{role}</Text>` pour le rôle"
+        ]
+      },
+      "counter-button": {
+        "name": "CounterButton (Pressable + State)",
+        "description": "Créez un compteur interactif avec Pressable — la primitive tactile moderne de React Native.",
+        "hints": [
+          "Utilisez `useState(0)` pour le compteur",
+          "Affichez `Count: {count}` dans `<Text testID=\"count\">`",
+          "`<Pressable testID=\"increment\" onPress={() => setCount(c => c + 1)}><Text>+</Text></Pressable>`",
+          "Même pattern pour le décrément avec `-`"
+        ]
+      },
+      "contact-list": {
+        "name": "ContactList (FlatList)",
+        "description": "Affichez une liste déroulante de contacts avec FlatList — la liste virtualisée de React Native.",
+        "hints": [
+          "Utilisez `<FlatList testID=\"contact-list\" data={contacts} keyExtractor={item => item.id} ... />`",
+          "Chaque ligne : `<View testID={`contact-${item.id}`}><Text>{item.name}</Text><Text>{item.phone}</Text></View>`",
+          "Gérez l'état vide : `ListEmptyComponent={<Text testID=\"empty\">No contacts</Text>}`"
+        ]
+      },
+      "toggle-card": {
+        "name": "ToggleCard (Pressable + Conditionnel)",
+        "description": "Construisez une carte qui se déplie/replie au toucher — combinant Pressable avec le rendu conditionnel.",
+        "hints": [
+          "Utilisez `useState(false)` pour l'état déplié",
+          "`<Pressable testID=\"toggle-header\" onPress={() => setExpanded(e => !e)}><Text>{title}</Text></Pressable>`",
+          "N'affichez le contenu que lorsque déplié : `{expanded && <View testID=\"toggle-content\"><Text>{content}</Text></View>}`"
         ]
       }
     }
