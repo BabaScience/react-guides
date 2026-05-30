@@ -6,6 +6,7 @@ import { useUIStore } from '@/store/ui-store';
 import type { Track } from '@/types/exercise';
 
 const trackConfig: Record<Track, { icon: string; label: string }> = {
+  javascript: { icon: '🟨', label: 'JavaScript' },
   react: { icon: '⚛️', label: 'React' },
   'react-native': { icon: '📱', label: 'React Native' },
 };

@@ -6,6 +6,11 @@ import { ModuleCard } from './ModuleCard';
 import type { Track } from '@/types/exercise';
 
 const trackMeta: Record<Track, { icon: string; title: string; subtitle: string }> = {
+  javascript: {
+    icon: '🟨',
+    title: 'JavaScript Mastery',
+    subtitle: 'From zero to production-grade JavaScript — the language, the runtime, the ecosystem',
+  },
   react: {
     icon: '⚛️',
     title: 'React Mastery',

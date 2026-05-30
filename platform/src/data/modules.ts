@@ -1,5 +1,6 @@
 import type { Module, Step, Track } from '@/types/exercise';
 import { rnModules } from './rn-modules';
+import { jsModules } from './js-modules';
 
 // --- Step definitions for Module 01: Fundamentals ---
 const fundamentalsSteps: Step[] = [
@@ -1067,7 +1068,7 @@ const reactModules: Module[] = [
   },
 ];
 
-export const modules: Module[] = [...reactModules, ...rnModules];
+export const modules: Module[] = [...reactModules, ...rnModules, ...jsModules];
 
 export function getModule(id: string): Module | undefined {
   return modules.find((m) => m.id === id);

@@ -19,8 +19,18 @@ const rnIcons: Record<number, string> = {
   19: '🔄', 20: '📊', 21: '🚀',
 };
 
-const moduleIcons = (track: string, num: number) =>
-  track === 'react-native' ? (rnIcons[num] ?? '📘') : (reactIcons[num] ?? '📘');
+const jsIcons: Record<number, string> = {
+  1: '📋', 2: '🟨', 3: '🔢', 4: '🔀', 5: '⚙️', 6: '🧱',
+  7: '📚', 8: '🔤', 9: '🔒', 10: '👆', 11: '🏗️', 12: '📦',
+  13: '⏳', 14: '🚨', 15: '🔄', 16: '🌐', 17: '💚', 18: '✨',
+  19: '🔷', 20: '🛠️', 21: '🧪', 22: '⚡', 23: '🛡️', 24: '🏛️',
+};
+
+const moduleIcons = (track: string, num: number) => {
+  if (track === 'react-native') return rnIcons[num] ?? '📘';
+  if (track === 'javascript') return jsIcons[num] ?? '📘';
+  return reactIcons[num] ?? '📘';
+};
 
 export function ModuleCard({ module }: ModuleCardProps) {
   const { t } = useTranslation();

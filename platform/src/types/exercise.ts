@@ -22,7 +22,7 @@ export interface ExerciseStep {
 
 export type Step = LessonStep | ExerciseStep;
 
-export type Track = 'react' | 'react-native';
+export type Track = 'react' | 'react-native' | 'javascript';
 
 export interface Module {
   id: string;

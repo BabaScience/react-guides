@@ -233,7 +233,103 @@
                     "rn-21-advanced-topics":  {
                                                   "name":  "Argomenti Avanzati",
                                                   "description":  "Monorepo, i18n, accessibilità, mappe, pagamenti, architettura su larga scala"
-                                              }
+                                              },
+                    "js-01-prerequisites":  {
+                                                "name":  "Prerequisiti",
+                                                "description":  "Alfabetizzazione informatica, basi del CLI, configurazione di VS Code, console del browser"
+                                            },
+                    "js-02-language-basics":  {
+                                                  "name":  "Basi del Linguaggio",
+                                                  "description":  "Tipizzazione dinamica, var/let/const, primitivi, tipi riferimento, coercizione"
+                                              },
+                    "js-03-operators":  {
+                                            "name":  "Operatori",
+                                            "description":  "Aritmetica, assegnazione, confronto, logica, spread/rest, optional chaining"
+                                        },
+                    "js-04-control-flow":  {
+                                               "name":  "Flusso di Controllo",
+                                               "description":  "if/else, switch, cicli for/while, metodi degli array, quando usare quale"
+                                           },
+                    "js-05-functions":  {
+                                            "name":  "Funzioni",
+                                            "description":  "Dichiarazioni, arrow function, parametri, higher-order, funzioni pure, currying"
+                                        },
+                    "js-06-objects-prototypes":  {
+                                                     "name":  "Oggetti e Prototipi",
+                                                     "description":  "Creazione di oggetti, descrittori, prototipi, clonazione, Maps e Sets"
+                                                 },
+                    "js-07-arrays":  {
+                                         "name":  "Array",
+                                         "description":  "Creazione di array, mutazione, map/filter/reduce, ricerca, iterazione"
+                                     },
+                    "js-08-strings-numbers-dates":  {
+                                                        "name":  "Stringhe, Numeri e Date",
+                                                        "description":  "Template literal, insidie IEEE 754, BigInt, API Date e alternative"
+                                                    },
+                    "js-09-scope-closures":  {
+                                                 "name":  "Scope e Closures",
+                                                 "description":  "Scope globale/funzione/blocco/modulo, scope lessicale, hoisting, closures"
+                                             },
+                    "js-10-this-keyword":  {
+                                               "name":  "La Parola Chiave this",
+                                               "description":  "Binding predefinito, implicito, esplicito, new, ed eccezione delle arrow function"
+                                           },
+                    "js-11-classes":  {
+                                          "name":  "Classi",
+                                          "description":  "Sintassi delle classi, campi privati, membri statici, ereditarietà, composizione"
+                                      },
+                    "js-12-modules":  {
+                                          "name":  "Moduli",
+                                          "description":  "ES Modules, CommonJS, import dinamici, barrel export, pattern dei moduli"
+                                      },
+                    "js-13-async":  {
+                                        "name":  "JavaScript Asincrono",
+                                        "description":  "Callback, Promise, combinatori, async/await, esecuzione parallela, cancellazione"
+                                    },
+                    "js-14-error-handling":  {
+                                                 "name":  "Gestione degli Errori",
+                                                 "description":  "try/catch, tipi di errore, errori personalizzati, errori asincroni, pattern Result"
+                                             },
+                    "js-15-event-loop":  {
+                                             "name":  "L\u0027Event Loop",
+                                             "description":  "Call stack, coda dei task, microtask, rAF/rIC del browser, fasi Node"
+                                         },
+                    "js-16-browser-apis":  {
+                                               "name":  "API del Browser",
+                                               "description":  "Manipolazione del DOM, eventi, fetch, storage, Web Workers, WebSocket"
+                                           },
+                    "js-17-nodejs":  {
+                                         "name":  "Node.js",
+                                         "description":  "Moduli core di Node.js, stream, npm, Deno/Bun, Express/Fastify/Hono"
+                                     },
+                    "js-18-modern-es":  {
+                                            "name":  "Funzionalità ES Moderne",
+                                            "description":  "Optional chaining fino a ES2025, Temporal, pipeline, Records/Tuples"
+                                        },
+                    "js-19-typescript":  {
+                                             "name":  "Fondamenti di TypeScript",
+                                             "description":  "Sistema di tipi, generics, utility types, branded types, validazione Zod"
+                                         },
+                    "js-20-tooling":  {
+                                          "name":  "Strumenti",
+                                          "description":  "pnpm, Vite, ESLint/Biome, Prettier, Turborepo, pattern monorepo"
+                                      },
+                    "js-21-testing":  {
+                                          "name":  "Testing",
+                                          "description":  "Vitest, Jest, Testing Library, MSW, Playwright, strategia di test"
+                                      },
+                    "js-22-performance":  {
+                                              "name":  "Prestazioni",
+                                              "description":  "Profiling con DevTools, Web Vitals, perdite di memoria, analisi del bundle, rendering"
+                                          },
+                    "js-23-security":  {
+                                           "name":  "Sicurezza",
+                                           "description":  "Prevenzione XSS, CSRF, best practice di autenticazione, sicurezza delle dipendenze"
+                                       },
+                    "js-24-patterns":  {
+                                           "name":  "Pattern e Architettura",
+                                           "description":  "FP vs OOP, design pattern, composizione, architettura pulita, concorrenza"
+                                       }
                 },
     "steps":  {
                   "01-fundamentals":  {
@@ -531,7 +627,166 @@
                                                 "multi-environment":  "Multi-Ambiente",
                                                 "app-size-optimization":  "Ottimizzazione della Dimensione dell\u0027App",
                                                 "app-store-optimization":  "App Store Optimization"
-                                            }
+                                            },
+                  "js-15-event-loop":  {
+                                           "microtasks-macrotasks":  "Microtask vs Macrotask",
+                                           "browser-specific":  "Specifico del Browser",
+                                           "node-specific":  "Specifico di Node",
+                                           "the-loop":  "Il Loop",
+                                           "mental-model":  "Modello Mentale"
+                                       },
+                  "js-24-patterns":  {
+                                         "concurrency-patterns":  "Pattern di Concorrenza",
+                                         "code-organization":  "Organizzazione del Codice",
+                                         "functional-patterns":  "Pattern Funzionali",
+                                         "design-patterns":  "Design Pattern",
+                                         "programming-paradigms":  "Paradigmi di Programmazione"
+                                     },
+                  "js-06-objects-prototypes":  {
+                                                   "object-methods":  "Metodi degli Oggetti",
+                                                   "object-creation":  "Creazione di Oggetti",
+                                                   "property-access-descriptors":  "Accesso alle Proprietà e Descrittori",
+                                                   "cloning":  "Clonazione",
+                                                   "maps-and-sets":  "Maps e Sets",
+                                                   "prototypes":  "Prototipi"
+                                               },
+                  "js-18-modern-es":  {
+                                          "es2024-beyond":  "ES2024 e Oltre",
+                                          "es2020-es2021":  "ES2020 ed ES2021",
+                                          "es2022-es2023":  "ES2022 ed ES2023"
+                                      },
+                  "js-22-performance":  {
+                                            "bundle-size":  "Dimensione del Bundle",
+                                            "js-specific":  "Specifico di JavaScript",
+                                            "measurement":  "Misurazione",
+                                            "memory":  "Memoria",
+                                            "rendering":  "Rendering"
+                                        },
+                  "js-12-modules":  {
+                                        "dynamic-imports":  "Import Dinamici",
+                                        "commonjs":  "CommonJS",
+                                        "es-modules":  "ES Modules",
+                                        "module-patterns":  "Pattern dei Moduli"
+                                    },
+                  "js-16-browser-apis":  {
+                                             "events":  "Eventi",
+                                             "the-dom":  "Il DOM",
+                                             "fetch-http":  "Fetch e HTTP",
+                                             "other-apis":  "Altre API Essenziali",
+                                             "storage":  "Storage"
+                                         },
+                  "js-19-typescript":  {
+                                           "advanced-ts":  "TypeScript Avanzato",
+                                           "what-ts-adds":  "Cosa Aggiunge TypeScript",
+                                           "generics":  "Generics",
+                                           "utility-types":  "Utility Types",
+                                           "type-fundamentals":  "Fondamenti del Sistema di Tipi"
+                                       },
+                  "js-04-control-flow":  {
+                                             "loop-control":  "Controllo dei Cicli",
+                                             "loops":  "Cicli",
+                                             "when-to-use-which":  "Quando Usare Quale",
+                                             "conditionals":  "Condizionali"
+                                         },
+                  "js-23-security":  {
+                                         "xss":  "XSS",
+                                         "authentication":  "Autenticazione",
+                                         "deps-secrets":  "Dipendenze e Secrets",
+                                         "csrf-injection":  "CSRF e Injection"
+                                     },
+                  "js-10-this-keyword":  {
+                                             "implicit-binding":  "Binding Implicito",
+                                             "explicit-binding":  "Binding Esplicito",
+                                             "arrow-functions-this":  "Arrow Function e this",
+                                             "new-binding":  "Binding new",
+                                             "default-binding":  "Binding Predefinito"
+                                         },
+                  "js-14-error-handling":  {
+                                               "async-error-handling":  "Gestione degli Errori Asincroni",
+                                               "custom-errors":  "Errori Personalizzati",
+                                               "throwing-catching":  "Lanciare e Catturare",
+                                               "error-types":  "Tipi di Errore",
+                                               "error-semantics":  "Semantica degli Errori"
+                                           },
+                  "js-11-classes":  {
+                                        "private-fields-static":  "Campi Privati e Static",
+                                        "classes-vs-functions":  "Quando Usare Classi vs Funzioni",
+                                        "inheritance":  "Ereditarietà",
+                                        "class-syntax":  "Sintassi delle Classi"
+                                    },
+                  "js-03-operators":  {
+                                          "optional-chaining-nullish":  "Optional Chaining e Accesso Nullish",
+                                          "spread-rest-destructuring":  "Spread, Rest, Destructuring",
+                                          "logical-operators":  "Operatori Logici",
+                                          "comparison":  "Confronto",
+                                          "assignment":  "Assegnazione",
+                                          "arithmetic":  "Aritmetica"
+                                      },
+                  "js-07-arrays":  {
+                                       "non-mutating-methods":  "Metodi Non Mutanti",
+                                       "reduction-and-search":  "Riduzione e Ricerca",
+                                       "iteration-patterns":  "Pattern di Iterazione",
+                                       "creation":  "Creazione",
+                                       "mutation-methods":  "Metodi di Mutazione"
+                                   },
+                  "js-01-prerequisites":  {
+                                              "before-you-start":  "Prima di Iniziare"
+                                          },
+                  "js-02-language-basics":  {
+                                                "type-coercion":  "Coercizione dei Tipi",
+                                                "typeof-and-type-checking":  "typeof e Controllo dei Tipi",
+                                                "variables-and-declarations":  "Variabili e Dichiarazioni",
+                                                "primitive-types":  "Tipi Primitivi",
+                                                "what-javascript-is":  "Cos\u0027è JavaScript",
+                                                "reference-types":  "Tipi Riferimento"
+                                            },
+                  "js-09-scope-closures":  {
+                                               "scope":  "Scope",
+                                               "closures":  "Closures",
+                                               "lexical-scoping":  "Scope Lessicale",
+                                               "hoisting":  "Hoisting"
+                                           },
+                  "js-17-nodejs":  {
+                                       "core-modules":  "Moduli Core",
+                                       "streams":  "Stream",
+                                       "what-node-is":  "Cos\u0027è Node",
+                                       "npm-ecosystem":  "Ecosistema npm",
+                                       "frameworks":  "Framework"
+                                   },
+                  "js-21-testing":  {
+                                        "test-runners":  "Test Runner",
+                                        "test-types":  "Tipi di Test",
+                                        "coverage-strategy":  "Copertura e Strategia",
+                                        "e2e-testing":  "Testing End-to-End"
+                                    },
+                  "js-08-strings-numbers-dates":  {
+                                                      "dates":  "Date",
+                                                      "math-and-bigint":  "Math e BigInt",
+                                                      "numbers":  "Numeri",
+                                                      "strings":  "Stringhe"
+                                                  },
+                  "js-05-functions":  {
+                                          "currying-partial":  "Currying e Applicazione Parziale",
+                                          "pure-functions":  "Funzioni Pure",
+                                          "higher-order-functions":  "Funzioni di Ordine Superiore",
+                                          "returns":  "Valori di Ritorno",
+                                          "parameters":  "Parametri",
+                                          "function-forms":  "Forme di Funzioni"
+                                      },
+                  "js-13-async":  {
+                                      "cancellation":  "Cancellazione",
+                                      "promise-combinators":  "Combinatori di Promise",
+                                      "async-await":  "Async Await",
+                                      "callbacks":  "Callback",
+                                      "promises":  "Promise",
+                                      "parallel-vs-serial":  "Parallelo vs Seriale"
+                                  },
+                  "js-20-tooling":  {
+                                        "bundlers":  "Bundler",
+                                        "package-managers":  "Gestori di Pacchetti",
+                                        "monorepo-tools":  "Strumenti Monorepo",
+                                        "linters-formatters":  "Linter e Formatter"
+                                    }
               },
     "exercises":  {
                       "01-fundamentals":  {
