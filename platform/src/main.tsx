@@ -4,9 +4,10 @@ import { App } from './App';
 import './i18n';
 import './styles/globals.css';
 
-// Initialize theme from stored preference
+// Initialize theme from stored preference.
+// "Paper & ink" (DESIGN_SYSTEM.md §9): light is the default theme.
 const stored = localStorage.getItem('react-mastery-ui');
-let theme = 'dark'; // default
+let theme = 'light'; // default — keep in sync with ui-store
 if (stored) {
   try {
     const { state } = JSON.parse(stored);

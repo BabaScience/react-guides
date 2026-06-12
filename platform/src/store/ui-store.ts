@@ -21,7 +21,8 @@ interface UIState {
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
-      theme: 'dark',
+      // "Paper & ink" (DESIGN_SYSTEM.md §9): light is the default theme.
+      theme: 'light',
       language: 'en',
       sidebarCollapsed: false,
       editorPanelSize: 50,

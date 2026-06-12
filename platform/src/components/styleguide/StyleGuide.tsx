@@ -36,14 +36,15 @@ function Swatch({ cls, label, hex }: { cls: string; label: string; hex?: string 
 }
 
 // Full literal class names — Tailwind JIT cannot see dynamically built classes.
+// "Paper & ink": primary = indigo, gray = stone (see tailwind.config.ts).
 const primarySwatches = [
-  { cls: 'bg-primary-50', label: 'primary-50', hex: '#eff6ff' },
-  { cls: 'bg-primary-100', label: 'primary-100', hex: '#dbeafe' },
-  { cls: 'bg-primary-300', label: 'primary-300', hex: '#93c5fd' },
-  { cls: 'bg-primary-400', label: 'primary-400', hex: '#60a5fa' },
-  { cls: 'bg-primary-500', label: 'primary-500', hex: '#3b82f6' },
-  { cls: 'bg-primary-600', label: 'primary-600', hex: '#2563eb' },
-  { cls: 'bg-primary-700', label: 'primary-700', hex: '#1d4ed8' },
+  { cls: 'bg-primary-50', label: 'primary-50', hex: '#eef2ff' },
+  { cls: 'bg-primary-100', label: 'primary-100', hex: '#e0e7ff' },
+  { cls: 'bg-primary-300', label: 'primary-300', hex: '#a5b4fc' },
+  { cls: 'bg-primary-400', label: 'primary-400', hex: '#818cf8' },
+  { cls: 'bg-primary-500', label: 'primary-500', hex: '#6366f1' },
+  { cls: 'bg-primary-600', label: 'primary-600', hex: '#4f46e5' },
+  { cls: 'bg-primary-700', label: 'primary-700', hex: '#4338ca' },
 ];
 
 const grayRoles = [
@@ -58,11 +59,11 @@ const grayRoles = [
 export function StyleGuide() {
   return (
     <div className="max-w-3xl mx-auto px-6 py-8">
-      <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Style Guide</h1>
+      <h1 className="font-display text-3xl text-gray-900 dark:text-white mb-2">Style guide — Paper &amp; ink</h1>
       <p className="text-sm text-gray-500 dark:text-gray-400 mb-10">
-        Living reference for <code className="bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-sm font-mono">DESIGN_SYSTEM.md</code>.
-        Every new UI element must be composed from what you see here. Toggle the theme in the
-        header to verify both modes.
+        Living reference for <code className="bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-sm font-mono">DESIGN_SYSTEM.md</code> (v2,
+        warm editorial light). Light is the primary theme — design here first, then verify dark
+        ("ink") mode with the header toggle.
       </p>
 
       <Section title="1. Colors">
@@ -107,8 +108,8 @@ export function StyleGuide() {
 
       <Section title="2. Typography">
         <div className="space-y-3">
-          <p className="text-3xl font-bold text-gray-900 dark:text-white">Page title — text-3xl bold</p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">Section title — text-2xl bold</p>
+          <p className="font-display text-3xl text-gray-900 dark:text-white">Page title — font-display text-3xl (serif)</p>
+          <p className="font-display text-2xl text-gray-900 dark:text-white">Section title — font-display text-2xl (serif)</p>
           <p className="text-xl font-semibold text-gray-800 dark:text-gray-200">Sub-section — text-xl semibold</p>
           <p className="text-lg font-semibold text-gray-700 dark:text-gray-300">Card title — text-lg semibold</p>
           <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">
@@ -126,7 +127,8 @@ export function StyleGuide() {
       <Section title="3. Buttons">
         <SubHeading>Variants (size lg)</SubHeading>
         <div className="flex flex-wrap items-center gap-3">
-          <Button variant="primary" size="lg">Primary</Button>
+          <Button variant="primary" size="lg">Primary (ink)</Button>
+          <Button variant="accent" size="lg">Accent</Button>
           <Button variant="success" size="lg">Success</Button>
           <Button variant="secondary" size="lg">Secondary</Button>
           <Button variant="ghost" size="lg">Ghost</Button>
@@ -143,12 +145,19 @@ export function StyleGuide() {
         </p>
       </Section>
 
-      <Section title="4. Badges">
+      <Section title="4. Badges & track chips">
+        <SubHeading>Status badges</SubHeading>
         <div className="flex flex-wrap items-center gap-3">
           <Badge tone="neutral">Soon</Badge>
           <Badge tone="info">Exercise</Badge>
           <Badge tone="warning">Lesson</Badge>
           <Badge tone="success">Completed</Badge>
+        </div>
+        <SubHeading>Track chips (the only per-track color)</SubHeading>
+        <div className="flex flex-wrap items-center gap-3">
+          <Badge tone="js">JavaScript</Badge>
+          <Badge tone="react">React</Badge>
+          <Badge tone="native">React Native</Badge>
         </div>
       </Section>
 

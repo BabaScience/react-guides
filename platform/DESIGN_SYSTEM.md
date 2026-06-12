@@ -1,276 +1,210 @@
-# Design System — Learning Platform
+# Design System — "Paper & Ink" (v2)
 
 > The single source of truth for all UI decisions in this platform. Every new component and every UI improvement must follow this guide. If something here doesn't cover your case, extend this document first, then build.
 
 A living, rendered version of this guide is available in the app at **`/styleguide`**.
 
+**Direction:** warm editorial light — Stripe/Notion lineage. Paper backgrounds, ink text, serif display headings, pill-shaped actions, one indigo accent. Light is the primary theme; dark mode is a warm "ink" night mode, not the default.
+
 ---
 
 ## 1. Design Principles
 
-1. **Content first.** This is a learning platform — lesson text and code are the heroes. Chrome (sidebars, headers, panels) stays quiet: muted grays, minimal shadows, thin borders.
-2. **Borders over shadows.** Elevation is communicated with 1px borders and background shifts, not drop shadows. The only shadow allowed is `shadow-lg` on floating menus (dropdowns, popovers).
-3. **Dark mode is not an afterthought.** Every color declaration ships with its `dark:` variant in the same commit. No exceptions.
-4. **Semantic color = meaning, never decoration.** Emerald means "done/passing". Amber means "current/attention". Red means "error". Primary blue means "interactive/active". Don't use them for anything else.
-5. **Motion is feedback, not flair.** `transition-colors` on everything interactive; nothing animates unless it responds to the user.
+1. **Reading comes first.** This platform is mostly long-form lessons. Warm paper backgrounds, generous whitespace, and a serif display voice make long sessions comfortable. Chrome stays quiet so content carries the page.
+2. **Light-first, ink-dark second.** Design and verify in light mode first. Dark mode is a warm near-black ("ink") counterpart — required on every element, but it follows the light design, never leads it.
+3. **Warm neutrals only.** All grays are the *stone* scale (warm). Cool blue-grays are gone; never reintroduce them.
+4. **One accent.** Indigo is the only interactive accent. Per-track identity lives in small tinted chips (§2.4) and never spreads beyond them.
+5. **Semantic color = meaning.** Emerald = done/passing. Amber = current/attention. Red = error. Never decorative.
+6. **Soft elevation.** Cards may carry a soft `shadow-sm`; floating menus `shadow-lg`. Nothing heavier — elevation whispers.
 
 ---
 
 ## 2. Color Tokens
 
-### 2.1 Primary (brand) — blue
+### 2.1 Token-level remaps (tailwind.config.ts)
 
-Defined in `tailwind.config.ts` under `theme.extend.colors.primary` (Tailwind blue scale).
+- `gray-*` **is** Tailwind `stone` (warm). Components keep writing `gray-…`.
+- `primary-*` **is** indigo.
+- `font-display` = Georgia serif stack.
+
+### 2.2 Primary (accent) — indigo
 
 | Token | Hex | Use |
 |---|---|---|
-| `primary-50` | `#eff6ff` | Active item background tint (light mode) |
-| `primary-100` | `#dbeafe` | Active nav/track background (light mode) |
-| `primary-300` | `#93c5fd` | Hover borders (light mode) |
-| `primary-400` | `#60a5fa` | Links, active text (dark mode) |
-| `primary-500` | `#3b82f6` | Progress bars, blockquote accents, spinners, focus rings |
-| `primary-600` | `#2563eb` | Primary buttons, links (light mode), `/20` tints in dark mode |
-| `primary-700` | `#1d4ed8` | Primary button hover, active text (light mode) |
+| `primary-50` | `#eef2ff` | Active item tint (light) |
+| `primary-100` | `#e0e7ff` | Active nav/track background (light) |
+| `primary-300` | `#a5b4fc` | Hover borders (light) |
+| `primary-400` | `#818cf8` | Links, active text (dark) |
+| `primary-500` | `#6366f1` | Progress bars, blockquote accents, focus rings |
+| `primary-600` | `#4f46e5` | Links (light), accent buttons, `/20` tints (dark) |
+| `primary-700` | `#4338ca` | Accent button hover, active text (light) |
 
-**Rule:** interactive states use only `500/600/700` (light) and `400` + `600/20` tints (dark). Never use `800–950` for UI; they're reserved.
+`800–950` are reserved — never use for UI.
 
-### 2.2 Neutrals — gray scale usage map
+### 2.3 Neutrals — paper & ink roles (stone scale)
 
 | Intent | Light mode | Dark mode |
 |---|---|---|
-| App background | `bg-gray-50` (body) / `bg-white` (content) | `bg-gray-950` |
-| Panel / sidebar background | `bg-gray-50` | `bg-gray-900` |
-| Raised surface (cards) | `bg-white` | `bg-gray-900/50` |
-| Subtle surface (table heads, bars) | `bg-gray-50` | `bg-gray-900/50` or `bg-gray-800/50` |
+| App background ("paper") | `bg-gray-50` | `bg-gray-950` |
+| Content surface | `bg-white` | `bg-gray-900/50` |
+| Panel / sidebar | `bg-gray-50` | `bg-gray-900` |
 | Hover background | `bg-gray-100` | `bg-gray-800` |
 | Border / divider | `border-gray-200` | `border-gray-800` |
-| Strong border (inputs, timeline dots) | `border-gray-300` | `border-gray-700` |
-| Primary text | `text-gray-900` | `text-gray-100` or `text-white` (headings) |
+| Strong border | `border-gray-300` | `border-gray-700` |
+| Ink (primary text) | `text-gray-900` | `text-gray-100` |
 | Secondary text | `text-gray-700` | `text-gray-300` |
-| Muted text (descriptions, labels) | `text-gray-500` | `text-gray-400` |
-| Faint text (timestamps, counters) | `text-gray-400` | `text-gray-500` |
+| Muted text | `text-gray-500` | `text-gray-400` |
+| Faint text | `text-gray-400` | `text-gray-500` |
 
-### 2.3 Semantic colors
+### 2.4 Track chips
 
-| Meaning | Scale | Canonical usages |
-|---|---|---|
-| **Success / complete / passing** | `emerald` | Completed steps, passed tests, progress-complete bars, "Run Tests" button |
-| **Attention / current / not-passing-yet** | `amber` | Current lesson dot, failing-but-expected tests, warnings |
-| **Error / destructive** | `red` | Runtime errors, sandbox failures, destructive confirmation |
+Per-track identity is a tinted pill — nowhere else:
 
-Semantic surface recipe (same shape for all three, swap the hue):
+| Track | Recipe |
+|---|---|
+| JavaScript | `bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300` |
+| React | `bg-sky-100 text-sky-800 dark:bg-sky-900/40 dark:text-sky-300` |
+| React Native | `bg-violet-100 text-violet-800 dark:bg-violet-900/40 dark:text-violet-300` |
+
+Tracks do **not** get their own page themes — indigo stays the only interactive accent.
+
+### 2.5 Semantic colors
+
+Same trio as v1: `emerald` (success/complete), `amber` (attention/current), `red` (error). Surface recipe:
 
 ```
 border-{hue}-200 dark:border-{hue}-800/50
 bg-{hue}-50     dark:bg-{hue}-950/20
-text-{hue}-700  dark:text-{hue}-400  (or -300 for emphasis)
+text-{hue}-700  dark:text-{hue}-400
 ```
 
-### 2.4 Dark-mode opacity ladder
+### 2.6 Dark-mode opacity ladder
 
-Translucent dark backgrounds are locked to **four** steps. Do not invent new ones.
-
-| Step | Value | Use |
-|---|---|---|
-| Tint | `/20` | Active-state tints (`bg-primary-600/20`), semantic surfaces (`bg-emerald-950/20`) |
-| Wash | `/30` | Disabled/coming-soon card backgrounds |
-| Surface | `/50` | Standard raised surfaces (cards, header bars) |
-| Solid-ish | `/80` | Toolbars and hover states that must read as solid |
+Unchanged and still locked to four steps: `/20` tint · `/30` wash · `/50` surface · `/80` solid-ish.
 
 ---
 
 ## 3. Typography
 
-System font stack only (no webfonts). Monospace: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas`.
-
-### 3.1 Scale
+Body: system sans. **Display: `font-display` (Georgia serif)** — the editorial voice.
 
 | Token | Use |
 |---|---|
-| `text-3xl font-bold` | Page titles, lesson h1 |
-| `text-2xl font-bold` | Section titles, lesson h2 (with `pb-2 border-b`) |
-| `text-xl font-semibold` | Lesson h3 |
-| `text-lg font-semibold` | Lesson h4, card titles |
-| `text-sm` | **Default body for UI chrome** — buttons, nav, descriptions |
-| `text-sm leading-relaxed` | Lesson body paragraphs |
-| `text-xs` | Metadata, badges, button labels in dense toolbars |
-| `text-[10px]` | Chip labels only (e.g. "Soon" badge). Nothing smaller. |
+| `font-display text-3xl text-gray-900 dark:text-white` | Page titles, lesson h1 (serif, normal weight — serif carries the authority, not boldness) |
+| `font-display text-2xl` | Section titles, lesson h2 (with `pb-2 border-b`) |
+| `text-xl font-semibold` (sans) | Lesson h3 |
+| `text-lg font-semibold` (sans) | Lesson h4, card titles |
+| `text-sm` | Default UI body — buttons, nav, descriptions |
+| `text-sm leading-relaxed` | Lesson paragraphs |
+| `text-xs` | Metadata, badges, dense toolbars |
+| `text-[10px]` | Chip labels only. Nothing smaller. |
 
-### 3.2 Weights
+Rules: serif (`font-display`) is for h1/h2 display moments only — never body text, never buttons. Weights: sans uses `medium/semibold`; serif headings stay normal weight (Georgia bold reads heavy). No `font-light`/`font-thin`.
 
-| Weight | Use |
-|---|---|
-| `font-bold` | h1/h2 only |
-| `font-semibold` | h3/h4, card titles, emphasized inline text |
-| `font-medium` | Nav items, buttons, badges, table headers |
-| (normal) | Body text |
-
-Never use `font-light` or `font-thin` — too faint on dark backgrounds.
-
-### 3.3 Code
-
-- Inline code: `bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-sm font-mono`
-- Code blocks: Shiki-rendered inside the IDE-chrome frame (see `ShikiCode.tsx`); `0.85rem` / `1.5` line-height, never restyle inline.
+Code styles are unchanged from v1 (inline code keeps `text-primary-600 dark:text-primary-400`; Shiki blocks untouched — dark code frames are intentional "ink islands" on paper).
 
 ---
 
 ## 4. Spacing
 
-Tailwind's 4px grid, restricted to these steps: **1, 1.5, 2, 3, 4, 5, 6, 8** (= 4–32px).
-
-| Pattern | Recipe |
-|---|---|
-| Dense toolbar button | `px-2 py-1` |
-| Standard small button | `px-3 py-1.5` |
-| Standard button | `px-4 py-2` |
-| List row / nav item | `px-4 py-3` |
-| Card padding | `p-5` |
-| Panel/section padding | `p-4` |
-| Page content | `px-6 py-8` with `max-w-3xl mx-auto` (reading) or `max-w-6xl` (dashboards) |
-| Icon-to-label gap | `gap-1.5` or `gap-2` |
-| Between cards/sections | `gap-4` |
-| Heading top margins (markdown) | h1/h2 `mt-8`, h3 `mt-6`, h4 `mt-4` |
+Unchanged from v1 — 4px grid, steps **1, 1.5, 2, 3, 4, 5, 6, 8**, same recipes (`px-4 py-2` buttons, `p-5` cards, `px-6 py-8` pages, `max-w-3xl` reading / `max-w-6xl` dashboards). Editorial generosity comes from the type scale and paper tones, not from inflating the grid.
 
 ---
 
 ## 5. Shape
 
+**Pills for actions, rounded rectangles for content.**
+
 | Radius | Use |
 |---|---|
-| `rounded` | Tiny chips, inline kbd, copy buttons |
-| `rounded-md` | Small buttons, "Soon" badges |
-| `rounded-lg` | **Default.** Buttons, list rows, dropdowns, code frames, semantic surfaces |
-| `rounded-xl` | Cards (module cards, panels that group content) |
-| `rounded-full` | Progress bars, timeline dots, avatars, scrollbar |
+| `rounded-full` | **Buttons, track chips, badges**, progress bars, timeline dots |
+| `rounded-xl` | Cards |
+| `rounded-lg` | List rows, dropdowns, code frames, semantic surfaces |
+| `rounded` / `rounded-md` | Inline kbd, tiny technical chips |
 
-**Borders:** 1px everywhere (`border`). Exceptions: `border-2` on timeline dots, `border-l-4 border-primary-500` on blockquotes, `border-dashed` on "escape hatch" hint boxes.
+**Borders:** 1px (`border`), warm via stone. Keep v1 exceptions (`border-2` timeline dots, `border-l-4 border-primary-500` blockquotes, `border-dashed` hint boxes).
 
-**Shadows:** only `shadow-lg` on floating overlays (dropdown menus). Nothing else.
+**Shadows (revised):** `shadow-sm` allowed on raised cards; `shadow-lg` on floating menus. Nothing else — no colored or large shadows.
 
 ---
 
 ## 6. Interaction
 
-### 6.1 Transitions
-
-- Color changes: `transition-colors` (default for every interactive element)
-- Layout changes (sidebar collapse): `transition-all duration-200`
-- Reveal on hover (copy buttons): `opacity-0 group-hover:opacity-100 transition-opacity`
+### 6.1 Transitions — unchanged (`transition-colors` default; `transition-all duration-200` for layout; `opacity-0 group-hover:opacity-100` reveals).
 
 ### 6.2 Hover recipes
 
 | Element | Hover |
 |---|---|
-| Ghost button / nav item | `hover:bg-gray-100 dark:hover:bg-gray-800` + text darkens to `gray-900`/`white` |
-| Solid button | background one step darker (`bg-primary-600 → hover:bg-primary-700`) |
-| Card | `hover:border-primary-300 dark:hover:border-primary-500/50` + `hover:bg-gray-50 dark:hover:bg-gray-900/80` |
+| Ghost button / nav item | `hover:bg-gray-100 dark:hover:bg-gray-800` + text to ink |
+| Ink button (primary) | `bg-gray-900 → hover:bg-gray-700` (light); inverted paper-on-ink in dark |
+| Accent/success solid | background one step darker |
+| Card | `hover:border-primary-300 dark:hover:border-primary-500/50` + `hover:shadow-sm` |
 | Link | `text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 underline` |
 
-### 6.3 Focus (accessibility — required on new components)
+### 6.3 Focus — unchanged, required: `focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950` (built into `Button`).
 
-All interactive elements must be focusable and show:
-
-```
-focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950
-```
-
-This is built into the shared `Button` primitive — use it instead of raw `<button>`.
-
-### 6.4 Disabled
-
-`disabled:opacity-50 disabled:cursor-not-allowed` on the shared primitives; solid buttons may also use `disabled:bg-gray-300 dark:disabled:bg-gray-700`.
+### 6.4 Disabled — unchanged (`disabled:opacity-50 disabled:cursor-not-allowed`).
 
 ---
 
 ## 7. Component Recipes
 
-Shared primitives live in `src/components/ui/`. **Use them instead of hand-rolling.** If a variant is missing, add it to the primitive + this doc + the `/styleguide` page in the same PR.
+Primitives live in `src/components/ui/` — use them. New variant = primitive + this doc + `/styleguide` in one PR.
 
-### 7.1 Button (`ui/Button.tsx`)
+### 7.1 Button (`ui/Button.tsx`) — pills
 
 | Variant | Recipe | Use |
 |---|---|---|
-| `primary` | `bg-primary-600 hover:bg-primary-700 text-white` | Main CTA (Start Learning, Continue) |
-| `success` | `bg-emerald-600 hover:bg-emerald-700 text-white` | Run Tests, completion actions |
+| `primary` | **Ink pill** — `bg-gray-900 hover:bg-gray-700 text-white dark:bg-gray-100 dark:hover:bg-gray-300 dark:text-gray-900` | Main CTA (Continue, Start Learning) |
+| `accent` | `bg-primary-600 hover:bg-primary-700 text-white` | Secondary emphasis, links-as-buttons |
+| `success` | `bg-emerald-600 hover:bg-emerald-700 text-white` | Run Tests, completion |
 | `secondary` | `border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800` | Reset, Cancel |
-| `ghost` | `text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white` | Icon buttons, toolbar actions |
+| `ghost` | `text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white` | Toolbar/icon actions |
 
-Sizes: `sm` (`px-2 py-1 text-xs`), `md` (`px-3 py-1.5 text-xs`), `lg` (`px-4 py-2 text-sm`). All `rounded-lg font-medium transition-colors` + focus ring.
+All `rounded-full font-medium transition-colors` + focus ring. Sizes unchanged: `sm` (`px-2.5 py-1 text-xs`), `md` (`px-3.5 py-1.5 text-xs`), `lg` (`px-5 py-2 text-sm`) — pills get slightly wider horizontal padding than v1.
 
-### 7.2 Badge (`ui/Badge.tsx`)
+### 7.2 Badge (`ui/Badge.tsx`) — pill chips
 
-`text-[10px] px-1.5 py-0.5 rounded font-medium` with tones:
-- `neutral` — `bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400` ("Soon")
-- `success` — `bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300`
-- `info` — `bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400` ("Exercise")
-- `warning` — `bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300` ("Lesson", current)
+`text-[10px] px-2 py-0.5 rounded-full font-medium`. Tones: `neutral`, `success`, `info`, `warning` (v1 recipes) **plus track tones** `js`, `react`, `native` (§2.4).
 
 ### 7.3 Card (`ui/Card.tsx`)
 
 Base: `rounded-xl border p-5 transition-all`. Tones:
-- `default` — `border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50`
-- `interactive` — default + card hover recipe (§6.2)
-- `success` — emerald semantic surface
-- `muted` — `bg-gray-50 dark:bg-gray-900/30 opacity-70 hover:opacity-90`
+- `default` — `border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 shadow-sm dark:shadow-none`
+- `interactive` — default + hover border/`hover:shadow` per §6.2
+- `success` / `muted` — unchanged from v1
 
-### 7.4 Progress bar
+### 7.4 Progress bar / 7.5 Timeline dot — unchanged from v1 (indigo fill now comes from the `primary` remap automatically).
 
-Track: `h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden` (h-1 in tight sidebars, h-2 on dashboards).
-Fill: `h-full rounded-full transition-all` + `bg-primary-500` (in progress) or `bg-emerald-500` (complete).
-
-### 7.5 Timeline dot (StepTimeline)
-
-`w-7 h-7 rounded-full border-2 flex items-center justify-center`:
-- complete → `bg-emerald-600 border-emerald-600 text-white`
-- current lesson → `bg-amber-600/20 border-amber-500 text-amber-400`
-- current exercise → `bg-primary-600/20 border-primary-500 text-primary-400`
-- upcoming → `bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700`
-
-### 7.6 Floating menu (dropdowns)
-
-`bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg` — the only shadow in the app.
+### 7.6 Floating menu — `bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg`.
 
 ---
 
-## 8. Layout
+## 8. Layout — unchanged from v1 (shell, `h-12` header, `w-64/w-16` sidebar, reading widths, `sm/lg/xl` breakpoints).
 
-- App shell: `h-screen flex` → fixed sidebar (`w-64`, collapsible to `w-16`) + `flex-1` column (header `h-12`, scrolling main).
-- Reading width: `max-w-3xl mx-auto` for lessons; `max-w-6xl` for dashboards.
-- Responsive grid for cards: `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4`.
-- Breakpoints: stick to `sm / lg / xl`. Don't introduce `md`/`2xl` without updating this doc.
+## 9. Theme Default
 
----
-
-## 9. Track Identity
-
-| Track | Icon | Accent usage |
-|---|---|---|
-| JavaScript | 🟨 | Track switcher + dashboard title only |
-| React | ⚛️ | idem |
-| React Native | 📱 | idem |
-
-Tracks do **not** get their own color themes — the primary blue stays constant across tracks. Identity is icon + title only. (Revisit deliberately if per-track theming is ever wanted; don't drift into it.)
-
----
+Light ("paper") is the default theme for new users. The toggle remains; dark mode ("ink") must stay first-class on every element.
 
 ## 10. Do / Don't
 
 | ✅ Do | ❌ Don't |
 |---|---|
-| Use the `Button`/`Badge`/`Card` primitives | Hand-roll `<button className="...">` with new color combos |
-| Pair every color with a `dark:` variant | Ship light-mode-only styles |
-| Use the 4-step dark opacity ladder (§2.4) | Invent `/35`, `/60`, `/75`… |
-| Use emerald/amber/red for status meaning | Use them decoratively |
-| Add new patterns to this doc + `/styleguide` first | Let a one-off component define a new pattern silently |
-| `transition-colors` on everything clickable | `transition-all` on hover-only color changes |
-| Keep shadows to floating overlays | Add card drop shadows |
-
----
+| Compose from `Button`/`Badge`/`Card` | Hand-roll new color combos |
+| Serif `font-display` for h1/h2 only | Serif body text or serif buttons |
+| Track colors as chips only | Per-track page theming |
+| `shadow-sm` cards, `shadow-lg` menus | Bigger/colored shadows |
+| Pills for actions and chips | Pill-shaped cards or panels |
+| Pair every color with `dark:` | Light-only styles |
+| Stick to the `/20 /30 /50 /80` ladder | New opacity values |
 
 ## 11. Extending the System
 
-When you need something this guide doesn't cover:
+1. Check `/styleguide` and `src/components/ui/` first.
+2. Design additions as tokens/variants, not one-offs.
+3. One PR = primitive + this doc + `/styleguide` updated together.
 
-1. Check `/styleguide` and `src/components/ui/` — the variant may exist.
-2. If not, design it **as a token/variant**, not a one-off: add it to the relevant primitive, document it here, render it on `/styleguide`.
-3. One PR = code + doc + styleguide page updated together.
+---
+
+*v2 supersedes the v1 (cool-gray/blue, borders-over-shadows, rectangular buttons) system. The v1→v2 migration is mechanical for neutrals/accent (token remap) and intentional for shape (pills), type (serif display), and elevation (soft shadows).*
