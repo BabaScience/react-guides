@@ -5,12 +5,14 @@ import { ModuleView } from '@/components/module/ModuleView';
 import { LessonView } from '@/components/lesson/LessonView';
 import { ExerciseView } from '@/components/exercise/ExerciseView';
 import { StepView } from '@/components/module/StepView';
+import { StyleGuide } from '@/components/styleguide/StyleGuide';
 
 export const router = createBrowserRouter([
   {
     element: <AppShell />,
     children: [
       { index: true, element: <ProgressDashboard /> },
+      { path: 'styleguide', element: <StyleGuide /> },
       { path: 'module/:id', element: <ModuleView /> },
       { path: 'module/:id/step/:stepIndex', element: <StepView /> },
       // Legacy routes (still work for direct links)
