@@ -45,7 +45,7 @@ export function Header() {
       <div className="flex items-center gap-1">
         {/* Language selector */}
         <div className="relative group">
-          <button className="px-2 py-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1">
+          <button className="px-2.5 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors flex items-center gap-1">
             <span>{currentLang.flag}</span>
             <span className="text-xs">{currentLang.code.toUpperCase()}</span>
           </button>
@@ -70,7 +70,7 @@ export function Header() {
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           title={theme === 'dark' ? t('theme.switchToLight') : t('theme.switchToDark')}
         >
           {theme === 'dark' ? '☀️' : '🌙'}

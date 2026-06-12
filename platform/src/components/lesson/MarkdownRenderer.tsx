@@ -59,10 +59,10 @@ const components: Components = {
     );
   },
   h1({ children }) {
-    return <h1 className="text-3xl font-bold text-gray-900 dark:text-white mt-8 mb-4">{children}</h1>;
+    return <h1 className="font-display text-3xl text-gray-900 dark:text-white mt-8 mb-4">{children}</h1>;
   },
   h2({ children }) {
-    return <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-3 pb-2 border-b border-gray-200 dark:border-gray-800">{children}</h2>;
+    return <h2 className="font-display text-2xl text-gray-900 dark:text-white mt-8 mb-3 pb-2 border-b border-gray-200 dark:border-gray-800">{children}</h2>;
   },
   h3({ children }) {
     return <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-6 mb-2">{children}</h3>;

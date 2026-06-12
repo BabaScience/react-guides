@@ -38,20 +38,20 @@ export function ExerciseChecklist({ module }: ExerciseChecklistProps) {
               )}
             </span>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-gray-200 truncate">
+              <div className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
                 {ex.name}
               </div>
               <div className="text-xs text-gray-500 truncate">{ex.description}</div>
             </div>
             <span
-              className={`text-xs px-2 py-0.5 rounded ${
+              className={`text-xs px-2.5 py-0.5 rounded-full font-medium ${
                 status === 'passed'
-                  ? 'bg-emerald-900/50 text-emerald-400'
+                  ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400'
                   : status === 'in-progress'
-                    ? 'bg-yellow-900/50 text-yellow-400'
+                    ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-400'
                     : status === 'available'
-                      ? 'bg-gray-800 text-gray-400'
-                      : 'bg-gray-800/50 text-gray-600'
+                      ? 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400'
+                      : 'bg-gray-100/50 text-gray-400 dark:bg-gray-800/50 dark:text-gray-600'
               }`}
             >
               {status === 'passed' ? t('status.passed') : status === 'in-progress' ? t('status.inProgress') : status === 'available' ? t('status.start') : t('status.locked')}

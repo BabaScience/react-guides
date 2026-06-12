@@ -39,7 +39,7 @@ export function Sidebar() {
         )}
         <button
           onClick={toggleSidebar}
-          className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+          className="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
           title={collapsed ? t('sidebar.expand') : t('sidebar.collapse')}
         >
           {collapsed ? '→' : '←'}
@@ -52,7 +52,7 @@ export function Sidebar() {
             <button
               key={track}
               onClick={() => setActiveTrack(track)}
-              className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md text-xs font-medium transition-colors ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-full text-xs font-medium transition-colors ${
                 activeTrack === track
                   ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400'
                   : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300'
@@ -71,7 +71,7 @@ export function Sidebar() {
             <button
               key={track}
               onClick={() => setActiveTrack(track)}
-              className={`p-1.5 rounded-md text-sm transition-colors ${
+              className={`p-1.5 rounded-full text-sm transition-colors ${
                 activeTrack === track
                   ? 'bg-primary-100 dark:bg-primary-600/20'
                   : 'hover:bg-gray-100 dark:hover:bg-gray-800'
@@ -124,7 +124,7 @@ export function Sidebar() {
                       {t(`modules.${mod.id}.name`, mod.name)}
                     </span>
                     {isComingSoon && (
-                      <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-1.5 py-0.5 rounded">
+                      <span className="text-[10px] bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-2 py-0.5 rounded-full font-medium">
                         {t('module.soon')}
                       </span>
                     )}

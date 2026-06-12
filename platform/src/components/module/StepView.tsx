@@ -61,7 +61,7 @@ export function StepView() {
           {stepIndex > 0 && (
             <Link
               to={`/module/${mod.id}/step/${stepIndex - 1}`}
-              className="px-2 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
+              className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-full transition-colors"
             >
               {t('nav.prev')}
             </Link>
@@ -69,7 +69,7 @@ export function StepView() {
           {stepIndex < mod.steps.length - 1 && (
             <Link
               to={`/module/${mod.id}/step/${stepIndex + 1}`}
-              className="px-2 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
+              className="px-2.5 py-1 text-xs text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-full transition-colors"
             >
               {t('nav.next')}
             </Link>

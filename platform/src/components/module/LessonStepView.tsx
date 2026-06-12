@@ -56,9 +56,9 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
     return (
       <div className="max-w-4xl mx-auto px-6 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-800 rounded w-1/3" />
-          <div className="h-4 bg-gray-800 rounded w-2/3" />
-          <div className="h-32 bg-gray-800 rounded" />
+          <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/3" />
+          <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3" />
+          <div className="h-32 bg-gray-200 dark:bg-gray-800 rounded" />
         </div>
       </div>
     );
@@ -67,7 +67,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
   if (error) {
     return (
       <div className="max-w-4xl mx-auto px-6 py-12 text-center">
-        <p className="text-red-400">{error}</p>
+        <p className="text-red-600 dark:text-red-400">{error}</p>
       </div>
     );
   }
@@ -76,7 +76,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
     <div className="max-w-4xl mx-auto px-6 py-8">
       {/* Step indicator */}
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-6">
-        <span className="bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">📖 {t('step.lesson')}</span>
+        <span className="bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-full">📖 {t('step.lesson')}</span>
         <span>{t('step.stepOf', { current: stepIndex + 1, total: totalSteps })}</span>
       </div>
 
@@ -96,7 +96,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
           <Link
             to={`/module/${module.id}/step/${stepIndex + 1}`}
             onClick={handleContinue}
-            className="px-5 py-2.5 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-5 py-2.5 bg-gray-900 hover:bg-gray-700 text-white dark:bg-gray-100 dark:hover:bg-gray-300 dark:text-gray-900 text-sm font-medium rounded-full transition-colors"
           >
             {isComplete ? t('nav.nextStep') : t('nav.continue')}
           </Link>
@@ -106,7 +106,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
           <Link
             to={`/module/${module.id}`}
             onClick={handleContinue}
-            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-full transition-colors"
           >
             {t('nav.completeModule')}
           </Link>

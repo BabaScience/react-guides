@@ -94,7 +94,7 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
             {t(`steps.${moduleId}.${step.id}`, step.title)}
           </span>
           <span
-            className={`text-[10px] px-1.5 py-0.5 rounded ${
+            className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
               isExercise
                 ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400'
                 : 'bg-gray-100 dark:bg-gray-800 text-gray-500'

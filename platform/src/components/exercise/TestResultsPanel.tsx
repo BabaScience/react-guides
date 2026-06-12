@@ -76,7 +76,7 @@ export function TestResultsPanel({
         <button
           onClick={onRun}
           disabled={running}
-          className="px-3 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-md transition-colors"
+          className="px-3.5 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-full transition-colors"
         >
           {running ? t('exercise.running') : t('exercise.runTests')}
         </button>
@@ -112,7 +112,7 @@ export function TestResultsPanel({
                 {t('exercise.passing', { passed: results.passed, total: results.total })}
               </div>
               {completedManually && (
-                <span className="ml-auto text-[11px] px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">
+                <span className="ml-auto text-[11px] px-2 py-0.5 rounded-full font-medium bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">
                   {t('exercise.manuallyCompleted')}
                 </span>
               )}
@@ -125,7 +125,7 @@ export function TestResultsPanel({
                 </div>
                 <button
                   onClick={onMarkComplete}
-                  className="px-3 py-1.5 text-xs font-medium border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded transition-colors"
+                  className="px-3.5 py-1.5 text-xs font-medium border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-full transition-colors"
                 >
                   {t('exercise.markCompleteManually')}
                 </button>

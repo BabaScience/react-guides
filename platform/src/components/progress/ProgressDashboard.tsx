@@ -44,7 +44,7 @@ export function ProgressDashboard() {
             <button
               key={track}
               onClick={() => setActiveTrack(track)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 activeTrack === track
                   ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 ring-1 ring-primary-300 dark:ring-primary-500/30'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
@@ -56,7 +56,7 @@ export function ProgressDashboard() {
           ))}
         </div>
 
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{meta.title}</h1>
+        <h1 className="font-display text-3xl text-gray-900 dark:text-white mb-2">{meta.title}</h1>
         <p className="text-gray-500 dark:text-gray-400 text-lg">{meta.subtitle}</p>
         <div className="mt-4 flex items-center gap-4">
           <div className="flex items-center gap-2">

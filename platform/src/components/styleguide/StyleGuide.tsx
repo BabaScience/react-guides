@@ -9,7 +9,7 @@ import { Button, Badge, Card } from '@/components/ui';
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-12">
-      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 pb-2 border-b border-gray-200 dark:border-gray-800">
+      <h2 className="font-display text-2xl text-gray-900 dark:text-white mb-1 pb-2 border-b border-gray-200 dark:border-gray-800">
         {title}
       </h2>
       <div className="mt-4">{children}</div>

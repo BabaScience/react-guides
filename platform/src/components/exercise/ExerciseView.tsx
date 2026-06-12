@@ -158,14 +158,14 @@ export function ExerciseView() {
         <div className="flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
+            className="px-2.5 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-full transition-colors"
           >
             {t('exercise.resetCode')}
           </button>
           {nextExercise && (
             <Link
               to={`/module/${moduleId}/exercise/${nextExercise.id}`}
-              className={`px-3 py-1 text-xs rounded transition-colors text-white ${
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors text-white ${
                 canAdvance
                   ? 'bg-emerald-600 hover:bg-emerald-700'
                   : 'bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600'

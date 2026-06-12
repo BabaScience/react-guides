@@ -29,17 +29,17 @@ export function LessonView() {
       {loading && (
         <div className="max-w-4xl mx-auto">
           <div className="animate-pulse space-y-4">
-            <div className="h-8 bg-gray-800 rounded w-1/3" />
-            <div className="h-4 bg-gray-800 rounded w-2/3" />
-            <div className="h-4 bg-gray-800 rounded w-1/2" />
-            <div className="h-32 bg-gray-800 rounded" />
+            <div className="h-8 bg-gray-200 dark:bg-gray-800 rounded w-1/3" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-2/3" />
+            <div className="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/2" />
+            <div className="h-32 bg-gray-200 dark:bg-gray-800 rounded" />
           </div>
         </div>
       )}
 
       {error && (
         <div className="max-w-4xl mx-auto text-center py-12">
-          <p className="text-red-400 mb-4">{t('errors.failedToLoadLesson')}</p>
+          <p className="text-red-600 dark:text-red-400 mb-4">{t('errors.failedToLoadLesson')}</p>
           <p className="text-gray-500 text-sm">{error}</p>
         </div>
       )}
@@ -47,17 +47,17 @@ export function LessonView() {
       {content && (
         <>
           <MarkdownRenderer content={content} />
-          <div className="max-w-4xl mx-auto mt-8 pt-6 border-t border-gray-800 flex justify-between">
+          <div className="max-w-4xl mx-auto mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 flex justify-between">
             <Link
               to={`/module/${mod.id}`}
-              className="text-sm text-gray-400 hover:text-white transition-colors"
+              className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
             >
               {t('nav.backToModule')}
             </Link>
             {mod.exercises.length > 0 && (
               <Link
                 to={`/module/${mod.id}/exercise/${mod.exercises[0].id}`}
-                className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm rounded-lg transition-colors"
+                className="px-5 py-2 bg-gray-900 hover:bg-gray-700 text-white dark:bg-gray-100 dark:hover:bg-gray-300 dark:text-gray-900 text-sm font-medium rounded-full transition-colors"
               >
                 {t('nav.startExercises')}
               </Link>

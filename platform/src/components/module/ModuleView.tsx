@@ -39,7 +39,7 @@ export function ModuleView() {
           <span>/</span>
           <span>{t('dashboard.modules', { count: mod ? getModulesByTrack(mod.track).length : 0 })}</span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="font-display text-2xl text-gray-900 dark:text-white mb-2">
           {t(`modules.${mod.id}.name`, mod.name)}
         </h1>
         <p className="text-gray-500 dark:text-gray-400">
@@ -65,13 +65,13 @@ export function ModuleView() {
         {!allComplete && mod.steps.length > 0 && (
           <Link
             to={`/module/${mod.id}/step/${startStepIndex}`}
-            className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors flex-shrink-0"
+            className="px-5 py-2 bg-gray-900 hover:bg-gray-700 text-white dark:bg-gray-100 dark:hover:bg-gray-300 dark:text-gray-900 text-sm font-medium rounded-full transition-colors flex-shrink-0"
           >
             {completed === 0 ? t('nav.startLearning') : t('nav.continue')}
           </Link>
         )}
         {allComplete && (
-          <span className="px-4 py-2 bg-emerald-100 dark:bg-emerald-600/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium rounded-lg flex-shrink-0">
+          <span className="px-5 py-2 bg-emerald-100 dark:bg-emerald-600/20 text-emerald-700 dark:text-emerald-400 text-sm font-medium rounded-full flex-shrink-0">
             {t('module.complete')}
           </span>
         )}

@@ -48,8 +48,8 @@ export function ModuleCard({ module }: ModuleCardProps) {
         isComingSoon
           ? 'border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/30 opacity-70 hover:opacity-90'
           : isComplete
-            ? 'border-emerald-300 dark:border-emerald-600/30 bg-emerald-50 dark:bg-emerald-950/20 hover:border-emerald-400 dark:hover:border-emerald-500/50'
-            : 'border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 hover:border-primary-300 dark:hover:border-primary-500/50 hover:bg-gray-50 dark:hover:bg-gray-900/80'
+            ? 'border-emerald-300 dark:border-emerald-600/30 bg-emerald-50 dark:bg-emerald-950/20 shadow-sm dark:shadow-none hover:border-emerald-400 dark:hover:border-emerald-500/50'
+            : 'border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/50 shadow-sm dark:shadow-none hover:border-primary-300 dark:hover:border-primary-500/50 hover:shadow dark:hover:bg-gray-900/80'
       }`}
     >
       <div className="flex items-start justify-between mb-3">
@@ -67,7 +67,7 @@ export function ModuleCard({ module }: ModuleCardProps) {
       </p>
 
       {isComingSoon ? (
-        <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 px-2 py-1 rounded-md self-start">
+        <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 px-2.5 py-1 rounded-full self-start">
           {t('module.comingSoon')}
         </span>
       ) : (

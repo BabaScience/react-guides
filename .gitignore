@@ -17,7 +17,9 @@ dist/
 
 # IDE
 .vscode/
-.claude/
+# Claude Code: keep personal config local, but share project skills with the team
+.claude/*
+!.claude/skills/
 .idea/
 *.swp
 *.swo

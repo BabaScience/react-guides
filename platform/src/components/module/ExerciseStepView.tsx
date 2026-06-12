@@ -155,7 +155,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
       {/* Exercise top bar */}
       <div className="flex items-center justify-between px-4 py-2 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-200 dark:border-gray-800">
         <div className="flex items-center gap-2">
-          <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded">
+          <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-2.5 py-0.5 rounded-full font-medium">
             {t('exercise.title', { number: exercise.number })}
           </span>
           <span className="text-sm text-gray-700 dark:text-gray-300">{exercise.name}</span>
@@ -163,14 +163,14 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
         <div className="flex items-center gap-2">
           <button
             onClick={handleReset}
-            className="px-2 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded transition-colors"
+            className="px-2.5 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-full transition-colors"
           >
             {t('exercise.reset')}
           </button>
           {hasNext && (
             <Link
               to={`/module/${module.id}/step/${stepIndex + 1}`}
-              className={`px-3 py-1 text-xs rounded transition-colors text-white ${
+              className={`px-3 py-1 text-xs font-medium rounded-full transition-colors text-white ${
                 canAdvance
                   ? 'bg-emerald-600 hover:bg-emerald-700'
                   : 'bg-gray-500 hover:bg-gray-600 dark:bg-gray-700 dark:hover:bg-gray-600'
