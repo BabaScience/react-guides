@@ -1,4 +1,4 @@
-# React Data Fetching and API Integration
+﻿# React Data Fetching and API Integration
 
 > A comprehensive exploration of asynchronous data fetching patterns, server state management strategies, and real-time data synchronization in React applications
 
@@ -44,9 +44,6 @@ graph TD
     F[Modern Approach] --> G[React Query/SWR for Server State]
     F --> H[useState for Client State]
     
-    style C fill:#ff6b6b
-    style F fill:#51cf66
-    style D fill:#ffd43b
 ```
 
 ### Data Fetching Evolution
@@ -2093,9 +2090,6 @@ graph TD
     E -->|Yes| J[React Query + WebSocket]
     E -->|No| K[React Query]
     
-    style C fill:#51cf66
-    style H fill:#845ef7
-    style I fill:#4dabf7
 ```
 
 ### Feature Comparison

@@ -1,4 +1,4 @@
-# React Performance Optimization: Strategies and Techniques
+﻿# React Performance Optimization: Strategies and Techniques
 
 > A comprehensive exploration of performance optimization strategies, rendering optimization patterns, and pragmatic profiling techniques for React applications
 
@@ -39,10 +39,6 @@ graph TD
     G --> I[Update Real DOM]
     I --> J[Browser Paint]
     
-    style A fill:#ff6b6b
-    style B fill:#ffd43b
-    style G fill:#4dabf7
-    style J fill:#51cf66
 ```
 
 ### When Components Re-render
@@ -347,8 +343,6 @@ flowchart TD
     G -->|Yes| H["memo defeated:<br/>wrap with useMemo / useCallback"]
     G -->|No| I["Expected re-render"]
 
-    style E fill:#51cf66
-    style H fill:#ff6b6b
 ```
 
 ### When to Use React.memo
@@ -567,10 +561,6 @@ flowchart TD
     D -->|Yes| G["useCallback(fn, deps)"]
     D -->|No| H["Inline arrow function<br/>(no hook needed)"]
 
-    style E fill:#4dabf7
-    style G fill:#845ef7
-    style F fill:#ffd43b
-    style H fill:#ffd43b
 ```
 
 ### When to Use useMemo and useCallback
@@ -1193,8 +1183,6 @@ flowchart LR
     E --> F["Render ~20 rows<br/>in DOM"]
     F --> G["Spacer div fakes<br/>total scroll height"]
 
-    style A fill:#ff6b6b
-    style F fill:#51cf66
 ```
 
 ### Problem with Large Lists
@@ -1924,10 +1912,6 @@ graph TD
     D --> L[Split Chunks]
     D --> M[Lazy Load]
     
-    style A fill:#ff6b6b
-    style H fill:#51cf66
-    style I fill:#51cf66
-    style J fill:#51cf66
 ```
 
 ---

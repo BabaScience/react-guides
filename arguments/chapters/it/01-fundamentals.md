@@ -1,4 +1,4 @@
-# Fondamenti di React: Costruire la Tua Prima UI Interattiva
+﻿# Fondamenti di React: Costruire la Tua Prima UI Interattiva
 
 > Un'introduzione a React, partendo dai principi di base, per chi conosce già un po' di HTML, CSS e JavaScript.
 

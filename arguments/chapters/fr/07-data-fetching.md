@@ -1,425 +1,2188 @@
-# Récupération de Données en React
+﻿# Récupération de données et intégration d'API en React
 
-> Stratégies et bibliothèques pour gérer les données distantes dans les applications React
+> Une exploration approfondie des patterns de récupération de données asynchrones, des stratégies de gestion du server state et de la synchronisation de données en temps réel dans les applications React
 
 ---
 
-## 1. Data Fetching Paradigms
+## Table of Contents
 
-### Approches
+1. [Data Fetching Paradigms](#1-data-fetching-paradigms)
+2. [Native Fetch API and Axios](#2-native-fetch-api-and-axios)
+3. [Loading States and Error Handling](#3-loading-states-and-error-handling)
+4. [React Query: Server State Management](#4-react-query-server-state-management)
+5. [SWR: Stale-While-Revalidate](#5-swr-stale-while-revalidate)
+6. [Optimistic Updates](#6-optimistic-updates)
+7. [Cache Management Strategies](#7-cache-management-strategies)
+8. [Polling and Real-Time Updates](#8-polling-and-real-time-updates)
+9. [Advanced Patterns](#9-advanced-patterns)
+10. [Data Fetching Strategy Selection](#10-data-fetching-strategy-selection)
 
-1. **Impératif** : `fetch` ou `axios` dans `useEffect`, en gérant manuellement les états de chargement/erreur.
-2. **Déclaratif** : bibliothèques comme React Query ou SWR qui gèrent cache, déduplication, refetch.
-3. **Suspense** (React 18+) : intégration native avec `<Suspense>` pour les loading boundaries.
-4. **Server Components** (Next.js, etc.) : fetch directement côté serveur.
+---
 
-### État serveur vs état client
+## 1. Les paradigmes de récupération de données
 
-L'état serveur est asynchrone, potentiellement obsolète et existe à l'extérieur de l'application. Les approches modernes le séparent explicitement de l'état client.
+### Server state vs Client state
+
+Le **server state** est fondamentalement différent du client state — il est asynchrone, potentiellement périmé (stale) et existe de manière externe. Les solutions traditionnelles de gestion d'état confondent ces deux préoccupations.
 
 ```mermaid
 graph TD
-    A["État de l'application"] --> B["État client"]
-    A --> C["État serveur"]
-
-    B --> B1["État UI"]
-    B --> B2["État de formulaire"]
-    B --> B3["État de navigation"]
-
-    C --> C1["Données distantes"]
-    C --> C2["Réponses en cache"]
-    C --> C3["États de chargement"]
-    C --> C4["États d'erreur"]
-    C --> C5["Logique de revalidation"]
-
-    D["Approche traditionnelle"] --> E["Redux/Context pour tout"]
-    F["Approche moderne"] --> G["React Query/SWR pour l'état serveur"]
-    F --> H["useState pour l'état client"]
-
-    style C fill:#ff6b6b
-    style F fill:#51cf66
-    style D fill:#ffd43b
+    A[Application State] --> B[Client State]
+    A --> C[Server State]
+    
+    B --> B1[UI State]
+    B --> B2[Form State]
+    B --> B3[Navigation State]
+    
+    C --> C1[Remote Data]
+    C --> C2[Cached Responses]
+    C --> C3[Loading States]
+    C --> C4[Error States]
+    C --> C5[Revalidation Logic]
+    
+    D[Traditional Approach] --> E[Redux/Context for Everything]
+    F[Modern Approach] --> G[React Query/SWR for Server State]
+    F --> H[useState for Client State]
+    
 ```
 
-### Quand utiliser quoi
+### L'évolution de la récupération de données
 
-- Petits projets, un seul appel : `fetch` + `useEffect`.
-- Tout le reste : **React Query** est aujourd'hui le standard de facto.
+```
+┌────────────────────────────────────────────────────────────────┐
+│           Data Fetching Approaches Evolution                   │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  Traditional (Pre-Hooks)                                       │
+│  • componentDidMount() + setState                              │
+│  • Redux thunks with action creators                           │
+│  • Manual loading/error state management                       │
+│  ❌ Boilerplate heavy                                          │
+│  ❌ No caching                                                 │
+│  ❌ No background refetching                                   │
+│                                                                │
+│  Modern Hooks Era                                              │
+│  • useEffect + useState                                        │
+│  • Custom hooks for reusability                                │
+│  • Still manual cache/state management                         │
+│  ⚠️  Less boilerplate but still complex                        │
+│                                                                │
+│  Specialized Libraries                                         │
+│  • React Query / TanStack Query                                │
+│  • SWR (Stale-While-Revalidate)                                │
+│  • Apollo Client (GraphQL)                                     │
+│  ✅ Automatic caching                                          │
+│  ✅ Background refetching                                      │
+│  ✅ Optimistic updates                                         │
+│  ✅ Pagination & infinite queries                              │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 2. Native Fetch API and Axios
+## 2. La Fetch API native et Axios
 
-### Fetch de base
+### La Fetch API native
 
-```tsx
-useEffect(() => {
-  let annule = false;
-  fetch('/api/utilisateurs')
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(data => { if (!annule) setUtilisateurs(data); })
-    .catch(err => { if (!annule) setErreur(err); });
-  return () => { annule = true; };
-}, []);
+```javascript
+// Basic GET request
+const fetchUsers = async () => {
+  try {
+    const response = await fetch('https://api.example.com/users');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Fetch error:', error);
+    throw error;
+  }
+};
+
+// POST request with body
+const createUser = async (userData) => {
+  const response = await fetch('https://api.example.com/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(userData)
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to create user');
+  }
+  
+  return response.json();
+};
+
+// PUT request
+const updateUser = async (userId, updates) => {
+  const response = await fetch(`https://api.example.com/users/${userId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates)
+  });
+  
+  return response.json();
+};
+
+// DELETE request
+const deleteUser = async (userId) => {
+  const response = await fetch(`https://api.example.com/users/${userId}`, {
+    method: 'DELETE'
+  });
+  
+  return response.ok;
+};
+
+// Request with timeout
+const fetchWithTimeout = async (url, timeout = 5000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeout);
+  
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    return response.json();
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('Request timeout');
+    }
+    throw error;
+  }
+};
 ```
 
-### Axios
+### La bibliothèque Axios
 
-Axios offre des intercepteurs, des transformations et une gestion d'erreur plus complète d'emblée :
+```bash
+npm install axios
+```
 
-```tsx
+```javascript
 import axios from 'axios';
 
-const api = axios.create({ baseURL: '/api', timeout: 5000 });
-api.interceptors.request.use((cfg) => {
-  cfg.headers.Authorization = `Bearer ${token}`;
-  return cfg;
+// Create axios instance with defaults
+const api = axios.create({
+  baseURL: 'https://api.example.com',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
+
+// Request interceptor (add auth token)
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Response interceptor (handle errors globally)
+api.interceptors.response.use(
+  (response) => response.data,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Redirect to login
+      window.location.href = '/login';
+    }
+    
+    if (error.response?.status === 500) {
+      // Show error notification
+      showErrorToast('Server error occurred');
+    }
+    
+    return Promise.reject(error);
+  }
+);
+
+// CRUD operations with Axios
+const userAPI = {
+  // GET all users
+  getAll: () => api.get('/users'),
+  
+  // GET single user
+  getById: (id) => api.get(`/users/${id}`),
+  
+  // POST create user
+  create: (userData) => api.post('/users', userData),
+  
+  // PUT update user
+  update: (id, updates) => api.put(`/users/${id}`, updates),
+  
+  // PATCH partial update
+  patch: (id, updates) => api.patch(`/users/${id}`, updates),
+  
+  // DELETE user
+  delete: (id) => api.delete(`/users/${id}`),
+  
+  // GET with query parameters
+  search: (params) => api.get('/users/search', { params }),
+  
+  // POST with file upload
+  uploadAvatar: (userId, file) => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    
+    return api.post(`/users/${userId}/avatar`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  }
+};
+
+// Usage in components
+const fetchUsers = async () => {
+  try {
+    const users = await userAPI.getAll();
+    return users;
+  } catch (error) {
+    console.error('Failed to fetch users:', error);
+    throw error;
+  }
+};
+```
+
+### Comparaison entre Fetch et Axios
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│              Fetch API vs Axios                                │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  Feature              Fetch API          Axios                 │
+│  ─────────────────────────────────────────────────────────────  │
+│  Browser Support      Modern            IE11+ (polyfill)       │
+│  Dependencies         None (native)     External library       │
+│  JSON Transform       Manual            Automatic              │
+│  Error Handling       Manual status     Rejects on HTTP errors │
+│  Timeout              AbortController   Built-in               │
+│  Interceptors         No                Yes                    │
+│  Request Cancel       AbortController   CancelToken            │
+│  Upload Progress      No                Yes                    │
+│  Base URL             Manual            Built-in               │
+│  Bundle Size          0KB               ~13KB                  │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Un wrapper Fetch personnalisé
+
+```javascript
+// Create a fetch wrapper with common functionality
+class APIClient {
+  constructor(baseURL) {
+    this.baseURL = baseURL;
+    this.defaultHeaders = {
+      'Content-Type': 'application/json'
+    };
+  }
+  
+  async request(endpoint, options = {}) {
+    const url = `${this.baseURL}${endpoint}`;
+    
+    const config = {
+      ...options,
+      headers: {
+        ...this.defaultHeaders,
+        ...options.headers
+      }
+    };
+    
+    // Add auth token
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    
+    try {
+      const response = await fetch(url, config);
+      
+      // Handle HTTP errors
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || `HTTP ${response.status}`);
+      }
+      
+      // Handle empty responses
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        return response.json();
+      }
+      
+      return response;
+    } catch (error) {
+      console.error('API request failed:', error);
+      throw error;
+    }
+  }
+  
+  get(endpoint, options) {
+    return this.request(endpoint, { ...options, method: 'GET' });
+  }
+  
+  post(endpoint, data, options) {
+    return this.request(endpoint, {
+      ...options,
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+  }
+  
+  put(endpoint, data, options) {
+    return this.request(endpoint, {
+      ...options,
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+  }
+  
+  delete(endpoint, options) {
+    return this.request(endpoint, { ...options, method: 'DELETE' });
+  }
+}
+
+// Usage
+const api = new APIClient('https://api.example.com');
+
+const users = await api.get('/users');
+const newUser = await api.post('/users', { name: 'Marco', email: 'marco@example.com' });
 ```
 
 ---
 
-## 3. Loading States and Error Handling
+## 3. États de chargement et gestion des erreurs
 
-### Cycle de vie d'une requête comme machine à états
+### Le cycle de vie d'une requête en tant que machine à états
 
-Modéliser une requête fetch comme une machine à états finis rend les quatre états exclusifs explicites et empêche des UI impossibles comme « chargement + erreur affichés en même temps ».
+Modéliser une requête fetch comme une machine à états finis rend explicites les quatre états mutuellement exclusifs et empêche les UI impossibles telles que « loading + error affichés en même temps ».
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Inactif
-    Inactif --> Chargement: "déclencher fetch"
-    Chargement --> Succes: "réponse ok"
-    Chargement --> Erreur: "réponse échouée"
-    Succes --> Chargement: "refetch"
-    Erreur --> Chargement: "réessayer"
-    Succes --> [*]: "démontage"
-    Erreur --> [*]: "démontage"
+    [*] --> Idle
+    Idle --> Loading: "trigger fetch"
+    Loading --> Success: "response ok"
+    Loading --> Error: "response failed"
+    Success --> Loading: "refetch"
+    Error --> Loading: "retry"
+    Success --> [*]: "unmount"
+    Error --> [*]: "unmount"
 ```
 
-### Pattern courant
+### Le pattern de base avec useEffect
 
-```tsx
-const [etat, setEtat] = useState<'idle' | 'chargement' | 'pret' | 'erreur'>('idle');
-const [donnees, setDonnees] = useState<Utilisateur[] | null>(null);
-const [erreur, setErreur] = useState<Error | null>(null);
+```jsx
+import { useState, useEffect } from 'react';
 
-useEffect(() => {
-  setEtat('chargement');
-  fetch('/api/utilisateurs')
-    .then(r => r.json())
-    .then(d => { setDonnees(d); setEtat('pret'); })
-    .catch(e => { setErreur(e); setEtat('erreur'); });
-}, []);
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch('/api/users');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch users');
+        }
+        
+        const data = await response.json();
+        setUsers(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUsers();
+  }, []); // Empty dependency array - fetch once on mount
+  
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  
+  return (
+    <ul>
+      {users.map(user => (
+        <li key={user.id}>{user.name}</li>
+      ))}
+    </ul>
+  );
+};
 ```
 
-### Error Boundaries
+### Un hook useFetch personnalisé
 
-Pour les erreurs de rendu :
+```javascript
+import { useState, useEffect, useCallback } from 'react';
 
-```tsx
-class ErrorBoundary extends Component<{ children: ReactNode }, { erreur: Error | null }> {
-  state = { erreur: null };
-  static getDerivedStateFromError(erreur: Error) { return { erreur }; }
+const useFetch = (url, options = {}) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await fetch(url, options);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      setData(result);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [url, JSON.stringify(options)]);
+  
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+  
+  const refetch = () => {
+    fetchData();
+  };
+  
+  return { data, loading, error, refetch };
+};
+
+// Usage
+const UserProfile = ({ userId }) => {
+  const { data: user, loading, error, refetch } = useFetch(`/api/users/${userId}`);
+  
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error} />;
+  
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <button onClick={refetch}>Refresh</button>
+    </div>
+  );
+};
+```
+
+### Gestion avancée des erreurs
+
+```jsx
+class APIError extends Error {
+  constructor(message, status, data) {
+    super(message);
+    this.status = status;
+    this.data = data;
+    this.name = 'APIError';
+  }
+}
+
+const fetchWithErrorHandling = async (url, options) => {
+  try {
+    const response = await fetch(url, options);
+    
+    const data = await response.json();
+    
+    if (!response.ok) {
+      throw new APIError(
+        data.message || 'Request failed',
+        response.status,
+        data
+      );
+    }
+    
+    return data;
+  } catch (error) {
+    if (error instanceof APIError) {
+      // Handle API errors
+      switch (error.status) {
+        case 400:
+          throw new Error('Invalid request. Please check your input.');
+        case 401:
+          throw new Error('Authentication required. Please login.');
+        case 403:
+          throw new Error('You do not have permission to access this resource.');
+        case 404:
+          throw new Error('Resource not found.');
+        case 500:
+          throw new Error('Server error. Please try again later.');
+        default:
+          throw error;
+      }
+    }
+    
+    // Handle network errors
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      throw new Error('Network error. Please check your connection.');
+    }
+    
+    throw error;
+  }
+};
+
+// Error Boundary Component
+import { Component } from 'react';
+
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+    // Log to error reporting service
+    // logErrorToService(error, errorInfo);
+  }
+  
   render() {
-    if (this.state.erreur) return <p>Quelque chose s'est mal passé : {this.state.erreur.message}</p>;
+    if (this.state.hasError) {
+      return (
+        <div className="error-container">
+          <h2>Something went wrong</h2>
+          <p>{this.state.error?.message}</p>
+          <button onClick={() => this.setState({ hasError: false, error: null })}>
+            Try Again
+          </button>
+        </div>
+      );
+    }
+    
     return this.props.children;
   }
 }
 ```
 
+### Patterns d'UI pour les états de chargement
+
+```jsx
+// Skeleton Loading
+const UserCardSkeleton = () => {
+  return (
+    <div className="user-card skeleton">
+      <div className="skeleton-avatar"></div>
+      <div className="skeleton-text"></div>
+      <div className="skeleton-text short"></div>
+    </div>
+  );
+};
+
+// Progressive Loading
+const UserList = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  return (
+    <div>
+      {loading && <div>Loading users...</div>}
+      
+      {users.map(user => (
+        <UserCard key={user.id} user={user} />
+      ))}
+      
+      {loading && (
+        <>
+          <UserCardSkeleton />
+          <UserCardSkeleton />
+          <UserCardSkeleton />
+        </>
+      )}
+    </div>
+  );
+};
+
+// Suspense-based Loading (React 18+)
+import { Suspense } from 'react';
+
+const App = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <UserProfile />
+    </Suspense>
+  );
+};
+```
+
+### Logique de réessai (retry)
+
+```javascript
+const fetchWithRetry = async (url, options = {}, retries = 3, delay = 1000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      const isLastAttempt = i === retries - 1;
+      
+      if (isLastAttempt) {
+        throw error;
+      }
+      
+      console.log(`Retry attempt ${i + 1}/${retries}`);
+      
+      // Exponential backoff
+      await new Promise(resolve => setTimeout(resolve, delay * Math.pow(2, i)));
+    }
+  }
+};
+
+// Custom hook with retry
+const useFetchWithRetry = (url) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const result = await fetchWithRetry(url);
+        setData(result);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
+  }, [url, retryCount]);
+  
+  const retry = () => setRetryCount(prev => prev + 1);
+  
+  return { data, loading, error, retry };
+};
+```
+
 ---
 
-## 4. React Query: Server State Management
+## 4. React Query : la gestion du server state
 
-### Concept
+### Installation et configuration
 
-React Query (TanStack Query) gère automatiquement :
-
-- Cache des réponses
-- Déduplication des requêtes concurrentes
-- Refetch au focus/fenêtre/réseau
-- Invalidation et refetch programmatique
-- États de chargement, erreur, succès
-
-### Setup
-
-```tsx
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
-
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <Utilisateurs />
-    </QueryClientProvider>
-  );
-}
+```bash
+npm install @tanstack/react-query
+# Optional: DevTools
+npm install @tanstack/react-query-devtools
 ```
 
-### useQuery
+```jsx
+// App.jsx - Setup Query Client
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-```tsx
-function Utilisateurs() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['utilisateurs'],
-    queryFn: () => fetch('/api/utilisateurs').then(r => r.json()),
-  });
-
-  if (isLoading) return <p>Chargement…</p>;
-  if (error) return <p>Erreur : {(error as Error).message}</p>;
-  return <ul>{data.map((u: Utilisateur) => <li key={u.id}>{u.nom}</li>)}</ul>;
-}
-```
-
-### useMutation
-
-```tsx
-const mutation = useMutation({
-  mutationFn: (nouveau: Utilisateur) => fetch('/api/utilisateurs', { method: 'POST', body: JSON.stringify(nouveau) }),
-  onSuccess: () => queryClient.invalidateQueries({ queryKey: ['utilisateurs'] }),
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      cacheTime: 1000 * 60 * 10, // 10 minutes
+      refetchOnWindowFocus: false,
+      retry: 3
+    }
+  }
 });
 
-mutation.mutate({ nom: 'Marie' });
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Routes />
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
+};
+```
+
+### useQuery de base
+
+```jsx
+import { useQuery } from '@tanstack/react-query';
+
+const fetchUsers = async () => {
+  const response = await fetch('/api/users');
+  if (!response.ok) {
+    throw new Error('Failed to fetch users');
+  }
+  return response.json();
+};
+
+const UserList = () => {
+  const { 
+    data: users, 
+    isLoading, 
+    isError, 
+    error,
+    isFetching,
+    refetch
+  } = useQuery({
+    queryKey: ['users'],
+    queryFn: fetchUsers
+  });
+  
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error: {error.message}</div>;
+  
+  return (
+    <div>
+      <button onClick={() => refetch()}>Refresh</button>
+      {isFetching && <span>Updating...</span>}
+      
+      <ul>
+        {users.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+```
+
+### Query avec paramètres
+
+```jsx
+const fetchUser = async ({ queryKey }) => {
+  const [_key, userId] = queryKey;
+  const response = await fetch(`/api/users/${userId}`);
+  return response.json();
+};
+
+const UserProfile = ({ userId }) => {
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: fetchUser,
+    enabled: !!userId // Only fetch if userId exists
+  });
+  
+  if (isLoading) return <div>Loading...</div>;
+  
+  return <div>{user.name}</div>;
+};
+```
+
+### useMutation pour les mises à jour
+
+```jsx
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+const updateUser = async ({ userId, updates }) => {
+  const response = await fetch(`/api/users/${userId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updates)
+  });
+  return response.json();
+};
+
+const EditUserForm = ({ userId }) => {
+  const queryClient = useQueryClient();
+  
+  const mutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['user', userId] });
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+    },
+    onError: (error) => {
+      console.error('Update failed:', error);
+    }
+  });
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutation.mutate({ userId, updates: { name: 'New Name' } });
+  };
+  
+  return (
+    <form onSubmit={handleSubmit}>
+      <input type="text" name="name" />
+      <button type="submit" disabled={mutation.isLoading}>
+        {mutation.isLoading ? 'Saving...' : 'Save'}
+      </button>
+      {mutation.isError && <div>Error: {mutation.error.message}</div>}
+      {mutation.isSuccess && <div>Saved successfully!</div>}
+    </form>
+  );
+};
+```
+
+### Opérations CRUD avec React Query
+
+```jsx
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
+// API functions
+const postsAPI = {
+  getAll: async () => {
+    const res = await fetch('/api/posts');
+    return res.json();
+  },
+  
+  getById: async (id) => {
+    const res = await fetch(`/api/posts/${id}`);
+    return res.json();
+  },
+  
+  create: async (post) => {
+    const res = await fetch('/api/posts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(post)
+    });
+    return res.json();
+  },
+  
+  update: async ({ id, updates }) => {
+    const res = await fetch(`/api/posts/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(updates)
+    });
+    return res.json();
+  },
+  
+  delete: async (id) => {
+    const res = await fetch(`/api/posts/${id}`, { method: 'DELETE' });
+    return res.json();
+  }
+};
+
+// Custom hooks
+const usePosts = () => {
+  return useQuery({
+    queryKey: ['posts'],
+    queryFn: postsAPI.getAll
+  });
+};
+
+const usePost = (id) => {
+  return useQuery({
+    queryKey: ['post', id],
+    queryFn: () => postsAPI.getById(id),
+    enabled: !!id
+  });
+};
+
+const useCreatePost = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: postsAPI.create,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    }
+  });
+};
+
+const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: postsAPI.update,
+    onSuccess: (data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['post', variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    }
+  });
+};
+
+const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: postsAPI.delete,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+    }
+  });
+};
+
+// Component using hooks
+const PostsManager = () => {
+  const { data: posts, isLoading } = usePosts();
+  const createMutation = useCreatePost();
+  const deleteMutation = useDeletePost();
+  
+  const handleCreate = () => {
+    createMutation.mutate({
+      title: 'New Post',
+      content: 'Post content'
+    });
+  };
+  
+  const handleDelete = (id) => {
+    deleteMutation.mutate(id);
+  };
+  
+  if (isLoading) return <div>Loading...</div>;
+  
+  return (
+    <div>
+      <button onClick={handleCreate}>Create Post</button>
+      
+      {posts.map(post => (
+        <div key={post.id}>
+          <h3>{post.title}</h3>
+          <button onClick={() => handleDelete(post.id)}>Delete</button>
+        </div>
+      ))}
+    </div>
+  );
+};
+```
+
+### Infinite queries (pagination)
+
+```jsx
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+const fetchPosts = async ({ pageParam = 0 }) => {
+  const response = await fetch(`/api/posts?page=${pageParam}&limit=10`);
+  return response.json();
+};
+
+const InfinitePostList = () => {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isLoading
+  } = useInfiniteQuery({
+    queryKey: ['posts'],
+    queryFn: fetchPosts,
+    getNextPageParam: (lastPage, pages) => {
+      return lastPage.hasMore ? pages.length : undefined;
+    }
+  });
+  
+  if (isLoading) return <div>Loading...</div>;
+  
+  return (
+    <div>
+      {data.pages.map((page, i) => (
+        <div key={i}>
+          {page.posts.map(post => (
+            <div key={post.id}>{post.title}</div>
+          ))}
+        </div>
+      ))}
+      
+      <button 
+        onClick={() => fetchNextPage()}
+        disabled={!hasNextPage || isFetchingNextPage}
+      >
+        {isFetchingNextPage
+          ? 'Loading more...'
+          : hasNextPage
+          ? 'Load More'
+          : 'No more posts'}
+      </button>
+    </div>
+  );
+};
+```
+
+### Dependent queries (requêtes dépendantes)
+
+```jsx
+// Fetch user first, then user's posts
+const UserPosts = ({ userId }) => {
+  const { data: user } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => fetchUser(userId)
+  });
+  
+  const { data: posts } = useQuery({
+    queryKey: ['posts', user?.id],
+    queryFn: () => fetchUserPosts(user.id),
+    enabled: !!user // Only fetch when user is available
+  });
+  
+  return (
+    <div>
+      <h2>{user?.name}'s Posts</h2>
+      {posts?.map(post => (
+        <div key={post.id}>{post.title}</div>
+      ))}
+    </div>
+  );
+};
 ```
 
 ---
 
-## 5. SWR: Stale-While-Revalidate
+## 5. SWR : Stale-While-Revalidate
 
-### Alternative plus légère
+### Installation et configuration
 
-```tsx
+```bash
+npm install swr
+```
+
+### Utilisation de base de SWR
+
+```jsx
 import useSWR from 'swr';
 
-const fetcher = (url: string) => fetch(url).then(r => r.json());
+// Fetcher function
+const fetcher = (url) => fetch(url).then(res => res.json());
 
-function Utilisateurs() {
-  const { data, error, isLoading } = useSWR('/api/utilisateurs', fetcher);
-  if (isLoading) return <p>Chargement…</p>;
-  if (error) return <p>Erreur</p>;
-  return <Liste utilisateurs={data} />;
-}
+const UserList = () => {
+  const { data, error, isLoading, mutate } = useSWR('/api/users', fetcher);
+  
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return (
+    <div>
+      <button onClick={() => mutate()}>Refresh</button>
+      
+      <ul>
+        {data.map(user => (
+          <li key={user.id}>{user.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 ```
 
-### Différences avec React Query
+### Configuration globale
 
-- SWR est plus petit avec une API minimale.
-- React Query a plus de fonctionnalités (mutations, annulation, pagination, infinite) et des devtools.
+```jsx
+import { SWRConfig } from 'swr';
+
+const App = () => {
+  return (
+    <SWRConfig
+      value={{
+        fetcher: (url) => fetch(url).then(res => res.json()),
+        revalidateOnFocus: false,
+        dedupingInterval: 2000,
+        errorRetryCount: 3,
+        errorRetryInterval: 5000
+      }}
+    >
+      <Routes />
+    </SWRConfig>
+  );
+};
+```
+
+### SWR avec paramètres
+
+```jsx
+const UserProfile = ({ userId }) => {
+  const { data: user } = useSWR(
+    userId ? `/api/users/${userId}` : null,
+    fetcher
+  );
+  
+  if (!user) return <div>Loading...</div>;
+  
+  return <div>{user.name}</div>;
+};
+
+// Dynamic keys
+const UserPosts = ({ userId, filter }) => {
+  const { data: posts } = useSWR(
+    [`/api/users/${userId}/posts`, filter],
+    ([url, filter]) => fetch(`${url}?filter=${filter}`).then(res => res.json())
+  );
+  
+  return <div>{/* render posts */}</div>;
+};
+```
+
+### Mutations avec SWR
+
+```jsx
+import useSWR, { useSWRConfig } from 'swr';
+
+const EditUser = ({ userId }) => {
+  const { data: user, mutate } = useSWR(`/api/users/${userId}`, fetcher);
+  const { mutate: globalMutate } = useSWRConfig();
+  
+  const updateUser = async (updates) => {
+    // Optimistic update
+    mutate({ ...user, ...updates }, false);
+    
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+      
+      const updatedUser = await response.json();
+      
+      // Revalidate
+      mutate(updatedUser);
+      
+      // Revalidate related data
+      globalMutate('/api/users');
+    } catch (error) {
+      // Revert on error
+      mutate();
+    }
+  };
+  
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      updateUser({ name: e.target.name.value });
+    }}>
+      <input type="text" name="name" defaultValue={user?.name} />
+      <button type="submit">Save</button>
+    </form>
+  );
+};
+```
+
+### Pagination avec SWR
+
+```jsx
+import useSWRInfinite from 'swr/infinite';
+
+const getKey = (pageIndex, previousPageData) => {
+  // Reached the end
+  if (previousPageData && !previousPageData.hasMore) return null;
+  
+  // First page
+  return `/api/posts?page=${pageIndex}&limit=10`;
+};
+
+const InfiniteList = () => {
+  const { data, size, setSize, isLoading } = useSWRInfinite(getKey, fetcher);
+  
+  const posts = data ? data.flatMap(page => page.posts) : [];
+  const isLoadingMore = isLoading || (size > 0 && data && typeof data[size - 1] === 'undefined');
+  const isEmpty = data?.[0]?.posts.length === 0;
+  const isReachingEnd = isEmpty || (data && !data[data.length - 1]?.hasMore);
+  
+  return (
+    <div>
+      {posts.map(post => (
+        <div key={post.id}>{post.title}</div>
+      ))}
+      
+      <button
+        disabled={isLoadingMore || isReachingEnd}
+        onClick={() => setSize(size + 1)}
+      >
+        {isLoadingMore ? 'Loading...' : isReachingEnd ? 'No more' : 'Load more'}
+      </button>
+    </div>
+  );
+};
+```
+
+### React Query vs SWR
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│              React Query vs SWR                                │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  Feature            React Query          SWR                   │
+│  ─────────────────────────────────────────────────────────────  │
+│  Bundle Size        ~13KB                ~5KB                  │
+│  DevTools           Yes                  No (3rd party)        │
+│  Caching            Advanced             Basic                 │
+│  Mutations          useMutation          mutate                │
+│  Prefetching        Built-in             Manual                │
+│  Pagination         Advanced             Basic                 │
+│  TypeScript         Excellent            Good                  │
+│  Learning Curve     Medium               Low                   │
+│  Focus              Feature-rich         Simplicity            │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 6. Optimistic Updates
+## 6. Les mises à jour optimistes (optimistic updates)
 
-### Flux de mise à jour optimiste
+### Le flux d'une mise à jour optimiste
 
-L'UI applique le changement localement avant la résolution réseau, puis confirme avec la réponse du serveur ou rollback en cas d'échec. C'est ce qui rend les interactions instantanées.
+L'UI applique le changement localement avant que le réseau n'ait répondu, puis confirme avec la réponse du serveur ou effectue un rollback en cas d'échec. C'est ce qui rend les interactions instantanées.
 
 ```mermaid
 sequenceDiagram
-    participant U as Utilisateur
-    participant C as Composant
-    participant Cache as Cache local
-    participant S as Serveur
-    U->>C: "clic sur action"
-    C->>Cache: "appliquer mise à jour optimiste"
-    Cache-->>U: "l'UI reflète le changement immédiatement"
-    C->>S: "envoyer requête mutation"
-    alt succès
-        S-->>C: "200 OK + données canoniques"
-        C->>Cache: "remplacer par données serveur"
-    else échec
-        S-->>C: "erreur"
-        C->>Cache: "rollback vers snapshot"
-        Cache-->>U: "l'UI revient en arrière"
+    participant U as User
+    participant C as Component
+    participant Cache as Local Cache
+    participant S as Server
+    U->>C: "click action"
+    C->>Cache: "apply optimistic update"
+    Cache-->>U: "UI reflects change immediately"
+    C->>S: "send mutation request"
+    alt success
+        S-->>C: "200 OK + canonical data"
+        C->>Cache: "replace with server data"
+    else failure
+        S-->>C: "error"
+        C->>Cache: "rollback to snapshot"
+        Cache-->>U: "UI reverts"
     end
 ```
 
-### Concept
+### Les mises à jour optimistes avec React Query
 
-Mettre à jour l'UI **avant** la confirmation serveur, avec rollback en cas d'erreur.
+```jsx
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-```tsx
-const mutation = useMutation({
-  mutationFn: mettreAJourTodo,
-  onMutate: async (nouveau) => {
-    await queryClient.cancelQueries({ queryKey: ['todos'] });
-    const precedent = queryClient.getQueryData(['todos']);
-    queryClient.setQueryData(['todos'], (ancien: Todo[]) =>
-      ancien.map(t => t.id === nouveau.id ? nouveau : t)
+const useLikePost = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (postId) => {
+      const response = await fetch(`/api/posts/${postId}/like`, {
+        method: 'POST'
+      });
+      return response.json();
+    },
+    
+    // Optimistic update
+    onMutate: async (postId) => {
+      // Cancel outgoing refetches
+      await queryClient.cancelQueries({ queryKey: ['post', postId] });
+      
+      // Snapshot previous value
+      const previousPost = queryClient.getQueryData(['post', postId]);
+      
+      // Optimistically update
+      queryClient.setQueryData(['post', postId], (old) => ({
+        ...old,
+        likes: old.likes + 1,
+        isLiked: true
+      }));
+      
+      // Return context with snapshot
+      return { previousPost };
+    },
+    
+    // Rollback on error
+    onError: (err, postId, context) => {
+      queryClient.setQueryData(['post', postId], context.previousPost);
+    },
+    
+    // Always refetch after error or success
+    onSettled: (data, error, postId) => {
+      queryClient.invalidateQueries({ queryKey: ['post', postId] });
+    }
+  });
+};
+
+const PostCard = ({ postId }) => {
+  const { data: post } = useQuery({
+    queryKey: ['post', postId],
+    queryFn: () => fetchPost(postId)
+  });
+  
+  const likeMutation = useLikePost();
+  
+  return (
+    <div>
+      <h3>{post.title}</h3>
+      <button onClick={() => likeMutation.mutate(postId)}>
+        👍 {post.likes} {post.isLiked ? '(Liked)' : ''}
+      </button>
+    </div>
+  );
+};
+```
+
+### Les mises à jour optimistes avec SWR
+
+```jsx
+import useSWR, { useSWRConfig } from 'swr';
+
+const TodoItem = ({ todo }) => {
+  const { mutate } = useSWRConfig();
+  
+  const toggleTodo = async () => {
+    // Optimistic update to local data
+    mutate(
+      '/api/todos',
+      (todos) => todos.map(t =>
+        t.id === todo.id ? { ...t, completed: !t.completed } : t
+      ),
+      false // Don't revalidate immediately
     );
-    return { precedent };
-  },
-  onError: (_err, _nouveau, contexte) => {
-    queryClient.setQueryData(['todos'], contexte?.precedent);
-  },
-  onSettled: () => {
-    queryClient.invalidateQueries({ queryKey: ['todos'] });
-  },
-});
+    
+    try {
+      await fetch(`/api/todos/${todo.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ completed: !todo.completed })
+      });
+      
+      // Revalidate to ensure sync
+      mutate('/api/todos');
+    } catch (error) {
+      // Revert on error
+      mutate('/api/todos');
+    }
+  };
+  
+  return (
+    <div>
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={toggleTodo}
+      />
+      {todo.text}
+    </div>
+  );
+};
+```
+
+### Un exemple complexe de mise à jour optimiste
+
+```jsx
+const useUpdatePost = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: ({ postId, updates }) =>
+      fetch(`/api/posts/${postId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      }).then(res => res.json()),
+    
+    onMutate: async ({ postId, updates }) => {
+      // Cancel queries
+      await queryClient.cancelQueries({ queryKey: ['posts'] });
+      await queryClient.cancelQueries({ queryKey: ['post', postId] });
+      
+      // Snapshots
+      const previousPosts = queryClient.getQueryData(['posts']);
+      const previousPost = queryClient.getQueryData(['post', postId]);
+      
+      // Optimistic updates
+      queryClient.setQueryData(['post', postId], (old) => ({
+        ...old,
+        ...updates,
+        updatedAt: new Date().toISOString()
+      }));
+      
+      queryClient.setQueryData(['posts'], (old) =>
+        old.map(post =>
+          post.id === postId
+            ? { ...post, ...updates, updatedAt: new Date().toISOString() }
+            : post
+        )
+      );
+      
+      return { previousPosts, previousPost };
+    },
+    
+    onError: (err, { postId }, context) => {
+      // Rollback
+      queryClient.setQueryData(['posts'], context.previousPosts);
+      queryClient.setQueryData(['post', postId], context.previousPost);
+      
+      // Show error notification
+      toast.error('Failed to update post');
+    },
+    
+    onSuccess: (data, { postId }) => {
+      // Update with server response
+      queryClient.setQueryData(['post', postId], data);
+      
+      toast.success('Post updated successfully');
+    },
+    
+    onSettled: (data, error, { postId }) => {
+      // Refetch to sync
+      queryClient.invalidateQueries({ queryKey: ['posts'] });
+      queryClient.invalidateQueries({ queryKey: ['post', postId] });
+    }
+  });
+};
 ```
 
 ---
 
-## 7. Cache Management Strategies
+## 7. Stratégies de gestion du cache
 
-### Décision hit/miss du cache
+### La décision cache hit / cache miss
 
-Chaque query consulte d'abord le cache via sa clé. Un hit frais retourne instantanément sans coût réseau ; un miss (ou une entrée stale) déclenche un vrai fetch et alimente le cache pour la prochaine fois.
+Chaque query consulte d'abord le cache via sa clé. Un hit frais retourne instantanément, sans coût réseau ; un miss (ou une entrée périmée) déclenche une vraie récupération et alimente le cache pour la prochaine fois.
 
 ```mermaid
 flowchart TD
-    A["Le composant demande des données via queryKey"] --> B{"Le cache a une entrée pour la clé ?"}
-    B -->|Non| C["Fetch depuis le serveur"]
-    B -->|Oui| D{"L'entrée est-elle fraîche ?"}
-    D -->|Oui| E["Retourner données en cache"]
-    D -->|Non - stale| F["Retourner données en cache immédiatement"]
-    F --> G["Revalider en arrière-plan"]
-    G --> H["Mettre à jour cache avec nouvelles données"]
-    C --> I["Stocker la réponse dans le cache"]
-    I --> J["Retourner données au composant"]
+    A["Component requests data by queryKey"] --> B{"Cache has entry for key?"}
+    B -->|No| C["Fetch from server"]
+    B -->|Yes| D{"Entry is fresh?"}
+    D -->|Yes| E["Return cached data"]
+    D -->|No - stale| F["Return cached data immediately"]
+    F --> G["Revalidate in background"]
+    G --> H["Update cache with new data"]
+    C --> I["Store response in cache"]
+    I --> J["Return data to component"]
     E --> J
     H --> J
 ```
 
-### Politiques de cache
+### La configuration du cache de React Query
 
-- **staleTime** : durée après laquelle une query devient « stale » (défaut 0).
-- **gcTime** (ex cacheTime) : temps de conservation des données après unmount (défaut 5min).
-- **refetchOnWindowFocus** : refetch au retour sur l'onglet.
+```javascript
+import { QueryClient } from '@tanstack/react-query';
 
-### Patterns typiques
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // How long data stays fresh
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      
+      // How long inactive data stays in cache
+      cacheTime: 1000 * 60 * 30, // 30 minutes
+      
+      // Refetch on window focus
+      refetchOnWindowFocus: true,
+      
+      // Refetch on reconnect
+      refetchOnReconnect: true,
+      
+      // Refetch on mount if stale
+      refetchOnMount: true,
+      
+      // Retry failed requests
+      retry: 3,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
+    }
+  }
+});
+```
 
-- Listes avec `staleTime` long, détails avec `staleTime` court.
-- Invalider les caches liés après une mutation.
-- Prefetch au hover d'un lien pour une UX instantanée.
+### Manipulation manuelle du cache
+
+```jsx
+import { useQueryClient } from '@tanstack/react-query';
+
+const CacheManager = () => {
+  const queryClient = useQueryClient();
+  
+  // Get cached data
+  const getCachedUser = (userId) => {
+    return queryClient.getQueryData(['user', userId]);
+  };
+  
+  // Set cached data
+  const setCachedUser = (userId, userData) => {
+    queryClient.setQueryData(['user', userId], userData);
+  };
+  
+  // Invalidate queries (mark as stale, trigger refetch)
+  const invalidateUsers = () => {
+    queryClient.invalidateQueries({ queryKey: ['users'] });
+  };
+  
+  // Remove queries from cache
+  const removeUser = (userId) => {
+    queryClient.removeQueries({ queryKey: ['user', userId] });
+  };
+  
+  // Reset entire cache
+  const resetCache = () => {
+    queryClient.resetQueries();
+  };
+  
+  // Prefetch data
+  const prefetchUser = (userId) => {
+    queryClient.prefetchQuery({
+      queryKey: ['user', userId],
+      queryFn: () => fetchUser(userId)
+    });
+  };
+  
+  // Get all queries
+  const getAllQueries = () => {
+    return queryClient.getQueryCache().getAll();
+  };
+  
+  return <div>{/* UI */}</div>;
+};
+```
+
+### Préchargement du cache
+
+```jsx
+// Prefetch on hover
+const UserLink = ({ userId, children }) => {
+  const queryClient = useQueryClient();
+  
+  const handleMouseEnter = () => {
+    queryClient.prefetchQuery({
+      queryKey: ['user', userId],
+      queryFn: () => fetchUser(userId),
+      staleTime: 1000 * 60 * 5 // Don't prefetch if data is fresh
+    });
+  };
+  
+  return (
+    <Link 
+      to={`/users/${userId}`}
+      onMouseEnter={handleMouseEnter}
+    >
+      {children}
+    </Link>
+  );
+};
+
+// Prefetch in route loader (React Router v6.4+)
+const userLoader = ({ params, queryClient }) => {
+  return queryClient.fetchQuery({
+    queryKey: ['user', params.userId],
+    queryFn: () => fetchUser(params.userId)
+  });
+};
+```
+
+### Gestion du cache avec SWR
+
+```jsx
+import { useSWRConfig } from 'swr';
+
+const CacheManager = () => {
+  const { cache, mutate } = useSWRConfig();
+  
+  // Get all cache keys
+  const getAllKeys = () => {
+    return Array.from(cache.keys());
+  };
+  
+  // Revalidate specific key
+  const revalidate = (key) => {
+    mutate(key);
+  };
+  
+  // Revalidate all matching keys
+  const revalidateAll = () => {
+    mutate(
+      key => typeof key === 'string' && key.startsWith('/api/users'),
+      undefined,
+      { revalidate: true }
+    );
+  };
+  
+  // Clear cache
+  const clearCache = () => {
+    cache.clear();
+  };
+  
+  return <div>{/* UI */}</div>;
+};
+```
+
+### Persister le cache
+
+```javascript
+// React Query Persistence
+import { QueryClient } from '@tanstack/react-query';
+import { persistQueryClient } from '@tanstack/react-query-persist-client';
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
+    },
+  },
+});
+
+const persister = createSyncStoragePersister({
+  storage: window.localStorage,
+});
+
+persistQueryClient({
+  queryClient,
+  persister,
+  maxAge: 1000 * 60 * 60 * 24, // 24 hours
+});
+```
 
 ---
 
-## 8. Polling and Real-Time Updates
+## 8. Polling et mises à jour en temps réel
 
-### Cycle de polling
+### Le cycle de polling
 
-Le polling est une boucle : fetch, mise à jour de l'UI, attente, répétition — jusqu'à ce qu'un signal d'arrêt (démontage, condition de succès, ou perte de focus de l'onglet) brise le cycle.
+Le polling est une boucle : récupérer, mettre à jour l'UI, attendre, répéter — jusqu'à ce qu'un signal d'arrêt (unmount, condition de succès ou perte de focus de l'onglet) interrompe le cycle.
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Fetch
-    Fetch --> MiseAJourUI: "données reçues"
-    MiseAJourUI --> Attente: "rendu terminé"
-    Attente --> Fetch: "intervalle écoulé"
-    Attente --> [*]: "démontage ou condition d'arrêt"
-    Fetch --> [*]: "démontage"
-    Fetch --> Attente: "erreur de requête - back off"
+    [*] --> Fetching
+    Fetching --> UpdatingUI: "data received"
+    UpdatingUI --> Waiting: "render complete"
+    Waiting --> Fetching: "interval elapsed"
+    Waiting --> [*]: "unmount or stop condition"
+    Fetching --> [*]: "unmount"
+    Fetching --> Waiting: "request error - back off"
 ```
 
-### Polling
+### Le polling avec React Query
 
-```tsx
-useQuery({
-  queryKey: ['statut'],
-  queryFn: fetchStatut,
-  refetchInterval: 5000,
-});
+```jsx
+import { useQuery } from '@tanstack/react-query';
+
+// Basic polling
+const RealtimeData = () => {
+  const { data } = useQuery({
+    queryKey: ['stats'],
+    queryFn: fetchStats,
+    refetchInterval: 5000, // Poll every 5 seconds
+    refetchIntervalInBackground: false // Only poll when window is focused
+  });
+  
+  return <div>Active Users: {data?.activeUsers}</div>;
+};
+
+// Conditional polling
+const OrderStatus = ({ orderId }) => {
+  const { data: order } = useQuery({
+    queryKey: ['order', orderId],
+    queryFn: () => fetchOrder(orderId),
+    refetchInterval: (data) => {
+      // Stop polling when order is delivered
+      return data?.status === 'delivered' ? false : 3000;
+    }
+  });
+  
+  return <div>Status: {order?.status}</div>;
+};
+
+// Adaptive polling (exponential backoff)
+const SmartPolling = () => {
+  const [pollInterval, setPollInterval] = useState(1000);
+  
+  const { data, isError } = useQuery({
+    queryKey: ['data'],
+    queryFn: fetchData,
+    refetchInterval: pollInterval,
+    onSuccess: () => {
+      // Slow down on success
+      setPollInterval(prev => Math.min(prev * 1.5, 30000));
+    },
+    onError: () => {
+      // Speed up on error
+      setPollInterval(prev => Math.max(prev / 2, 1000));
+    }
+  });
+  
+  return <div>{data?.value}</div>;
+};
 ```
 
-### WebSocket
+### Le polling avec SWR
 
-Combinez React Query (snapshot initial) + WebSocket (mises à jour push) :
+```jsx
+import useSWR from 'swr';
 
-```tsx
-useEffect(() => {
-  const ws = new WebSocket('/api/stream');
-  ws.onmessage = (msg) => {
-    queryClient.setQueryData(['statut'], JSON.parse(msg.data));
+// Basic polling
+const RealtimeData = () => {
+  const { data } = useSWR(
+    '/api/stats',
+    fetcher,
+    { refreshInterval: 5000 }
+  );
+  
+  return <div>Active Users: {data?.activeUsers}</div>;
+};
+
+// Conditional polling
+const OrderStatus = ({ orderId }) => {
+  const { data: order } = useSWR(
+    `/api/orders/${orderId}`,
+    fetcher,
+    {
+      refreshInterval: (data) => {
+        return data?.status === 'delivered' ? 0 : 3000;
+      }
+    }
+  );
+  
+  return <div>Status: {order?.status}</div>;
+};
+```
+
+### Intégration de WebSocket
+
+```jsx
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+
+const useWebSocket = (url) => {
+  const queryClient = useQueryClient();
+  
+  useEffect(() => {
+    const ws = new WebSocket(url);
+    
+    ws.onopen = () => {
+      console.log('WebSocket connected');
+    };
+    
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      
+      // Update React Query cache based on message type
+      switch (message.type) {
+        case 'USER_UPDATED':
+          queryClient.setQueryData(
+            ['user', message.data.id],
+            message.data
+          );
+          break;
+          
+        case 'NEW_NOTIFICATION':
+          queryClient.setQueryData(
+            ['notifications'],
+            (old) => [message.data, ...old]
+          );
+          break;
+          
+        case 'POST_DELETED':
+          queryClient.invalidateQueries({ queryKey: ['posts'] });
+          break;
+      }
+    };
+    
+    ws.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    return () => {
+      ws.close();
+    };
+  }, [url, queryClient]);
+};
+
+// Usage
+const RealtimeApp = () => {
+  useWebSocket('wss://api.example.com/ws');
+  
+  const { data: notifications } = useQuery({
+    queryKey: ['notifications'],
+    queryFn: fetchNotifications
+  });
+  
+  return (
+    <div>
+      {notifications?.map(notif => (
+        <div key={notif.id}>{notif.message}</div>
+      ))}
+    </div>
+  );
+};
+```
+
+### Server-Sent Events (SSE)
+
+```jsx
+import { useEffect } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+
+const useSSE = (url) => {
+  const queryClient = useQueryClient();
+  
+  useEffect(() => {
+    const eventSource = new EventSource(url);
+    
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      
+      // Update cache with new data
+      queryClient.setQueryData(['live-data'], data);
+    };
+    
+    eventSource.onerror = (error) => {
+      console.error('SSE error:', error);
+      eventSource.close();
+    };
+    
+    return () => {
+      eventSource.close();
+    };
+  }, [url, queryClient]);
+};
+
+// Usage
+const LiveDashboard = () => {
+  useSSE('/api/events');
+  
+  const { data } = useQuery({
+    queryKey: ['live-data'],
+    queryFn: fetchInitialData,
+    staleTime: Infinity // Never consider stale, rely on SSE updates
+  });
+  
+  return <div>{data?.value}</div>;
+};
+```
+
+### Mises à jour optimistes en temps réel
+
+```jsx
+const useRealtimeMessages = (chatId) => {
+  const queryClient = useQueryClient();
+  
+  useEffect(() => {
+    const ws = new WebSocket(`wss://api.example.com/chat/${chatId}`);
+    
+    ws.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      
+      // Optimistically add message
+      queryClient.setQueryData(
+        ['messages', chatId],
+        (old) => [...old, message]
+      );
+    };
+    
+    return () => ws.close();
+  }, [chatId, queryClient]);
+  
+  return useQuery({
+    queryKey: ['messages', chatId],
+    queryFn: () => fetchMessages(chatId)
+  });
+};
+
+const ChatRoom = ({ chatId }) => {
+  const { data: messages } = useRealtimeMessages(chatId);
+  const sendMutation = useSendMessage();
+  
+  const handleSend = (text) => {
+    // Optimistic update
+    const tempId = `temp-${Date.now()}`;
+    queryClient.setQueryData(
+      ['messages', chatId],
+      (old) => [...old, { id: tempId, text, sending: true }]
+    );
+    
+    sendMutation.mutate(
+      { chatId, text },
+      {
+        onSuccess: (newMessage) => {
+          // Replace temp message with real one
+          queryClient.setQueryData(
+            ['messages', chatId],
+            (old) => old.map(msg => 
+              msg.id === tempId ? newMessage : msg
+            )
+          );
+        }
+      }
+    );
   };
-  return () => ws.close();
-}, []);
+  
+  return (
+    <div>
+      {messages?.map(msg => (
+        <div key={msg.id}>
+          {msg.text} {msg.sending && '(Sending...)'}
+        </div>
+      ))}
+    </div>
+  );
+};
 ```
 
 ---
 
-## 9. Advanced Patterns
+## 9. Patterns avancés
 
-### Pagination
+### Déduplication des requêtes
 
-```tsx
-const { data } = useQuery({
-  queryKey: ['utilisateurs', page],
-  queryFn: () => fetch(`/api/utilisateurs?page=${page}`).then(r => r.json()),
-  keepPreviousData: true,
-});
+```jsx
+// React Query automatically deduplicates requests
+const UserProfile = ({ userId }) => {
+  // Even if called multiple times, only one request is made
+  const { data } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => fetchUser(userId)
+  });
+  
+  return <div>{data?.name}</div>;
+};
+
+const App = () => {
+  return (
+    <div>
+      <UserProfile userId={1} />
+      <UserProfile userId={1} /> {/* Uses same request */}
+      <UserProfile userId={1} /> {/* Uses same request */}
+    </div>
+  );
+};
 ```
 
-### Infinite scroll
+### Annulation des requêtes
 
-```tsx
-const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-  queryKey: ['posts'],
-  queryFn: ({ pageParam = 0 }) => fetchPosts(pageParam),
-  getNextPageParam: (last) => last.nextCursor,
-});
+```jsx
+import { useQuery } from '@tanstack/react-query';
+
+const fetchUser = async ({ queryKey, signal }) => {
+  const [_key, userId] = queryKey;
+  
+  const response = await fetch(`/api/users/${userId}`, {
+    signal // Pass AbortSignal
+  });
+  
+  return response.json();
+};
+
+const UserProfile = ({ userId }) => {
+  const { data } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: fetchUser
+  });
+  
+  // Automatically cancelled when userId changes or component unmounts
+  
+  return <div>{data?.name}</div>;
+};
 ```
 
-### Suspense avec React Query
+### Requêtes parallèles
 
-```tsx
-useSuspenseQuery({ queryKey: ['utilisateur', id], queryFn: () => fetchUtilisateur(id) });
+```jsx
+import { useQueries } from '@tanstack/react-query';
+
+const Dashboard = () => {
+  const results = useQueries({
+    queries: [
+      { queryKey: ['users'], queryFn: fetchUsers },
+      { queryKey: ['posts'], queryFn: fetchPosts },
+      { queryKey: ['comments'], queryFn: fetchComments }
+    ]
+  });
+  
+  const isLoading = results.some(result => result.isLoading);
+  const isError = results.some(result => result.isError);
+  
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error loading data</div>;
+  
+  const [users, posts, comments] = results.map(r => r.data);
+  
+  return (
+    <div>
+      <h2>Users: {users.length}</h2>
+      <h2>Posts: {posts.length}</h2>
+      <h2>Comments: {comments.length}</h2>
+    </div>
+  );
+};
+
+// Dynamic parallel queries
+const UserDetails = ({ userIds }) => {
+  const userQueries = useQueries({
+    queries: userIds.map(id => ({
+      queryKey: ['user', id],
+      queryFn: () => fetchUser(id)
+    }))
+  });
+  
+  return (
+    <div>
+      {userQueries.map((query, index) => (
+        <div key={userIds[index]}>
+          {query.isLoading ? 'Loading...' : query.data?.name}
+        </div>
+      ))}
+    </div>
+  );
+};
+```
+
+### Mode Suspense
+
+```jsx
+import { Suspense } from 'react';
+import { useQuery } from '@tanstack/react-query';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      suspense: true // Enable suspense mode
+    }
+  }
+});
+
+const UserProfile = ({ userId }) => {
+  const { data } = useQuery({
+    queryKey: ['user', userId],
+    queryFn: () => fetchUser(userId)
+  });
+  
+  // No loading state needed - Suspense handles it
+  return <div>{data.name}</div>;
+};
+
+const App = () => {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <UserProfile userId={1} />
+    </Suspense>
+  );
+};
 ```
 
 ---
 
-## 10. Data Fetching Strategy Selection
-
-### Arbre de décision
-
-Un guide rapide pour choisir une stratégie en fonction de la complexité de l'application et des besoins.
-
-```mermaid
-graph TD
-    A["Choisir une stratégie de data fetching"] --> B{"Complexité de l'app ?"}
-
-    B -->|Simple| C["useEffect + fetch"]
-    B -->|Moyenne| D{"Besoin de cache ?"}
-    B -->|Complexe| E{"Temps réel requis ?"}
-
-    D -->|Non| F["Hook useFetch personnalisé"]
-    D -->|Oui| G{"Préférence de bibliothèque ?"}
-
-    G -->|Riche en fonctionnalités| H["React Query"]
-    G -->|Léger| I["SWR"]
-
-    E -->|Oui| J["React Query + WebSocket"]
-    E -->|Non| K["React Query"]
-
-    style C fill:#51cf66
-    style H fill:#845ef7
-    style I fill:#4dabf7
-```
+## 10. Le choix d'une stratégie de récupération de données
 
 ### Matrice de décision
 
-| Besoin | Solution |
-|--------|----------|
-| Une seule GET simple | `fetch` + `useEffect` |
-| Plusieurs appels avec cache | React Query / SWR |
-| Synchronisation temps réel | WebSocket + React Query |
-| Soumission de formulaire + invalidation | useMutation |
-| Pagination/infinite | useInfiniteQuery |
-| SSR/Server Components | Next.js / Remix |
+```mermaid
+graph TD
+    A[Choose Data Fetching Strategy] --> B{App Complexity?}
+    
+    B -->|Simple| C[useEffect + fetch]
+    B -->|Medium| D{Need Caching?}
+    B -->|Complex| E{Real-time Required?}
+    
+    D -->|No| F[Custom useFetch hook]
+    D -->|Yes| G{Library Preference?}
+    
+    G -->|Feature-rich| H[React Query]
+    G -->|Lightweight| I[SWR]
+    
+    E -->|Yes| J[React Query + WebSocket]
+    E -->|No| K[React Query]
+    
+```
+
+### Comparaison des fonctionnalités
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│          Data Fetching Solutions Comparison                    │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│ Feature           useEffect  Custom   React Query   SWR        │
+│                             Hook                               │
+│ ─────────────────────────────────────────────────────────────  │
+│ Setup Time        Fast       Medium    Medium        Fast      │
+│ Caching           No         Manual    Advanced      Good      │
+│ Deduplication     No         No        Yes           Yes       │
+│ Refetching        Manual     Manual    Automatic     Automatic │
+│ Optimistic UI     Manual     Manual    Built-in      Built-in  │
+│ Pagination        Manual     Manual    Advanced      Basic     │
+│ DevTools          No         No        Yes           No        │
+│ Learning Curve    Low        Low       Medium        Low       │
+│ Bundle Size       0KB        0KB       ~13KB         ~5KB      │
+│                                                                │
+│ Best For:                                                      │
+│ • useEffect:      Prototypes, learning                         │
+│ • Custom Hook:    Simple apps, specific needs                  │
+│ • React Query:    Production apps, complex requirements        │
+│ • SWR:            Quick setup, Vercel ecosystem                │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Recommandations par cas d'usage
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│              Use Case Recommendations                          │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  Blog / Content Site                                           │
+│  → SWR (simple, ISR-friendly)                                  │
+│                                                                │
+│  E-commerce Platform                                           │
+│  → React Query (complex state, mutations)                      │
+│                                                                │
+│  Real-time Dashboard                                           │
+│  → React Query + WebSocket                                     │
+│                                                                │
+│  Admin Panel                                                   │
+│  → React Query (CRUD, tables, filters)                         │
+│                                                                │
+│  Social Media App                                              │
+│  → React Query (infinite scroll, optimistic updates)           │
+│                                                                │
+│  Documentation Site                                            │
+│  → SWR or simple fetch (mostly static)                         │
+│                                                                │
+│  Startup MVP                                                   │
+│  → SWR (fastest setup)                                         │
+│                                                                │
+│  Enterprise Application                                        │
+│  → React Query (mature, documented)                            │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
 
 ---
 
-## Conclusion: Mastering Data Fetching
+## Conclusion : maîtriser la récupération de données
 
-### Conclusion
+### Principes clés
 
-Le « data fetching » ne se résume pas à HTTP : c'est la **gestion de l'état serveur**. React Query le modélise bien. Trois règles :
+```
+┌────────────────────────────────────────────────────────────────┐
+│              Data Fetching Best Practices                      │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  1. Separate Server State from Client State                   │
+│  2. Implement Proper Loading & Error States                   │
+│  3. Use Caching to Minimize Network Requests                  │
+│  4. Handle Race Conditions & Cancellation                     │
+│  5. Implement Optimistic Updates for Better UX                │
+│  6. Use Specialized Libraries for Complex Apps                │
+│  7. Consider Real-time Needs Early                            │
+│  8. Monitor & Optimize Network Performance                    │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
 
-1. **Ne dupliquez pas l'état serveur dans l'état local**.
-2. **Cache d'abord, fetch en exception** : pensez à ce qui invalide quoi.
-3. **Loading et error** font partie de l'UX, pas d'un détail : concevez-les dès le départ.
+### Ressources
+
+- 📘 [TanStack Query Documentation](https://tanstack.com/query/latest)
+- 🔄 [SWR Documentation](https://swr.vercel.app/)
+- 🌐 [Fetch API MDN](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
+- 📦 [Axios GitHub](https://github.com/axios/axios)
+
+**Une gestion magistrale des données pour l'excellence ! 📡**

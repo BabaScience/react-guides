@@ -1,4 +1,4 @@
-# Hooks React : ajouter état et effets aux composants
+﻿# Hooks React : ajouter état et effets aux composants
 
 > Plongée pratique dans les hooks qui propulsent les composants React modernes : ce que chacun résout, quand y recourir, et les pièges à éviter.
 

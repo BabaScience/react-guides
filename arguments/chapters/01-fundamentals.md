@@ -1,4 +1,4 @@
-# React Fundamentals: Building Your First Interactive UI
+﻿# React Fundamentals: Building Your First Interactive UI
 
 > A first-principles introduction to React for developers who already know a bit of HTML, CSS, and JavaScript.
 

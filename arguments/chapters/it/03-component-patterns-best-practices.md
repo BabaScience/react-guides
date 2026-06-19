@@ -1,61 +1,115 @@
-# Pattern dei Componenti e Best Practice in React
+﻿# Pattern e Best Practice dei Componenti React
 
-> Pattern di progettazione e organizzazione del codice per applicazioni React mantenibili
+> Un'esplorazione esaustiva dei pattern architetturali, delle strategie di composizione e delle pratiche idiomatiche per la progettazione dei componenti React
 
 ---
 
-## 1. Component Composition and Reusability
+## Table of Contents
 
-### Composizione dei Componenti
+1. [Composizione e Riusabilità dei Componenti](#1-component-composition-and-reusability)
+2. [Prop Drilling: Problema e Soluzioni](#2-prop-drilling-problem-and-solutions)
+3. [Strategie di Elevazione dello State](#3-state-elevation-strategies)
+4. [Architettura e Organizzazione dei Componenti](#4-component-architecture-and-organization)
+5. [Componenti Presentazionali vs Container](#5-presentational-vs-container-components)
+6. [Higher-Order Components (HOC)](#6-higher-order-components-hocs)
+7. [Pattern Render Props](#7-render-props-pattern)
+8. [Pattern Compound Components](#8-compound-components-pattern)
+9. [Tecniche di Composizione Avanzate](#9-advanced-composition-techniques)
+10. [Matrice Decisionale per la Selezione dei Pattern](#10-pattern-selection-decision-matrix)
 
-React favorisce la **composizione** rispetto all'ereditarietà. Si costruiscono UI complesse combinando componenti piccoli e focalizzati.
+---
+
+## 1. Composizione e Riusabilità dei Componenti
+
+### Filosofia della Composizione
+
+React adotta la **composizione rispetto all'ereditarietà**, permettendo agli sviluppatori di costruire interfacce utente sofisticate assemblando componenti discreti e autonomi. Questo paradigma facilita la massima riusabilità del codice, la manutenibilità e la testabilità.
 
 ```mermaid
 graph TD
-    A[Componente Monolitico] --> B[❌ Difficile da mantenere]
-    A --> C[❌ Difficile da testare]
-    A --> D[❌ Nessuna riusabilità]
+    A[Monolithic Component] --> B[❌ Difficult to Maintain]
+    A --> C[❌ Hard to Test]
+    A --> D[❌ No Reusability]
     
-    E[Componenti Composti] --> F[✅ Separazione delle responsabilità]
-    E --> G[✅ Test semplici]
-    E --> H[✅ Alta riusabilità]
-    E --> I[✅ Architettura flessibile]
+    E[Composed Components] --> F[✅ Separation of Concerns]
+    E --> G[✅ Easy Testing]
+    E --> H[✅ High Reusability]
+    E --> I[✅ Flexible Architecture]
     
-    style A fill:#ff6b6b
-    style E fill:#51cf66
 ```
 
-```tsx
-function Card({ titolo, children }: { titolo: string; children: ReactNode }) {
+### Composizione Fondamentale: La Prop Children
+
+```jsx
+// Generic Container Component
+const Card = ({ children, title, footer }) => {
   return (
     <div className="card">
-      <h2>{titolo}</h2>
-      <div className="card-body">{children}</div>
+      {title && <div className="card-header">{title}</div>}
+      <div className="card-body">
+        {children}
+      </div>
+      {footer && <div className="card-footer">{footer}</div>}
     </div>
   );
-}
+};
 
-<Card titolo="Profilo">
-  <Avatar />
-  <Dettagli />
-</Card>
+// Composition Examples
+const UserProfile = () => {
+  return (
+    <Card 
+      title="User Information"
+      footer={<button>Edit Profile</button>}
+    >
+      <h2>Marco Rossi</h2>
+      <p>Email: marco@example.com</p>
+      <p>Location: Milano, Italia</p>
+    </Card>
+  );
+};
+
+const ProductCard = () => {
+  return (
+    <Card title="Product Details">
+      <img src="product.jpg" alt="Product" />
+      <h3>Premium Widget</h3>
+      <p>Price: €99.99</p>
+      <button>Add to Cart</button>
+    </Card>
+  );
+};
 ```
 
-### Pattern Children
+### Composizione Specializzata Basata su Slot
 
-`children` è la prop speciale che riceve tutto il contenuto JSX annidato. Usalo per slot generici.
+```jsx
+const Layout = ({ header, sidebar, content, footer }) => {
+  return (
+    <div className="layout">
+      <header className="layout-header">{header}</header>
+      <div className="layout-main">
+        <aside className="layout-sidebar">{sidebar}</aside>
+        <main className="layout-content">{content}</main>
+      </div>
+      <footer className="layout-footer">{footer}</footer>
+    </div>
+  );
+};
 
-### Slot Multipli
-
-Quando servono più punti di inserimento, passa elementi React come prop:
-
-```tsx
-<Layout header={<Header />} sidebar={<Sidebar />} main={<Main />} />
+// Usage with specific slots
+const App = () => {
+  return (
+    <Layout
+      header={<Navigation />}
+      sidebar={<Sidebar />}
+      content={<MainContent />}
+      footer={<Footer />}
+    />
+  );
+};
 ```
 
-### Gerarchia di composizione
-
-L'albero dei componenti mostra come l'applicazione si scompone in sottosistemi:
+### Gerarchia di Composizione dei Componenti
 
 ```mermaid
 graph TD
@@ -77,128 +131,677 @@ graph TD
     E1 --> E3[Chart]
     E1 --> E4[DataTable]
     
-    style A fill:#845ef7
-    style B fill:#4dabf7
-    style E1 fill:#51cf66
+```
+
+### Pattern di Componenti Riutilizzabili
+
+```jsx
+// Generic Button Component with Variants
+const Button = ({ 
+  variant = 'primary', 
+  size = 'medium',
+  disabled = false,
+  loading = false,
+  icon,
+  children,
+  onClick,
+  ...rest 
+}) => {
+  const classNames = `btn btn-${variant} btn-${size} ${disabled ? 'disabled' : ''}`;
+  
+  return (
+    <button 
+      className={classNames}
+      disabled={disabled || loading}
+      onClick={onClick}
+      {...rest}
+    >
+      {loading && <Spinner size="small" />}
+      {icon && <span className="btn-icon">{icon}</span>}
+      {children}
+    </button>
+  );
+};
+
+// Multiple Variant Usages
+const ButtonShowcase = () => {
+  return (
+    <div>
+      <Button variant="primary">Primary Button</Button>
+      <Button variant="secondary">Secondary Button</Button>
+      <Button variant="danger" icon={<TrashIcon />}>Delete</Button>
+      <Button variant="success" loading>Saving...</Button>
+      <Button variant="outline" size="small">Small Button</Button>
+      <Button variant="link" size="large">Large Link</Button>
+    </div>
+  );
+};
+```
+
+### Pattern del Componente Polimorfico
+
+```jsx
+// Component that can render as different elements
+const Text = ({ 
+  as: Component = 'span', 
+  variant = 'body',
+  children,
+  ...props 
+}) => {
+  const classNames = `text text-${variant}`;
+  
+  return (
+    <Component className={classNames} {...props}>
+      {children}
+    </Component>
+  );
+};
+
+// Usage: Same component, different rendered elements
+const TextExamples = () => {
+  return (
+    <>
+      <Text as="h1" variant="heading">Main Title</Text>
+      <Text as="h2" variant="subheading">Subtitle</Text>
+      <Text as="p" variant="body">Paragraph text</Text>
+      <Text as="span" variant="caption">Caption text</Text>
+      <Text as="label" variant="label">Form label</Text>
+    </>
+  );
+};
+```
+
+### Composizione con Funzioni di Render
+
+```jsx
+const List = ({ items, renderItem, renderEmpty }) => {
+  if (items.length === 0) {
+    return renderEmpty ? renderEmpty() : <p>No items</p>;
+  }
+  
+  return (
+    <ul className="list">
+      {items.map((item, index) => (
+        <li key={item.id || index}>
+          {renderItem(item, index)}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+// Usage with custom render functions
+const UserList = () => {
+  const users = [
+    { id: 1, name: 'Marco', role: 'Admin' },
+    { id: 2, name: 'Giulia', role: 'User' }
+  ];
+  
+  return (
+    <List
+      items={users}
+      renderItem={(user) => (
+        <div>
+          <strong>{user.name}</strong> - {user.role}
+        </div>
+      )}
+      renderEmpty={() => (
+        <div className="empty-state">
+          <p>No users found</p>
+          <button>Add User</button>
+        </div>
+      )}
+    />
+  );
+};
 ```
 
 ---
 
-## 2. Prop Drilling: Problem and Solutions
+## 2. Prop Drilling: Problema e Soluzioni
 
-### Il Problema
+### Comprendere il Prop Drilling
 
-Passare una prop attraverso molti livelli di componenti che non la usano direttamente porta a codice fragile e accoppiato.
+Il **prop drilling** si verifica quando i dati devono attraversare più livelli di componenti per raggiungere componenti profondamente annidati, generando oneri di manutenzione e accoppiamento tra componenti non correlati.
 
 ```mermaid
 graph TD
-    A[App - dati utente] -->|props.user| B[Dashboard]
+    A[App - user data] -->|props.user| B[Dashboard]
     B -->|props.user| C[Sidebar]
     C -->|props.user| D[UserMenu]
     D -->|props.user| E[UserAvatar]
     
-    style A fill:#ff6b6b
-    style B fill:#ffd43b
-    style C fill:#ffd43b
-    style D fill:#ffd43b
-    style E fill:#51cf66
     
-    F[App con Context] -.Context.-> G[UserAvatar]
-    style F fill:#51cf66
-    style G fill:#51cf66
+    F[App with Context] -.Context.-> G[UserAvatar]
 ```
 
-### Soluzioni
+### Dimostrazione del Prop Drilling
 
-1. **Composizione**: porta i dati più vicino al consumer tramite children o slot.
-2. **Context API** per dati globali (tema, autenticazione, lingua).
-3. **State management** dedicato (Zustand, Redux, Jotai) per applicazioni grandi.
+```jsx
+// ❌ PROBLEM: Excessive prop drilling
+const App = () => {
+  const [user, setUser] = useState({ name: 'Marco', theme: 'dark' });
+  
+  return <Dashboard user={user} setUser={setUser} />;
+};
 
-### Quando Usare Cosa
+const Dashboard = ({ user, setUser }) => {
+  // Dashboard doesn't use user, just passes it down
+  return (
+    <div>
+      <Sidebar user={user} setUser={setUser} />
+      <MainContent />
+    </div>
+  );
+};
 
-| Profondità | Frequenza | Soluzione |
-|-----------|-----------|-----------|
-| 1–2 livelli | Qualsiasi | Props normali |
-| 3+ livelli | Bassa | Composizione/children |
-| 3+ livelli | Alta | Context |
-| App-wide | Alta | Store dedicato |
+const Sidebar = ({ user, setUser }) => {
+  // Sidebar doesn't use user, just passes it down
+  return (
+    <aside>
+      <Navigation user={user} />
+      <UserSection user={user} setUser={setUser} />
+    </aside>
+  );
+};
+
+const UserSection = ({ user, setUser }) => {
+  // Finally used here!
+  return (
+    <div>
+      <UserAvatar user={user} />
+      <UserSettings user={user} setUser={setUser} />
+    </div>
+  );
+};
+```
+
+### Soluzione 1: Context API
+
+```jsx
+// ✅ SOLUTION: Context eliminates prop drilling
+import { createContext, useContext, useState } from 'react';
+
+const UserContext = createContext();
+
+// Provider at top level
+const UserProvider = ({ children }) => {
+  const [user, setUser] = useState({ name: 'Marco', theme: 'dark' });
+  
+  const value = {
+    user,
+    setUser,
+    updateTheme: (theme) => setUser(prev => ({ ...prev, theme })),
+    updateName: (name) => setUser(prev => ({ ...prev, name }))
+  };
+  
+  return (
+    <UserContext.Provider value={value}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+// Custom hook for consumption
+const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within UserProvider');
+  }
+  return context;
+};
+
+// App structure - no props needed
+const App = () => {
+  return (
+    <UserProvider>
+      <Dashboard />
+    </UserProvider>
+  );
+};
+
+const Dashboard = () => {
+  // No user props needed
+  return (
+    <div>
+      <Sidebar />
+      <MainContent />
+    </div>
+  );
+};
+
+const Sidebar = () => {
+  // No user props needed
+  return (
+    <aside>
+      <Navigation />
+      <UserSection />
+    </aside>
+  );
+};
+
+const UserSection = () => {
+  // Access user directly from context
+  const { user, updateTheme } = useUser();
+  
+  return (
+    <div>
+      <UserAvatar user={user} />
+      <button onClick={() => updateTheme('light')}>
+        Switch Theme
+      </button>
+    </div>
+  );
+};
+```
+
+### Soluzione 2: Composizione dei Componenti
+
+```jsx
+// ✅ SOLUTION: Composition with children
+const App = () => {
+  const [user, setUser] = useState({ name: 'Marco' });
+  
+  return (
+    <Dashboard>
+      <Sidebar>
+        <Navigation />
+        {/* User components receive user directly */}
+        <UserSection user={user} setUser={setUser} />
+      </Sidebar>
+      <MainContent />
+    </Dashboard>
+  );
+};
+
+// Dashboard and Sidebar don't need to know about user
+const Dashboard = ({ children }) => {
+  return <div className="dashboard">{children}</div>;
+};
+
+const Sidebar = ({ children }) => {
+  return <aside className="sidebar">{children}</aside>;
+};
+```
+
+### Soluzione 3: Librerie di State Management
+
+```jsx
+// ✅ SOLUTION: External state management (e.g., Zustand)
+import create from 'zustand';
+
+const useUserStore = create((set) => ({
+  user: { name: 'Marco', theme: 'dark' },
+  setUser: (user) => set({ user }),
+  updateTheme: (theme) => set((state) => ({
+    user: { ...state.user, theme }
+  }))
+}));
+
+// Any component can access without props
+const UserAvatar = () => {
+  const user = useUserStore((state) => state.user);
+  return <img src={user.avatar} alt={user.name} />;
+};
+
+const ThemeToggle = () => {
+  const { user, updateTheme } = useUserStore();
+  return (
+    <button onClick={() => updateTheme(
+      user.theme === 'dark' ? 'light' : 'dark'
+    )}>
+      Toggle Theme
+    </button>
+  );
+};
+```
+
+### Confronto: Soluzioni al Prop Drilling
+
+```
+┌────────────────────────────────────────────────┐
+│         Solution Comparison Matrix             │
+├────────────────────────────────────────────────┤
+│                                                │
+│  Context API                                   │
+│  ✅ Built-in React solution                    │
+│  ✅ No external dependencies                   │
+│  ⚠️  Can cause unnecessary re-renders          │
+│  ⚠️  Requires provider wrapping                │
+│                                                │
+│  Component Composition                         │
+│  ✅ Most flexible                              │
+│  ✅ Best performance                           │
+│  ⚠️  Requires architectural planning           │
+│                                                │
+│  State Management (Redux/Zustand)              │
+│  ✅ Scalable for large apps                    │
+│  ✅ DevTools and middleware                    │
+│  ⚠️  Additional learning curve                 │
+│  ⚠️  External dependency                       │
+│                                                │
+└────────────────────────────────────────────────┘
+```
+
+### Quando Usare Ciascuna Soluzione
+
+```jsx
+// Use CONTEXT when:
+// - Truly global data (theme, auth, language)
+// - Data needed by many components at different levels
+// - Data changes infrequently
+
+// Use COMPOSITION when:
+// - Layout and structure are primary concerns
+// - Parent-child relationship is natural
+// - Maximum flexibility needed
+
+// Use STATE MANAGEMENT when:
+// - Large-scale application
+// - Complex state interactions
+// - Need for time-travel debugging
+// - Multiple independent state slices
+```
 
 ---
 
-## 3. State Elevation Strategies
+## 3. Strategie di Elevazione dello State
 
-### Stato Locale vs Sollevato
+### Lifting State Up: Fondamenti Teorici
 
-- **Locale**: lo stato vive nel componente che lo usa.
-- **Sollevato**: lo stato si trova nell'antenato comune di tutti i componenti che ne hanno bisogno.
+L'**elevazione dello state** si riferisce allo spostamento dello state dai componenti figli verso l'antenato comune più vicino, facilitando la condivisione e la sincronizzazione dei dati tra componenti fratelli.
 
 ```mermaid
 graph TD
-    A[Componente Padre - Stato condiviso] --> B[Figlio A]
-    A --> C[Figlio B]
+    A[Parent Component - Shared State] --> B[Child A]
+    A --> C[Child B]
     
     B -.setState via callback.-> A
     C -.setState via callback.-> A
     
-    D[Prima: Stati separati] --> E[Figlio A - Stato locale]
-    D --> F[Figlio B - Stato locale]
+    D[Before: Separate States] --> E[Child A - Local State]
+    D --> F[Child B - Local State]
     
-    style A fill:#51cf66
-    style D fill:#ff6b6b
 ```
 
-### Regola Pratica
+### Problema: State Non Coordinato
 
-Mantieni lo stato il più vicino possibile a dove viene usato. Sollevalo solo quando due o più rami dell'albero hanno bisogno della stessa fonte di verità.
-
-```tsx
-function Genitore() {
-  const [filtro, setFiltro] = useState('');
+```jsx
+// ❌ PROBLEM: Independent states, no synchronization
+const TemperatureInput = ({ scale }) => {
+  const [temperature, setTemperature] = useState('');
+  
   return (
-    <>
-      <BarraRicerca valore={filtro} onChange={setFiltro} />
-      <ListaFiltrata filtro={filtro} />
-    </>
+    <div>
+      <label>Temperature in {scale}:</label>
+      <input
+        value={temperature}
+        onChange={(e) => setTemperature(e.target.value)}
+      />
+    </div>
   );
-}
+};
+
+const Calculator = () => {
+  return (
+    <div>
+      <TemperatureInput scale="Celsius" />
+      <TemperatureInput scale="Fahrenheit" />
+      {/* These inputs are not synchronized! */}
+    </div>
+  );
+};
 ```
 
-### Inversione del Controllo
+### Soluzione: State Elevato
 
-Se uno stato deve essere controllabile dall'esterno, esponilo come prop opzionale: si parla di **componenti controllati/non controllati**.
+```jsx
+// ✅ SOLUTION: State lifted to parent
+const TemperatureInput = ({ scale, temperature, onTemperatureChange }) => {
+  return (
+    <div>
+      <label>Temperature in {scale}:</label>
+      <input
+        value={temperature}
+        onChange={(e) => onTemperatureChange(e.target.value)}
+      />
+    </div>
+  );
+};
 
-### Albero decisionale per il sollevamento dello stato
+const Calculator = () => {
+  const [temperature, setTemperature] = useState('');
+  const [scale, setScale] = useState('celsius');
+  
+  const handleCelsiusChange = (temp) => {
+    setScale('celsius');
+    setTemperature(temp);
+  };
+  
+  const handleFahrenheitChange = (temp) => {
+    setScale('fahrenheit');
+    setTemperature(temp);
+  };
+  
+  const celsius = scale === 'fahrenheit' 
+    ? ((parseFloat(temperature) - 32) * 5/9).toFixed(2)
+    : temperature;
+    
+  const fahrenheit = scale === 'celsius'
+    ? (parseFloat(temperature) * 9/5 + 32).toFixed(2)
+    : temperature;
+  
+  return (
+    <div>
+      <TemperatureInput
+        scale="Celsius"
+        temperature={celsius}
+        onTemperatureChange={handleCelsiusChange}
+      />
+      <TemperatureInput
+        scale="Fahrenheit"
+        temperature={fahrenheit}
+        onTemperatureChange={handleFahrenheitChange}
+      />
+      <BoilingVerdict celsius={parseFloat(celsius)} />
+    </div>
+  );
+};
+```
+
+### Albero Decisionale per l'Elevazione dello State
 
 ```mermaid
 graph TD
-    A[Serve condividere lo stato?] -->|Sì| B[Trovare l'antenato comune]
-    A -->|No| C[Mantenere lo stato locale]
+    A[Need to share state?] -->|Yes| B[Find common ancestor]
+    A -->|No| C[Keep state local]
     
-    B --> D[Sollevare lo stato verso l'antenato]
-    D --> E[Passare lo stato come props]
-    D --> F[Passare i setter come callback]
+    B --> D[Lift state to ancestor]
+    D --> E[Pass state as props]
+    D --> F[Pass setters as callbacks]
     
-    C --> G[useState nel componente]
+    C --> G[useState in component]
     
-    H{Più livelli di profondità?} -->|Sì| I[Considerare Context]
-    H -->|No| J[Le props vanno bene]
+    H{Multiple levels deep?} -->|Yes| I[Consider Context]
+    H -->|No| J[Props are fine]
     
-    style B fill:#ffd43b
-    style D fill:#51cf66
-    style I fill:#4dabf7
+```
+
+### Esempio Complesso: Carrello della Spesa
+
+```jsx
+const ShoppingCart = () => {
+  const [cartItems, setCartItems] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  
+  const addToCart = (product) => {
+    setCartItems(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) {
+        return prev.map(item =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
+  };
+  
+  const removeFromCart = (productId) => {
+    setCartItems(prev => prev.filter(item => item.id !== productId));
+  };
+  
+  const updateQuantity = (productId, quantity) => {
+    if (quantity === 0) {
+      removeFromCart(productId);
+      return;
+    }
+    setCartItems(prev =>
+      prev.map(item =>
+        item.id === productId ? { ...item, quantity } : item
+      )
+    );
+  };
+  
+  const totalPrice = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  
+  const totalItems = cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  );
+  
+  return (
+    <div className="shopping-cart">
+      <Header cartItemCount={totalItems} />
+      
+      <div className="main-content">
+        <Sidebar
+          selectedCategory={selectedCategory}
+          onCategoryChange={setSelectedCategory}
+        />
+        
+        <ProductList
+          category={selectedCategory}
+          onAddToCart={addToCart}
+        />
+        
+        <CartSummary
+          items={cartItems}
+          totalPrice={totalPrice}
+          onUpdateQuantity={updateQuantity}
+          onRemoveItem={removeFromCart}
+        />
+      </div>
+    </div>
+  );
+};
+
+// Child components receive data and callbacks
+const Header = ({ cartItemCount }) => {
+  return (
+    <header>
+      <h1>E-Commerce</h1>
+      <div className="cart-icon">
+        🛒 <span className="badge">{cartItemCount}</span>
+      </div>
+    </header>
+  );
+};
+
+const ProductList = ({ category, onAddToCart }) => {
+  const products = useProducts(category);
+  
+  return (
+    <div className="product-list">
+      {products.map(product => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          onAddToCart={onAddToCart}
+        />
+      ))}
+    </div>
+  );
+};
+
+const CartSummary = ({ items, totalPrice, onUpdateQuantity, onRemoveItem }) => {
+  return (
+    <div className="cart-summary">
+      <h3>Your Cart</h3>
+      {items.map(item => (
+        <CartItem
+          key={item.id}
+          item={item}
+          onUpdateQuantity={onUpdateQuantity}
+          onRemove={onRemoveItem}
+        />
+      ))}
+      <div className="total">
+        Total: €{totalPrice.toFixed(2)}
+      </div>
+      <button className="checkout-btn">Checkout</button>
+    </div>
+  );
+};
+```
+
+### Principio della Colocazione dello State
+
+```jsx
+// ✅ GOOD: Keep state as close as possible to where it's used
+const ProductCard = ({ product, onAddToCart }) => {
+  // This state only affects this card
+  const [showDetails, setShowDetails] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  
+  const handleAddToCart = () => {
+    onAddToCart({ ...product, quantity });
+    setQuantity(1); // Reset after adding
+  };
+  
+  return (
+    <div className="product-card">
+      <img src={product.image} alt={product.name} />
+      <h3>{product.name}</h3>
+      <p>€{product.price}</p>
+      
+      <button onClick={() => setShowDetails(!showDetails)}>
+        {showDetails ? 'Hide' : 'Show'} Details
+      </button>
+      
+      {showDetails && (
+        <div className="details">
+          <p>{product.description}</p>
+        </div>
+      )}
+      
+      <input
+        type="number"
+        value={quantity}
+        onChange={(e) => setQuantity(parseInt(e.target.value))}
+        min="1"
+      />
+      <button onClick={handleAddToCart}>Add to Cart</button>
+    </div>
+  );
+};
 ```
 
 ---
 
-## 4. Component Architecture and Organization
+## 4. Architettura e Organizzazione dei Componenti
 
-### Organizzazione delle Cartelle
+### Principi Architetturali
 
-Un'architettura solida si basa sulla separazione delle responsabilità e su una struttura di cartelle prevedibile:
+Un'architettura efficace dei componenti aderisce ai **principi SOLID**, enfatizzando la singola responsabilità, la segregazione delle interfacce e l'inversione delle dipendenze per ottenere codebase manutenibili e scalabili.
 
 ```mermaid
 graph TD
-    A[Radice del progetto] --> B[src/]
+    A[Project Root] --> B[src/]
     B --> C[components/]
     B --> D[features/]
     B --> E[hooks/]
@@ -218,280 +821,1918 @@ graph TD
     D2 --> D2B[hooks/]
     D2 --> D2C[utils/]
     
-    style A fill:#845ef7
-    style B fill:#4dabf7
-    style D fill:#51cf66
 ```
 
+### Struttura delle Cartelle Raccomandata
+
 ```
-src/
-  components/    # componenti riutilizzabili
-  features/      # raggruppamenti per dominio
-  hooks/         # custom hooks
-  lib/           # utility, client API
-  pages/         # punti d'ingresso per il routing
-```
-
-### Naming
-
-- File e cartelle in `kebab-case` o `PascalCase` per i componenti.
-- Un componente per file di solito; co-locazione di stili e test.
-
-### Pubblico vs Privato
-
-Esporta solo ciò che fa parte dell'API pubblica della feature. Usa un `index.ts` di barrel per isolare i dettagli interni.
-
----
-
-## 5. Presentational vs Container Components
-
-### Pattern Storico
-
-- **Presentational**: solo UI, riceve dati e callback via props.
-- **Container**: gestisce stato, fetch, side effect; passa dati al presentational.
-
-```mermaid
-graph LR
-    A[Componente Container] -->|Dati & Logica| B[Componente Presentational]
-    
-    C[Chiamate API] --> A
-    D[Gestione dello stato] --> A
-    E[Logica di business] --> A
-    
-    B --> F[Rendering puro]
-    B --> G[Stile & Layout]
-    B --> H[Nessun side effect]
-    
-    style A fill:#ff6b6b
-    style B fill:#51cf66
-```
-
-### Stato Attuale
-
-Con gli hooks la separazione netta è meno rigida: spesso si scrivono componenti misti, mentre la logica viene estratta in custom hooks.
-
-### Quando Mantenere la Separazione
-
-- Quando lo stesso componente presentational è usato in più contesti con dati diversi.
-- Quando vuoi testare l'UI in isolamento dallo stato.
-
----
-
-## 6. Higher-Order Components (HOCs)
-
-### Definizione
-
-Una funzione che prende un componente e ne restituisce uno nuovo arricchito di funzionalità:
-
-```mermaid
-graph LR
-    A[Componente] --> B[Funzione HOC]
-    C[Props/Logica aggiuntiva] --> B
-    B --> D[Componente potenziato]
-    
-    style B fill:#845ef7
-    style D fill:#51cf66
-```
-
-```tsx
-function withLogger<P>(Componente: React.ComponentType<P>) {
-  return function Wrapped(props: P) {
-    useEffect(() => { console.log('rendered'); });
-    return <Componente {...props} />;
-  };
-}
+project/
+├── src/
+│   ├── components/           # Shared/common components
+│   │   ├── common/
+│   │   │   ├── Button/
+│   │   │   │   ├── Button.jsx
+│   │   │   │   ├── Button.test.jsx
+│   │   │   │   ├── Button.module.css
+│   │   │   │   └── index.js
+│   │   │   ├── Input/
+│   │   │   └── Modal/
+│   │   └── layout/
+│   │       ├── Header/
+│   │       ├── Footer/
+│   │       └── Sidebar/
+│   │
+│   ├── features/             # Feature-based modules
+│   │   ├── auth/
+│   │   │   ├── components/
+│   │   │   │   ├── LoginForm/
+│   │   │   │   └── RegisterForm/
+│   │   │   ├── hooks/
+│   │   │   │   └── useAuth.js
+│   │   │   ├── services/
+│   │   │   │   └── authService.js
+│   │   │   └── contexts/
+│   │   │       └── AuthContext.jsx
+│   │   │
+│   │   ├── products/
+│   │   │   ├── components/
+│   │   │   │   ├── ProductList/
+│   │   │   │   ├── ProductCard/
+│   │   │   │   └── ProductDetails/
+│   │   │   ├── hooks/
+│   │   │   │   ├── useProducts.js
+│   │   │   │   └── useProductFilters.js
+│   │   │   └── services/
+│   │   │       └── productService.js
+│   │   │
+│   │   └── dashboard/
+│   │
+│   ├── hooks/                # Global custom hooks
+│   │   ├── useLocalStorage.js
+│   │   ├── useDebounce.js
+│   │   └── useWindowSize.js
+│   │
+│   ├── contexts/             # Global contexts
+│   │   ├── ThemeContext.jsx
+│   │   └── UserContext.jsx
+│   │
+│   ├── services/             # API and external services
+│   │   ├── api.js
+│   │   └── analytics.js
+│   │
+│   ├── utils/                # Utility functions
+│   │   ├── formatters.js
+│   │   ├── validators.js
+│   │   └── constants.js
+│   │
+│   ├── types/                # TypeScript types
+│   │   └── index.ts
+│   │
+│   ├── App.jsx
+│   └── main.jsx
+│
+└── package.json
 ```
 
-### Quando Usarli Ancora
+### Organizzazione dei File dei Componenti
 
-Gli HOC sono utili per integrazioni con librerie legacy (`withRouter`, `connect`). Per nuovo codice, **custom hooks** o **render props** sono di solito più chiari.
+```jsx
+// ✅ RECOMMENDED: Separate file structure
+// components/common/Button/Button.jsx
+import React from 'react';
+import PropTypes from 'prop-types';
+import styles from './Button.module.css';
 
----
-
-## 7. Render Props Pattern
-
-### Concetto
-
-Un componente accetta una funzione come prop (o come `children`) che descrive *cosa* renderizzare, ricevendo dei dati dal componente stesso.
-
-```mermaid
-graph LR
-    A[Componente con logica] -->|funzione render| B[Rendering dinamico]
-    C[Props] --> B
-    D[Stato] --> A
-    
-    style A fill:#4dabf7
-    style B fill:#51cf66
-```
-
-```tsx
-function PosizioneMouse({ children }: { children: (pos: { x: number; y: number }) => ReactNode }) {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  useEffect(() => {
-    const h = (e: MouseEvent) => setPos({ x: e.clientX, y: e.clientY });
-    window.addEventListener('mousemove', h);
-    return () => window.removeEventListener('mousemove', h);
-  }, []);
-  return <>{children(pos)}</>;
-}
-
-<PosizioneMouse>
-  {({ x, y }) => <div>Mouse: {x}, {y}</div>}
-</PosizioneMouse>
-```
-
-### Quando Usarlo
-
-Quando vuoi che il consumer decida come visualizzare i dati esposti dal componente. I custom hooks spesso lo sostituiscono con un'API più pulita.
-
----
-
-## 8. Compound Components Pattern
-
-### Concetto
-
-Più componenti collegati che lavorano insieme, condividendo stato implicito tramite context.
-
-```mermaid
-graph TD
-    A[Componente Padre - Stato condiviso] --> B[Figlio 1]
-    A --> C[Figlio 2]
-    A --> D[Figlio 3]
-    
-    B -.Context implicito.-> A
-    C -.Context implicito.-> A
-    D -.Context implicito.-> A
-    
-    style A fill:#845ef7
-    style B fill:#51cf66
-    style C fill:#51cf66
-    style D fill:#51cf66
-```
-
-```tsx
-const TabsContext = createContext<{ attivo: string; setAttivo: (id: string) => void } | null>(null);
-
-function Tabs({ predefinito, children }) {
-  const [attivo, setAttivo] = useState(predefinito);
+export const Button = ({ 
+  variant = 'primary',
+  size = 'medium',
+  children,
+  ...props 
+}) => {
   return (
-    <TabsContext.Provider value={{ attivo, setAttivo }}>
-      <div className="tabs">{children}</div>
-    </TabsContext.Provider>
-  );
-}
-
-function Tab({ id, children }) {
-  const ctx = useContext(TabsContext)!;
-  return (
-    <button
-      data-attivo={ctx.attivo === id}
-      onClick={() => ctx.setAttivo(id)}
+    <button 
+      className={`${styles.button} ${styles[variant]} ${styles[size]}`}
+      {...props}
     >
       {children}
     </button>
   );
+};
+
+Button.propTypes = {
+  variant: PropTypes.oneOf(['primary', 'secondary', 'danger']),
+  size: PropTypes.oneOf(['small', 'medium', 'large']),
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func
+};
+
+Button.defaultProps = {
+  variant: 'primary',
+  size: 'medium'
+};
+
+// components/common/Button/index.js
+export { Button } from './Button';
+export { default as Button } from './Button'; // For default imports
+```
+
+### Convenzioni di Denominazione
+
+```
+┌────────────────────────────────────────────────┐
+│          Component Naming Standards            │
+├────────────────────────────────────────────────┤
+│                                                │
+│  Component Files:  PascalCase                  │
+│  ✅ Button.jsx, UserProfile.jsx                │
+│  ❌ button.jsx, userProfile.jsx                │
+│                                                │
+│  Hook Files:  camelCase with 'use' prefix      │
+│  ✅ useAuth.js, useLocalStorage.js             │
+│  ❌ UseAuth.js, auth.js                        │
+│                                                │
+│  Utility Files:  camelCase                     │
+│  ✅ formatDate.js, apiHelpers.js               │
+│  ❌ FormatDate.js, API_helpers.js              │
+│                                                │
+│  Context Files:  PascalCase with 'Context'     │
+│  ✅ AuthContext.jsx, ThemeContext.jsx          │
+│  ❌ auth.jsx, theme-context.jsx                │
+│                                                │
+│  Constants:  UPPER_SNAKE_CASE                  │
+│  ✅ API_BASE_URL, MAX_RETRY_COUNT              │
+│  ❌ apiBaseUrl, maxRetryCount                  │
+│                                                │
+└────────────────────────────────────────────────┘
+```
+
+### Categorie di Componenti
+
+```jsx
+// 1. UI Components (Presentational)
+// Location: src/components/common/
+const Button = ({ children, onClick, variant }) => {
+  return (
+    <button className={`btn btn-${variant}`} onClick={onClick}>
+      {children}
+    </button>
+  );
+};
+
+// 2. Feature Components
+// Location: src/features/[feature]/components/
+const ProductList = () => {
+  const { products, loading } = useProducts();
+  
+  if (loading) return <LoadingSpinner />;
+  
+  return (
+    <div className="product-list">
+      {products.map(product => (
+        <ProductCard key={product.id} product={product} />
+      ))}
+    </div>
+  );
+};
+
+// 3. Layout Components
+// Location: src/components/layout/
+const DashboardLayout = ({ children }) => {
+  return (
+    <div className="dashboard-layout">
+      <Header />
+      <Sidebar />
+      <main className="content">{children}</main>
+      <Footer />
+    </div>
+  );
+};
+
+// 4. Page Components
+// Location: src/pages/ or src/features/[feature]/pages/
+const ProductsPage = () => {
+  return (
+    <DashboardLayout>
+      <ProductList />
+      <ProductFilters />
+    </DashboardLayout>
+  );
+};
+
+// 5. Container Components (with logic)
+// Location: src/features/[feature]/containers/
+const ProductListContainer = () => {
+  const [filters, setFilters] = useState({});
+  const { products, loading } = useProducts(filters);
+  
+  return (
+    <ProductListPresentation
+      products={products}
+      loading={loading}
+      filters={filters}
+      onFilterChange={setFilters}
+    />
+  );
+};
+```
+
+### Pattern dei Barrel Export
+
+```jsx
+// components/common/index.js
+export { Button } from './Button';
+export { Input } from './Input';
+export { Modal } from './Modal';
+export { Card } from './Card';
+
+// Usage: Clean imports
+import { Button, Input, Modal } from '@/components/common';
+
+// Instead of:
+import { Button } from '@/components/common/Button/Button';
+import { Input } from '@/components/common/Input/Input';
+import { Modal } from '@/components/common/Modal/Modal';
+```
+
+### Configurazione degli Alias di Percorso
+
+```javascript
+// vite.config.js
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
+
+export default defineConfig({
+  plugins: [react()],
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@features': path.resolve(__dirname, './src/features'),
+      '@hooks': path.resolve(__dirname, './src/hooks'),
+      '@utils': path.resolve(__dirname, './src/utils')
+    }
+  }
+});
+
+// Usage in components
+import { Button } from '@components/common';
+import { useAuth } from '@hooks/useAuth';
+import { formatDate } from '@utils/formatters';
+```
+
+---
+
+## 5. Componenti Presentazionali vs Container
+
+### Dicotomia Architetturale
+
+Questo pattern separa le **questioni di presentazione** (come appaiono le cose) dalle **questioni di comportamento** (come funzionano le cose), promuovendo la riusabilità e la testabilità.
+
+```mermaid
+graph LR
+    A[Container Component] -->|Data & Logic| B[Presentational Component]
+    
+    C[API Calls] --> A
+    D[State Management] --> A
+    E[Business Logic] --> A
+    
+    B --> F[Pure Rendering]
+    B --> G[Style & Layout]
+    B --> H[No Side Effects]
+    
+```
+
+### Caratteristiche dei Componenti Presentazionali
+
+```
+┌────────────────────────────────────────────────┐
+│       Presentational Components                │
+├────────────────────────────────────────────────┤
+│  • Concerned with appearance                   │
+│  • Receive data via props                      │
+│  • Rarely have internal state                  │
+│  • Written as functional components            │
+│  • Examples: Button, Card, List, Avatar        │
+└────────────────────────────────────────────────┘
+```
+
+```jsx
+// ✅ Presentational Component Example
+const UserCard = ({ user, onEdit, onDelete }) => {
+  return (
+    <div className="user-card">
+      <img src={user.avatar} alt={user.name} />
+      <h3>{user.name}</h3>
+      <p>{user.email}</p>
+      <p className="role">{user.role}</p>
+      
+      <div className="actions">
+        <button onClick={() => onEdit(user.id)}>Edit</button>
+        <button onClick={() => onDelete(user.id)}>Delete</button>
+      </div>
+    </div>
+  );
+};
+
+// Pure presentation - no business logic
+const StatCard = ({ title, value, trend, icon }) => {
+  const trendClass = trend > 0 ? 'positive' : 'negative';
+  
+  return (
+    <div className="stat-card">
+      <div className="icon">{icon}</div>
+      <h4>{title}</h4>
+      <p className="value">{value}</p>
+      <span className={`trend ${trendClass}`}>
+        {trend > 0 ? '↑' : '↓'} {Math.abs(trend)}%
+      </span>
+    </div>
+  );
+};
+```
+
+### Caratteristiche dei Componenti Container
+
+```
+┌────────────────────────────────────────────────┐
+│         Container Components                   │
+├────────────────────────────────────────────────┤
+│  • Concerned with behavior                     │
+│  • Provide data to presentational components   │
+│  • Contain business logic                      │
+│  • Make API calls                              │
+│  • Manage state                                │
+│  • Examples: UserListContainer, Dashboard      │
+└────────────────────────────────────────────────┘
+```
+
+```jsx
+// ✅ Container Component Example
+const UserListContainer = () => {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filters, setFilters] = useState({ role: 'all', search: '' });
+  
+  useEffect(() => {
+    fetchUsers();
+  }, [filters]);
+  
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        body: JSON.stringify(filters)
+      });
+      const data = await response.json();
+      setUsers(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleEdit = async (userId) => {
+    // Business logic for editing
+    const user = users.find(u => u.id === userId);
+    // Open modal, navigate, etc.
+  };
+  
+  const handleDelete = async (userId) => {
+    // Business logic for deletion
+    if (window.confirm('Are you sure?')) {
+      await fetch(`/api/users/${userId}`, { method: 'DELETE' });
+      setUsers(users.filter(u => u.id !== userId));
+    }
+  };
+  
+  const handleFilterChange = (newFilters) => {
+    setFilters(prev => ({ ...prev, ...newFilters }));
+  };
+  
+  // Render presentational component
+  return (
+    <UserListPresentation
+      users={users}
+      loading={loading}
+      error={error}
+      filters={filters}
+      onEdit={handleEdit}
+      onDelete={handleDelete}
+      onFilterChange={handleFilterChange}
+    />
+  );
+};
+
+// Presentational Component
+const UserListPresentation = ({
+  users,
+  loading,
+  error,
+  filters,
+  onEdit,
+  onDelete,
+  onFilterChange
+}) => {
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage message={error} />;
+  
+  return (
+    <div className="user-list">
+      <UserFilters filters={filters} onChange={onFilterChange} />
+      
+      <div className="users">
+        {users.map(user => (
+          <UserCard
+            key={user.id}
+            user={user}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+```
+
+### Esempio Completo del Pattern
+
+```jsx
+// === CONTAINER COMPONENT ===
+const DashboardContainer = () => {
+  const { user } = useAuth();
+  const [stats, setStats] = useState(null);
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  
+  useEffect(() => {
+    loadDashboardData();
+  }, [user.id]);
+  
+  const loadDashboardData = async () => {
+    const [statsData, activityData, notificationsData] = await Promise.all([
+      fetchStats(user.id),
+      fetchRecentActivity(user.id),
+      fetchNotifications(user.id)
+    ]);
+    
+    setStats(statsData);
+    setRecentActivity(activityData);
+    setNotifications(notificationsData);
+  };
+  
+  const handleNotificationDismiss = async (id) => {
+    await dismissNotification(id);
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+  
+  return (
+    <DashboardPresentation
+      user={user}
+      stats={stats}
+      recentActivity={recentActivity}
+      notifications={notifications}
+      onNotificationDismiss={handleNotificationDismiss}
+    />
+  );
+};
+
+// === PRESENTATIONAL COMPONENT ===
+const DashboardPresentation = ({
+  user,
+  stats,
+  recentActivity,
+  notifications,
+  onNotificationDismiss
+}) => {
+  return (
+    <div className="dashboard">
+      <WelcomeBanner user={user} />
+      
+      {stats && (
+        <div className="stats-grid">
+          <StatCard
+            title="Total Sales"
+            value={stats.totalSales}
+            trend={stats.salesTrend}
+            icon="💰"
+          />
+          <StatCard
+            title="New Users"
+            value={stats.newUsers}
+            trend={stats.usersTrend}
+            icon="👥"
+          />
+          <StatCard
+            title="Revenue"
+            value={stats.revenue}
+            trend={stats.revenueTrend}
+            icon="📈"
+          />
+        </div>
+      )}
+      
+      <div className="dashboard-grid">
+        <section className="recent-activity">
+          <h2>Recent Activity</h2>
+          <ActivityList items={recentActivity} />
+        </section>
+        
+        <section className="notifications">
+          <h2>Notifications</h2>
+          <NotificationList
+            items={notifications}
+            onDismiss={onNotificationDismiss}
+          />
+        </section>
+      </div>
+    </div>
+  );
+};
+```
+
+### Alternativa Moderna: Custom Hooks
+
+```jsx
+// Modern approach: Extract logic into custom hooks
+const useDashboard = (userId) => {
+  const [stats, setStats] = useState(null);
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    loadDashboardData();
+  }, [userId]);
+  
+  const loadDashboardData = async () => {
+    setLoading(true);
+    const [statsData, activityData, notificationsData] = await Promise.all([
+      fetchStats(userId),
+      fetchRecentActivity(userId),
+      fetchNotifications(userId)
+    ]);
+    
+    setStats(statsData);
+    setRecentActivity(activityData);
+    setNotifications(notificationsData);
+    setLoading(false);
+  };
+  
+  const dismissNotification = (id) => {
+    setNotifications(notifications.filter(n => n.id !== id));
+  };
+  
+  return {
+    stats,
+    recentActivity,
+    notifications,
+    loading,
+    dismissNotification
+  };
+};
+
+// Component combines hook with presentation
+const Dashboard = () => {
+  const { user } = useAuth();
+  const {
+    stats,
+    recentActivity,
+    notifications,
+    loading,
+    dismissNotification
+  } = useDashboard(user.id);
+  
+  if (loading) return <LoadingSpinner />;
+  
+  return (
+    <div className="dashboard">
+      {/* Presentation markup */}
+    </div>
+  );
+};
+```
+
+---
+
+## 6. Higher-Order Components (HOC)
+
+### Fondamenti Concettuali
+
+Gli **Higher-Order Components** sono funzioni che accettano un componente e restituiscono un componente arricchito con funzionalità aggiuntive, implementando le **cross-cutting concern** attraverso la composizione anziché l'ereditarietà.
+
+```mermaid
+graph LR
+    A[Component] --> B[HOC Function]
+    C[Additional Props/Logic] --> B
+    B --> D[Enhanced Component]
+    
+```
+
+### Pattern HOC di Base
+
+```jsx
+// HOC that adds logging functionality
+const withLogging = (WrappedComponent) => {
+  return (props) => {
+    useEffect(() => {
+      console.log(`${WrappedComponent.name} mounted`);
+      return () => console.log(`${WrappedComponent.name} unmounted`);
+    }, []);
+    
+    useEffect(() => {
+      console.log(`${WrappedComponent.name} props:`, props);
+    }, [props]);
+    
+    return <WrappedComponent {...props} />;
+  };
+};
+
+// Usage
+const UserProfile = ({ name, email }) => {
+  return (
+    <div>
+      <h2>{name}</h2>
+      <p>{email}</p>
+    </div>
+  );
+};
+
+const UserProfileWithLogging = withLogging(UserProfile);
+
+// Now UserProfileWithLogging logs mount/unmount and prop changes
+```
+
+### HOC di Autenticazione
+
+```jsx
+const withAuth = (WrappedComponent) => {
+  return (props) => {
+    const { user, loading } = useAuth();
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+      if (!loading && !user) {
+        navigate('/login');
+      }
+    }, [user, loading, navigate]);
+    
+    if (loading) {
+      return <LoadingSpinner />;
+    }
+    
+    if (!user) {
+      return null;
+    }
+    
+    return <WrappedComponent {...props} user={user} />;
+  };
+};
+
+// Usage: Protect routes
+const Dashboard = ({ user }) => {
+  return <h1>Benvenuto, {user.name}!</h1>;
+};
+
+const ProtectedDashboard = withAuth(Dashboard);
+```
+
+### HOC di Data Fetching
+
+```jsx
+const withData = (WrappedComponent, fetchFn) => {
+  return (props) => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    useEffect(() => {
+      let isCancelled = false;
+      
+      const loadData = async () => {
+        try {
+          setLoading(true);
+          const result = await fetchFn(props);
+          if (!isCancelled) {
+            setData(result);
+          }
+        } catch (err) {
+          if (!isCancelled) {
+            setError(err.message);
+          }
+        } finally {
+          if (!isCancelled) {
+            setLoading(false);
+          }
+        }
+      };
+      
+      loadData();
+      
+      return () => {
+        isCancelled = true;
+      };
+    }, [props.id]); // Re-fetch when ID changes
+    
+    return (
+      <WrappedComponent
+        {...props}
+        data={data}
+        loading={loading}
+        error={error}
+      />
+    );
+  };
+};
+
+// Usage
+const UserDetails = ({ data, loading, error }) => {
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  
+  return (
+    <div>
+      <h2>{data.name}</h2>
+      <p>{data.email}</p>
+    </div>
+  );
+};
+
+const fetchUser = ({ id }) => fetch(`/api/users/${id}`).then(r => r.json());
+const UserDetailsWithData = withData(UserDetails, fetchUser);
+
+// Render: <UserDetailsWithData id={123} />
+```
+
+### Comporre Più HOC
+
+```jsx
+// Multiple HOCs composition
+const EnhancedComponent = compose(
+  withAuth,
+  withLogging,
+  withData(fetchUserData)
+)(BaseComponent);
+
+// Or using functional composition
+const EnhancedComponent = withAuth(
+  withLogging(
+    withData(BaseComponent, fetchUserData)
+  )
+);
+
+// Better readability with helper
+const compose = (...hocs) => (Component) => {
+  return hocs.reduceRight((acc, hoc) => hoc(acc), Component);
+};
+```
+
+### Best Practice per gli HOC
+
+```jsx
+// ✅ GOOD: Pass through unrelated props
+const withAuth = (WrappedComponent) => {
+  return (props) => {
+    const { user } = useAuth();
+    
+    // Pass all props to wrapped component
+    return <WrappedComponent {...props} user={user} />;
+  };
+};
+
+// ✅ GOOD: Display name for debugging
+const withAuth = (WrappedComponent) => {
+  const WithAuth = (props) => {
+    // ... logic
+    return <WrappedComponent {...props} />;
+  };
+  
+  WithAuth.displayName = `withAuth(${getDisplayName(WrappedComponent)})`;
+  
+  return WithAuth;
+};
+
+function getDisplayName(WrappedComponent) {
+  return WrappedComponent.displayName || WrappedComponent.name || 'Component';
 }
 
+// ❌ BAD: Don't mutate the original component
+const withAuth = (WrappedComponent) => {
+  WrappedComponent.prototype.isAuthenticated = true; // DON'T DO THIS
+  return WrappedComponent;
+};
+
+// ❌ BAD: Don't use HOCs inside render
+const MyComponent = () => {
+  // This creates a new component on every render!
+  const EnhancedComponent = withAuth(SomeComponent); // DON'T DO THIS
+  return <EnhancedComponent />;
+};
+```
+
+### Limitazioni degli HOC e Alternative
+
+```
+┌────────────────────────────────────────────────┐
+│            HOC Limitations                     │
+├────────────────────────────────────────────────┤
+│  ❌ Wrapper hell (multiple nested HOCs)        │
+│  ❌ Props collision potential                  │
+│  ❌ Static composition (not dynamic)           │
+│  ❌ Ref forwarding complexity                  │
+│                                                │
+│         Modern Alternatives                    │
+│  ✅ Custom Hooks (preferred for logic)         │
+│  ✅ Render Props (for dynamic composition)     │
+│  ✅ Compound Components (for related UI)       │
+└────────────────────────────────────────────────┘
+```
+
+```jsx
+// HOC approach (legacy)
+const UserListWithData = withData(UserList, fetchUsers);
+
+// Modern approach with hooks (preferred)
+const UserList = () => {
+  const { data, loading, error } = useFetchUsers();
+  
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage error={error} />;
+  
+  return <div>{/* render users */}</div>;
+};
+```
+
+---
+
+## 7. Pattern Render Props
+
+### Definizione del Pattern
+
+Il pattern **Render Props** utilizza una prop il cui valore è una funzione, per determinare dinamicamente cosa renderizzare, abilitando la composizione a runtime e la massima flessibilità.
+
+```mermaid
+graph LR
+    A[Component with Logic] -->|render function| B[Dynamic Rendering]
+    C[Props] --> B
+    D[State] --> A
+    
+```
+
+### Render Props di Base
+
+```jsx
+const Mouse = ({ render }) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  
+  useEffect(() => {
+    const handleMouseMove = (event) => {
+      setPosition({
+        x: event.clientX,
+        y: event.clientY
+      });
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+  
+  return render(position);
+};
+
+// Usage with different render functions
+const App = () => {
+  return (
+    <div>
+      <h1>Mouse Tracker</h1>
+      
+      <Mouse render={({ x, y }) => (
+        <p>Mouse position: {x}, {y}</p>
+      )} />
+      
+      <Mouse render={({ x, y }) => (
+        <div
+          style={{
+            position: 'absolute',
+            left: x,
+            top: y,
+            width: 10,
+            height: 10,
+            backgroundColor: 'red',
+            borderRadius: '50%',
+            transform: 'translate(-50%, -50%)'
+          }}
+        />
+      )} />
+    </div>
+  );
+};
+```
+
+### Pattern Children come Funzione
+
+```jsx
+// Alternative: Use children prop as function
+const DataProvider = ({ url, children }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  useEffect(() => {
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        setData(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        setError(err.message);
+        setLoading(false);
+      });
+  }, [url]);
+  
+  return children({ data, loading, error });
+};
+
+// Usage
+const UserList = () => {
+  return (
+    <DataProvider url="/api/users">
+      {({ data, loading, error }) => {
+        if (loading) return <LoadingSpinner />;
+        if (error) return <ErrorMessage message={error} />;
+        
+        return (
+          <ul>
+            {data.map(user => (
+              <li key={user.id}>{user.name}</li>
+            ))}
+          </ul>
+        );
+      }}
+    </DataProvider>
+  );
+};
+```
+
+### Render Props Complesse: Gestione di un Form
+
+```jsx
+const Form = ({ initialValues, onSubmit, validate, children }) => {
+  const [values, setValues] = useState(initialValues);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleChange = (name) => (event) => {
+    const value = event.target.value;
+    setValues(prev => ({ ...prev, [name]: value }));
+    
+    if (touched[name]) {
+      const error = validate?.[name]?.(value);
+      setErrors(prev => ({ ...prev, [name]: error }));
+    }
+  };
+  
+  const handleBlur = (name) => () => {
+    setTouched(prev => ({ ...prev, [name]: true }));
+    const error = validate?.[name]?.(values[name]);
+    setErrors(prev => ({ ...prev, [name]: error }));
+  };
+  
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      await onSubmit(values);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  return children({
+    values,
+    errors,
+    touched,
+    isSubmitting,
+    handleChange,
+    handleBlur,
+    handleSubmit
+  });
+};
+
+// Usage with flexible rendering
+const LoginForm = () => {
+  const handleSubmit = async (values) => {
+    await login(values);
+  };
+  
+  const validate = {
+    email: (value) => !value ? 'Email required' : null,
+    password: (value) => value.length < 8 ? 'Too short' : null
+  };
+  
+  return (
+    <Form
+      initialValues={{ email: '', password: '' }}
+      onSubmit={handleSubmit}
+      validate={validate}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleChange,
+        handleBlur,
+        handleSubmit
+      }) => (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email</label>
+            <input
+              type="email"
+              value={values.email}
+              onChange={handleChange('email')}
+              onBlur={handleBlur('email')}
+            />
+            {touched.email && errors.email && (
+              <span className="error">{errors.email}</span>
+            )}
+          </div>
+          
+          <div>
+            <label>Password</label>
+            <input
+              type="password"
+              value={values.password}
+              onChange={handleChange('password')}
+              onBlur={handleBlur('password')}
+            />
+            {touched.password && errors.password && (
+              <span className="error">{errors.password}</span>
+            )}
+          </div>
+          
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </button>
+        </form>
+      )}
+    </Form>
+  );
+};
+```
+
+### Render Props vs HOC vs Hooks
+
+```jsx
+// 1. HOC Approach
+const withMousePosition = (Component) => {
+  return (props) => {
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    // ... mouse tracking logic
+    return <Component {...props} mousePosition={position} />;
+  };
+};
+const TrackedComponent = withMousePosition(MyComponent);
+
+// 2. Render Props Approach
+<MouseTracker>
+  {(position) => <MyComponent mousePosition={position} />}
+</MouseTracker>
+
+// 3. Custom Hook Approach (Modern Preferred)
+const useMousePosition = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  // ... mouse tracking logic
+  return position;
+};
+
+const MyComponent = () => {
+  const position = useMousePosition();
+  return <div>Mouse: {position.x}, {position.y}</div>;
+};
+```
+
+### Componente Toggle con Render Props
+
+```jsx
+const Toggle = ({ children, defaultOn = false }) => {
+  const [on, setOn] = useState(defaultOn);
+  
+  const toggle = () => setOn(prev => !prev);
+  const setOnValue = (value) => setOn(value);
+  
+  return children({
+    on,
+    toggle,
+    setOn: setOnValue
+  });
+};
+
+// Multiple different usages
+const App = () => {
+  return (
+    <div>
+      {/* Usage 1: Simple toggle */}
+      <Toggle>
+        {({ on, toggle }) => (
+          <div>
+            {on ? '🌞' : '🌙'}
+            <button onClick={toggle}>Toggle Theme</button>
+          </div>
+        )}
+      </Toggle>
+      
+      {/* Usage 2: Modal */}
+      <Toggle>
+        {({ on, toggle }) => (
+          <>
+            <button onClick={toggle}>Open Modal</button>
+            {on && (
+              <Modal onClose={toggle}>
+                <h2>Modal Content</h2>
+              </Modal>
+            )}
+          </>
+        )}
+      </Toggle>
+      
+      {/* Usage 3: Accordion */}
+      <Toggle defaultOn={true}>
+        {({ on, toggle }) => (
+          <div className="accordion">
+            <button onClick={toggle}>
+              {on ? '▼' : '▶'} Accordion Title
+            </button>
+            {on && <div className="content">Accordion content</div>}
+          </div>
+        )}
+      </Toggle>
+    </div>
+  );
+};
+```
+
+---
+
+## 8. Pattern Compound Components
+
+### Filosofia del Pattern
+
+I **Compound Components** creano relazioni implicite tra componenti genitori e figli, abilitando la condivisione dello state senza prop drilling esplicito, dando luogo ad API dichiarative e intuitive.
+
+```mermaid
+graph TD
+    A[Parent Component - Shared State] --> B[Child 1]
+    A --> C[Child 2]
+    A --> D[Child 3]
+    
+    B -.Implicit Context.-> A
+    C -.Implicit Context.-> A
+    D -.Implicit Context.-> A
+    
+```
+
+### Compound Component di Base: Tabs
+
+```jsx
+const TabsContext = createContext();
+
+const Tabs = ({ children, defaultTab = 0 }) => {
+  const [activeTab, setActiveTab] = useState(defaultTab);
+  
+  return (
+    <TabsContext.Provider value={{ activeTab, setActiveTab }}>
+      <div className="tabs">{children}</div>
+    </TabsContext.Provider>
+  );
+};
+
+const TabList = ({ children }) => {
+  return <div className="tab-list">{children}</div>;
+};
+
+const Tab = ({ index, children }) => {
+  const { activeTab, setActiveTab } = useContext(TabsContext);
+  const isActive = activeTab === index;
+  
+  return (
+    <button
+      className={`tab ${isActive ? 'active' : ''}`}
+      onClick={() => setActiveTab(index)}
+    >
+      {children}
+    </button>
+  );
+};
+
+const TabPanels = ({ children }) => {
+  return <div className="tab-panels">{children}</div>;
+};
+
+const TabPanel = ({ index, children }) => {
+  const { activeTab } = useContext(TabsContext);
+  
+  if (activeTab !== index) return null;
+  
+  return <div className="tab-panel">{children}</div>;
+};
+
+// Compose the compound component
+Tabs.List = TabList;
 Tabs.Tab = Tab;
+Tabs.Panels = TabPanels;
+Tabs.Panel = TabPanel;
+
+// Usage - Declarative and intuitive!
+const App = () => {
+  return (
+    <Tabs defaultTab={0}>
+      <Tabs.List>
+        <Tabs.Tab index={0}>Profile</Tabs.Tab>
+        <Tabs.Tab index={1}>Settings</Tabs.Tab>
+        <Tabs.Tab index={2}>Notifications</Tabs.Tab>
+      </Tabs.List>
+      
+      <Tabs.Panels>
+        <Tabs.Panel index={0}>
+          <h2>Profile Content</h2>
+          <p>Your profile information...</p>
+        </Tabs.Panel>
+        
+        <Tabs.Panel index={1}>
+          <h2>Settings Content</h2>
+          <p>Your settings...</p>
+        </Tabs.Panel>
+        
+        <Tabs.Panel index={2}>
+          <h2>Notifications Content</h2>
+          <p>Your notifications...</p>
+        </Tabs.Panel>
+      </Tabs.Panels>
+    </Tabs>
+  );
+};
 ```
 
-### Vantaggi
+### Compound Component Avanzato: Accordion
 
-API espressiva e leggibile:
+```jsx
+const AccordionContext = createContext();
 
-```tsx
-<Tabs predefinito="profilo">
-  <Tabs.Tab id="profilo">Profilo</Tabs.Tab>
-  <Tabs.Tab id="impostazioni">Impostazioni</Tabs.Tab>
-</Tabs>
+const Accordion = ({ children, allowMultiple = false }) => {
+  const [openItems, setOpenItems] = useState([]);
+  
+  const toggle = (index) => {
+    if (allowMultiple) {
+      setOpenItems(prev =>
+        prev.includes(index)
+          ? prev.filter(i => i !== index)
+          : [...prev, index]
+      );
+    } else {
+      setOpenItems(prev =>
+        prev.includes(index) ? [] : [index]
+      );
+    }
+  };
+  
+  return (
+    <AccordionContext.Provider value={{ openItems, toggle }}>
+      <div className="accordion">{children}</div>
+    </AccordionContext.Provider>
+  );
+};
+
+const AccordionItem = ({ index, children }) => {
+  return <div className="accordion-item">{children}</div>;
+};
+
+const AccordionHeader = ({ index, children }) => {
+  const { openItems, toggle } = useContext(AccordionContext);
+  const isOpen = openItems.includes(index);
+  
+  return (
+    <button
+      className="accordion-header"
+      onClick={() => toggle(index)}
+    >
+      <span>{children}</span>
+      <span className="icon">{isOpen ? '▼' : '▶'}</span>
+    </button>
+  );
+};
+
+const AccordionPanel = ({ index, children }) => {
+  const { openItems } = useContext(AccordionContext);
+  const isOpen = openItems.includes(index);
+  
+  return (
+    <div className={`accordion-panel ${isOpen ? 'open' : 'closed'}`}>
+      {isOpen && children}
+    </div>
+  );
+};
+
+// Compose
+Accordion.Item = AccordionItem;
+Accordion.Header = AccordionHeader;
+Accordion.Panel = AccordionPanel;
+
+// Usage
+const FAQSection = () => {
+  return (
+    <Accordion allowMultiple={true}>
+      <Accordion.Item index={0}>
+        <Accordion.Header index={0}>
+          What is React?
+        </Accordion.Header>
+        <Accordion.Panel index={0}>
+          React is a JavaScript library for building user interfaces.
+        </Accordion.Panel>
+      </Accordion.Item>
+      
+      <Accordion.Item index={1}>
+        <Accordion.Header index={1}>
+          What are Hooks?
+        </Accordion.Header>
+        <Accordion.Panel index={1}>
+          Hooks are functions that let you use state and lifecycle features.
+        </Accordion.Panel>
+      </Accordion.Item>
+    </Accordion>
+  );
+};
+```
+
+### Compound Component: Dropdown Menu
+
+```jsx
+const DropdownContext = createContext();
+
+const Dropdown = ({ children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  return (
+    <DropdownContext.Provider value={{ isOpen, setIsOpen }}>
+      <div ref={dropdownRef} className="dropdown">
+        {children}
+      </div>
+    </DropdownContext.Provider>
+  );
+};
+
+const DropdownTrigger = ({ children }) => {
+  const { isOpen, setIsOpen } = useContext(DropdownContext);
+  
+  return (
+    <button
+      className="dropdown-trigger"
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      {children}
+    </button>
+  );
+};
+
+const DropdownMenu = ({ children }) => {
+  const { isOpen } = useContext(DropdownContext);
+  
+  if (!isOpen) return null;
+  
+  return (
+    <div className="dropdown-menu">
+      {children}
+    </div>
+  );
+};
+
+const DropdownItem = ({ onClick, children }) => {
+  const { setIsOpen } = useContext(DropdownContext);
+  
+  const handleClick = () => {
+    onClick?.();
+    setIsOpen(false);
+  };
+  
+  return (
+    <button className="dropdown-item" onClick={handleClick}>
+      {children}
+    </button>
+  );
+};
+
+// Compose
+Dropdown.Trigger = DropdownTrigger;
+Dropdown.Menu = DropdownMenu;
+Dropdown.Item = DropdownItem;
+
+// Usage
+const UserMenu = () => {
+  return (
+    <Dropdown>
+      <Dropdown.Trigger>
+        <img src="avatar.jpg" alt="User" />
+        <span>Marco Rossi</span>
+      </Dropdown.Trigger>
+      
+      <Dropdown.Menu>
+        <Dropdown.Item onClick={() => navigate('/profile')}>
+          Profile
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => navigate('/settings')}>
+          Settings
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => logout()}>
+          Logout
+        </Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  );
+};
+```
+
+### Validazione dei Compound Component
+
+```jsx
+// Ensure children are valid compound components
+const validateChildren = (children, validTypes) => {
+  React.Children.forEach(children, child => {
+    if (!React.isValidElement(child)) return;
+    
+    const childType = child.type.displayName || child.type.name;
+    
+    if (!validTypes.includes(childType)) {
+      throw new Error(
+        `${childType} is not a valid child. Valid children: ${validTypes.join(', ')}`
+      );
+    }
+  });
+};
+
+const Tabs = ({ children }) => {
+  validateChildren(children, ['TabList', 'TabPanels']);
+  // ... rest of implementation
+};
 ```
 
 ---
 
-## 9. Advanced Composition Techniques
+## 9. Tecniche di Composizione Avanzate
 
-### Tecniche Avanzate
+### Composizione Basata su Slot
 
-- **Slot Pattern**: nominare gli slot tramite prop tipizzate.
-- **Polymorphic Components**: prop `as` per renderizzare elementi diversi (es. Box che diventa `<a>` o `<button>`).
-- **Controlled/Uncontrolled** con valori opzionali e default sensati.
-- **Forwardable refs** per inoltrare ref a un elemento interno.
+```jsx
+const Card = ({ 
+  header, 
+  media, 
+  content, 
+  actions,
+  className 
+}) => {
+  return (
+    <div className={`card ${className || ''}`}>
+      {header && <div className="card-header">{header}</div>}
+      {media && <div className="card-media">{media}</div>}
+      {content && <div className="card-content">{content}</div>}
+      {actions && <div className="card-actions">{actions}</div>}
+    </div>
+  );
+};
 
-### Polimorfismo
+// Usage with named slots
+const ProductCard = ({ product }) => {
+  return (
+    <Card
+      header={
+        <div className="product-header">
+          <h3>{product.name}</h3>
+          <span className="badge">{product.category}</span>
+        </div>
+      }
+      media={
+        <img src={product.image} alt={product.name} />
+      }
+      content={
+        <>
+          <p>{product.description}</p>
+          <p className="price">€{product.price}</p>
+        </>
+      }
+      actions={
+        <>
+          <button>View Details</button>
+          <button>Add to Cart</button>
+        </>
+      }
+    />
+  );
+};
+```
 
-```tsx
-type AsProp<E extends ElementType> = { as?: E };
+### Function as Child Component (FACC)
 
-function Box<E extends ElementType = 'div'>({ as, ...resto }: AsProp<E> & ComponentPropsWithoutRef<E>) {
-  const Tag = as ?? 'div';
-  return <Tag {...resto} />;
-}
+```jsx
+const Measure = ({ children }) => {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
+  const ref = useRef(null);
+  
+  useEffect(() => {
+    const observeTarget = ref.current;
+    const resizeObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        setDimensions({
+          width: entry.contentRect.width,
+          height: entry.contentRect.height
+        });
+      });
+    });
+    
+    if (observeTarget) {
+      resizeObserver.observe(observeTarget);
+    }
+    
+    return () => {
+      if (observeTarget) {
+        resizeObserver.unobserve(observeTarget);
+      }
+    };
+  }, []);
+  
+  return <div ref={ref}>{children(dimensions)}</div>;
+};
+
+// Usage
+const ResponsiveComponent = () => {
+  return (
+    <Measure>
+      {({ width, height }) => (
+        <div>
+          <p>Width: {width}px</p>
+          <p>Height: {height}px</p>
+          {width < 768 ? <MobileView /> : <DesktopView />}
+        </div>
+      )}
+    </Measure>
+  );
+};
+```
+
+### Componenti Controlled vs Uncontrolled
+
+```jsx
+// Uncontrolled Component
+const UncontrolledInput = () => {
+  const inputRef = useRef();
+  
+  const handleSubmit = () => {
+    console.log(inputRef.current.value);
+  };
+  
+  return (
+    <div>
+      <input ref={inputRef} defaultValue="Initial" />
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
+};
+
+// Controlled Component
+const ControlledInput = () => {
+  const [value, setValue] = useState('Initial');
+  
+  const handleSubmit = () => {
+    console.log(value);
+  };
+  
+  return (
+    <div>
+      <input 
+        value={value} 
+        onChange={(e) => setValue(e.target.value)} 
+      />
+      <button onClick={handleSubmit}>Submit</button>
+    </div>
+  );
+};
+
+// Hybrid: Flexible Control
+const FlexibleInput = ({ 
+  value: controlledValue, 
+  defaultValue, 
+  onChange 
+}) => {
+  const [internalValue, setInternalValue] = useState(defaultValue || '');
+  
+  const isControlled = controlledValue !== undefined;
+  const value = isControlled ? controlledValue : internalValue;
+  
+  const handleChange = (e) => {
+    if (!isControlled) {
+      setInternalValue(e.target.value);
+    }
+    onChange?.(e);
+  };
+  
+  return <input value={value} onChange={handleChange} />;
+};
+```
+
+### Pattern di Inversione del Controllo
+
+```jsx
+const List = ({ 
+  items, 
+  renderItem, 
+  renderEmpty, 
+  renderLoading,
+  loading,
+  emptyMessage = "No items found"
+}) => {
+  if (loading && renderLoading) {
+    return renderLoading();
+  }
+  
+  if (items.length === 0) {
+    return renderEmpty ? renderEmpty() : <p>{emptyMessage}</p>;
+  }
+  
+  return (
+    <ul>
+      {items.map((item, index) => (
+        <li key={item.id || index}>
+          {renderItem(item, index)}
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+// Maximum flexibility in usage
+const CustomList = () => {
+  const { items, loading } = useItems();
+  
+  return (
+    <List
+      items={items}
+      loading={loading}
+      renderItem={(item) => (
+        <div className="custom-item">
+          <strong>{item.title}</strong>
+          <p>{item.description}</p>
+        </div>
+      )}
+      renderLoading={() => (
+        <div className="custom-loading">
+          <Spinner />
+          <p>Caricamento elementi...</p>
+        </div>
+      )}
+      renderEmpty={() => (
+        <div className="custom-empty">
+          <img src="empty.svg" alt="Empty" />
+          <p>Nessun elemento trovato</p>
+          <button>Aggiungi Elemento</button>
+        </div>
+      )}
+    />
+  );
+};
 ```
 
 ---
 
-## 10. Pattern Selection Decision Matrix
+## 10. Matrice Decisionale per la Selezione dei Pattern
 
-### Quale Pattern Quando?
+### Framework Decisionale
 
 ```mermaid
 graph TD
-    A[Serve condividere logica?] -->|Sì| B{Statica o dinamica?}
-    A -->|No| C[Componente semplice]
+    A[Need to share logic?] -->|Yes| B{Static or Dynamic?}
+    A -->|No| C[Simple Component]
     
-    B -->|Statica| D[Custom Hook]
-    B -->|Dinamica| E{Elementi UI correlati?}
+    B -->|Static| D[Custom Hook]
+    B -->|Dynamic| E{Related UI Elements?}
     
-    E -->|Sì| F[Compound Components]
-    E -->|No| G{Serve flessibilità?}
+    E -->|Yes| F[Compound Components]
+    E -->|No| G{Need Flexibility?}
     
-    G -->|Alta| H[Render Props]
-    G -->|Bassa| I[HOC o Hook]
+    G -->|High| H[Render Props]
+    G -->|Low| I[HOC or Hook]
     
-    style D fill:#51cf66
-    style F fill:#4dabf7
-    style H fill:#ffd43b
 ```
 
-| Esigenza | Pattern consigliato |
-|----------|---------------------|
-| Logica con stato riutilizzabile | Custom hook |
-| Stato condiviso annidato | Compound components |
-| Estendere comportamento di un componente | HOC (raramente) o hook |
-| UI parametrica con dati esposti | Render prop / custom hook |
-| Slot multipli con default | Children + slot props |
-| Stile e markup riusabili | Componente con props variazionali |
+### Matrice di Confronto dei Pattern
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│                 Pattern Selection Guide                        │
+├────────────────────────────────────────────────────────────────┤
+│                                                                │
+│  Custom Hooks                                                  │
+│  ✅ Logic reuse across components                              │
+│  ✅ Access to React lifecycle                                  │
+│  ✅ Composable and testable                                    │
+│  ⚠️  Cannot render UI directly                                 │
+│  Use when: Sharing stateful logic                             │
+│                                                                │
+│  Compound Components                                           │
+│  ✅ Flexible, declarative API                                  │
+│  ✅ Related components work together                           │
+│  ✅ Implicit state sharing                                     │
+│  ⚠️  More complex implementation                               │
+│  Use when: Building component libraries (Tabs, Accordion)     │
+│                                                                │
+│  Render Props                                                  │
+│  ✅ Maximum render flexibility                                 │
+│  ✅ Runtime composition                                        │
+│  ⚠️  Can lead to callback hell                                 │
+│  ⚠️  Less performant than hooks                                │
+│  Use when: Dynamic render logic needed                        │
+│                                                                │
+│  Higher-Order Components                                       │
+│  ✅ Cross-cutting concerns                                     │
+│  ✅ Static composition                                         │
+│  ⚠️  Wrapper hell potential                                    │
+│  ⚠️  Props collision risk                                      │
+│  Use when: Legacy code or specific enhancement                │
+│                                                                │
+│  Component Composition                                         │
+│  ✅ Simple and intuitive                                       │
+│  ✅ Best performance                                           │
+│  ✅ Natural parent-child relationship                          │
+│  Use when: Layout and structure                               │
+│                                                                │
+└────────────────────────────────────────────────────────────────┘
+```
+
+### Esempio del Mondo Reale: Applicazione Completa
+
+```jsx
+// === Custom Hooks ===
+const useAuth = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  
+  useEffect(() => {
+    // Auth initialization logic
+  }, []);
+  
+  const login = async (credentials) => {
+    // Login logic
+  };
+  
+  const logout = () => {
+    // Logout logic
+  };
+  
+  return { user, loading, login, logout };
+};
+
+// === Context for Global State ===
+const AuthContext = createContext();
+
+const AuthProvider = ({ children }) => {
+  const auth = useAuth();
+  return (
+    <AuthContext.Provider value={auth}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// === Compound Components for UI ===
+const Modal = ({ children, isOpen, onClose }) => {
+  if (!isOpen) return null;
+  
+  return (
+    <ModalContext.Provider value={{ onClose }}>
+      <div className="modal-overlay">
+        <div className="modal-content">
+          {children}
+        </div>
+      </div>
+    </ModalContext.Provider>
+  );
+};
+
+Modal.Header = ({ children }) => (
+  <div className="modal-header">{children}</div>
+);
+
+Modal.Body = ({ children }) => (
+  <div className="modal-body">{children}</div>
+);
+
+Modal.Footer = ({ children }) => (
+  <div className="modal-footer">{children}</div>
+);
+
+// === Main Application ===
+const App = () => {
+  return (
+    <AuthProvider>
+      <Router>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
+          </Routes>
+        </Layout>
+      </Router>
+    </AuthProvider>
+  );
+};
+```
+
+### Riepilogo delle Best Practice
+
+```
+┌────────────────────────────────────────────────┐
+│         Component Best Practices               │
+├────────────────────────────────────────────────┤
+│                                                │
+│  1. Prefer composition over inheritance        │
+│  2. Keep components small and focused          │
+│  3. Use custom hooks for logic reuse           │
+│  4. Implement compound components for related  │
+│     UI elements                                │
+│  5. Avoid prop drilling with Context           │
+│  6. Colocate state close to usage              │
+│  7. Use TypeScript for type safety             │
+│  8. Write tests for complex logic              │
+│  9. Document component APIs                    │
+│  10. Optimize only when necessary              │
+│                                                │
+└────────────────────────────────────────────────┘
+```
 
 ---
 
-## Conclusion: Architecting Excellence
+## Conclusione: Progettare l'Eccellenza
 
-### Traiettoria di maturazione
+### Traiettoria di Maturazione
 
 ```mermaid
 graph TD
-    A[Principiante] --> B[Imparare la composizione di base]
-    B --> C[Padroneggiare props e stato]
-    C --> D[Comprendere Context]
+    A[Beginner] --> B[Learn Basic Composition]
+    B --> C[Master Props & State]
+    C --> D[Understand Context]
     
-    D --> E[Intermedio]
+    D --> E[Intermediate]
     E --> F[Custom Hooks]
-    E --> G[Pattern di componenti]
+    E --> G[Component Patterns]
     
-    G --> H[Avanzato]
+    G --> H[Advanced]
     H --> I[Compound Components]
-    H --> J[Ottimizzazione delle performance]
-    H --> K[Progettazione dell'architettura]
+    H --> J[Performance Optimization]
+    H --> K[Architecture Design]
     
-    style A fill:#ff6b6b
-    style E fill:#ffd43b
-    style H fill:#51cf66
 ```
 
-### Conclusione
+### Ricapitolazione dei Principi Essenziali
 
-Non esiste un pattern "migliore" in assoluto. Scegli in base a chiarezza, esigenze di riuso e familiarità del team. Le tre regole guida:
+1. **La Composizione è Sovrana**: Costruisci UI complesse a partire da componenti semplici e riutilizzabili
+2. **Singola Responsabilità**: Ogni componente dovrebbe avere uno scopo chiaro e unico
+3. **Flusso di Dati Esplicito**: Props verso il basso, callback verso l'alto - mantieni la prevedibilità
+4. **Context con Parsimonia**: Usalo per questioni davvero globali (auth, theme)
+5. **Custom Hooks per la Logica**: Estrai la logica stateful riutilizzabile
+6. **Selezione dei Pattern**: Scegli i pattern in base ai requisiti specifici
+7. **Consapevolezza delle Performance**: Ottimizza strategicamente, non prematuramente
 
-1. **Prima la composizione**, poi astrazioni più sofisticate.
-2. **Estrai la logica nei custom hooks**, l'UI nei componenti.
-3. **Misura prima di ottimizzare**, semplifica prima di astrarre.
+### Risorse per la Padronanza
+
+- 📘 [React Patterns](https://reactpatterns.com/)
+- 🎓 [Component Composition Guide](https://react.dev/learn/passing-props-to-a-component)
+- 🛠️ [Advanced Patterns by Kent C. Dodds](https://kentcdodds.com/blog/advanced-react-component-patterns)
+- 📦 [Radix UI](https://www.radix-ui.com/) - Compound component examples
+
+---
+
+**Composizione magistrale per eccellenza architettonica! 🏛️**

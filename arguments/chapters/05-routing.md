@@ -1,4 +1,4 @@
-# React Router: Navigation and Routing Architecture
+﻿# React Router: Navigation and Routing Architecture
 
 > A comprehensive exploration of client-side routing paradigms, navigation patterns, and authentication-driven route protection strategies in React applications
 
@@ -39,10 +39,6 @@ graph TD
     I --> J[Full Page Reload]
     J --> K[State Lost]
     
-    style A fill:#4dabf7
-    style E fill:#51cf66
-    style H fill:#ff6b6b
-    style K fill:#ff6b6b
 ```
 
 ### Router Types Comparison
@@ -472,9 +468,6 @@ flowchart LR
     E --> F
     F --> G["useParams returns { userId, postId }"]
 
-    style A fill:#4dabf7
-    style F fill:#ffd43b
-    style G fill:#51cf66
 ```
 
 ### URL Parameters (Path Params)
@@ -790,9 +783,6 @@ graph TD
     I --> J[Account Settings]
     I --> K[Privacy Settings]
     
-    style B fill:#4dabf7
-    style C fill:#ffd43b
-    style I fill:#51cf66
 ```
 
 ### Basic Nested Routes
@@ -1067,10 +1057,6 @@ flowchart TD
     H -->|Yes| G
     H -->|No| I["Navigate to /unauthorized"]
 
-    style C fill:#ffd43b
-    style E fill:#ff6b6b
-    style G fill:#51cf66
-    style I fill:#ff6b6b
 ```
 
 ### Basic Protected Route Implementation
@@ -2304,10 +2290,6 @@ graph TD
     D --> D2[Prefetching]
     D --> D3[Monitoring]
     
-    style A fill:#845ef7
-    style B fill:#4dabf7
-    style C fill:#51cf66
-    style D fill:#ffd43b
 ```
 
 ### Essential Principles

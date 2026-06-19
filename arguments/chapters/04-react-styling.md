@@ -1,4 +1,4 @@
-# React Styling Strategies and Implementation
+﻿# React Styling Strategies and Implementation
 
 > A comprehensive exploration of styling methodologies, architectural patterns, and pragmatic approaches for styling React applications
 
@@ -50,9 +50,6 @@ graph TD
     F --> F2[Ant Design]
     F --> F3[Chakra UI]
     
-    style A fill:#845ef7
-    style D fill:#4dabf7
-    style E fill:#51cf66
 ```
 
 ### Comparative Overview
@@ -377,8 +374,6 @@ graph LR
     E[Component] -->|Import| A
     E -->|Uses| D
     
-    style A fill:#4dabf7
-    style D fill:#51cf66
 ```
 
 ### Basic Configuration and Usage
@@ -842,8 +837,6 @@ graph TD
     F[Component Props] --> B
     G[Theme Context] --> B
     
-    style A fill:#845ef7
-    style E fill:#51cf66
 ```
 
 ### styled-components: Fundamental Usage
@@ -1302,8 +1295,6 @@ graph LR
     B --> F[Rapid Development]
     B --> G[Minimal CSS Bundle]
     
-    style A fill:#4dabf7
-    style E fill:#51cf66
 ```
 
 ### Installation and Configuration
@@ -2000,9 +1991,6 @@ graph TD
     F --> M[Cacheable]
     J --> N[Tree-shakeable]
     
-    style C fill:#ff6b6b
-    style G fill:#ffd43b
-    style I fill:#51cf66
 ```
 
 ### Performance Comparison
@@ -2353,9 +2341,6 @@ graph TD
     E -->|Yes| J[Component Library + Custom]
     E -->|No| K[Tailwind + Custom Components]
     
-    style F fill:#51cf66
-    style G fill:#4dabf7
-    style J fill:#845ef7
 ```
 
 ### Recommendation Matrix

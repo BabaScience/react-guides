@@ -1,4 +1,4 @@
-# React State Management: Architecture and Patterns
+﻿# React State Management: Architecture and Patterns
 
 > A comprehensive exploration of state management paradigms, architectural patterns, and pragmatic implementation strategies for React applications
 
@@ -44,9 +44,6 @@ graph TD
     E --> E1[Route Parameters]
     E --> E2[Query Parameters]
     
-    style A fill:#845ef7
-    style B2 fill:#4dabf7
-    style C fill:#51cf66
 ```
 
 ### State Management Approaches Comparison
@@ -124,9 +121,6 @@ graph TD
     G -->|Simple| H[Context API]
     G -->|Complex| I[Redux/Zustand]
     
-    style B fill:#51cf66
-    style H fill:#4dabf7
-    style I fill:#845ef7
 ```
 
 ### Local State Examples
@@ -353,9 +347,6 @@ flowchart TD
     H -.useNotification.-> D
     H -.useTheme.-> C
 
-    style B fill:#845ef7
-    style C fill:#4dabf7
-    style D fill:#51cf66
 ```
 
 ### Basic Context Implementation
@@ -954,10 +945,6 @@ graph LR
     D[Middleware] -.intercepts.-> B
     D -.modifies.-> C
     
-    style A fill:#4dabf7
-    style B fill:#845ef7
-    style C fill:#51cf66
-    style D fill:#ffd43b
 ```
 
 ### Actions Deep Dive
@@ -2033,9 +2020,6 @@ graph TD
     J -->|Want Simple| L[Zustand]
     J -->|Modern Patterns| M[Jotai or Recoil]
     
-    style C fill:#51cf66
-    style H fill:#4dabf7
-    style K fill:#845ef7
 ```
 
 ### Comparison Table
