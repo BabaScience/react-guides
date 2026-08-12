@@ -1,4 +1,4 @@
-﻿# Gestion de l'état : Le même React, une plateforme différente
+# Gestion de l'état : Le même React, une plateforme différente
 
 > État local, état global et état serveur dans React Native — ce qui se transfère depuis le web et ce qui change.
 

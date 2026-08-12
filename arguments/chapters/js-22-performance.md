@@ -1,4 +1,4 @@
-﻿# Performance: Making JavaScript Fast
+# Performance: Making JavaScript Fast
 
 > Measurement, main thread optimization, memory, bundle size, and rendering performance.
 

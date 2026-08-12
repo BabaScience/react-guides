@@ -1,232 +1,154 @@
-# React Mastery Exercises
+# Learning Platform
 
-> Test-driven React learning repository designed specifically for Angular developers
+An interactive, multi-track learning platform: long-form illustrated guides plus
+test-driven exercises you solve in the browser, in English, French and Italian.
 
-## 🎯 Overview
-
-This repository provides a structured, progressive approach to learning React through hands-on exercises. Each module builds upon previous concepts, ensuring systematic knowledge acquisition without overwhelming cognitive load.
-
-**Pedagogical Paradigm:** Students implement functionality to satisfy pre-written test specifications, ensuring objective assessment and immediate feedback.
-
-## 🏗️ Repository Structure
-
-```
-react-mastery-exercises/
-├── src/
-│   ├── 01-fundamentals/          ← Start here!
-│   │   ├── index.tsx            ← Student implements here
-│   │   ├── index.test.tsx       ← Pre-written tests
-│   │   └── README.md            ← Instructions & concepts
-│   ├── 02-hooks/                ← Coming soon
-│   ├── 03-component-patterns/   ← Coming soon
-│   └── ... (12 modules total)
-├── scripts/
-│   ├── test-runner.js           ← Handles module flag logic
-│   └── check-progress.js        ← Shows completion status
-├── package.json
-├── jest.config.js
-├── tsconfig.json
-└── README.md
-```
-
-## 🚀 Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Test module 1 only
-npm test 1
-
-# Test modules 1-3
-npm test 3
-
-# Watch mode for module 1
-npm test 1 -- --watch
-
-# Check overall progress
-npm run progress
-
-# Type checking
-npm run type-check
-```
-
-## 📚 Module Progression
-
-| Module | Topic | Exercises | Status |
-|--------|-------|-----------|--------|
-| 01 | Fundamentals | 8 | ✅ Available |
-| 02 | Hooks Deep Dive | 7 | 🚧 Coming Soon |
-| 03 | Component Patterns | 6 | 🚧 Coming Soon |
-| 04 | Styling | 5 | 🚧 Coming Soon |
-| 05 | Routing | 6 | 🚧 Coming Soon |
-| 06 | State Management | 7 | 🚧 Coming Soon |
-| 07 | Data Fetching | 6 | 🚧 Coming Soon |
-| 08 | Forms & Validation | 5 | 🚧 Coming Soon |
-| 09 | Performance | 6 | 🚧 Coming Soon |
-| 10 | Testing | 7 | 🚧 Coming Soon |
-| 11 | TypeScript | 6 | 🚧 Coming Soon |
-| 12 | Advanced Patterns | 5 | 🚧 Coming Soon |
-
-## 🎓 Learning Workflow
-
-1. **Read Module README** - Understand concepts and Angular mappings
-2. **Open `index.tsx`** - Review exercise descriptions
-3. **Run Tests** - See what needs to be implemented
-4. **Implement Solutions** - Write code to pass tests
-5. **Verify** - All tests pass = move to next module
-6. **Track Progress** - Use `npm run progress`
-
-## 🔗 Angular to React Mapping
-
-This repository is specifically designed for Angular developers. Each exercise includes:
-
-- **Side-by-side comparisons** of Angular vs React approaches
-- **Conceptual mappings** from Angular patterns to React equivalents
-- **TypeScript integration** (you'll feel at home!)
-- **Progressive complexity** building on familiar concepts
-
-### Key Differences Highlighted
-
-| Concept | Angular | React |
-|---------|---------|-------|
-| Component | `@Component` class | Function returning JSX |
-| Props | `@Input()` decorator | Function parameters |
-| State | Class properties | `useState` hook |
-| Templates | String templates | JSX expressions |
-| Directives | `*ngIf`, `*ngFor` | JavaScript conditionals |
-| Events | `(click)="handler()"` | `onClick={handler}` |
-
-## 🧪 Test-Driven Learning
-
-### How It Works
-
-1. **Pre-written Tests** - Define success criteria
-2. **Stub Implementations** - Students fill in the code
-3. **Immediate Feedback** - Tests show what's missing
-4. **Progressive Unlocking** - Next module unlocks after current completion
-
-### Example Test Command
-
-```bash
-# Test only module 1
-npm test 1
-
-# Test modules 1, 2, and 3
-npm test 3
-
-# Watch mode for continuous feedback
-npm test 1 -- --watch
-```
-
-## 📊 Progress Tracking
-
-```bash
-npm run progress
-```
-
-Shows visual progress bars for all modules with completion percentages:
-
-```
-📊 React Mastery Progress Report
-============================================================
-✅ Module 01: Fundamentals
-   ████████████████████████████████ 8/8 (100.0%)
-
-⏳ Module 02: Hooks Deep Dive
-   ████████████████████████████████ 5/7 (71.4%)
-
-❌ Module 03: Component Patterns
-   Error running tests
-
-============================================================
-Overall Progress: 13/15 tests (86.7%)
-```
-
-## 🛠️ Development Setup
-
-### Prerequisites
-
-- Node.js 18+ 
-- npm or yarn
-- Basic TypeScript knowledge
-- Angular development experience
-
-### Installation
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd react-mastery-exercises
-
-# Install dependencies
-npm install
-
-# Verify setup
-npm run type-check
-```
-
-### Project Configuration
-
-- **TypeScript**: Strict mode enabled
-- **Jest**: React Testing Library integration
-- **ESLint**: Code quality enforcement
-- **Prettier**: Code formatting
-
-## 🎯 Module 01: React Fundamentals
-
-**Start here!** This module covers essential React concepts:
-
-1. **Basic Greeting Component** - Props and default values
-2. **User Card** - Multiple props with TypeScript
-3. **Todo List** - Rendering arrays with keys
-4. **Counter** - useState for state management
-5. **Status Message** - Conditional rendering
-6. **Action Button** - Event handling
-7. **Contact Form** - Controlled form components
-8. **Filtered List** - Array methods with state
-
-### Getting Started with Module 01
-
-```bash
-# Navigate to module 01
-cd src/01-fundamentals
-
-# Read the instructions
-cat README.md
-
-# Open the exercises
-code index.tsx
-
-# Run tests to see what needs implementation
-npm test 1
-```
-
-## 🤝 Contributing
-
-This repository is designed for learning. If you find issues or have suggestions:
-
-1. **Report Issues** - Help improve the exercises
-2. **Suggest Improvements** - Better Angular mappings
-3. **Add Examples** - Additional use cases
-4. **Fix Typos** - Improve documentation
-
-## 📚 Additional Resources
-
-- [React Official Documentation](https://react.dev)
-- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
-- [Angular to React Migration Guide](https://react.dev/learn/thinking-in-react)
-- [Jest Testing Framework](https://jestjs.io/)
-- [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)
-
-## 🎉 Success Criteria
-
-**Module Complete** = All tests passing ✓
-
-**Repository Complete** = All 12 modules mastered ✓
+| | |
+|---|---|
+| **Tracks** | JavaScript · React · React Native |
+| **Chapters** | 55 (≈254k words in English, ≈634k including translations) |
+| **Diagrams** | 611 Mermaid diagrams |
+| **Steps** | 384 (317 lessons, 67 exercises) |
+| **Languages** | 🇬🇧 English · 🇫🇷 French · 🇮🇹 Italian |
 
 ---
 
-**Happy Learning! 🚀**
+## Quick start
 
-*Built with ❤️ for Angular developers transitioning to React*
+```bash
+cd platform && npm install && npm run dev
+```
+
+Then open http://localhost:3000.
+
+Everything runs in the browser — the editor (Monaco), the TypeScript/JSX
+transpiler (Babel standalone) and the test runner are all bundled. There is no
+backend and no account; progress is saved to `localStorage`.
+
+---
+
+## Repository layout
+
+```
+arguments/
+  00-roadmap.md                  Track overview
+  chapters/
+    01-fundamentals.md …         React chapters      (English)
+    js-01-prerequisites.md …     JavaScript chapters (English)
+    rn-01-prerequisites.md …     React Native chapters (English)
+    fr/  it/                     Translations, same filenames
+
+src/
+  01-fundamentals/               One directory per module with exercises
+    index.tsx                    Learner-facing stubs, split by `// EXERCISE N:` banners
+    index.test.tsx               The contract each stub must satisfy
+    README.md                    Optional per-module notes
+
+platform/                        The Vite + React app that serves all of the above
+  src/data/*.ts                  Module / step / exercise metadata
+  src/i18n/locales/*.json        UI strings + module, step and exercise text
+  src/sandbox/                   Transpiler, test harness, test runner, extractors
+  src/components/                Lesson, exercise, module, layout and UI components
+  scripts/copy-content.js        Copies content into public/raw/ for production
+
+scripts/
+  validate-content.mjs           Content validator — run this before you commit
+```
+
+### How a page is assembled
+
+1. `platform/src/data/*.ts` declares each module's ordered list of **steps**.
+2. A lesson step names an English `## ` heading (`sectionHeading`).
+3. `loadGuide()` fetches the chapter in the reader's language *and* in English.
+4. The heading's **ordinal** is found in the English chapter and the same
+   position is taken from the localized one — so translated headings never
+   break the lookup.
+5. An exercise step names an entry in `module.exercises`, which maps to an
+   `// EXERCISE N:` block in `src/<module>/index.tsx` and a
+   `describe("Exercise N …")` block in `index.test.tsx`.
+
+Every one of those joins is checked by the validator.
+
+---
+
+## Commands
+
+From the repo root:
+
+```bash
+npm run validate
+```
+
+Checks that chapters, module metadata and the three locale files still agree —
+section headings resolve exactly, no chapter section is unreachable, every
+exercise has a banner + export + test block, every id has translations, and
+every exercise directory is in the production copy list. **CI runs this on every
+push; run it locally before committing content changes.**
+
+From `platform/`:
+
+```bash
+npm run dev
+```
+
+| Command | What it does |
+|---|---|
+| `npm run dev` | Dev server on :3000 |
+| `npm run build` | Copy content → typecheck → production build |
+| `npm run preview` | Serve the production build on :4173 |
+| `npm run lint` | ESLint |
+| `npm run format` | Prettier |
+
+---
+
+## Adding content
+
+### A new lesson
+
+1. Add a `## N. Your Heading` section to the chapter in `arguments/chapters/`.
+2. Add the matching section to `fr/` and `it/` — **same count, same order**;
+   the ordinal lookup depends on it.
+3. Add a `{ type: 'lesson', id, title, sectionHeading }` entry to the module's
+   step list in `platform/src/data/`. `sectionHeading` must equal the English
+   heading exactly, leading number included.
+4. Add `steps.<module>.<id>` to all three locale files.
+5. `npm run validate`.
+
+### A new exercise
+
+1. Add an `// EXERCISE N: Title` block to `src/<module>/index.tsx` with an
+   exported symbol.
+2. Add a `describe('Exercise N: …')` block to `src/<module>/index.test.tsx`.
+3. Add the exercise to `module.exercises` **and** to the step timeline.
+4. Add `exercises.<module>.<id>` (`name`, `description`, `hints`) to all three
+   locale files — hint text lives only there, never in the data files.
+5. `npm run validate`.
+
+### A new module
+
+Also add its `exerciseDir` to `platform/scripts/copy-content.js`, or the files
+will 404 in production only. The validator catches this.
+
+---
+
+## Project documents
+
+- [ANALYSIS.md](ANALYSIS.md) — architecture audit: what works, what's broken,
+  what blocks scaling to more tracks.
+- [PLAN.md](PLAN.md) — the remediation plan, phase by phase.
+- [platform/DESIGN_SYSTEM.md](platform/DESIGN_SYSTEM.md) — "Paper & ink" design
+  system. Read before touching UI.
+- [TRANSLATION-TODO.md](TRANSLATION-TODO.md) — translation coverage.
+- [EXERCISE-VALIDATION.md](EXERCISE-VALIDATION.md) — per-exercise hint and
+  reference-solution review.
+
+---
+
+## Known gaps
+
+- The **JavaScript track has no French or Italian chapters** yet; those lessons
+  fall back to English.
+- The JavaScript and React Native tracks have few or no exercises (0 and 4).
+- No quizzes, projects or capstones yet — see PLAN.md Phase 3.
+- Exercise execution is React-in-the-browser only; Node, Python and GIS tracks
+  need the pluggable runner in PLAN.md P2.6.

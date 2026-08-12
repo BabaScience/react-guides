@@ -1,4 +1,4 @@
-﻿# OTA Updates: Distribuire senza l'App Store
+# OTA Updates: Distribuire senza l'App Store
 
 > EAS Update, download delta, versionamento del runtime e le regole di compliance che devi rispettare.
 

@@ -1,4 +1,4 @@
-﻿# Monitoring and Production: Keeping Your App Healthy
+# Monitoring and Production: Keeping Your App Healthy
 
 > Crash reporting, analytics, feature flags, and the observability stack for production mobile apps.
 

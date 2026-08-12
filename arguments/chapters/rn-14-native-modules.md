@@ -1,4 +1,4 @@
-﻿# Native Modules and the New Architecture
+# Native Modules and the New Architecture
 
 > JSI, Fabric, TurboModules, and Codegen — what they are and when you need to write your own.
 

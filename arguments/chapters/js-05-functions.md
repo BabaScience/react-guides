@@ -1,4 +1,4 @@
-﻿# Functions Deep Dive: Every Form, Every Pattern
+# Functions Deep Dive: Every Form, Every Pattern
 
 > Declarations, expressions, arrows, higher-order functions, pure functions, and currying.
 

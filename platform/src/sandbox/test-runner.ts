@@ -1,39 +1,45 @@
-import { transpile, preprocessTypeScript } from './transpiler';
+import { transpile } from './transpiler';
 import { createTestHarness } from './test-harness';
 import type { TestRunResult } from '@/types/exercise';
 
 /**
- * Runs tests in the main window using a temporary DOM container.
+ * Runs an exercise's tests against the learner's code.
+ *
+ * NOTE ON ISOLATION: despite the name `runTestsInSandbox`, there is no
+ * sandbox. The code is evaluated with `(0, eval)` in the main window, so it can
+ * reach `document`, `localStorage` (including saved progress) and the app's own
+ * origin, and an infinite loop freezes the tab with no way back. That is
+ * tolerable while the only code being run is code the learner typed themselves.
+ * It stops being tolerable the moment shared solutions, imported starter code
+ * or any third-party content can reach this function — see ANALYSIS.md §4.5 and
+ * PLAN.md P2.2 for the iframe + watchdog replacement.
  */
 export async function runTestsInSandbox(
   userCode: string,
   testCode: string,
   exerciseNumber: number
 ): Promise<TestRunResult> {
-  // 1. Preprocess and transpile both files
-  const processedUserCode = preprocessTypeScript(userCode);
-  const processedTestCode = preprocessTypeScript(testCode);
-
+  // 1. Transpile both files
   let transpiledUser: string;
   let transpiledTest: string;
 
   try {
-    transpiledUser = await transpile(processedUserCode, 'index.tsx');
+    transpiledUser = await transpile(userCode, 'index.tsx');
   } catch (e) {
     return errorResult('Compilation Error in your code', e);
   }
 
   try {
-    transpiledTest = await transpile(processedTestCode, 'index.test.tsx');
+    transpiledTest = await transpile(testCode, 'index.test.tsx');
   } catch (e) {
     return errorResult('Compilation Error in test file', e);
   }
 
   // 2. Load all dependencies.
-  // Note: in production builds, React's `act()` throws. The fix is in
-  // vite.config.ts — a build-time alias routes @testing-library/react's
-  // `react` import to `src/sandbox/react-act-shim.ts`, which provides a
-  // pass-through `act`. See that file for the full story.
+  // Note: in production builds React's `act()` throws, and
+  // @testing-library/react v14 calls it on every render. The fix is the
+  // `patch-testing-library-act` plugin in vite.config.ts, which rewrites TL's
+  // `domAct` to a pass-through that flushes via ReactDOM.flushSync.
   const React = await lazyLoad('react', () => import('react'));
   const ReactDOM = await lazyLoad('react-dom', () => import('react-dom'));
   const ReactNativeWeb = await lazyLoad('react-native-web', () => import('react-native-web'));
@@ -89,7 +95,6 @@ export async function runTestsInSandbox(
   // To make `screen` follow the latest render, intercept `render` to track
   // the container it created, and expose a Proxy `screen` that re-binds
   // `within(...)` queries to that container on every access.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const TL = TestingLib as any;
   const wrappedTL: Record<string, unknown> = { ...TL };
   let lastRenderContainer: HTMLElement | null = null;
@@ -165,7 +170,9 @@ export async function runTestsInSandbox(
       test: harness.it,
       expect: harness.expect,
       beforeEach: harness.beforeEach,
-      afterEach: () => {}, // noop for compatibility
+      afterEach: harness.afterEach,
+      beforeAll: harness.beforeAll,
+      afterAll: harness.afterAll,
       jest: harness.jest,
       waitFor: harness.waitFor,
       React,

@@ -1,4 +1,4 @@
-﻿# Sujets avancés pour applications complexes
+# Sujets avancés pour applications complexes
 
 > Configuration monorepo, partage cross-platform, i18n, accessibilité, cartes, paiements et architecture à grande échelle.
 

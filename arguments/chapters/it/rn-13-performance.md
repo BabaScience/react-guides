@@ -1,4 +1,4 @@
-﻿# Performance Engineering: tenere entrambi i thread contenti
+# Performance Engineering: tenere entrambi i thread contenti
 
 > Il modello mentale dei due thread, l'ottimizzazione delle liste, la prevenzione dei re-render e gli strumenti di profiling.
 

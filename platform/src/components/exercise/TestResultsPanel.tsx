@@ -64,7 +64,7 @@ export function TestResultsPanel({
   const allPassed = !!results && results.failed === 0 && results.total > 0;
   // The escape hatch is offered whenever tests have run and not everything
   // passes — that's also the shape we get from sandbox/compilation errors
-  // (which sandbox-iframe.ts coerces into a single failed case). It hides
+  // (which test-runner.ts coerces into a single failed case). It hides
   // once everything passes naturally, or once the user has already used it.
   const showMarkComplete =
     !!onMarkComplete && hasResults && !running && !allPassed && !completedManually;

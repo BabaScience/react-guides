@@ -1,4 +1,4 @@
-﻿# Classes and Inheritance: Syntactic Sugar Over Prototypes
+# Classes and Inheritance: Syntactic Sugar Over Prototypes
 
 > Class syntax, private fields, static members, inheritance, and when to use classes vs functions.
 

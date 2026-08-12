@@ -1,4 +1,4 @@
-﻿# Argomenti Avanzati per App Complesse
+# Argomenti Avanzati per App Complesse
 
 > Configurazione monorepo, condivisione cross-platform, i18n, accessibilità, mappe, pagamenti e architettura su larga scala.
 

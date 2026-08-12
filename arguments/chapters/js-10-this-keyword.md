@@ -1,4 +1,4 @@
-﻿# The this Keyword: Four Rules and One Exception
+# The this Keyword: Four Rules and One Exception
 
 > The most-misunderstood part of JS — default, implicit, explicit, new binding, and arrow functions.
 

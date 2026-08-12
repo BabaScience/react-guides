@@ -1,5 +1,16 @@
 /**
  * In-browser TypeScript/JSX transpilation using @babel/standalone.
+ *
+ * Note: there is deliberately no pre-processing step here. An earlier version
+ * stripped `import type`, `export type` and `export interface` with regexes
+ * before handing the source to Babel. Those patterns used `[^}]*` / `[^;]+`,
+ * so any nested brace or inner semicolon truncated the match and left dangling
+ * syntax behind — valid learner code like
+ *
+ *   export interface Props { user: { name: string }; age: number }
+ *
+ * came out as a syntax error blamed on the learner. Babel's TypeScript preset
+ * handles every one of those constructs correctly on its own.
  */
 
 let babelLoaded: Promise<typeof import('@babel/standalone')> | null = null;
@@ -28,16 +39,4 @@ export async function transpile(code: string, filename = 'index.tsx'): Promise<s
     throw new Error(`Babel produced no output for ${filename}`);
   }
   return result.code;
-}
-
-/**
- * Strip TypeScript-only syntax that Babel sometimes struggles with,
- * like `import type` and `export type`.
- */
-export function preprocessTypeScript(code: string): string {
-  return code
-    .replace(/import\s+type\s+\{[^}]*\}\s+from\s+['"][^'"]+['"];?/g, '')
-    .replace(/export\s+type\s+\{[^}]*\};?/g, '')
-    .replace(/export\s+type\s+\w+\s*=[^;]+;/g, '')
-    .replace(/export\s+interface\s+\w+[^{]*\{[^}]*\}/g, '');
 }

@@ -1,4 +1,4 @@
-﻿# Componenti e API di Base: i Mattoni Fondamentali
+# Componenti e API di Base: i Mattoni Fondamentali
 
 > Le primitive native che sostituiscono gli elementi HTML, e le API di piattaforma che userai ogni giorno.
 

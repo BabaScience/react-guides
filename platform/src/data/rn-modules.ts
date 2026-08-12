@@ -218,12 +218,6 @@ export const rnModules: Module[] = [
         name: 'ProfileCard (View + Text + Image)',
         componentName: 'ProfileCard',
         description: 'Build a profile card using View, Text, and Image — the three most fundamental RN components.',
-        hints: [
-          'Wrap everything in `<View testID="profile-card">`',
-          'Use `<Image testID="avatar" source={{ uri: avatarUrl }} style={{ width: 60, height: 60 }} />`',
-          'Use `<Text testID="name">{name}</Text>` for the name',
-          'Use `<Text testID="role">{role}</Text>` for the role',
-        ],
       },
       {
         id: 'counter-button',
@@ -231,12 +225,6 @@ export const rnModules: Module[] = [
         name: 'CounterButton (Pressable + State)',
         componentName: 'CounterButton',
         description: 'Create a tappable counter using Pressable — the modern touch primitive in React Native.',
-        hints: [
-          'Use `useState(0)` for the count',
-          'Display `Count: {count}` in `<Text testID="count">`',
-          '`<Pressable testID="increment" onPress={() => setCount(c => c + 1)}><Text>+</Text></Pressable>`',
-          'Same pattern for decrement with `-`',
-        ],
       },
       {
         id: 'contact-list',
@@ -244,11 +232,6 @@ export const rnModules: Module[] = [
         name: 'ContactList (FlatList)',
         componentName: 'ContactList',
         description: 'Render a scrollable list of contacts using FlatList — the virtualized list for React Native.',
-        hints: [
-          'Use `<FlatList testID="contact-list" data={contacts} keyExtractor={item => item.id} ... />`',
-          'Each row: `<View testID={`contact-${item.id}`}><Text>{item.name}</Text><Text>{item.phone}</Text></View>`',
-          'Handle empty state: `ListEmptyComponent={<Text testID="empty">No contacts</Text>}`',
-        ],
       },
       {
         id: 'toggle-card',
@@ -256,11 +239,6 @@ export const rnModules: Module[] = [
         name: 'ToggleCard (Pressable + Conditional)',
         componentName: 'ToggleCard',
         description: 'Build a card that expands/collapses on press — combining Pressable with conditional rendering.',
-        hints: [
-          'Use `useState(false)` for the expanded state',
-          '`<Pressable testID="toggle-header" onPress={() => setExpanded(e => !e)}><Text>{title}</Text></Pressable>`',
-          'Only render content when expanded: `{expanded && <View testID="toggle-content"><Text>{content}</Text></View>}`',
-        ],
       },
     ],
   },

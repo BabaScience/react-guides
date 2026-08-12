@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import i18n from '@/i18n';
 import type { LessonStep, Module } from '@/types/exercise';
-import { loadGuideContent } from '@/data/loader';
+import { loadGuide } from '@/data/loader';
 import { extractSections, findSection } from '@/sandbox/section-extractor';
 import { MarkdownRenderer } from '@/components/lesson/MarkdownRenderer';
 import { useProgressStore } from '@/store/progress-store';
@@ -31,10 +31,13 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
     }
     setLoading(true);
     setError(null);
-    loadGuideContent(module.guideFile)
-      .then((md) => {
-        const sections = extractSections(md);
-        const section = findSection(sections, step.sectionHeading);
+    loadGuide(module.guideFile)
+      .then(({ localized, english }) => {
+        const section = findSection(
+          extractSections(english),
+          extractSections(localized),
+          step.sectionHeading
+        );
         if (section) {
           setContent(section.content);
         } else {
@@ -46,9 +49,12 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module.guideFile, step.sectionHeading, i18n.language]);
 
-  const handleContinue = () => {
-    markLessonComplete(module.id, step.id);
-  };
+  // A lesson counts as read once its content is on screen. Previously this only
+  // fired from the "Continue" button, so anyone navigating by the step timeline
+  // or the top-bar Next link finished a module with 0% recorded.
+  useEffect(() => {
+    if (content && !isComplete) markLessonComplete(module.id, step.id);
+  }, [content, isComplete, markLessonComplete, module.id, step.id]);
 
   const hasNext = stepIndex < totalSteps - 1;
 
@@ -95,7 +101,6 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
         {hasNext && (
           <Link
             to={`/module/${module.id}/step/${stepIndex + 1}`}
-            onClick={handleContinue}
             className="px-5 py-2.5 bg-gray-900 hover:bg-gray-700 text-white dark:bg-gray-100 dark:hover:bg-gray-300 dark:text-gray-900 text-sm font-medium rounded-full transition-colors"
           >
             {isComplete ? t('nav.nextStep') : t('nav.continue')}
@@ -105,7 +110,6 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
         {!hasNext && (
           <Link
             to={`/module/${module.id}`}
-            onClick={handleContinue}
             className="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium rounded-full transition-colors"
           >
             {t('nav.completeModule')}

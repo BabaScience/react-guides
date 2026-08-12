@@ -1,4 +1,4 @@
-﻿# Ingénierie de la performance : satisfaire les deux threads
+# Ingénierie de la performance : satisfaire les deux threads
 
 > Le modèle mental des deux threads, l'optimisation des listes, la prévention des re-renders et les outils de profilage.
 

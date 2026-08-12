@@ -1,4 +1,4 @@
-﻿# Operators and Expressions: The Building Blocks of Logic
+# Operators and Expressions: The Building Blocks of Logic
 
 > Arithmetic, comparison, logical operators, destructuring, optional chaining, and the expressions that compose them.
 
@@ -10,7 +10,7 @@
 - [2. Assignment](#2-assignment)
 - [3. Comparison](#3-comparison)
 - [4. Logical Operators](#4-logical-operators)
-- [5. Spread Rest Destructuring](#5-spread-rest-destructuring)
+- [5. Spread, Rest, Destructuring](#5-spread-rest-destructuring)
 - [6. Optional Chaining and Nullish Access](#6-optional-chaining-and-nullish-access)
 
 ---
@@ -432,7 +432,7 @@ This is actually a good design decision. The precedence between these operators 
 
 ---
 
-## 5. Spread Rest Destructuring
+## 5. Spread, Rest, Destructuring
 
 These three features -- spread, rest, and destructuring -- are syntactic tools that fundamentally changed how JavaScript developers write code. They all use the same `...` syntax (spread and rest) or pattern-matching syntax (destructuring), but they serve different purposes. Understanding when you are "spreading" versus "resting" versus "destructuring" is the key.
 

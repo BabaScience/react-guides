@@ -1,4 +1,4 @@
-﻿# API native del dispositivo: il salto dal web
+# API native del dispositivo: il salto dal web
 
 > Camera, posizione, biometria, sensori e media — le capacità che rendono mobile le app mobile.
 

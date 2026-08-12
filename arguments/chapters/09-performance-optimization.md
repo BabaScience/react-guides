@@ -1,4 +1,4 @@
-﻿# React Performance Optimization: Strategies and Techniques
+# React Performance Optimization: Strategies and Techniques
 
 > A comprehensive exploration of performance optimization strategies, rendering optimization patterns, and pragmatic profiling techniques for React applications
 

@@ -1,4 +1,4 @@
-﻿# OTA Updates: Shipping Without the App Store
+# OTA Updates: Shipping Without the App Store
 
 > EAS Update, delta downloads, runtime versioning, and the compliance rules you must follow.
 

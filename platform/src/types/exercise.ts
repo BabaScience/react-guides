@@ -4,7 +4,13 @@ export interface Exercise {
   name: string;
   componentName: string;
   description: string;
-  hints: string[];
+  /**
+   * Optional English fallback. Hint text lives in the locale files
+   * (`exercises.<module>.<exercise>.hints`) — that is the single source of
+   * truth, and `scripts/validate-content.mjs` guarantees every exercise has
+   * hints in every locale. Duplicating them here only creates drift.
+   */
+  hints?: string[];
 }
 
 export interface LessonStep {

@@ -1,4 +1,4 @@
-﻿# Animazioni e Gesture: 60fps sul Thread UI
+# Animazioni e Gesture: 60fps sul Thread UI
 
 > Reanimated 3, Gesture Handler e gli strumenti che sostituiscono le transizioni CSS con prestazioni native.
 

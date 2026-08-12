@@ -1,4 +1,4 @@
-﻿# N.` headings exactly while expanding each section, removing hardcoded mermaid colors, and adding diagrams.
+# N.` headings exactly while expanding each section, removing hardcoded mermaid colors, and adding diagrams.
 
 # Navigation: Stacks, Tabs, and Deep Links
 

@@ -1,4 +1,4 @@
-﻿# Moduli Nativi e la Nuova Architettura
+# Moduli Nativi e la Nuova Architettura
 
 > JSI, Fabric, TurboModules e Codegen — cosa sono e quando è necessario scriverne uno proprio.
 

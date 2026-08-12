@@ -1,4 +1,4 @@
-﻿# Core Components and APIs: The Building Blocks
+# Core Components and APIs: The Building Blocks
 
 > The native primitives that replace HTML elements, and the platform APIs you will use every day.
 

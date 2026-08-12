@@ -1,4 +1,7 @@
 import Editor, { type BeforeMount } from '@monaco-editor/react';
+// Side-effect import: points @monaco-editor/react at the locally bundled
+// Monaco instead of cdn.jsdelivr.net. Must run before the first <Editor/>.
+import '@/monaco-setup';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '@/store/ui-store';

@@ -1,4 +1,4 @@
-﻿# Forms and Input: TextInput and Beyond
+# Forms and Input: TextInput and Beyond
 
 > The single input primitive, keyboard management, and form handling in a mobile-first world.
 

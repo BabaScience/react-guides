@@ -1,4 +1,4 @@
-﻿# Testing: From Unit Tests to Device Automation
+# Testing: From Unit Tests to Device Automation
 
 > Jest, React Native Testing Library, Maestro, and the testing pyramid for mobile apps.
 

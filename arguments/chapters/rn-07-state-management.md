@@ -1,4 +1,4 @@
-﻿# State Management: Same React, Different Platform
+# State Management: Same React, Different Platform
 
 > Local state, global state, and server state in React Native — what transfers from web and what changes.
 

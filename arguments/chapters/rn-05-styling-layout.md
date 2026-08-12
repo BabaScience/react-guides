@@ -1,4 +1,4 @@
-﻿# Styling and Layout: Flexbox Without the Web
+# Styling and Layout: Flexbox Without the Web
 
 > How styling works in React Native — no CSS, no Grid, just Flexbox and density-independent pixels.
 

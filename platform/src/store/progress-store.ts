@@ -4,6 +4,9 @@ import type { ExerciseProgress, ExerciseStatus } from '@/types/progress';
 import type { TestRunResult } from '@/types/exercise';
 import { modules } from '@/data/modules';
 
+/** Bump when the persisted shape changes, and add a `migrate` branch for it. */
+const PROGRESS_STORE_VERSION = 1;
+
 interface ProgressStore {
   exercises: Record<string, ExerciseProgress>;
   lessonSteps: Record<string, boolean>;
@@ -196,6 +199,20 @@ export const useProgressStore = create<ProgressStore>()(
         });
       },
     }),
-    { name: 'react-mastery-progress' }
+    {
+      name: 'react-mastery-progress',
+      // This store holds the learner's saved code — the one thing in the app
+      // that cannot be regenerated. A version stamp is what makes a future
+      // shape change migratable instead of silently corrupting it.
+      version: PROGRESS_STORE_VERSION,
+      migrate: (persisted, version) => {
+        if (version === 0) {
+          // v0 had no stamp. Shape is unchanged; record where we started so
+          // the next migration has a floor to work from.
+          return persisted as ProgressStore;
+        }
+        return persisted as ProgressStore;
+      },
+    }
   )
 );

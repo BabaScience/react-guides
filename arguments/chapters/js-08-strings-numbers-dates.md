@@ -1,4 +1,4 @@
-﻿# Strings, Numbers, and Dates: The Primitives That Bite
+# Strings, Numbers, and Dates: The Primitives That Bite
 
 > Template literals, floating-point traps, Unicode surprises, and why the Date API needs replacing.
 

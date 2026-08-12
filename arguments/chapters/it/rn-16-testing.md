@@ -1,4 +1,4 @@
-﻿# Testing: Dai Test Unitari all'Automazione su Dispositivo
+# Testing: Dai Test Unitari all'Automazione su Dispositivo
 
 > Jest, React Native Testing Library, Maestro e la piramide dei test per le app mobile.
 

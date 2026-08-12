@@ -1,4 +1,4 @@
-﻿# React Forms and Validation: Pattern e Strategie
+# React Forms and Validation: Pattern e Strategie
 
 > Un'esplorazione completa dei pattern di gestione dei moduli, delle strategie di validazione e degli approcci implementativi pragmatici per le applicazioni React
 

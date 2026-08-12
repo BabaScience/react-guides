@@ -1,6 +1,5 @@
 /**
- * Extracts sections from a markdown guide by splitting on ## headings.
- * Returns a map of heading text → section content (including the heading itself).
+ * Splits a markdown guide into `## ` sections and resolves a step to one of them.
  */
 
 export interface MarkdownSection {
@@ -17,7 +16,6 @@ export function extractSections(markdown: string): MarkdownSection[] {
 
   for (const line of lines) {
     if (line.startsWith('## ')) {
-      // Save previous section
       if (currentHeading) {
         sections.push({
           heading: currentHeading,
@@ -31,7 +29,6 @@ export function extractSections(markdown: string): MarkdownSection[] {
     }
   }
 
-  // Don't forget last section
   if (currentHeading) {
     sections.push({
       heading: currentHeading,
@@ -43,44 +40,39 @@ export function extractSections(markdown: string): MarkdownSection[] {
 }
 
 /**
- * Find a section by a partial heading match.
+ * Position of a step's section within the English chapter.
  *
- * `sectionHeading` from the step config is always in English (e.g. `"9. Custom
- * Hooks"`), but the markdown we're scanning may be a localized chapter whose
- * H2s have been translated (e.g. `"9. Custom Hook"` in Italian, `"9. Hooks
- * personnalisés"` in French). We work through progressively looser strategies:
+ * `step.sectionHeading` is always the English H2, verbatim.
+ * `scripts/validate-content.mjs` fails the build if it doesn't match exactly,
+ * so this is a lookup, not a search — no fuzzy fallbacks, no silent mismatches.
+ */
+export function findSectionIndex(
+  englishSections: MarkdownSection[],
+  sectionHeading: string
+): number {
+  return englishSections.findIndex((s) => s.heading === sectionHeading);
+}
+
+/**
+ * Resolve a step to its section in the reader's language.
  *
- *   1. exact heading match
- *   2. prefix match (heading starts with lookup)
- *   3. case-insensitive substring match
- *   4. leading-number match — translated headings reliably keep the `N.`
- *      numbering even when the title text changes, so as a final fallback we
- *      match `"9. Custom Hooks"` against any H2 starting with `"9."`.
+ * Translated chapters translate their H2 text ("1. Styling Paradigms in React"
+ * → "1. Paradigmes de styling dans React"), so matching on text can't work
+ * across locales. Instead we find the heading's *ordinal* in the English
+ * chapter and take the same ordinal from the localized one. The validator
+ * guarantees translations keep every H2 in the same order, which is what makes
+ * this exact rather than approximate.
+ *
+ * Returns `undefined` only if the heading is absent from the English chapter —
+ * a content bug the validator catches before it can ship.
  */
 export function findSection(
-  sections: MarkdownSection[],
+  englishSections: MarkdownSection[],
+  localizedSections: MarkdownSection[],
   sectionHeading: string
 ): MarkdownSection | undefined {
-  // 1. Try exact match
-  const exact = sections.find((s) => s.heading === sectionHeading);
-  if (exact) return exact;
-
-  // 2. Try prefix match (e.g. "1. Understanding React" matches "1. Understanding React: What It Is...")
-  const prefix = sections.find((s) => s.heading.startsWith(sectionHeading));
-  if (prefix) return prefix;
-
-  // 3. Try contains match
-  const contains = sections.find((s) =>
-    s.heading.toLowerCase().includes(sectionHeading.toLowerCase())
-  );
-  if (contains) return contains;
-
-  // 4. Leading-number fallback for translated headings.
-  const numMatch = sectionHeading.match(/^(\d+)\./);
-  if (numMatch) {
-    const numPrefix = `${numMatch[1]}.`;
-    return sections.find((s) => s.heading.startsWith(numPrefix));
-  }
-
-  return undefined;
+  const index = findSectionIndex(englishSections, sectionHeading);
+  if (index === -1) return undefined;
+  // If a translation drifted out of shape, English is better than nothing.
+  return localizedSections[index] ?? englishSections[index];
 }

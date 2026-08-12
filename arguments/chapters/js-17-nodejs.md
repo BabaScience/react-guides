@@ -1,4 +1,4 @@
-﻿# Node.js Runtime: JavaScript Beyond the Browser
+# Node.js Runtime: JavaScript Beyond the Browser
 
 > V8 on the server — filesystem, streams, npm, and backend frameworks.
 

@@ -1,4 +1,4 @@
-﻿# Monitoraggio e Produzione: Mantenere la tua App in Salute
+# Monitoraggio e Produzione: Mantenere la tua App in Salute
 
 > Crash reporting, analytics, feature flags e lo stack di osservabilità per le app mobile in produzione.
 

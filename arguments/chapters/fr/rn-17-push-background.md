@@ -1,4 +1,4 @@
-﻿# Notifications push et tâches en arrière-plan
+# Notifications push et tâches en arrière-plan
 
 > APNs, FCM, le background fetch et les contraintes de plateforme qui déterminent comment les applications mobiles se réveillent.
 

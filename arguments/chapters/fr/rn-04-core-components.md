@@ -1,4 +1,4 @@
-﻿# Composants et API de base : les briques fondamentales
+# Composants et API de base : les briques fondamentales
 
 > Les primitives natives qui remplacent les éléments HTML, et les API de plateforme que vous utiliserez au quotidien.
 

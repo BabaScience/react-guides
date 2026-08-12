@@ -1,4 +1,4 @@
-﻿# Monitoring et production : garder votre application en bonne santé
+# Monitoring et production : garder votre application en bonne santé
 
 > Rapports de crash, analytics, feature flags et la pile d'observabilité pour les applications mobiles en production.
 

@@ -1,4 +1,4 @@
-﻿# Networking and Data: Fetching, Caching, and Going Offline
+# Networking and Data: Fetching, Caching, and Going Offline
 
 > HTTP requests, server state management, real-time connections, and offline-first patterns for mobile.
 

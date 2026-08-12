@@ -1,4 +1,4 @@
-﻿# Control Flow: Making Decisions and Repeating Work
+# Control Flow: Making Decisions and Repeating Work
 
 > Conditionals, loops, iteration patterns, and when to reach for each one.
 

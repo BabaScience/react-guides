@@ -1,4 +1,4 @@
-﻿# Build et déploiement : du code aux stores
+# Build et déploiement : du code aux stores
 
 > EAS Build, soumission aux app stores, versioning et pipelines CI/CD pour livrer des applications mobiles.
 

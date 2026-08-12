@@ -1,56 +1,56 @@
 #!/usr/bin/env node
+/**
+ * CLI exercise runner — the offline counterpart to the in-browser runner.
+ *
+ * Usage:
+ *   npm test                    every module, every track
+ *   npm test 3                  React modules 1–3
+ *   npm test 07                 one module
+ *   npm test rn-04              one module in another track
+ *   npm test js                 a whole track
+ *   npm test 3 -- --watch       watch mode
+ */
 
-const { execSync } = require('child_process');
-const path = require('path');
+const { execFileSync } = require('child_process');
+const { exerciseDirs, selectDirs, jestBin } = require('./exercise-dirs');
 
-// Parse command line arguments
 const args = process.argv.slice(2);
-const moduleArg = args.find(arg => !arg.startsWith('--'));
+const selector = args.find((a) => !a.startsWith('--'));
 const isWatch = args.includes('--watch');
 
-if (!moduleArg || isNaN(moduleArg)) {
-  console.log('\n❌ Usage: npm test [module_number] [options]');
-  console.log('\nExamples:');
-  console.log('  npm test 1           - Test module 1 only');
-  console.log('  npm test 3           - Test modules 1, 2, and 3');
-  console.log('  npm test 5 -- --watch - Watch mode for modules 1-5');
-  console.log('\n');
+const selected = selectDirs(selector);
+
+if (selected.length === 0) {
+  const available = exerciseDirs();
+  console.log(`\nNothing matched "${selector}".\n`);
+  if (available.length === 0) {
+    console.log('No exercise directories found under src/.\n');
+  } else {
+    console.log('Available modules:');
+    for (const m of available) console.log(`  ${m.dir}  (${m.track})`);
+    console.log('\nOr pass a track: react | rn | js\n');
+  }
   process.exit(1);
 }
 
-const maxModule = parseInt(moduleArg);
+const pattern = selected.map((m) => `src/${m.dir}/index\\.test\\.tsx`).join('|');
 
-if (maxModule < 1 || maxModule > 12) {
-  console.log('\n❌ Module number must be between 1 and 12\n');
-  process.exit(1);
-}
-
-// Generate array of module numbers: ['01', '02', '03', ...]
-const modules = Array.from(
-  { length: maxModule },
-  (_, i) => String(i + 1).padStart(2, '0')
-);
-
-// Create test pattern that matches any of these modules
-const testPattern = modules
-  .map(num => `src/${num}-[^/]+/index\\.test\\.tsx`)
-  .join('|');
-
-console.log(`\n🧪 Running tests for modules 1-${maxModule}\n`);
-console.log('Modules included:', modules.join(', '));
+console.log(`\nRunning tests for ${selected.length} module(s):`);
+for (const m of selected) console.log(`  ${m.dir}`);
 console.log('');
 
-const watchFlag = isWatch ? '--watch' : '';
+const jest = jestBin();
+if (!jest) {
+  console.log('jest is not installed. Run `npm install` at the repo root first.\n');
+  process.exit(1);
+}
+
+const jestArgs = [`--testPathPattern=${pattern}`];
+if (isWatch) jestArgs.push('--watch');
 
 try {
-  execSync(
-    `jest --testPathPattern="${testPattern}" ${watchFlag}`,
-    {
-      stdio: 'inherit',
-      cwd: process.cwd()
-    }
-  );
-} catch (error) {
-  console.log('\n❌ Tests failed\n');
+  execFileSync(process.execPath, [jest, ...jestArgs], { stdio: 'inherit' });
+} catch {
+  console.log('\nTests failed.\n');
   process.exit(1);
 }

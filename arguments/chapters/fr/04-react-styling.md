@@ -1,4 +1,4 @@
-﻿# Stratégies de styling React et mise en œuvre
+# Stratégies de styling React et mise en œuvre
 
 > Une exploration complète des méthodologies de styling, des patterns architecturaux et des approches pragmatiques pour styliser les applications React
 

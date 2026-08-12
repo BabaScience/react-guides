@@ -1,4 +1,4 @@
-﻿# Optimisation des performances React : stratégies et techniques
+# Optimisation des performances React : stratégies et techniques
 
 > Une exploration complète des stratégies d'optimisation des performances, des patterns d'optimisation du rendu et des techniques de profiling pragmatiques pour les applications React
 

@@ -40,10 +40,10 @@ coverage/
 
 # VS Code
 .vscode/
-spec.md
-repo-guide.md
-architecture.md
-specifications.md
+
+# NOTE: spec.md, repo-guide.md, architecture.md and specifications.md used to
+# be ignored here. They are the project's specifications — keeping them on one
+# machine only meant nobody else could read them. They are tracked now.
 
 # Local-only artifacts (presentations, notes)
 *.pptx

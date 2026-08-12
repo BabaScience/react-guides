@@ -1,4 +1,4 @@
-﻿# The Event Loop: How JavaScript Actually Runs
+# The Event Loop: How JavaScript Actually Runs
 
 > Call stack, task queues, microtasks, and the execution model that explains every timing surprise.
 

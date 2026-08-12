@@ -1,4 +1,4 @@
-﻿# Advanced Topics for Complex Apps
+# Advanced Topics for Complex Apps
 
 > Monorepo setup, cross-platform sharing, i18n, accessibility, maps, payments, and architecture at scale.
 

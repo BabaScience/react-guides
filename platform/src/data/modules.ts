@@ -22,6 +22,7 @@ const fundamentalsSteps: Step[] = [
   { type: 'lesson', id: 'forms-controlled', title: 'Forms and Controlled Components', sectionHeading: '10. Forms and Controlled Components' },
   { type: 'exercise', id: 'contact-form', title: 'Exercise: ContactForm' },
   { type: 'exercise', id: 'filtered-list', title: 'Exercise: FilteredList' },
+  { type: 'lesson', id: 'fundamentals-summary', title: 'Recap: What You Just Learned', sectionHeading: 'Summary: What You Just Learned' },
 ];
 
 // --- Step definitions for Module 03: Component Patterns ---
@@ -30,6 +31,8 @@ const patternsSteps: Step[] = [
   { type: 'exercise', id: 'card', title: 'Exercise: Card (Composition)' },
   { type: 'lesson', id: 'prop-drilling', title: 'Prop Drilling: Problem and Solutions', sectionHeading: '2. Prop Drilling: Problem and Solutions' },
   { type: 'exercise', id: 'button-variant', title: 'Exercise: Button Variants' },
+  { type: 'lesson', id: 'state-elevation', title: 'State Elevation Strategies', sectionHeading: '3. State Elevation Strategies' },
+  { type: 'lesson', id: 'component-architecture', title: 'Component Architecture & Organization', sectionHeading: '4. Component Architecture and Organization' },
   { type: 'lesson', id: 'presentational-container', title: 'Presentational vs Container Components', sectionHeading: '5. Presentational vs Container Components' },
   { type: 'exercise', id: 'slot-card', title: 'Exercise: Slot Card' },
   { type: 'lesson', id: 'hoc-pattern', title: 'Higher-Order Components', sectionHeading: '6. Higher-Order Components (HOCs)' },
@@ -38,22 +41,33 @@ const patternsSteps: Step[] = [
   { type: 'exercise', id: 'toggle', title: 'Exercise: Toggle (Render Props)' },
   { type: 'lesson', id: 'compound-components', title: 'Compound Components', sectionHeading: '8. Compound Components Pattern' },
   { type: 'exercise', id: 'tabs', title: 'Exercise: Tabs (Compound)' },
+  { type: 'lesson', id: 'advanced-composition', title: 'Advanced Composition Techniques', sectionHeading: '9. Advanced Composition Techniques' },
+  { type: 'lesson', id: 'pattern-selection-matrix', title: 'Pattern Selection Decision Matrix', sectionHeading: '10. Pattern Selection Decision Matrix' },
+  { type: 'lesson', id: 'patterns-conclusion', title: 'Wrap-Up: Architecting Excellence', sectionHeading: 'Conclusion: Architecting Excellence' },
 ];
 
+// NOTE: `sectionHeading` must match the English H2 *exactly* — the section
+// lookup finds the heading's ordinal in the English chapter and takes the same
+// ordinal from the localized one. Dropping the leading `N.` here is what made
+// all seven of these lessons dead ends in French and Italian.
 const stylingSteps: Step[] = [
-  { type: 'lesson', id: 'styling-paradigms', title: 'Styling Paradigms in React', sectionHeading: 'Styling Paradigms in React' },
-  { type: 'lesson', id: 'inline-styles', title: 'Inline Styles: Mechanisms and Constraints', sectionHeading: 'Inline Styles: Mechanisms and Constraints' },
+  { type: 'lesson', id: 'styling-paradigms', title: 'Styling Paradigms in React', sectionHeading: '1. Styling Paradigms in React' },
+  { type: 'lesson', id: 'inline-styles', title: 'Inline Styles: Mechanisms and Constraints', sectionHeading: '2. Inline Styles: Mechanisms and Constraints' },
   { type: 'exercise', id: 'inline-styled', title: 'Exercise: InlineStyled' },
-  { type: 'lesson', id: 'css-modules', title: 'CSS Modules: Scoped Styling Architecture', sectionHeading: 'CSS Modules: Scoped Styling Architecture' },
+  { type: 'lesson', id: 'css-modules', title: 'CSS Modules: Scoped Styling Architecture', sectionHeading: '3. CSS Modules: Scoped Styling Architecture' },
   { type: 'exercise', id: 'badge', title: 'Exercise: Badge' },
-  { type: 'lesson', id: 'css-in-js', title: 'CSS-in-JS: styled-components and Emotion', sectionHeading: 'CSS-in-JS: styled-components and Emotion' },
+  { type: 'lesson', id: 'css-in-js', title: 'CSS-in-JS: styled-components and Emotion', sectionHeading: '4. CSS-in-JS: styled-components and Emotion' },
   { type: 'exercise', id: 'padded-box', title: 'Exercise: PaddedBox' },
-  { type: 'lesson', id: 'theming-design-systems', title: 'Theming and Design Systems', sectionHeading: 'Theming and Design Systems' },
-  { type: 'exercise', id: 'themed-text', title: 'Exercise: ThemedText' },
-  { type: 'lesson', id: 'tailwind-utility-first', title: 'Tailwind CSS: Utility-First Methodology', sectionHeading: 'Tailwind CSS: Utility-First Methodology' },
+  { type: 'lesson', id: 'tailwind-utility-first', title: 'Tailwind CSS: Utility-First Methodology', sectionHeading: '5. Tailwind CSS: Utility-First Methodology' },
   { type: 'exercise', id: 'responsive-grid', title: 'Exercise: ResponsiveGrid' },
-  { type: 'lesson', id: 'css-frameworks', title: 'CSS Frameworks Integration', sectionHeading: 'CSS Frameworks Integration' },
+  { type: 'lesson', id: 'css-frameworks', title: 'CSS Frameworks Integration', sectionHeading: '6. CSS Frameworks Integration' },
   { type: 'exercise', id: 'alert', title: 'Exercise: Alert' },
+  { type: 'lesson', id: 'styling-performance', title: 'Performance Considerations', sectionHeading: '7. Performance Considerations' },
+  { type: 'lesson', id: 'advanced-styling-patterns', title: 'Advanced Styling Patterns', sectionHeading: '8. Advanced Styling Patterns' },
+  { type: 'lesson', id: 'theming-design-systems', title: 'Theming and Design Systems', sectionHeading: '9. Theming and Design Systems' },
+  { type: 'exercise', id: 'themed-text', title: 'Exercise: ThemedText' },
+  { type: 'lesson', id: 'styling-selection-matrix', title: 'Styling Strategy Selection Matrix', sectionHeading: '10. Styling Strategy Selection Matrix' },
+  { type: 'lesson', id: 'styling-conclusion', title: 'Wrap-Up: Architecting Stylistic Excellence', sectionHeading: 'Conclusion: Architecting Stylistic Excellence' },
 ];
 
 const routingSteps: Step[] = [
@@ -65,10 +79,15 @@ const routingSteps: Step[] = [
   { type: 'exercise', id: 'link', title: 'Exercise: Link' },
   { type: 'exercise', id: 'route', title: 'Exercise: Route' },
   { type: 'lesson', id: 'dynamic-routing', title: 'Dynamic Routing with Parameters', sectionHeading: '4. Dynamic Routing with Parameters' },
+  { type: 'lesson', id: 'nested-routes', title: 'Nested Routes and Layouts', sectionHeading: '5. Nested Routes and Layouts' },
   { type: 'lesson', id: 'programmatic-navigation', title: 'Programmatic Navigation', sectionHeading: '7. Programmatic Navigation' },
   { type: 'exercise', id: 'use-navigate', title: 'Exercise: useNavigate' },
   { type: 'lesson', id: 'protected-routes', title: 'Protected Routes and Authentication', sectionHeading: '6. Protected Routes and Authentication' },
   { type: 'exercise', id: 'protected-route', title: 'Exercise: ProtectedRoute' },
+  { type: 'lesson', id: 'route-guards', title: 'Route Guards and Redirects', sectionHeading: '8. Route Guards and Redirects' },
+  { type: 'lesson', id: 'advanced-routing', title: 'Advanced Routing Patterns', sectionHeading: '9. Advanced Routing Patterns' },
+  { type: 'lesson', id: 'routing-performance', title: 'Routing Performance Optimization', sectionHeading: '10. Performance Optimization' },
+  { type: 'lesson', id: 'routing-conclusion', title: 'Wrap-Up: Mastering Navigation Architecture', sectionHeading: 'Conclusion: Mastering Navigation Architecture' },
 ];
 
 const stateMgmtSteps: Step[] = [
@@ -81,9 +100,14 @@ const stateMgmtSteps: Step[] = [
   { type: 'exercise', id: 'use-counter-reducer', title: 'Exercise: useCounterReducer' },
   { type: 'lesson', id: 'redux-core', title: 'Redux Core Concepts Deep Dive', sectionHeading: '5. Redux Core Concepts Deep Dive' },
   { type: 'exercise', id: 'combine-reducers', title: 'Exercise: combineReducers' },
+  { type: 'lesson', id: 'middleware-async', title: 'Middleware and Async Operations', sectionHeading: '6. Middleware and Async Operations' },
   { type: 'lesson', id: 'zustand', title: 'Zustand: Minimalist State Management', sectionHeading: '7. Zustand: Minimalist State Management' },
   { type: 'exercise', id: 'use-toggle', title: 'Exercise: useToggle' },
   { type: 'exercise', id: 'use-local-storage', title: 'Exercise: useLocalStorage' },
+  { type: 'lesson', id: 'jotai', title: 'Jotai: Atomic State Management', sectionHeading: '8. Jotai: Atomic State Management' },
+  { type: 'lesson', id: 'recoil', title: 'Recoil: Graph-Based State', sectionHeading: '9. Recoil: Graph-Based State' },
+  { type: 'lesson', id: 'state-selection-matrix', title: 'State Management Selection Matrix', sectionHeading: '10. State Management Selection Matrix' },
+  { type: 'lesson', id: 'state-conclusion', title: 'Wrap-Up: State Management Mastery', sectionHeading: 'Conclusion: State Management Mastery' },
 ];
 
 const dataFetchingSteps: Step[] = [
@@ -92,6 +116,8 @@ const dataFetchingSteps: Step[] = [
   { type: 'exercise', id: 'use-fetch', title: 'Exercise: useFetch' },
   { type: 'lesson', id: 'loading-error-states', title: 'Loading & Error States', sectionHeading: '3. Loading States and Error Handling' },
   { type: 'exercise', id: 'use-debounce', title: 'Exercise: useDebounce' },
+  { type: 'lesson', id: 'react-query', title: 'React Query: Server State Management', sectionHeading: '4. React Query: Server State Management' },
+  { type: 'lesson', id: 'swr', title: 'SWR: Stale-While-Revalidate', sectionHeading: '5. SWR: Stale-While-Revalidate' },
   { type: 'lesson', id: 'polling', title: 'Polling and Real-Time Updates', sectionHeading: '8. Polling and Real-Time Updates' },
   { type: 'exercise', id: 'use-interval', title: 'Exercise: useInterval' },
   { type: 'lesson', id: 'cancellation', title: 'Cancellation with AbortController', sectionHeading: '9. Advanced Patterns' },
@@ -100,6 +126,8 @@ const dataFetchingSteps: Step[] = [
   { type: 'exercise', id: 'use-optimistic', title: 'Exercise: useOptimistic' },
   { type: 'lesson', id: 'cache-strategies', title: 'Cache Management Strategies', sectionHeading: '7. Cache Management Strategies' },
   { type: 'exercise', id: 'create-cache', title: 'Exercise: createCache' },
+  { type: 'lesson', id: 'fetching-selection-matrix', title: 'Data Fetching Strategy Selection', sectionHeading: '10. Data Fetching Strategy Selection' },
+  { type: 'lesson', id: 'fetching-conclusion', title: 'Wrap-Up: Mastering Data Fetching', sectionHeading: 'Conclusion: Mastering Data Fetching' },
 ];
 
 const formsSteps: Step[] = [
@@ -107,14 +135,19 @@ const formsSteps: Step[] = [
   { type: 'lesson', id: 'controlled-uncontrolled', title: 'Controlled vs Uncontrolled Components', sectionHeading: '2. Controlled vs Uncontrolled Components' },
   { type: 'exercise', id: 'validate-email', title: 'Exercise: validateEmail' },
   { type: 'exercise', id: 'validate-min-length', title: 'Exercise: validateMinLength' },
+  { type: 'lesson', id: 'react-hook-form', title: 'React Hook Form: Modern Form Management', sectionHeading: '3. React Hook Form: Modern Form Management' },
   { type: 'lesson', id: 'custom-field-hook', title: 'Reusable Field State with Custom Hooks', sectionHeading: '8. Form State Management' },
   { type: 'exercise', id: 'use-field', title: 'Exercise: useField (custom hook)' },
   { type: 'lesson', id: 'form-validation', title: 'Validating Forms Without a Library', sectionHeading: '4. Validation with Yup' },
   { type: 'exercise', id: 'login-form', title: 'Exercise: LoginForm' },
+  { type: 'lesson', id: 'validation-zod', title: 'Validation with Zod', sectionHeading: '5. Validation with Zod' },
+  { type: 'lesson', id: 'file-upload', title: 'File Upload Handling', sectionHeading: '6. File Upload Handling' },
   { type: 'lesson', id: 'multi-step-forms', title: 'Multi-Step Forms', sectionHeading: '7. Multi-Step Forms' },
   { type: 'exercise', id: 'multi-step-form', title: 'Exercise: MultiStepForm' },
   { type: 'lesson', id: 'advanced-patterns', title: 'Advanced Form Patterns', sectionHeading: '9. Advanced Form Patterns' },
   { type: 'exercise', id: 'form-errors', title: 'Exercise: FormErrors' },
+  { type: 'lesson', id: 'forms-selection-matrix', title: 'Form Strategy Selection Matrix', sectionHeading: '10. Form Strategy Selection Matrix' },
+  { type: 'lesson', id: 'forms-conclusion', title: 'Wrap-Up: Mastering Form Management', sectionHeading: 'Conclusion: Mastering Form Management' },
 ];
 
 const performanceSteps: Step[] = [
@@ -124,12 +157,17 @@ const performanceSteps: Step[] = [
   { type: 'lesson', id: 'usememo-usecallback', title: 'useMemo and useCallback Patterns', sectionHeading: '3. useMemo and useCallback Patterns' },
   { type: 'exercise', id: 'use-expensive-calc', title: 'Exercise: useExpensiveCalc' },
   { type: 'exercise', id: 'use-stable-callback', title: 'Exercise: useStableCallback' },
+  { type: 'lesson', id: 'code-splitting', title: 'Code Splitting and Lazy Loading', sectionHeading: '4. Code Splitting and Lazy Loading' },
+  { type: 'lesson', id: 'bundle-size', title: 'Bundle Size Optimization', sectionHeading: '5. Bundle Size Optimization' },
+  { type: 'lesson', id: 'virtualization', title: 'Virtual Scrolling for Large Lists', sectionHeading: '6. Virtual Scrolling for Large Lists' },
+  { type: 'exercise', id: 'virtual-list', title: 'Exercise: VirtualList' },
   { type: 'lesson', id: 'render-introspection', title: 'Render Introspection with useRef', sectionHeading: '7. Profiling with React DevTools' },
   { type: 'exercise', id: 'use-render-count', title: 'Exercise: useRenderCount' },
   { type: 'lesson', id: 'debouncing', title: 'Debouncing Expensive Work', sectionHeading: '8. Advanced Optimization Techniques' },
   { type: 'exercise', id: 'use-debounced-value', title: 'Exercise: useDebouncedValue' },
-  { type: 'lesson', id: 'virtualization', title: 'Virtual Scrolling for Large Lists', sectionHeading: '6. Virtual Scrolling for Large Lists' },
-  { type: 'exercise', id: 'virtual-list', title: 'Exercise: VirtualList' },
+  { type: 'lesson', id: 'performance-monitoring', title: 'Performance Monitoring', sectionHeading: '9. Performance Monitoring' },
+  { type: 'lesson', id: 'performance-selection-matrix', title: 'Optimization Strategy Selection', sectionHeading: '10. Optimization Strategy Selection' },
+  { type: 'lesson', id: 'performance-conclusion', title: 'Wrap-Up: Performance Mastery', sectionHeading: 'Conclusion: Performance Mastery' },
 ];
 
 const testingSteps: Step[] = [
@@ -143,8 +181,12 @@ const testingSteps: Step[] = [
   { type: 'exercise', id: 'use-counter', title: 'Exercise: useCounter (hook testing)' },
   { type: 'lesson', id: 'mocking-dependencies', title: 'Mocking Dependencies', sectionHeading: '5. Mocking API Calls and Dependencies' },
   { type: 'exercise', id: 'event-emitter', title: 'Exercise: EventEmitter (jest.fn)' },
-  { type: 'lesson', id: 'best-practices', title: 'Testing Best Practices & Patterns', sectionHeading: '10. Testing Best Practices and Patterns' },
   { type: 'exercise', id: 'fetch-user-name', title: 'Exercise: fetchUserName (mocked fetch)' },
+  { type: 'lesson', id: 'integration-testing', title: 'Integration Testing Strategies', sectionHeading: '6. Integration Testing Strategies' },
+  { type: 'lesson', id: 'e2e-cypress', title: 'End-to-End Testing with Cypress', sectionHeading: '7. End-to-End Testing with Cypress' },
+  { type: 'lesson', id: 'e2e-playwright', title: 'End-to-End Testing with Playwright', sectionHeading: '8. End-to-End Testing with Playwright' },
+  { type: 'lesson', id: 'coverage-quality', title: 'Test Coverage and Quality Metrics', sectionHeading: '9. Test Coverage and Quality Metrics' },
+  { type: 'lesson', id: 'best-practices', title: 'Testing Best Practices & Patterns', sectionHeading: '10. Testing Best Practices and Patterns' },
 ];
 
 // --- Step definitions for Module 02: Hooks ---
@@ -166,6 +208,7 @@ const hooksSteps: Step[] = [
   { type: 'exercise', id: 'todo-reducer', title: 'Exercise: Todo App (useReducer)' },
   { type: 'lesson', id: 'custom-hooks', title: 'Custom Hooks', sectionHeading: '9. Custom Hooks' },
   { type: 'lesson', id: 'advanced-patterns', title: 'Advanced Patterns', sectionHeading: '10. Advanced Patterns' },
+  { type: 'lesson', id: 'hooks-wrap-up', title: 'Wrap-Up', sectionHeading: 'Wrapping Up' },
 ];
 
 const reactModules: Module[] = [
@@ -186,7 +229,6 @@ const reactModules: Module[] = [
         name: 'Basic Greeting Component',
         componentName: 'Greeting',
         description: 'Create a Greeting component that displays a personalized message with an optional name prop.',
-        hints: ['Accept an optional name prop with default "Guest"', 'Render: "Hello, [name]!"'],
       },
       {
         id: 'user-card',
@@ -194,7 +236,6 @@ const reactModules: Module[] = [
         name: 'User Card with Multiple Props',
         componentName: 'UserCard',
         description: 'Create a UserCard component that displays name, email, and age with typed props.',
-        hints: ['Define a TypeScript interface for props', 'Display all three fields'],
       },
       {
         id: 'todo-list',
@@ -202,7 +243,6 @@ const reactModules: Module[] = [
         name: 'Todo List (Arrays & Keys)',
         componentName: 'TodoList',
         description: 'Render a list of todos with proper key management and completion status.',
-        hints: ['Use .map() to render each todo', 'Each list item needs a unique key prop', 'Show completion status'],
       },
       {
         id: 'counter',
@@ -210,7 +250,6 @@ const reactModules: Module[] = [
         name: 'Counter with State',
         componentName: 'Counter',
         description: 'Create a counter with increment and decrement buttons using the useState hook.',
-        hints: ['Use useState to manage count', 'Create increment and decrement handlers', 'Display "Count: [number]"'],
       },
       {
         id: 'status-message',
@@ -218,7 +257,6 @@ const reactModules: Module[] = [
         name: 'Conditional Rendering',
         componentName: 'StatusMessage',
         description: 'Implement conditional rendering for loading, error, and data states.',
-        hints: ['Priority: loading > error > data', 'Use early returns or ternary operators', 'Handle all three states'],
       },
       {
         id: 'action-button',
@@ -226,7 +264,6 @@ const reactModules: Module[] = [
         name: 'Event Handler Button',
         componentName: 'ActionButton',
         description: 'Create a button that handles click events via a callback prop.',
-        hints: ['Accept text and onClick props', 'Wire onClick to the button element'],
       },
       {
         id: 'contact-form',
@@ -234,7 +271,6 @@ const reactModules: Module[] = [
         name: 'Controlled Input Form',
         componentName: 'ContactForm',
         description: 'Create a form with controlled inputs for name and email, handling submission.',
-        hints: ['Use useState for each field', 'Use value + onChange for controlled inputs', 'Handle form submission with preventDefault'],
       },
       {
         id: 'filtered-list',
@@ -242,7 +278,6 @@ const reactModules: Module[] = [
         name: 'Filtered List with State',
         componentName: 'FilteredList',
         description: 'Create a searchable list that filters items based on a search term.',
-        hints: ['Use useState for the search term', 'Filter items using .filter() and .includes()', 'Case-insensitive search'],
       },
     ],
   },
@@ -263,7 +298,6 @@ const reactModules: Module[] = [
         name: 'useState with Functional Updates',
         componentName: 'CounterWithFunctionalUpdates',
         description: 'Create a counter using functional updates to prevent stale state.',
-        hints: ['Use setCount(prev => prev + 1) pattern', 'Functional updates ensure correct value when batching'],
       },
       {
         id: 'data-fetching',
@@ -271,7 +305,6 @@ const reactModules: Module[] = [
         name: 'useEffect Data Fetching',
         componentName: 'DataFetchingComponent',
         description: 'Fetch data on mount with loading, error, and success states.',
-        hints: ['Use useEffect with empty dependency array for mount', 'Track loading/error/data states', 'Implement cleanup to prevent memory leaks'],
       },
       {
         id: 'theme-context',
@@ -279,7 +312,6 @@ const reactModules: Module[] = [
         name: 'useContext Theme Provider',
         componentName: 'ThemeProvider',
         description: 'Create a theme context with provider, consumer hook, and toggle component.',
-        hints: ['Use createContext + useContext', 'ThemeProvider manages state and provides value', 'useTheme hook throws if used outside provider'],
       },
       {
         id: 'focus-input',
@@ -287,7 +319,6 @@ const reactModules: Module[] = [
         name: 'useRef Focus Management',
         componentName: 'FocusInput',
         description: 'Use useRef to create an input reference and a button that focuses it.',
-        hints: ['Create ref with useRef<HTMLInputElement>(null)', 'Call ref.current?.focus() on button click'],
       },
       {
         id: 'filtered-list-memo',
@@ -295,7 +326,6 @@ const reactModules: Module[] = [
         name: 'useMemo Derived Data',
         componentName: 'FilteredList',
         description: 'Use useMemo to optimize filtering and sorting of a list.',
-        hints: ['Memoize the filtered+sorted result', 'Dependencies: items, filter, sortBy', 'Filter by category, sort by name or value'],
       },
       {
         id: 'callback-parent',
@@ -303,7 +333,6 @@ const reactModules: Module[] = [
         name: 'useCallback Stable References',
         componentName: 'ParentWithCallback',
         description: 'Use useCallback to prevent unnecessary re-renders of memoized children.',
-        hints: ['Wrap handlers in useCallback', 'Child uses React.memo', 'Verify child does not re-render when unrelated state changes'],
       },
       {
         id: 'todo-reducer',
@@ -311,7 +340,6 @@ const reactModules: Module[] = [
         name: 'useReducer Todo Management',
         componentName: 'TodoApp',
         description: 'Implement a full todo app with useReducer for complex state management.',
-        hints: ['Define actions: ADD_TODO, TOGGLE_TODO, DELETE_TODO, CLEAR_COMPLETED', 'Reducer is a pure function', 'Use dispatch to send actions'],
       },
     ],
   },
@@ -332,11 +360,6 @@ const reactModules: Module[] = [
         name: 'Card (Composition)',
         componentName: 'Card',
         description: 'Build a Card component that wraps arbitrary children below a title.',
-        hints: [
-          'Accept `title: string` and `children: React.ReactNode`',
-          'Render `<h2>{title}</h2>` then `{children}` inside one wrapper element',
-          'Tests use `getByRole(\'heading\', { level: 2 })` — make sure the title uses an `<h2>`',
-        ],
       },
       {
         id: 'button-variant',
@@ -344,11 +367,6 @@ const reactModules: Module[] = [
         name: 'Button Variants',
         componentName: 'ButtonVariant',
         description: 'Render a button whose className is derived from a `variant` prop.',
-        hints: [
-          'Accept `variant: \'primary\' | \'secondary\' | \'danger\'`',
-          'Set `className={`btn-${variant}`}` on the `<button>`',
-          'Wire `onClick` straight on the button',
-        ],
       },
       {
         id: 'slot-card',
@@ -356,11 +374,6 @@ const reactModules: Module[] = [
         name: 'Slot Card (Named Slots)',
         componentName: 'SlotCard',
         description: 'A card with three named slots (header, body, footer) tagged via `data-slot`.',
-        hints: [
-          'Accept three ReactNode props: `header`, `body`, `footer`',
-          'Render three children with `data-slot="header" | "body" | "footer"` in that order',
-          'Tests use `container.querySelector(\'[data-slot="header"]\')` so the attribute name matters',
-        ],
       },
       {
         id: 'with-logger',
@@ -368,12 +381,6 @@ const reactModules: Module[] = [
         name: 'withLogger (HOC)',
         componentName: 'withLogger',
         description: 'A higher-order component that wraps a component and counts its renders.',
-        hints: [
-          '`withLogger(Component)` should return a new functional component',
-          'On every render, increment the module-level `RENDER_COUNT` variable',
-          'Forward all props with `<Component {...props} />`',
-          'Tests reset the counter via `resetRenderCount()` in `beforeEach`',
-        ],
       },
       {
         id: 'toggle',
@@ -381,11 +388,6 @@ const reactModules: Module[] = [
         name: 'Toggle (Render Props)',
         componentName: 'Toggle',
         description: 'A Toggle that gives the consumer access to `on` state and a toggle fn via a function child.',
-        hints: [
-          'Use `useState(false)` for the boolean `on`',
-          '`children` is a function — call it with `{ on, toggle }`',
-          '`toggle` should flip the boolean (use `setOn((v) => !v)`)',
-        ],
       },
       {
         id: 'tabs',
@@ -393,12 +395,6 @@ const reactModules: Module[] = [
         name: 'Tabs (Compound Components)',
         componentName: 'Tabs',
         description: 'Build a `Tabs` + `Tab` + `TabPanel` set where parent and children share state via context.',
-        hints: [
-          '`Tabs` manages `active` state with useState, initial value = `defaultActive`',
-          'Wrap children in `<TabsContext.Provider value={{ active, setActive }}>`',
-          '`Tab` reads context and renders a `<button>` whose className contains `"active"` when `active === id`',
-          '`TabPanel` reads context and renders its children only when `active === id`',
-        ],
       },
     ],
   },
@@ -419,12 +415,6 @@ const reactModules: Module[] = [
         name: 'InlineStyled (Inline Style Prop)',
         componentName: 'InlineStyled',
         description: 'Render a <div> whose text color is driven entirely by an inline style prop.',
-        hints: [
-          'Accept `color: string` and `children: React.ReactNode`',
-          'Render `<div style={{ color }}>{children}</div>` — a single wrapper element',
-          'Tests grab the element via `getByText(children)` then read `el.style.color`, so the `color` value must land on the element that holds the text',
-          'Don\'t normalize the colour — pass it through exactly as received (e.g. `red`, `rgb(10,20,30)`)',
-        ],
       },
       {
         id: 'badge',
@@ -432,12 +422,6 @@ const reactModules: Module[] = [
         name: 'Badge (Variant className)',
         componentName: 'Badge',
         description: 'A <span> badge whose CSS class is built from the `variant` prop.',
-        hints: [
-          'Render a `<span>` (not a `<div>`) so it\'s inline',
-          'The element\'s className must literally include `badge-${variant}` — tests check `className.includes(\'badge-success\')` etc.',
-          'Build it with a template literal: `` `badge-${variant}` ``',
-          'The children must be rendered as the span\'s text content',
-        ],
       },
       {
         id: 'padded-box',
@@ -445,12 +429,6 @@ const reactModules: Module[] = [
         name: 'PaddedBox (Dynamic Inline Style)',
         componentName: 'PaddedBox',
         description: 'Render a <div> whose `padding` inline style is derived from a numeric prop.',
-        hints: [
-          'Render `<div style={{ padding: `${padding}px` }}>{children}</div>`',
-          'Note the `px` suffix — tests expect `el.style.padding === \'16px\'`, not `\'16\'`',
-          'Even `padding={0}` must serialize to `\'0px\'` — the template literal handles that automatically',
-          'Tests find the element via `getByText(children)`, so the padding style must be on the element that holds the text',
-        ],
       },
       {
         id: 'themed-text',
@@ -458,12 +436,6 @@ const reactModules: Module[] = [
         name: 'ThemedText (Theming via Context)',
         componentName: 'ThemedText',
         description: 'Consume a theme from React Context and apply it as the inline color and background of a <p>.',
-        hints: [
-          '`ThemeProvider` just wraps `children` in `<ThemeContext.Provider value={theme}>` — no extra DOM',
-          '`ThemedText` reads the theme with `useContext(ThemeContext)`',
-          'Render `<p style={{ color: theme.color, background: theme.background }}>{children}</p>`',
-          'Tests assert on `el.style.color` (exact match) and `el.style.background` (substring containing the value), so apply both on the same `<p>` that holds the text',
-        ],
       },
       {
         id: 'responsive-grid',
@@ -471,12 +443,6 @@ const reactModules: Module[] = [
         name: 'ResponsiveGrid (CSS Grid Inline Style)',
         componentName: 'ResponsiveGrid',
         description: 'Render a CSS-grid <div> whose column count comes from the `columns` prop.',
-        hints: [
-          'Inline style must be `{ display: \'grid\', gridTemplateColumns: `repeat(${columns}, 1fr)` }`',
-          'Tests check `el.style.display === \'grid\'`',
-          'Tests also check that the `style` attribute string contains the substring `repeat(3, 1fr)` for `columns={3}` — note the **space after the comma** matters',
-          'The grid element wraps `children`; tests reach it via `screen.getByText(\'cell\').parentElement`',
-        ],
       },
       {
         id: 'alert',
@@ -484,12 +450,6 @@ const reactModules: Module[] = [
         name: 'Alert (Role + Variant className)',
         componentName: 'Alert',
         description: 'An accessible alert box whose styling comes from a className and whose semantics come from `role="alert"`.',
-        hints: [
-          'Render a `<div>` with `role="alert"` so tests can find it with `getByRole(\'alert\')`',
-          'The className must literally include `alert-${type}` — tests check `className.includes(\'alert-success\')` etc.',
-          'Render the `message` string as the div\'s text content — `<div ...>{message}</div>`',
-          'Don\'t wrap the message in any extra elements — `toHaveTextContent(message)` needs the text directly on the alert div',
-        ],
       },
     ],
   },
@@ -510,12 +470,6 @@ const reactModules: Module[] = [
         name: 'match (Pattern Matching)',
         componentName: 'match',
         description: 'A pure function that matches a URL pattern with `:param` segments against a path and returns the captured parameters (or null on mismatch).',
-        hints: [
-          'Signature is `match(pattern, path): Record<string, string> | null` — return null, NOT an empty object, when the path does not match',
-          'Split both `pattern` and `path` on \'/\' and compare segment-by-segment; a different segment count is an automatic null',
-          'A pattern segment starting with \':\' captures the path segment; strip the leading \':\' to get the param name',
-          'Static segments must equal their path counterpart exactly — `match(\'/x\', \'/y\')` is null',
-        ],
       },
       {
         id: 'parse-query',
@@ -523,12 +477,6 @@ const reactModules: Module[] = [
         name: 'parseQuery (Query Strings)',
         componentName: 'parseQuery',
         description: 'A pure function that parses a query string (with or without a leading `?`) into a `Record<string, string>`. Empty string returns `{}`.',
-        hints: [
-          'Signature is `parseQuery(qs): Record<string, string>` — never coerce values to numbers, keep them as strings',
-          'Strip a leading \'?\' if present before splitting on \'&\'',
-          'Return `{}` for an empty input string — do not return `null` or `undefined`',
-          'Each pair splits on \'=\' into a key and a value; assign into an accumulator object',
-        ],
       },
       {
         id: 'link',
@@ -536,12 +484,6 @@ const reactModules: Module[] = [
         name: 'Link',
         componentName: 'Link',
         description: 'An anchor that performs client-side navigation: renders `<a href={to}>`, but intercepts clicks to call a `navigate` callback instead of letting the browser follow the link.',
-        hints: [
-          'Props are `to: string`, `navigate: (to: string) => void`, and `children` — the rendered element is `<a href={to}>{children}</a>`',
-          'The onClick handler MUST call `e.preventDefault()` before calling `navigate(to)` — otherwise the browser follows the href and reloads',
-          'After preventDefault, call `navigate(to)` with the exact `to` prop value (not a derived value)',
-          'Tests check the `defaultPrevented` flag on the event AND assert `navigate` was called once with `to`',
-        ],
       },
       {
         id: 'route',
@@ -549,12 +491,6 @@ const reactModules: Module[] = [
         name: 'Route',
         componentName: 'Route',
         description: 'Renders its children only when the `path` prop matches the `currentPath` prop (exact string comparison).',
-        hints: [
-          'Props are `path: string`, `currentPath: string`, `children` — render `{children}` when `path === currentPath`, otherwise return `null`',
-          'Use strict equality (`===`) — no pattern matching, no startsWith',
-          'Returning `null` (not an empty fragment) is what hides the content from the rendered output',
-          'The component is presentational only; it does not own any state',
-        ],
       },
       {
         id: 'use-navigate',
@@ -562,12 +498,6 @@ const reactModules: Module[] = [
         name: 'useNavigate',
         componentName: 'useNavigate',
         description: 'A custom hook that owns the current path with useState and returns a `[path, navigate]` tuple.',
-        hints: [
-          'Signature is `useNavigate(initial): [string, (to: string) => void]` — note the return is a TUPLE (array), not an object',
-          'Use `useState(initial)` internally; the tuple\'s first element is the state, the second is a function that calls the setter',
-          'The navigate function just sets the path — it does not need to validate or transform the input',
-          'Tests render a probe component, read the path via `data-testid="p"`, and click buttons that call `navigate(\'/x\')`',
-        ],
       },
       {
         id: 'protected-route',
@@ -575,12 +505,6 @@ const reactModules: Module[] = [
         name: 'ProtectedRoute',
         componentName: 'ProtectedRoute',
         description: 'A wrapper component that renders its children when `isAuthenticated` is true and renders a `fallback` node otherwise.',
-        hints: [
-          'Props are `isAuthenticated: boolean`, `children: React.ReactNode`, `fallback: React.ReactNode`',
-          'Return `{children}` when `isAuthenticated` is true; otherwise return `{fallback}` — both must be ReactNode, not strings',
-          'Do not call hooks or own any state — this is a pure render-time switch',
-          'Tests pass `<p>DASHBOARD</p>` as children and `<p>LOGIN</p>` as fallback and assert exactly one of them is in the document',
-        ],
       },
     ],
   },
@@ -601,12 +525,6 @@ const reactModules: Module[] = [
         name: 'createStore (Observable Store)',
         componentName: 'createStore',
         description: 'Build a tiny pub/sub store with getState, setState (value or updater), and subscribe — the engine behind every external state library.',
-        hints: [
-          'Keep `state` and a Set (or array) of listener callbacks in closure',
-          '`setState(next)`: if `typeof next === \'function\'`, call `next(state)`; else use `next` directly',
-          'After updating state, call every listener with no args',
-          '`subscribe(fn)` returns an unsubscribe fn that removes `fn` from the listener set',
-        ],
       },
       {
         id: 'use-counter-reducer',
@@ -614,12 +532,6 @@ const reactModules: Module[] = [
         name: 'useCounterReducer (useReducer Hook)',
         componentName: 'useCounterReducer',
         description: 'Wrap useReducer in a hook that returns [state, dispatch] for a counter with increment / decrement / reset actions.',
-        hints: [
-          'State shape is `{ count: number }`, initial `{ count: 0 }`',
-          'Reducer must be pure — return a NEW object, never mutate `state`',
-          'Handle action types `\'increment\'`, `\'decrement\'`, `\'reset\'`; return `state` for unknown types',
-          'Return the tuple `useReducer(reducer, initial)` produces, unchanged',
-        ],
       },
       {
         id: 'combine-reducers',
@@ -627,12 +539,6 @@ const reactModules: Module[] = [
         name: 'combineReducers (Reducer Composition)',
         componentName: 'combineReducers',
         description: 'Reproduce Redux\'s combineReducers: take a map of slice reducers and return a single root reducer that runs each on its own slice.',
-        hints: [
-          'Return a NEW function `(state, action) => nextState`',
-          'Iterate over each key in the input map and call `reducers[key](state[key], action)`',
-          'Assemble the results into a fresh object — never mutate the input `state`',
-          'Unknown actions: each sub-reducer returns its slice unchanged, so the root returns an equal-shaped object',
-        ],
       },
       {
         id: 'use-toggle',
@@ -640,11 +546,6 @@ const reactModules: Module[] = [
         name: 'useToggle (Boolean Hook)',
         componentName: 'useToggle',
         description: 'A reusable hook that returns [on, toggle] for a boolean value.',
-        hints: [
-          '`const [on, setOn] = useState(initial)`',
-          'Use the functional updater: `setOn(v => !v)` to stay safe in event handlers',
-          'Return the tuple `[on, toggle]` — order matters for destructuring',
-        ],
       },
       {
         id: 'count-context',
@@ -652,12 +553,6 @@ const reactModules: Module[] = [
         name: 'CountContext + Provider + useCount',
         componentName: 'CountProvider',
         description: 'A typed Context API setup: CountProvider owns the state; useCount reads context and throws when used outside a provider.',
-        hints: [
-          '`createContext<CountContextValue | null>(null)` so a missing provider is detectable',
-          '`CountProvider` uses `useState(0)` and defines `increment = () => setCount(c => c + 1)`',
-          'Pass `{ count, increment }` as the context value',
-          '`useCount` calls `useContext`, then `if (!ctx) throw new Error(...)` before returning',
-        ],
       },
       {
         id: 'use-local-storage',
@@ -665,12 +560,6 @@ const reactModules: Module[] = [
         name: 'useLocalStorage (Persistent State)',
         componentName: 'useLocalStorage',
         description: 'A useState-like hook that hydrates from localStorage on mount and writes JSON on every set.',
-        hints: [
-          'Use the lazy form of useState: `useState<T>(() => readFromLocalStorage())`',
-          'Wrap the read in `try/catch` — return `initial` if the key is missing OR JSON.parse throws',
-          'The setter must update React state AND call `localStorage.setItem(key, JSON.stringify(next))`',
-          'Clear localStorage in test setup so each test starts clean',
-        ],
       },
     ],
   },
@@ -691,13 +580,6 @@ const reactModules: Module[] = [
         name: 'useFetch (basic data hook)',
         componentName: 'useFetch',
         description: 'Build a generic hook `useFetch<T>(url)` that exposes `{ data, loading, error }` and refetches when the URL changes.',
-        hints: [
-          'Initial state: `{ data: null, loading: true, error: null }`',
-          'Use `useEffect` with `[url]` so the request re-runs whenever the URL prop changes',
-          'Reset to loading=true at the START of every fetch — not just on mount',
-          'On success call `r.json()` and put the result in `data`; on rejection put the error message in `error`',
-          'End every code path with `loading = false`',
-        ],
       },
       {
         id: 'use-debounce',
@@ -705,12 +587,6 @@ const reactModules: Module[] = [
         name: 'useDebounce',
         componentName: 'useDebounce',
         description: 'Return a debounced version of a value that only updates after `ms` milliseconds of no change.',
-        hints: [
-          '`useState(value)` for the debounced copy',
-          '`useEffect(() => { const id = setTimeout(...); return () => clearTimeout(id); }, [value, ms])`',
-          'The cleanup is what cancels the pending update when `value` changes again',
-          'Return the initial value immediately on the first render',
-        ],
       },
       {
         id: 'use-interval',
@@ -718,12 +594,6 @@ const reactModules: Module[] = [
         name: 'useInterval',
         componentName: 'useInterval',
         description: 'Run `callback` every `ms` ms; pause when `ms === null`; always use the latest callback (no stale closures).',
-        hints: [
-          'Store `callback` in a `useRef` and update `ref.current = callback` in an effect on every render',
-          'In a second effect (dependency `[ms]`), call `setInterval(() => ref.current(), ms)`',
-          'Return early from the interval effect when `ms === null` so no interval is created',
-          'Always return a cleanup that calls `clearInterval`',
-        ],
       },
       {
         id: 'use-abortable',
@@ -731,12 +601,6 @@ const reactModules: Module[] = [
         name: 'useAbortable',
         componentName: 'useAbortable',
         description: 'Like useFetch, but cancels the in-flight request on unmount and on URL change using AbortController.',
-        hints: [
-          'Inside the effect, create `const controller = new AbortController()`',
-          'Pass `{ signal: controller.signal }` as the second arg to `fetch`',
-          'Cleanup: `return () => controller.abort()`',
-          'In `.catch`, ignore errors where `err.name === \'AbortError\'` — don\'t update state for those',
-        ],
       },
       {
         id: 'use-optimistic',
@@ -744,12 +608,6 @@ const reactModules: Module[] = [
         name: 'useOptimistic',
         componentName: 'useOptimistic',
         description: 'Immediately reflect a tentative value, await the real commit, swap in the result, or revert on failure.',
-        hints: [
-          'Return `[state, apply]` where `apply(optimistic, commit)` is async',
-          'Capture the CURRENT state into `previous` BEFORE you setState(optimistic) — otherwise rollback is wrong',
-          'On success: `setState(await commit())`',
-          'On rejection: `setState(previous)` and re-throw the error so callers can handle it',
-        ],
       },
       {
         id: 'create-cache',
@@ -757,13 +615,6 @@ const reactModules: Module[] = [
         name: 'createCache',
         componentName: 'createCache',
         description: 'A small framework-free in-memory cache: `get`, `set`, `has`, `clear` — used as a building block for request caching.',
-        hints: [
-          'A closed-over `Map<string, T>` is the simplest backing store',
-          '`get` returns `map.get(key)` — `undefined` for missing keys is fine',
-          '`has` returns `map.has(key)`',
-          '`clear` calls `map.clear()`',
-          'Each call to `createCache()` must return a fresh independent instance (don\'t share state at module scope)',
-        ],
       },
     ],
   },
@@ -784,12 +635,6 @@ const reactModules: Module[] = [
         name: 'validateEmail (pure)',
         componentName: 'validateEmail',
         description: 'Write a pure boolean validator that returns true when a string looks like a basic email address.',
-        hints: [
-          'Signature: `validateEmail(s: string): boolean`',
-          'Regex: `/^[^\s@]+@[^\s@]+\.[^\s@]+$/` — non-space-or-@ chars, then `@`, then non-space-or-@ chars, then `.`, then non-space-or-@ chars',
-          'Pure function: no trimming, no side effects',
-          'Tests cover valid addresses, missing `@`, missing TLD, embedded whitespace, and the empty string',
-        ],
       },
       {
         id: 'validate-min-length',
@@ -797,12 +642,6 @@ const reactModules: Module[] = [
         name: 'validateMinLength (pure)',
         componentName: 'validateMinLength',
         description: 'Write a pure validator that returns true iff a string is at least `min` characters long.',
-        hints: [
-          'Signature: `validateMinLength(s: string, min: number): boolean`',
-          'Return `s.length >= min`',
-          'Do NOT trim whitespace — the caller decides whether whitespace counts',
-          'Edge case: `validateMinLength(\'\', 0)` is `true`',
-        ],
       },
       {
         id: 'use-field',
@@ -810,13 +649,6 @@ const reactModules: Module[] = [
         name: 'useField (custom hook)',
         componentName: 'useField',
         description: 'Build a reusable controlled-field hook that returns `{ value, onChange, error }`.',
-        hints: [
-          'Signature: `useField(initial: string, validate: (v: string) => string | null)`',
-          'Manage `value` with `useState(initial)`',
-          '`onChange` must be a `React.ChangeEventHandler<HTMLInputElement>` that reads `e.target.value`',
-          '`error` is just `validate(value)` recomputed each render',
-          'Consumers should be able to write `<input value={f.value} onChange={f.onChange} />`',
-        ],
       },
       {
         id: 'login-form',
@@ -824,15 +656,6 @@ const reactModules: Module[] = [
         name: 'LoginForm',
         componentName: 'LoginForm',
         description: 'A controlled login form that validates email + password (min 6 chars) and surfaces errors before calling onSubmit.',
-        hints: [
-          'Props: `onSubmit: (data: { email: string; password: string }) => void`',
-          'Render `<form role="form">` — tests look it up with `getByRole(\'form\')`',
-          'Use `<label htmlFor>` + `<input id>` with label text exactly "Email" and "Password" so `getByLabelText(\'Email\')` works',
-          'Submit `<button>` text must be "Log in"',
-          'On submit: call `e.preventDefault()`, then validate with `validateEmail` and `validateMinLength(password, 6)`',
-          'If any check fails, render a `<ul role="alert">` with one `<li>` per error message',
-          'If both pass, call `onSubmit({ email, password })`',
-        ],
       },
       {
         id: 'multi-step-form',
@@ -840,13 +663,6 @@ const reactModules: Module[] = [
         name: 'MultiStepForm',
         componentName: 'MultiStepForm',
         description: 'A 3-step wizard with Back / Next buttons and a final Submit button on the last step.',
-        hints: [
-          'Track the current step with `useState<1 | 2 | 3>(1)`',
-          'Render the heading as `<h2>Step {step}</h2>` — text must be exactly "Step 1", "Step 2", or "Step 3"',
-          '"Back" button is `disabled` on step 1',
-          'On steps 1 and 2, show a "Next" button that increments the step',
-          'On step 3, hide "Next" and render a "Submit" button instead — tests check both with `getByRole(\'button\', { name: \'Submit\' })` and `queryByRole(\'button\', { name: \'Next\' })`',
-        ],
       },
       {
         id: 'form-errors',
@@ -854,12 +670,6 @@ const reactModules: Module[] = [
         name: 'FormErrors',
         componentName: 'FormErrors',
         description: 'A presentational component that renders a list of field errors, or nothing when there are none.',
-        hints: [
-          'Props: `errors: Record<string, string>`',
-          'If `Object.keys(errors).length === 0`, return `null`',
-          'Otherwise render `<ul role="alert">` with one `<li data-error-key="{key}">{message}</li>` per entry',
-          'Tests query items via `container.querySelector(\'[data-error-key="email"]\')`',
-        ],
       },
     ],
   },
@@ -880,13 +690,6 @@ const reactModules: Module[] = [
         name: 'MemoizedChild (React.memo)',
         componentName: 'MemoizedChild',
         description: 'Wrap a component in React.memo so identical `value` props short-circuit re-renders. Track render count via a module-level counter for assertions.',
-        hints: [
-          'Wrap the component definition in `React.memo(...)`',
-          'On every render, increment the exported `MEMOIZED_RENDERS` counter',
-          'Render `<span>{value}</span>` so the test can locate the output',
-          'Tests reset the counter via `resetMemoizedRenders()` in `beforeEach`',
-          'If the parent\'s unrelated state bumps but `value` is unchanged, the counter must stay flat',
-        ],
       },
       {
         id: 'use-expensive-calc',
@@ -894,11 +697,6 @@ const reactModules: Module[] = [
         name: 'useExpensiveCalc (useMemo)',
         componentName: 'useExpensiveCalc',
         description: 'A hook that memoizes an expensive calculation, only re-running it when the numeric input changes.',
-        hints: [
-          'Signature: `useExpensiveCalc(n: number, calc: (n: number) => number): number`',
-          'Return `useMemo(() => calc(n), [n])` — do NOT add `calc` to the deps',
-          'Tests pass a `jest.fn()` for `calc` and assert it\'s called once per distinct `n`',
-        ],
       },
       {
         id: 'use-stable-callback',
@@ -906,11 +704,6 @@ const reactModules: Module[] = [
         name: 'useStableCallback',
         componentName: 'useStableCallback',
         description: 'Return a callback whose reference is stable across renders but which always invokes the latest closure.',
-        hints: [
-          'Hold the latest `fn` in a `useRef` and update it on every render',
-          'Return a `useCallback` with empty deps that delegates to `ref.current(...args)`',
-          'Tests assert the returned function is `===` across renders AND that it sees the latest closed-over state',
-        ],
       },
       {
         id: 'use-render-count',
@@ -918,11 +711,6 @@ const reactModules: Module[] = [
         name: 'useRenderCount',
         componentName: 'useRenderCount',
         description: 'A hook that returns how many times the host component has rendered.',
-        hints: [
-          'Use `useRef(0)` so the counter survives across renders without triggering one',
-          'Increment `ref.current` on every render BEFORE returning it',
-          'Return `ref.current` directly — do not use `useState`, which would loop',
-        ],
       },
       {
         id: 'use-debounced-value',
@@ -930,12 +718,6 @@ const reactModules: Module[] = [
         name: 'useDebouncedValue',
         componentName: 'useDebouncedValue',
         description: 'Return a debounced version of `value` that only updates after `ms` milliseconds of stability.',
-        hints: [
-          'Hold the debounced value in `useState(value)`',
-          'Inside `useEffect` keyed on `[value, ms]`, schedule `setDebounced(value)` via `setTimeout`',
-          'Return a cleanup function that calls `clearTimeout(id)` — this is what resets the timer when `value` changes again',
-          'Tests use fake timers — initial render must produce the initial value synchronously',
-        ],
       },
       {
         id: 'virtual-list',
@@ -943,12 +725,6 @@ const reactModules: Module[] = [
         name: 'VirtualList (windowing)',
         componentName: 'VirtualList',
         description: 'Render only the visible slice of a long list so the DOM stays small no matter how many items.',
-        hints: [
-          '`startIndex = Math.floor(scrollTop / itemHeight)`',
-          '`endIndex = startIndex + Math.ceil(windowHeight / itemHeight) + 1` (the `+1` is the overscan buffer)',
-          'Render a single `<ul>` with `items.slice(start, end).map(...)` — `Array.slice` already clamps at `items.length`',
-          'Each `<li>` text content is the item string; `key={start + i}` is fine',
-        ],
       },
     ],
   },
@@ -969,11 +745,6 @@ const reactModules: Module[] = [
         name: 'sum (toBe)',
         componentName: 'sum',
         description: 'A pure function adding two numbers. Teaches the most basic assertion: `expect(actual).toBe(expected)`.',
-        hints: [
-          'Signature: `sum(a: number, b: number): number`',
-          'Just `return a + b` — nothing else',
-          'Tests use `expect(sum(2, 3)).toBe(5)` — primitive `===` equality',
-        ],
       },
       {
         id: 'capitalize',
@@ -981,12 +752,6 @@ const reactModules: Module[] = [
         name: 'capitalize (edge cases)',
         componentName: 'capitalize',
         description: 'A pure function that upper-cases the first character of a string. Teaches handling edge cases (empty string) with multiple assertions.',
-        hints: [
-          'Signature: `capitalize(s: string): string`',
-          'Guard the empty string first: `if (!s) return \'\'`',
-          'Otherwise: `s[0].toUpperCase() + s.slice(1)`',
-          'Already-capitalized inputs (e.g. \'ABC\') must stay unchanged',
-        ],
       },
       {
         id: 'greeting',
@@ -994,11 +759,6 @@ const reactModules: Module[] = [
         name: 'Greeting (render + jest-dom)',
         componentName: 'Greeting',
         description: 'Render `<p>Hello, {name}!</p>`. Teaches `render()`, `screen.getByText`, and `toBeInTheDocument`.',
-        hints: [
-          'Accept `name: string`',
-          'Return exactly `<p>Hello, {name}!</p>` — note the comma, space, and `!`',
-          'Tests rely on `screen.getByText(\'Hello, Ada!\')` — the text must be a single, exact match',
-        ],
       },
       {
         id: 'use-counter',
@@ -1006,12 +766,6 @@ const reactModules: Module[] = [
         name: 'useCounter (hook testing)',
         componentName: 'useCounter',
         description: 'A counter hook exposing `{ count, increment, decrement }`. Teaches hook testing via a wrapper component that surfaces the hook through the DOM.',
-        hints: [
-          'Use `useState(initial)` for the count',
-          '`increment` should be `() => setCount((c) => c + 1)`',
-          '`decrement` should be `() => setCount((c) => c - 1)`',
-          'Return `{ count, increment, decrement }` — exact field names, the test harness component reads them',
-        ],
       },
       {
         id: 'event-emitter',
@@ -1019,12 +773,6 @@ const reactModules: Module[] = [
         name: 'EventEmitter (jest.fn + unsubscribe)',
         componentName: 'EventEmitter',
         description: 'A tiny pub/sub class with `on`, `off`, `emit`. Teaches `jest.fn()` for spies plus `toHaveBeenCalledTimes` / `toHaveBeenCalledWith` for multiple subscribers and unsubscription.',
-        hints: [
-          'Store listeners in a `Map<string, Listener[]>`',
-          '`on(event, fn)` appends fn to the array (create the array if missing)',
-          '`off(event, fn)` removes that exact fn reference — `array.filter(l => l !== fn)` works',
-          '`emit(event, ...args)` calls every listener; if no listeners exist, do nothing (don\'t throw)',
-        ],
       },
       {
         id: 'fetch-user-name',
@@ -1032,13 +780,6 @@ const reactModules: Module[] = [
         name: 'fetchUserName (mocked fetch)',
         componentName: 'fetchUserName',
         description: 'Async function that fetches `/api/users/{id}` and returns the `name` field. Teaches mocking `global.fetch` with `jest.fn().mockResolvedValue(...)` and asserting on the URL the function called.',
-        hints: [
-          '`const res = await fetch(\'/api/users/\' + id)`',
-          '`const user = await res.json()`',
-          '`return user.name`',
-          'Tests replace `global.fetch` with a mock that resolves to `{ json: () => Promise.resolve({ name: \'Alice\' }) }`',
-          'The URL must be exactly `/api/users/<id>` — the test checks via `toHaveBeenCalledWith(\'/api/users/42\')`',
-        ],
       },
     ],
   },

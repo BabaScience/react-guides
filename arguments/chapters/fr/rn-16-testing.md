@@ -1,4 +1,4 @@
-﻿# Tests : des tests unitaires à l'automatisation sur appareil
+# Tests : des tests unitaires à l'automatisation sur appareil
 
 > Jest, React Native Testing Library, Maestro et la pyramide des tests pour les applications mobiles.
 

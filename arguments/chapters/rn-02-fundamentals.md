@@ -1,4 +1,4 @@
-﻿# React Native Fundamentals: Understanding the Runtime
+# React Native Fundamentals: Understanding the Runtime
 
 > What React Native actually is under the hood, and the critical mental model shift from web to mobile.
 

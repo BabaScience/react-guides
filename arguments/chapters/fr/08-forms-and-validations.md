@@ -1,4 +1,4 @@
-﻿# Formulaires et validation en React : patterns et stratégies
+# Formulaires et validation en React : patterns et stratégies
 
 > Une exploration complète des patterns de gestion des formulaires, des stratégies de validation et des approches d'implémentation pragmatiques pour les applications React
 

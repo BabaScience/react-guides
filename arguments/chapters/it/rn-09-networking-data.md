@@ -1,4 +1,4 @@
-﻿# Networking e Dati: Fetching, Caching e Funzionamento Offline
+# Networking e Dati: Fetching, Caching e Funzionamento Offline
 
 > Richieste HTTP, gestione dello stato del server, connessioni in tempo reale e pattern offline-first per il mobile.
 

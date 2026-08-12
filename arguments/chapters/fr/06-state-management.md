@@ -1,4 +1,4 @@
-﻿# Gestion d'état React : Architecture et Patterns
+# Gestion d'état React : Architecture et Patterns
 
 > Une exploration approfondie des paradigmes de gestion d'état, des patterns architecturaux et des stratégies d'implémentation pragmatiques pour les applications React
 

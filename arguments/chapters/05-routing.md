@@ -1,4 +1,4 @@
-﻿# React Router: Navigation and Routing Architecture
+# React Router: Navigation and Routing Architecture
 
 > A comprehensive exploration of client-side routing paradigms, navigation patterns, and authentication-driven route protection strategies in React applications
 

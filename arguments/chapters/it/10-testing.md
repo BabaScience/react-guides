@@ -1,4 +1,4 @@
-﻿# Testing in React: Strategie e Metodologie Complete
+# Testing in React: Strategie e Metodologie Complete
 
 > Un compendio esaustivo di paradigmi di testing, pattern architetturali e tecniche di implementazione pragmatiche per applicazioni React
 

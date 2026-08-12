@@ -1,4 +1,4 @@
-﻿# API natives de l'appareil : le grand saut depuis le web
+# API natives de l'appareil : le grand saut depuis le web
 
 > Caméra, géolocalisation, biométrie, capteurs et médias — les capacités qui rendent les applications mobiles réellement mobiles.
 

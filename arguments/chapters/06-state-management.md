@@ -1,4 +1,4 @@
-﻿# React State Management: Architecture and Patterns
+# React State Management: Architecture and Patterns
 
 > A comprehensive exploration of state management paradigms, architectural patterns, and pragmatic implementation strategies for React applications
 

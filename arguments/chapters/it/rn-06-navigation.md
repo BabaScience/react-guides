@@ -1,4 +1,4 @@
-﻿# Navigazione: Stack, Tab e Deep Link
+# Navigazione: Stack, Tab e Deep Link
 
 > Come le schermate si collegano tra loro nel mobile — React Navigation v7, Expo Router e i pattern che sostituiscono il routing basato su URL.
 

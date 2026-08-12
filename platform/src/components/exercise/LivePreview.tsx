@@ -10,7 +10,7 @@ import * as React from 'react';
 import * as ReactNativeWeb from 'react-native-web';
 import { createRoot, type Root } from 'react-dom/client';
 import { useTranslation } from 'react-i18next';
-import { preprocessTypeScript, transpile } from '@/sandbox/transpiler';
+import { transpile } from '@/sandbox/transpiler';
 import { extractExampleProps } from '@/sandbox/preview-props-extractor';
 
 interface LivePreviewProps {
@@ -25,12 +25,21 @@ const DEBOUNCE_MS = 500;
 
 /**
  * Live preview of the user's exercise component.
- * Transpiles the editor source on each (debounced) change and mounts the
- * named export into a sandboxed container with an error boundary around it.
  *
- * Components are rendered with no props — exercises that take required props
- * will render with `undefined` values, which is intentional: it lets the user
- * see the markup shape without us having to invent props per exercise.
+ * Two separate effects, deliberately:
+ *
+ *   compile — debounced, keyed on `code`. Runs Babel, evaluates the module and
+ *             stores the exported component.
+ *   render  — keyed on the compiled component and the current props.
+ *
+ * Keeping them apart matters. When both lived in one effect keyed on
+ * `currentProps`, editing a prop re-ran Babel and produced a *new* component
+ * identity, so React unmounted and remounted the tree — the preview lost its
+ * own state on every keystroke in the props panel.
+ *
+ * Props come from the exercise's test file (see preview-props-extractor) so
+ * components with required props render with realistic data, and the user can
+ * edit them live in the panel below.
  */
 export function LivePreview({ code, componentName, testSource }: LivePreviewProps) {
   const { t } = useTranslation();
@@ -40,6 +49,13 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
     'idle'
   );
   const [error, setError] = useState<string | null>(null);
+  // The compiled component plus a monotonic generation id — the id is what
+  // resets the error boundary on recompile without doing so on prop edits.
+  const [compiled, setCompiled] = useState<{
+    Component: React.ComponentType;
+    generation: number;
+  } | null>(null);
+  const generationRef = useRef(0);
   const [exampleProps, setExampleProps] = useState<Record<string, unknown>>({});
   // The props actually passed to the rendered component. Starts as a clone of
   // exampleProps, but the user can edit them via the Props panel below.
@@ -69,6 +85,7 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
     return () => { cancelled = true; };
   }, [testSource, componentName]);
 
+  // --- compile: debounced, only when the source changes ---
   useEffect(() => {
     let cancelled = false;
     setStatus('compiling');
@@ -77,9 +94,8 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
       if (cancelled) return;
 
       try {
-        const processed = preprocessTypeScript(code);
-        const compiled = await transpile(processed, 'index.tsx');
-        if (cancelled || !containerRef.current) return;
+        const compiled = await transpile(code, 'index.tsx');
+        if (cancelled) return;
 
         const moduleExports: Record<string, unknown> = {};
         const requireFn = (id: string): unknown => {
@@ -104,30 +120,22 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
         if (moduleObj.exports !== moduleExports) {
           Object.assign(moduleExports, moduleObj.exports);
         }
+        if (cancelled) return;
 
-        const Component = moduleExports[componentName] as
-          | React.ComponentType
-          | undefined;
-
-        if (typeof Component !== 'function') {
+        const Exported = moduleExports[componentName];
+        if (typeof Exported !== 'function') {
+          setCompiled(null);
           setError(t('preview.notExported', { name: componentName }));
           setStatus('error');
-          rootRef.current?.render(<></>);
           return;
         }
 
-        if (!rootRef.current) {
-          rootRef.current = createRoot(containerRef.current);
-        }
-        rootRef.current.render(
-          <PreviewErrorBoundary key={code} fallbackLabel={t('preview.runtimeError')}>
-            <Component {...(currentProps as Record<string, unknown>)} />
-          </PreviewErrorBoundary>
-        );
+        setCompiled({ Component: Exported as React.ComponentType, generation: generationRef.current++ });
         setError(null);
         setStatus('ok');
       } catch (e) {
         if (cancelled) return;
+        setCompiled(null);
         setError(e instanceof Error ? e.message : String(e));
         setStatus('error');
       }
@@ -137,7 +145,27 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
       cancelled = true;
       window.clearTimeout(handle);
     };
-  }, [code, componentName, currentProps, t]);
+  }, [code, componentName, t]);
+
+  // --- render: cheap, runs on prop edits without re-compiling ---
+  useEffect(() => {
+    if (!containerRef.current) return;
+    if (!rootRef.current) rootRef.current = createRoot(containerRef.current);
+
+    if (!compiled) {
+      rootRef.current.render(<></>);
+      return;
+    }
+
+    const { Component, generation } = compiled;
+    rootRef.current.render(
+      // Keyed on the compile generation so a fresh compile resets a boundary
+      // that had caught an error, while prop edits reuse the same instance.
+      <PreviewErrorBoundary key={generation} fallbackLabel={t('preview.runtimeError')}>
+        <Component {...(currentProps as Record<string, unknown>)} />
+      </PreviewErrorBoundary>
+    );
+  }, [compiled, currentProps, t]);
 
   // Unmount the React root when the LivePreview itself unmounts.
   useEffect(() => {

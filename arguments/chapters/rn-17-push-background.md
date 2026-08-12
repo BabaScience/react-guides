@@ -1,4 +1,4 @@
-﻿# Push Notifications and Background Tasks
+# Push Notifications and Background Tasks
 
 > APNs, FCM, background fetch, and the platform constraints that shape how mobile apps wake up.
 

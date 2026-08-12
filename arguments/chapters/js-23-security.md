@@ -1,4 +1,4 @@
-﻿# Security: Defending JavaScript Applications
+# Security: Defending JavaScript Applications
 
 > XSS, CSRF, injection, authentication, dependency auditing, and security practices.
 

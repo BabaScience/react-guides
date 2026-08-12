@@ -1,4 +1,4 @@
-﻿# Environment Setup: From Zero to Running App
+# Environment Setup: From Zero to Running App
 
 > Setting up Expo, simulators, and your first running React Native project in under 10 minutes.
 

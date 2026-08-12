@@ -1,4 +1,4 @@
-﻿# Browser APIs and the DOM: JavaScript Meets the Web
+# Browser APIs and the DOM: JavaScript Meets the Web
 
 > DOM manipulation, events, fetch, storage, and the Web APIs that make browsers a platform.
 

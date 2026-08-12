@@ -1,4 +1,4 @@
-﻿# Configurazione dell'ambiente: da zero all'app in esecuzione
+# Configurazione dell'ambiente: da zero all'app in esecuzione
 
 > Configurare Expo, i simulatori e il tuo primo progetto React Native funzionante in meno di 10 minuti.
 

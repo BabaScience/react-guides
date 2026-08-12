@@ -1,4 +1,4 @@
-﻿# Form e Input: TextInput e oltre
+# Form e Input: TextInput e oltre
 
 > Il singolo primitivo di input, la gestione della tastiera e la gestione dei form in un mondo mobile-first.
 

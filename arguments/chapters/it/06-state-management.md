@@ -1,4 +1,4 @@
-﻿# Gestione dello stato in React: architettura e pattern
+# Gestione dello stato in React: architettura e pattern
 
 > Un'esplorazione approfondita dei paradigmi di gestione dello stato, dei pattern architetturali e delle strategie di implementazione pragmatiche per le applicazioni React
 

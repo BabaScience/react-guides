@@ -1,4 +1,4 @@
-﻿# Modern JavaScript: ES2020 Through ES2025
+# Modern JavaScript: ES2020 Through ES2025
 
 > The features shipped since 2020 and proposals shaping the next decade.
 

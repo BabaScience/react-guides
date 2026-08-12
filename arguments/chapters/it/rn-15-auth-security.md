@@ -1,4 +1,4 @@
-﻿# Autenticazione e sicurezza: proteggere la tua app mobile
+# Autenticazione e sicurezza: proteggere la tua app mobile
 
 > Pattern di autenticazione, archiviazione dei token, sblocco biometrico e l'hardening di sicurezza che separa le app giocattolo da quelle in produzione.
 

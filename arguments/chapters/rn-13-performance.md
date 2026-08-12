@@ -1,4 +1,4 @@
-﻿# Performance Engineering: Keeping Both Threads Happy
+# Performance Engineering: Keeping Both Threads Happy
 
 > The two-thread mental model, list optimization, re-render prevention, and profiling tools.
 

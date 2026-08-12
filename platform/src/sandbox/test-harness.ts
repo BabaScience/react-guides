@@ -1,11 +1,30 @@
 /**
- * Lightweight test harness implementing Jest-like API for in-browser execution.
- * Implements: describe, it, expect, beforeEach, jest.fn, jest.spyOn, waitFor
+ * Lightweight test harness implementing a Jest-like API for in-browser execution.
+ *
+ * Implements: describe (nestable), it/test, expect, beforeEach, afterEach,
+ * beforeAll, afterAll, jest.fn, jest.spyOn, waitFor.
+ *
+ * Hook semantics follow Jest: beforeEach runs outermost-first, afterEach
+ * innermost-first, beforeAll once per suite before its first test, afterAll
+ * once after its last. A suite's hooks apply to every test nested below it.
  */
+
+type Hook = () => Promise<void> | void;
 
 export interface TestHarnessOptions {
   /** Called after every test, success or failure. Use for testing-library cleanup. */
   afterEachTest?: () => void | Promise<void>;
+}
+
+interface Suite {
+  /** Full path, e.g. "Module 10 > Exercise 6: fetchUserName". */
+  name: string;
+  parent: Suite | null;
+  beforeEachFns: Hook[];
+  afterEachFns: Hook[];
+  beforeAllFns: Hook[];
+  afterAllFns: Hook[];
+  beforeAllRan: boolean;
 }
 
 export function createTestHarness(options: TestHarnessOptions = {}) {
@@ -16,34 +35,59 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
     duration: number;
   }> = [];
 
-  const suites: Array<{
-    name: string;
-    tests: Array<{ name: string; fn: () => Promise<void> | void }>;
-    beforeEachFns: Array<() => Promise<void> | void>;
-  }> = [];
+  /** Flat, in registration order — a test carries the suite it was declared in. */
+  const tests: Array<{ name: string; fn: Hook; suite: Suite }> = [];
+  const allSuites: Suite[] = [];
 
-  let currentSuite: (typeof suites)[0] | null = null;
+  const rootSuite: Suite = {
+    name: '',
+    parent: null,
+    beforeEachFns: [],
+    afterEachFns: [],
+    beforeAllFns: [],
+    afterAllFns: [],
+    beforeAllRan: false,
+  };
+  allSuites.push(rootSuite);
+
+  let currentSuite: Suite = rootSuite;
+
+  /** Root → leaf, so beforeEach/beforeAll run in declaration order. */
+  function chainOf(suite: Suite): Suite[] {
+    const chain: Suite[] = [];
+    for (let s: Suite | null = suite; s; s = s.parent) chain.unshift(s);
+    return chain;
+  }
 
   function describe(name: string, fn: () => void) {
-    const suite = { name, tests: [], beforeEachFns: [] };
+    const suite: Suite = {
+      name: currentSuite.name ? `${currentSuite.name} > ${name}` : name,
+      parent: currentSuite,
+      beforeEachFns: [],
+      afterEachFns: [],
+      beforeAllFns: [],
+      afterAllFns: [],
+      beforeAllRan: false,
+    };
+    allSuites.push(suite);
+
     const prev = currentSuite;
     currentSuite = suite;
-    suites.push(suite);
-    fn();
-    currentSuite = prev;
-  }
-
-  function it(name: string, fn: () => Promise<void> | void) {
-    if (currentSuite) {
-      currentSuite.tests.push({ name, fn });
+    try {
+      fn();
+    } finally {
+      currentSuite = prev;
     }
   }
 
-  function beforeEach(fn: () => Promise<void> | void) {
-    if (currentSuite) {
-      currentSuite.beforeEachFns.push(fn);
-    }
+  function it(name: string, fn: Hook) {
+    tests.push({ name, fn, suite: currentSuite });
   }
+
+  const beforeEach = (fn: Hook) => currentSuite.beforeEachFns.push(fn);
+  const afterEach = (fn: Hook) => currentSuite.afterEachFns.push(fn);
+  const beforeAll = (fn: Hook) => currentSuite.beforeAllFns.push(fn);
+  const afterAll = (fn: Hook) => currentSuite.afterAllFns.push(fn);
 
   // --- expect ---
   function expect(actual: unknown) {
@@ -442,44 +486,80 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
 
   // --- run tests ---
   async function run(filterExerciseNumber?: number): Promise<typeof results> {
-    // If filtering, only run suites matching "Exercise N:"
-    const suitesToRun = filterExerciseNumber
-      ? suites.filter((s) => {
-          const match = s.name.match(/Exercise\s+(\d+)/i);
-          return match && parseInt(match[1]) === filterExerciseNumber;
-        })
-      : suites;
+    // Match the filter against the *full* suite path, so tests inside a
+    // `describe` nested under `describe('Exercise 6: …')` still run.
+    const testsToRun =
+      filterExerciseNumber === undefined
+        ? tests
+        : tests.filter((t) => {
+            const match = t.suite.name.match(/Exercise\s+(\d+)/i);
+            return match !== null && parseInt(match[1], 10) === filterExerciseNumber;
+          });
 
-    for (const suite of suitesToRun) {
-      for (const test of suite.tests) {
-        const start = performance.now();
-        try {
-          for (const beFn of suite.beforeEachFns) {
-            await beFn();
-          }
-          await test.fn();
-          results.push({
-            name: `${suite.name} > ${test.name}`,
-            status: 'passed',
-            duration: Math.round(performance.now() - start),
-          });
-        } catch (e) {
-          results.push({
-            name: `${suite.name} > ${test.name}`,
-            status: 'failed',
-            error: e instanceof Error ? e.message : String(e),
-            duration: Math.round(performance.now() - start),
-          });
-        } finally {
-          // Unmount components rendered by @testing-library/react so state
-          // does not leak into the next test in the suite.
-          if (options.afterEachTest) {
+    const startedSuites: Suite[] = [];
+
+    for (const test of testsToRun) {
+      const chain = chainOf(test.suite);
+      const start = performance.now();
+
+      try {
+        // beforeAll: once per suite, outermost first.
+        for (const suite of chain) {
+          if (suite.beforeAllRan) continue;
+          suite.beforeAllRan = true;
+          startedSuites.push(suite);
+          for (const fn of suite.beforeAllFns) await fn();
+        }
+
+        for (const suite of chain) {
+          for (const fn of suite.beforeEachFns) await fn();
+        }
+
+        await test.fn();
+
+        results.push({
+          name: `${test.suite.name} > ${test.name}`,
+          status: 'passed',
+          duration: Math.round(performance.now() - start),
+        });
+      } catch (e) {
+        results.push({
+          name: `${test.suite.name} > ${test.name}`,
+          status: 'failed',
+          error: e instanceof Error ? e.message : String(e),
+          duration: Math.round(performance.now() - start),
+        });
+      } finally {
+        // afterEach runs innermost-first, like Jest. A throwing hook must not
+        // mask the test result, so each is isolated.
+        for (const suite of [...chain].reverse()) {
+          for (const fn of [...suite.afterEachFns].reverse()) {
             try {
-              await options.afterEachTest();
+              await fn();
             } catch {
-              // cleanup failures should not mask test results
+              /* hook failures don't overwrite the test outcome */
             }
           }
+        }
+        // Internal cleanup always runs last: unmount anything
+        // @testing-library/react rendered so it can't leak into the next test.
+        if (options.afterEachTest) {
+          try {
+            await options.afterEachTest();
+          } catch {
+            /* cleanup failures should not mask test results */
+          }
+        }
+      }
+    }
+
+    // afterAll for every suite that actually started, innermost first.
+    for (const suite of startedSuites.reverse()) {
+      for (const fn of [...suite.afterAllFns].reverse()) {
+        try {
+          await fn();
+        } catch {
+          /* teardown failures don't invalidate results already recorded */
         }
       }
     }
@@ -487,7 +567,19 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
     return results;
   }
 
-  return { describe, it, test: it, expect, beforeEach, jest, waitFor, run };
+  return {
+    describe,
+    it,
+    test: it,
+    expect,
+    beforeEach,
+    afterEach,
+    beforeAll,
+    afterAll,
+    jest,
+    waitFor,
+    run,
+  };
 }
 
 // --- utilities ---

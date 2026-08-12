@@ -1,4 +1,4 @@
-﻿# Configuration de l'environnement : de zéro à une application qui tourne
+# Configuration de l'environnement : de zéro à une application qui tourne
 
 > Mise en place d'Expo, des simulateurs et de votre premier projet React Native fonctionnel en moins de 10 minutes.
 

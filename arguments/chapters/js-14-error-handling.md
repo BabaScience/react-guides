@@ -1,4 +1,4 @@
-﻿# Error Handling: Failing Gracefully
+# Error Handling: Failing Gracefully
 
 > Throwing, catching, custom errors, async errors, and failing fast.
 

@@ -1,4 +1,4 @@
-﻿# React Testing: Comprehensive Strategies and Methodologies
+# React Testing: Comprehensive Strategies and Methodologies
 
 > An exhaustive compendium of testing paradigms, architectural patterns, and pragmatic implementation techniques for React applications
 

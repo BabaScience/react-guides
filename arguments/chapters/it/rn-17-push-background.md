@@ -1,4 +1,4 @@
-﻿# Notifiche Push e Task in Background
+# Notifiche Push e Task in Background
 
 > APNs, FCM, background fetch e i vincoli di piattaforma che determinano come le app mobile si "risvegliano".
 

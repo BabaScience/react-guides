@@ -1,4 +1,4 @@
-﻿# Prerequisites: What You Need Before React Native
+# Prerequisites: What You Need Before React Native
 
 > The React, JavaScript, tooling, and mobile knowledge you must have before writing your first React Native component.
 

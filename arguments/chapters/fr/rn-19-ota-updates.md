@@ -1,4 +1,4 @@
-﻿# Mises à jour OTA : Déployer sans passer par l'App Store
+# Mises à jour OTA : Déployer sans passer par l'App Store
 
 > EAS Update, téléchargements delta, versioning de runtime et les règles de conformité que vous devez respecter.
 

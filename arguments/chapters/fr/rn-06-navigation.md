@@ -1,4 +1,4 @@
-﻿# Navigation : Stacks, Tabs et Deep Links
+# Navigation : Stacks, Tabs et Deep Links
 
 > Comment les écrans se connectent en mobile — React Navigation v7, Expo Router, et les patterns qui remplacent le routage basé sur les URL.
 

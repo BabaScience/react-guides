@@ -1,15 +1,15 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { Module } from '@/types/exercise';
 import { loadExerciseStub, loadTestFile } from '@/data/loader';
 import { useProgressStore } from '@/store/progress-store';
 import { SplitPane } from '@/components/exercise/SplitPane';
-import { CodeEditor } from '@/components/exercise/CodeEditor';
+import { CodeEditorLazy as CodeEditor } from '@/components/exercise/CodeEditorLazy';
 import { ExercisePanel } from '@/components/exercise/ExercisePanel';
 import { TestResultsPanel } from '@/components/exercise/TestResultsPanel';
 import { LivePreview } from '@/components/exercise/LivePreview';
-import { runTestsInSandbox } from '@/sandbox/sandbox-iframe';
+import { runTestsInSandbox } from '@/sandbox/test-runner';
 import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
 import type { TestRunResult } from '@/types/exercise';
 
@@ -19,6 +19,9 @@ interface ExerciseStepViewProps {
   stepIndex: number;
   totalSteps: number;
 }
+
+/** How long the editor stays quiet before the draft is written to storage. */
+const SAVE_DEBOUNCE_MS = 600;
 
 function TabButton({
   label,
@@ -102,13 +105,40 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module.exerciseDir, exercise?.number]);
 
+  // Persisting on every keystroke meant a JSON.stringify of the whole progress
+  // store plus a localStorage write per character. Keep the editor state
+  // immediate and debounce only the persistence.
+  const saveTimerRef = useRef<number | null>(null);
+  const pendingSaveRef = useRef<(() => void) | null>(null);
+
+  const flushPendingSave = useCallback(() => {
+    if (saveTimerRef.current !== null) {
+      window.clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
+    pendingSaveRef.current?.();
+    pendingSaveRef.current = null;
+  }, []);
+
   const handleCodeChange = useCallback(
     (newCode: string) => {
       setCode(newCode);
-      saveCode(module.id, exerciseId, newCode);
+      pendingSaveRef.current = () => saveCode(module.id, exerciseId, newCode);
+      if (saveTimerRef.current !== null) window.clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = window.setTimeout(flushPendingSave, SAVE_DEBOUNCE_MS);
     },
-    [module.id, exerciseId, saveCode]
+    [module.id, exerciseId, saveCode, flushPendingSave]
   );
+
+  // Never lose work: flush on unmount (navigating away) and on tab close.
+  useEffect(() => {
+    const onHide = () => flushPendingSave();
+    window.addEventListener('pagehide', onHide);
+    return () => {
+      window.removeEventListener('pagehide', onHide);
+      flushPendingSave();
+    };
+  }, [flushPendingSave]);
 
   const handleRunTests = useCallback(async () => {
     if (!exercise || running) return;
@@ -131,6 +161,13 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   }, [code, fullFile, testFileContent, exercise, module.id, exerciseId, running, saveTestResults, t]);
 
   const handleReset = useCallback(() => {
+    // Drop any queued save first, or the debounce would write the discarded
+    // draft back over the freshly reset stub.
+    if (saveTimerRef.current !== null) {
+      window.clearTimeout(saveTimerRef.current);
+      saveTimerRef.current = null;
+    }
+    pendingSaveRef.current = null;
     setCode(defaultCode);
     saveCode(module.id, exerciseId, defaultCode);
   }, [defaultCode, module.id, exerciseId, saveCode]);

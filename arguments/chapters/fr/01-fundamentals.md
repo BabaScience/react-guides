@@ -1,4 +1,4 @@
-﻿# Fondamentaux de React : construire votre première interface interactive
+# Fondamentaux de React : construire votre première interface interactive
 
 > Une introduction à React, partant des premiers principes, pour les développeurs qui connaissent déjà un peu d'HTML, de CSS et de JavaScript.
 

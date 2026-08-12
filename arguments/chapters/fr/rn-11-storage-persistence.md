@@ -1,4 +1,4 @@
-﻿# Stockage et persistance : conserver les données sur l'appareil
+# Stockage et persistance : conserver les données sur l'appareil
 
 > Stores clé-valeur, coffres-forts sécurisés, bases de données relationnelles, et quand utiliser chacun.
 

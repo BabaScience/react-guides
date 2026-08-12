@@ -1,4 +1,4 @@
-﻿# React Hooks: Adding State and Effects to Components
+# React Hooks: Adding State and Effects to Components
 
 > A practical deep dive into the hooks that power modern React components: what each one solves, when to reach for it, and the pitfalls to avoid.
 

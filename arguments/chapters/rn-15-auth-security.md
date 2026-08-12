@@ -1,4 +1,4 @@
-﻿# Authentication and Security: Protecting Your Mobile App
+# Authentication and Security: Protecting Your Mobile App
 
 > Auth patterns, token storage, biometric unlock, and the security hardening that separates toy apps from production.
 

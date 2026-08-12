@@ -1,4 +1,4 @@
-﻿# Storage e Persistenza: Mantenere i Dati sul Dispositivo
+# Storage e Persistenza: Mantenere i Dati sul Dispositivo
 
 > Store key-value, vault sicuri, database relazionali e quando usare ciascuno.
 

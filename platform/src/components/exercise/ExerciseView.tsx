@@ -5,11 +5,11 @@ import { getModule } from '@/data/modules';
 import { loadExerciseStub, loadTestFile } from '@/data/loader';
 import { useProgressStore } from '@/store/progress-store';
 import { SplitPane } from './SplitPane';
-import { CodeEditor } from './CodeEditor';
+import { CodeEditorLazy as CodeEditor } from './CodeEditorLazy';
 import { ExercisePanel } from './ExercisePanel';
 import { TestResultsPanel } from './TestResultsPanel';
 import { LivePreview } from './LivePreview';
-import { runTestsInSandbox } from '@/sandbox/sandbox-iframe';
+import { runTestsInSandbox } from '@/sandbox/test-runner';
 import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
 import type { TestRunResult } from '@/types/exercise';
 

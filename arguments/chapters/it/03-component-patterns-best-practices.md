@@ -1,4 +1,4 @@
-﻿# Pattern e Best Practice dei Componenti React
+# Pattern e Best Practice dei Componenti React
 
 > Un'esplorazione esaustiva dei pattern architetturali, delle strategie di composizione e delle pratiche idiomatiche per la progettazione dei componenti React
 

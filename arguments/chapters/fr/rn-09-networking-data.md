@@ -1,4 +1,4 @@
-﻿# Réseau et données : récupération, mise en cache et passage hors ligne
+# Réseau et données : récupération, mise en cache et passage hors ligne
 
 > Requêtes HTTP, gestion du state serveur, connexions temps réel et patterns offline-first pour le mobile.
 

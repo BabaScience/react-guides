@@ -1,9 +1,15 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import i18n from '@/i18n';
+import i18n, { UI_STORE_KEY, type SupportedLang } from '@/i18n';
 import type { Track } from '@/types/exercise';
 
-export type Language = 'en' | 'it' | 'fr';
+export type Language = SupportedLang;
+
+/** Bump when the persisted shape changes, and add a `migrate` branch for it. */
+const UI_STORE_VERSION = 1;
+
+/** "Paper & ink" (DESIGN_SYSTEM.md §9): light is the default theme. */
+export const DEFAULT_THEME: 'light' | 'dark' = 'light';
 
 interface UIState {
   theme: 'light' | 'dark';
@@ -21,8 +27,7 @@ interface UIState {
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
-      // "Paper & ink" (DESIGN_SYSTEM.md §9): light is the default theme.
-      theme: 'light',
+      theme: DEFAULT_THEME,
       language: 'en',
       sidebarCollapsed: false,
       editorPanelSize: 50,
@@ -42,6 +47,20 @@ export const useUIStore = create<UIState>()(
       setEditorPanelSize: (size) => set({ editorPanelSize: size }),
       setActiveTrack: (track) => set({ activeTrack: track }),
     }),
-    { name: 'react-mastery-ui' }
+    {
+      name: UI_STORE_KEY,
+      version: UI_STORE_VERSION,
+      // Without a version, zustand merges whatever shape it finds in
+      // localStorage into the current state — so any future rename silently
+      // resurrects a stale field instead of migrating it.
+      migrate: (persisted, version) => {
+        if (version === 0) {
+          // v0 had no version stamp. Nothing structural changed; the stamp is
+          // what lets later migrations know where they are starting from.
+          return persisted as UIState;
+        }
+        return persisted as UIState;
+      },
+    }
   )
 );

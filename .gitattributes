@@ -1,0 +1,35 @@
+# Normalize everything to LF in the repository. Windows checkouts still get
+# native line endings on disk via core.autocrlf, but the stored blobs stay LF —
+# which keeps the content pipeline (section extraction, exercise banners) from
+# ever seeing a stray \r.
+* text=auto eol=lf
+
+# Explicit for the content pipeline's inputs.
+*.md      text eol=lf
+*.mdx     text eol=lf
+*.ts      text eol=lf
+*.tsx     text eol=lf
+*.js      text eol=lf
+*.mjs     text eol=lf
+*.cjs     text eol=lf
+*.json    text eol=lf
+*.css     text eol=lf
+*.html    text eol=lf
+*.yml     text eol=lf
+*.yaml    text eol=lf
+
+# Binary — never touch.
+*.pptx    binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.webp    binary
+*.ico     binary
+*.woff    binary
+*.woff2   binary
+*.ttf     binary
+*.pdf     binary
+
+# Generated — collapse in diffs and exclude from language stats.
+package-lock.json  linguist-generated=true -diff

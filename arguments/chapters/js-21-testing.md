@@ -1,4 +1,4 @@
-﻿# Testing: Writing Code That Proves Your Code Works
+# Testing: Writing Code That Proves Your Code Works
 
 > Test runners, assertion patterns, mocking, E2E, and sustainable testing strategy.
 

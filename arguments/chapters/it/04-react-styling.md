@@ -1,4 +1,4 @@
-﻿# Strategie e implementazione dello styling in React
+# Strategie e implementazione dello styling in React
 
 > Un'esplorazione completa delle metodologie di styling, dei pattern architetturali e degli approcci pragmatici per lo styling delle applicazioni React
 

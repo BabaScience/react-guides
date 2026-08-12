@@ -15,7 +15,6 @@
 
 // Babel AST nodes have wildly different shapes per node kind, so a permissive
 // type with any-typed property access keeps this file readable.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyNode = { type: string; [key: string]: any };
 
 interface ParserLike {

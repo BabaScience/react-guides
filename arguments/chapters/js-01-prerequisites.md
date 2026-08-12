@@ -1,4 +1,4 @@
-﻿# Prerequisites: Before You Open a JS File
+# Prerequisites: Before You Open a JS File
 
 > The baseline knowledge and tools you need before writing your first line of JavaScript.
 

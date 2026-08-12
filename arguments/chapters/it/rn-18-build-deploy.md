@@ -1,4 +1,4 @@
-﻿# Build e Deploy: Dal Codice agli App Store
+# Build e Deploy: Dal Codice agli App Store
 
 > EAS Build, invio agli app store, versioning e pipeline CI/CD per pubblicare app mobile.
 

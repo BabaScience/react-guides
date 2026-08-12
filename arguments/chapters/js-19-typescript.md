@@ -1,4 +1,4 @@
-﻿# TypeScript: JavaScript at Scale
+# TypeScript: JavaScript at Scale
 
 > Static types, generics, utility types, and why production JS means TypeScript.
 

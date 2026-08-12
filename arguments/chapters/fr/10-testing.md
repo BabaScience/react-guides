@@ -1,4 +1,4 @@
-﻿# Tests React : stratégies et méthodologies complètes
+# Tests React : stratégies et méthodologies complètes
 
 > Un recueil exhaustif des paradigmes de test, des patterns d'architecture et des techniques d'implémentation pragmatiques pour les applications React
 

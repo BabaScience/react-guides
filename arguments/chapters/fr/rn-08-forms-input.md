@@ -1,4 +1,4 @@
-﻿# Formulaires et saisie : TextInput et au-delà
+# Formulaires et saisie : TextInput et au-delà
 
 > La primitive de saisie unique, la gestion du clavier et le traitement des formulaires dans un monde mobile-first.
 

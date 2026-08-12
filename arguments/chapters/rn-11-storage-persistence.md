@@ -1,4 +1,4 @@
-﻿# Storage and Persistence: Keeping Data on the Device
+# Storage and Persistence: Keeping Data on the Device
 
 > Key-value stores, secure vaults, relational databases, and when to use each.
 

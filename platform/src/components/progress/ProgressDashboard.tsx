@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getModulesByTrack } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
@@ -29,10 +30,27 @@ export function ProgressDashboard() {
   const setActiveTrack = useUIStore((s) => s.setActiveTrack);
   const trackModules = getModulesByTrack(activeTrack);
 
-  const totalCompleted = trackModules.reduce((sum, mod) => {
-    const { completed } = useProgressStore.getState().getStepProgress(mod.id);
-    return sum + completed;
-  }, 0);
+  // Subscribe to the progress slices this view renders. Reading via
+  // `useProgressStore.getState()` inside the reduce (as this used to) never
+  // registers a subscription, so the bar sat stale until an unrelated
+  // re-render happened to refresh it.
+  const exercises = useProgressStore((s) => s.exercises);
+  const lessonSteps = useProgressStore((s) => s.lessonSteps);
+
+  const totalCompleted = useMemo(
+    () =>
+      trackModules.reduce(
+        (sum, mod) =>
+          sum +
+          mod.steps.filter((step) =>
+            step.type === 'lesson'
+              ? lessonSteps[`${mod.id}/${step.id}`] === true
+              : exercises[`${mod.id}/${step.id}`]?.status === 'passed'
+          ).length,
+        0
+      ),
+    [trackModules, exercises, lessonSteps]
+  );
   const totalSteps = trackModules.reduce((sum, mod) => sum + mod.steps.length, 0);
   const meta = trackMeta[activeTrack];
 

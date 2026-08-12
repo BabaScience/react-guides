@@ -1,4 +1,4 @@
-﻿# Arrays and Iteration: The Most-Used Data Structure
+# Arrays and Iteration: The Most-Used Data Structure
 
 > Creation, mutation, transformation, search, and iteration patterns.
 

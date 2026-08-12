@@ -1,4 +1,4 @@
-﻿# Native Device APIs: The Leap from Web
+# Native Device APIs: The Leap from Web
 
 > Camera, location, biometrics, sensors, and media — the capabilities that make mobile apps mobile.
 

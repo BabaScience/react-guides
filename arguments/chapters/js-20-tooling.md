@@ -1,4 +1,4 @@
-﻿# Tooling and Build: The JavaScript Development Stack
+# Tooling and Build: The JavaScript Development Stack
 
 > Package managers, bundlers, linters, formatters, and the tools that turn source into production.
 

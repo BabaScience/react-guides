@@ -1,4 +1,4 @@
-﻿# Language Basics: Types, Variables, and the Rules of JavaScript
+# Language Basics: Types, Variables, and the Rules of JavaScript
 
 > What JavaScript is, how it thinks about types, and the variable declarations that shape your code.
 

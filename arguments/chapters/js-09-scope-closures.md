@@ -1,4 +1,4 @@
-﻿# Scope, Closures, and Hoisting: Where Variables Live
+# Scope, Closures, and Hoisting: Where Variables Live
 
 > The invisible rules that govern variable visibility, lifetime, and why closures are the most powerful concept.
 

@@ -1,4 +1,4 @@
-﻿# React Data Fetching and API Integration
+# React Data Fetching and API Integration
 
 > A comprehensive exploration of asynchronous data fetching patterns, server state management strategies, and real-time data synchronization in React applications
 

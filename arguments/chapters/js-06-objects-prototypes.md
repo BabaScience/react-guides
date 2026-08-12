@@ -1,4 +1,4 @@
-﻿# Objects and Prototypes: The Real OOP of JavaScript
+# Objects and Prototypes: The Real OOP of JavaScript
 
 > Object creation, property descriptors, the prototype chain, Maps, Sets, and why JS OOP is not what you think.
 

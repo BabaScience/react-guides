@@ -1,4 +1,4 @@
-﻿# Asynchronous JavaScript: Callbacks, Promises, and Async/Await
+# Asynchronous JavaScript: Callbacks, Promises, and Async/Await
 
 > The hardest concept after this — from callback hell to elegant async flows.
 

@@ -1,4 +1,4 @@
-﻿# Récupération de données et intégration d'API en React
+# Récupération de données et intégration d'API en React
 
 > Une exploration approfondie des patterns de récupération de données asynchrones, des stratégies de gestion du server state et de la synchronisation de données en temps réel dans les applications React
 

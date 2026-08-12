@@ -1,8 +1,10 @@
 {
-  "name": "react-mastery-exercises",
+  "name": "learning-platform-content",
   "version": "1.0.0",
-  "description": "Test-driven React learning for Angular developers",
+  "description": "Multi-track interactive learning platform — content, exercises and validation",
   "scripts": {
+    "validate": "node scripts/validate-content.mjs",
+    "validate:warn": "node scripts/validate-content.mjs --warn-only",
     "test": "node scripts/test-runner.js",
     "test:watch": "node scripts/test-runner.js --watch",
     "progress": "node scripts/check-progress.js",

@@ -1,4 +1,4 @@
-﻿# React Native Fundamentals : comprendre le runtime
+# React Native Fundamentals : comprendre le runtime
 
 > Ce qu'est réellement React Native sous le capot, et le changement crucial de modèle mental entre le web et le mobile.
 

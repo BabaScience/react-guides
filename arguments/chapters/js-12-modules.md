@@ -1,4 +1,4 @@
-﻿# Modules: Organizing Code for Humans and Machines
+# Modules: Organizing Code for Humans and Machines
 
 > ES Modules, CommonJS, dynamic imports, and module patterns.
 

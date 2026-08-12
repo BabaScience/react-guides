@@ -1,4 +1,4 @@
-﻿# Authentification et sécurité : protéger votre application mobile
+# Authentification et sécurité : protéger votre application mobile
 
 > Patterns d'authentification, stockage des tokens, déverrouillage biométrique et durcissement de sécurité — ce qui sépare les applications jouets des applications de production.
 
