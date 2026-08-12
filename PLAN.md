@@ -5,10 +5,10 @@ the safety net comes first so nothing regresses while the rest is fixed.
 
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
-**Phase 0 and Phase 1 are complete.** Gate at the time of writing:
+**Phase 0, Phase 1 and P2.1 are complete.** Gate at the time of writing:
 `npm run validate` → *Content valid, 2 warnings* (both the documented
 JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0 errors ·
-`npm run build` → succeeds, entry chunk 1.19 MB / 370 KB gzip.
+`npm run build` → succeeds, entry chunk 528 KB / 172 KB gzip, 62 chunks.
 
 ---
 
@@ -122,14 +122,48 @@ root runner track-aware or retire it.
 
 ## Phase 2 — Restructure before scaling
 
-### [ ] P2.1 — Bundle diet
-Shiki core + explicit grammars · mermaid core registry (no ELK) · `@babel/standalone` →
-Sucrase · `React.lazy` per route.
-**Target:** entry chunk < 200 KB gzip, < 50 chunks, `dist/` < 5 MB.
+### [x] P2.1 — Bundle diet
+Shiki core + 9 explicit grammars with the JS regex engine (drops the oniguruma
+WASM) · `@babel/standalone` → Sucrase, and `@babel/parser` alone for the props
+extractor · Monaco cherry-picked (no CSS/HTML/JSON services or their workers)
+and behind `React.lazy` · `React.lazy` per route · dropped unused
+`rehype-highlight`.
+
+| | before | after |
+|---|---|---|
+| entry chunk | 1,204 KB / 378 KB gzip | **528 KB / 172 KB gzip** |
+| chunks | 443 | **62** |
+| `dist/assets` | 30.1 MB | **18 MB** |
+
+Target was < 50 chunks / < 5 MB. Not met, and the remainder is understood: Monaco's
+TypeScript worker alone is 6.8 MB and the editor chunk 3.6 MB. That is the price of
+real TS diagnostics in the exercise editor, which the project deliberately wants
+(it feeds Monaco the actual `@types/react`). Both are lazy — a reader who never
+opens an exercise never downloads them. Mermaid's diagram types (~15 chunks) are
+lazy per diagram kind and were left alone.
+
+**Also fixed here (found while verifying):** the production test runner could not
+render *anything*. The `patch-testing-library-act` plugin ran the callback and
+*then* called `flushSync(() => {})`, which does not commit a `root.render()`
+scheduled on the default lane — so every rendering exercise failed on the
+deployed site. Running the callback inside `flushSync` fixes it: module 10
+exercise 3 went 0/3 → **3/3**, module 01 exercise 7 went 0/4 → **3/4** in a
+production build. This was pre-existing — verified by rebuilding with Babel,
+which fails identically — and is what the "Mark as completed manually" escape
+hatch in `progress-store.ts` was built to work around. The last 1/4 is the
+`user-event` limitation carried into P2.2.
+
+`toHaveBeenCalledWith` now reports what the mock *was* called with, not only what
+was expected — that is how the remaining failure was diagnosed.
 
 ### [ ] P2.2 — Real sandbox
 `<iframe sandbox="allow-scripts">` + `postMessage` + watchdog timeout.
 Allowlist the dev `/raw` middleware to `arguments/` and `src/<module>/`.
+
+Also carries the last piece of the production test-runner fix: the iframe gets
+its own React, so it can load the **development** build and have a working
+`act()`. That closes the remaining gap where `user-event` state updates don't
+commit under production React (see the KNOWN LIMITATION note in vite.config.ts).
 
 ### [ ] P2.3 — Design system + a11y
 Adopt `Button`/`Card`/`Badge` across all 18 call sites. `aria-label` on icon-only

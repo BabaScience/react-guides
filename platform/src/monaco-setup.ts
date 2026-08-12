@@ -15,17 +15,30 @@
  */
 
 import { loader } from '@monaco-editor/react';
-// Import the package entry rather than cherry-picking
-// `editor.api.js` + `monaco.contribution.js`. Vite pre-bundles those subpaths
-// into separate optimized chunks, which yields two copies of the API module —
-// the language contribution registers `languages.typescript` on one of them
-// while `beforeMount` hands the editor the other, and reading
-// `monaco.languages.typescript.typescriptDefaults` throws. The entry keeps
-// everything in one module graph.
-import * as monaco from 'monaco-editor';
+// Cherry-picked rather than the `monaco-editor` barrel: the barrel also drags
+// in the CSS, HTML and JSON language services and their web workers — roughly
+// 2 MB of build output for an editor that only ever opens .tsx files.
+//
+// The `.js` suffixes are required — monaco's package `exports` map is a literal
+// `"./*": "./*"`, so extensionless subpaths don't resolve.
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api.js';
+
+// Editor contributions: find/replace, folding, bracket matching, suggestions…
+import 'monaco-editor/esm/vs/editor/editor.all.js';
+// The TypeScript/JavaScript language service — diagnostics and completions.
+import * as typescriptContribution from 'monaco-editor/esm/vs/language/typescript/monaco.contribution.js';
 
 import EditorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker';
 import TsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker';
+
+// The contribution only *exports* `typescriptDefaults` and friends — it does
+// not attach them to the API. Normally `editor.main.js` does that
+// (`monacoApi.languages.typescript = …`), but that is the barrel we are
+// avoiding, so mirror the one line we need. Without it,
+// `monaco.languages.typescript.typescriptDefaults` is undefined and CodeEditor
+// throws on mount.
+(monaco.languages as unknown as Record<string, unknown>).typescript =
+  typescriptContribution;
 
 declare global {
   interface Window {

@@ -1,7 +1,7 @@
 /**
  * Extract example props for the live preview from a test file.
  *
- * Strategy: parse the test file with Babel's AST, find the first JSX element
+ * Strategy: parse the test file into an AST, find the first JSX element
  * whose name matches `componentName`, and evaluate each of its attributes.
  *
  * Identifiers referenced in attributes (e.g. `<TodoList todos={mockTodos} />`)
@@ -23,14 +23,18 @@ interface ParserLike {
 
 let parserPromise: Promise<ParserLike> | null = null;
 
+/**
+ * `@babel/parser` on its own, not `@babel/standalone`.
+ *
+ * All this needs is an AST; standalone bundles the whole compiler (2.98 MB) to
+ * expose the parser via `packages.parser`, and pulled that weight into the
+ * build even though transpilation moved to Sucrase.
+ */
 async function getParser(): Promise<ParserLike> {
   if (!parserPromise) {
-    parserPromise = import('@babel/standalone').then((mod) => {
-      // Babel/standalone exposes the underlying parser via `packages.parser`.
-      // It's not in the top-level types, so we cast through unknown.
-      const pkgs = (mod as unknown as { packages: { parser: ParserLike } }).packages;
-      return pkgs.parser;
-    });
+    parserPromise = import('@babel/parser').then(
+      (mod) => mod as unknown as ParserLike
+    );
   }
   return parserPromise;
 }

@@ -1,51 +1,16 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useUIStore } from '@/store/ui-store';
+import {
+  DARK_THEME,
+  LIGHT_THEME,
+  getHighlighter,
+  resolveLang,
+} from './shiki-highlighter';
 
 interface ShikiCodeProps {
   code: string;
   language?: string;
-}
-
-/**
- * Languages we ship bundled. Anything else falls back to plain text.
- * Keep this list short — each grammar adds to the chunk size.
- */
-const LANGUAGES = [
-  'tsx', 'ts', 'typescript',
-  'jsx', 'js', 'javascript',
-  'css', 'scss',
-  'html', 'xml',
-  'json', 'jsonc',
-  'bash', 'shell', 'sh',
-  'markdown', 'md',
-  'yaml',
-  'diff',
-] as const;
-
-const LIGHT_THEME = 'github-light';
-const DARK_THEME = 'github-dark';
-
-type Highlighter = Awaited<ReturnType<typeof loadHighlighter>>;
-let highlighterPromise: Promise<Highlighter> | null = null;
-
-async function loadHighlighter() {
-  const { createHighlighter } = await import('shiki');
-  return createHighlighter({
-    themes: [LIGHT_THEME, DARK_THEME],
-    langs: LANGUAGES as unknown as string[],
-  });
-}
-
-function getHighlighter() {
-  if (!highlighterPromise) highlighterPromise = loadHighlighter();
-  return highlighterPromise;
-}
-
-function normalizeLang(lang?: string): string {
-  if (!lang) return 'text';
-  const lower = lang.toLowerCase();
-  return (LANGUAGES as readonly string[]).includes(lower) ? lower : 'text';
 }
 
 export function ShikiCode({ code, language }: ShikiCodeProps) {
@@ -55,20 +20,26 @@ export function ShikiCode({ code, language }: ShikiCodeProps) {
   const [copied, setCopied] = useState(false);
   const copyTimerRef = useRef<number | null>(null);
 
-  const lang = useMemo(() => normalizeLang(language), [language]);
+  const lang = useMemo(() => resolveLang(language), [language]);
 
   useEffect(() => {
+    // No grammar for this fence tag — the plain-code fallback below is correct.
+    if (!lang) {
+      setHtml(null);
+      return;
+    }
     let cancelled = false;
     getHighlighter().then((hl) => {
       if (cancelled) return;
       try {
-        const rendered = hl.codeToHtml(code, {
-          lang,
-          theme: theme === 'dark' ? DARK_THEME : LIGHT_THEME,
-        });
-        setHtml(rendered);
+        setHtml(
+          hl.codeToHtml(code, {
+            lang,
+            theme: theme === 'dark' ? DARK_THEME : LIGHT_THEME,
+          })
+        );
       } catch (e) {
-        // Unknown grammar or runtime error — show plain code.
+        // Grammar mismatch or runtime error — show plain code.
         setHtml(null);
         console.warn('[ShikiCode] highlight failed:', e);
       }

@@ -340,8 +340,16 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
         const mock = actual as MockFn;
         const pass = mock.mock.calls.some((call) => deepEqual(call, args));
         if (negated ? pass : !pass) {
+          // Show what it *was* called with. Without this the learner only sees
+          // what was expected, which is the half they already knew.
+          const received = negated
+            ? ''
+            : mock.mock.calls.length === 0
+              ? '\nBut it was never called.'
+              : `\nReceived ${mock.mock.calls.length} call(s):\n` +
+                mock.mock.calls.map((call, i) => `  ${i + 1}. ${fmt(call)}`).join('\n');
           throw new Error(
-            `Expected function ${negated ? 'not ' : ''}to have been called with ${fmt(args)}`
+            `Expected function ${negated ? 'not ' : ''}to have been called with ${fmt(args)}${received}`
           );
         }
       },
