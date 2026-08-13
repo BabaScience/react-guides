@@ -146,7 +146,7 @@ function buildBreadcrumbs(pathname: string, t: TFunction): Crumb[] {
   if (parts[0] === 'module' && parts[1]) {
     const mod = modules.find((m) => m.id === parts[1]);
     if (mod) {
-      const modName = t(`modules.${mod.id}.name`, mod.name);
+      const modName = t(`modules.${mod.id}.name`);
       crumbs.push({
         label: `${String(mod.number).padStart(2, '0')} ${modName}`,
         href: `/module/${mod.id}`,
@@ -157,7 +157,7 @@ function buildBreadcrumbs(pathname: string, t: TFunction): Crumb[] {
       } else if (parts[2] === 'exercise' && parts[3]) {
         const ex = mod.exercises.find((e) => e.id === parts[3]);
         if (ex) {
-          const exName = t(`exercises.${mod.id}.${ex.id}.name`, ex.name);
+          const exName = t(`exercises.${mod.id}.${ex.id}.name`);
           crumbs.push({ label: `${t('step.exercise')} ${ex.number}: ${exName}` });
         }
       } else if (parts[2] === 'step' && parts[3]) {

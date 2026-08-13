@@ -1,0 +1,29 @@
+# js-13-async
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-13-async
+track: javascript
+number: 13
+status: available
+guide: arguments/chapters/js-13-async.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: callbacks
+    section: 1. Callbacks
+  - lesson: promises
+    section: 2. Promises
+  - lesson: promise-combinators
+    section: 3. Promise Combinators
+  - lesson: async-await
+    section: 4. Async Await
+  - lesson: parallel-vs-serial
+    section: 5. Parallel vs Serial
+  - lesson: cancellation
+    section: 6. Cancellation

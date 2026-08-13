@@ -1,0 +1,27 @@
+# rn-16-testing
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-16-testing
+track: react-native
+number: 16
+status: available
+guide: arguments/chapters/rn-16-testing.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: unit-component-testing
+    section: 1. Unit and Component Testing
+  - lesson: integration-testing
+    section: 2. Integration Testing
+  - lesson: e2e-testing
+    section: 3. End-to-End Testing
+  - lesson: visual-regression
+    section: 4. Visual Regression
+  - lesson: performance-regression
+    section: 5. Performance Regression

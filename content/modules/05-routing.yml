@@ -1,0 +1,64 @@
+# 05-routing
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 05-routing
+track: react
+number: 5
+status: available
+guide: arguments/chapters/05-routing.md
+exerciseDir: src/05-routing
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: routing-paradigms
+    section: 1. Routing Paradigms and Architecture
+  - lesson: react-router-fundamentals
+    section: 2. React Router Fundamentals
+  - lesson: route-configuration
+    section: 3. Route Configuration and Navigation
+  - exercise: match
+  - exercise: parse-query
+  - exercise: link
+  - exercise: route
+  - lesson: dynamic-routing
+    section: 4. Dynamic Routing with Parameters
+  - lesson: nested-routes
+    section: 5. Nested Routes and Layouts
+  - lesson: programmatic-navigation
+    section: 7. Programmatic Navigation
+  - exercise: use-navigate
+  - lesson: protected-routes
+    section: 6. Protected Routes and Authentication
+  - exercise: protected-route
+  - lesson: route-guards
+    section: 8. Route Guards and Redirects
+  - lesson: advanced-routing
+    section: 9. Advanced Routing Patterns
+  - lesson: routing-performance
+    section: 10. Performance Optimization
+  - lesson: routing-conclusion
+    section: "Conclusion: Mastering Navigation Architecture"
+exercises:
+  match:
+    number: 1
+    componentName: match
+  parse-query:
+    number: 2
+    componentName: parseQuery
+  link:
+    number: 3
+    componentName: Link
+  route:
+    number: 4
+    componentName: Route
+  use-navigate:
+    number: 5
+    componentName: useNavigate
+  protected-route:
+    number: 6
+    componentName: ProtectedRoute

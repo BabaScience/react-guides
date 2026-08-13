@@ -1,0 +1,38 @@
+# rn-04-core-components
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-04-core-components
+track: react-native
+number: 4
+status: available
+guide: arguments/chapters/rn-04-core-components.md
+exerciseDir: src/rn-04-core-components
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: building-block-components
+    section: 1. Building-Block Components
+  - exercise: profile-card
+  - exercise: counter-button
+  - lesson: core-apis
+    section: 2. Core APIs to Internalize
+  - exercise: contact-list
+  - exercise: toggle-card
+exercises:
+  profile-card:
+    number: 1
+    componentName: ProfileCard
+  counter-button:
+    number: 2
+    componentName: CounterButton
+  contact-list:
+    number: 3
+    componentName: ContactList
+  toggle-card:
+    number: 4
+    componentName: ToggleCard

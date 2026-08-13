@@ -1,0 +1,27 @@
+# js-15-event-loop
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-15-event-loop
+track: javascript
+number: 15
+status: available
+guide: arguments/chapters/js-15-event-loop.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: mental-model
+    section: 1. Mental Model
+  - lesson: the-loop
+    section: 2. The Loop
+  - lesson: microtasks-vs-macrotasks
+    section: 3. Microtasks vs Macrotasks
+  - lesson: browser-specific
+    section: 4. Browser-Specific
+  - lesson: node-specific
+    section: 5. Node-Specific

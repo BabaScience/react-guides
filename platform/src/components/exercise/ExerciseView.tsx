@@ -10,8 +10,8 @@ import { ExercisePanel } from './ExercisePanel';
 import { TestResultsPanel } from './TestResultsPanel';
 import { LivePreview } from './LivePreview';
 import { Button } from '@/components/ui';
-import { runTestsInSandbox } from '@/sandbox/test-runner';
-import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
+import { buildExerciseCode } from '@/sandbox/exercise-extractor';
+import { DEFAULT_TIMEOUT_MS, getRunner } from '@/sandbox/runners';
 import type { TestRunResult } from '@/types/exercise';
 
 export function ExerciseView() {
@@ -75,25 +75,16 @@ export function ExerciseView() {
   );
 
   const handleRunTests = useCallback(async () => {
-    if (!exercise || !moduleId || !exId || running) return;
+    if (!mod || !exercise || !moduleId || !exId || running) return;
     setRunning(true);
     try {
-      // Strip the import header from user code before reassembling,
-      // since reassembleFullCode adds imports from the original file.
-      const userBodyCode = stripImports(code);
-
-      // Reassemble the full file with the user's exercise code patched in
-      const fullCode = reassembleFullCode(
-        fullFileRef.current,
-        exercise.number,
-        userBodyCode
-      );
-
-      const result = await runTestsInSandbox(
-        fullCode,
-        testFileContent,
-        exercise.number
-      );
+      const result = await getRunner(mod).run({
+        userCode: code,
+        moduleSource: fullFileRef.current,
+        spec: testFileContent,
+        exerciseNumber: exercise.number,
+        timeoutMs: DEFAULT_TIMEOUT_MS,
+      });
       setResults(result);
       saveTestResults(moduleId, exId, result);
     } catch (e) {
@@ -114,7 +105,7 @@ export function ExerciseView() {
     } finally {
       setRunning(false);
     }
-  }, [code, testFileContent, exercise, moduleId, exId, running, saveTestResults, t]);
+  }, [code, testFileContent, exercise, mod, moduleId, exId, running, saveTestResults, t]);
 
   const handleReset = useCallback(() => {
     setCode(defaultCode);
@@ -153,7 +144,7 @@ export function ExerciseView() {
             {t('nav.back')}
           </Link>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-            {t('exercise.title', { number: exercise.number })}: {exercise.name}
+            {t('exercise.title', { number: exercise.number })}: {t(`exercises.${mod.id}.${exercise.id}.name`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -220,7 +211,7 @@ export function ExerciseView() {
             <div className="h-full flex flex-col">
               <div className="flex-1 min-h-0 flex flex-col">
                 <div className="h-1/3 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
-                  <ExercisePanel exercise={exercise} moduleName={mod.name} />
+                  <ExercisePanel exercise={exercise} moduleId={mod.id} />
                 </div>
                 <div className="flex-1 min-h-0">
                   <TestResultsPanel
@@ -248,36 +239,6 @@ export function ExerciseView() {
  * Strip import lines from user code so they don't duplicate
  * when reassembled with the original file's imports.
  */
-function stripImports(code: string): string {
-  const lines = code.split('\n');
-  const result: string[] = [];
-  let skipNext = false;
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith('import ')) {
-      // Multi-line import: skip until we find the closing line
-      if (!trimmed.includes(';') && !trimmed.includes("'") && !trimmed.endsWith("';") && !trimmed.endsWith('";')) {
-        skipNext = true;
-      }
-      continue;
-    }
-    if (skipNext) {
-      if (trimmed.includes(';') || trimmed.includes("from '") || trimmed.includes('from "')) {
-        skipNext = false;
-      }
-      continue;
-    }
-    result.push(line);
-  }
-
-  // Trim leading blank lines
-  while (result.length > 0 && result[0].trim() === '') {
-    result.shift();
-  }
-
-  return result.join('\n');
-}
 
 function TabButton({
   label,

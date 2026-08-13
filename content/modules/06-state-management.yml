@@ -1,0 +1,64 @@
+# 06-state-management
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 06-state-management
+track: react
+number: 6
+status: available
+guide: arguments/chapters/06-state-management.md
+exerciseDir: src/06-state-management
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: paradigms
+    section: 1. State Management Paradigms
+  - lesson: local-vs-global
+    section: "2. Local vs Global State: Decision Framework"
+  - exercise: create-store
+  - lesson: context-api
+    section: "3. Context API: Simple Global State"
+  - exercise: count-context
+  - lesson: redux-toolkit
+    section: "4. Redux Toolkit: Modern Redux"
+  - exercise: use-counter-reducer
+  - lesson: redux-core
+    section: 5. Redux Core Concepts Deep Dive
+  - exercise: combine-reducers
+  - lesson: middleware-async
+    section: 6. Middleware and Async Operations
+  - lesson: zustand
+    section: "7. Zustand: Minimalist State Management"
+  - exercise: use-toggle
+  - exercise: use-local-storage
+  - lesson: jotai
+    section: "8. Jotai: Atomic State Management"
+  - lesson: recoil
+    section: "9. Recoil: Graph-Based State"
+  - lesson: state-selection-matrix
+    section: 10. State Management Selection Matrix
+  - lesson: state-conclusion
+    section: "Conclusion: State Management Mastery"
+exercises:
+  create-store:
+    number: 1
+    componentName: createStore
+  use-counter-reducer:
+    number: 2
+    componentName: useCounterReducer
+  combine-reducers:
+    number: 3
+    componentName: combineReducers
+  use-toggle:
+    number: 4
+    componentName: useToggle
+  count-context:
+    number: 5
+    componentName: CountProvider
+  use-local-storage:
+    number: 6
+    componentName: useLocalStorage

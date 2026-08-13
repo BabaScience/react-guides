@@ -10,8 +10,8 @@ import { ExercisePanel } from '@/components/exercise/ExercisePanel';
 import { TestResultsPanel } from '@/components/exercise/TestResultsPanel';
 import { LivePreview } from '@/components/exercise/LivePreview';
 import { Button } from '@/components/ui';
-import { runTestsInSandbox } from '@/sandbox/test-runner';
-import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
+import { DEFAULT_TIMEOUT_MS, getRunner } from '@/sandbox/runners';
+import { buildExerciseCode } from '@/sandbox/exercise-extractor';
 import type { TestRunResult } from '@/types/exercise';
 
 interface ExerciseStepViewProps {
@@ -48,30 +48,6 @@ function TabButton({
       {label}
     </button>
   );
-}
-
-function stripImports(code: string): string {
-  const lines = code.split('\n');
-  const result: string[] = [];
-  let skipNext = false;
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (trimmed.startsWith('import ')) {
-      if (!trimmed.includes(';') && !trimmed.includes("'") && !trimmed.endsWith("';") && !trimmed.endsWith('";')) {
-        skipNext = true;
-      }
-      continue;
-    }
-    if (skipNext) {
-      if (trimmed.includes(';') || trimmed.includes("from '") || trimmed.includes('from "')) {
-        skipNext = false;
-      }
-      continue;
-    }
-    result.push(line);
-  }
-  while (result.length > 0 && result[0].trim() === '') result.shift();
-  return result.join('\n');
 }
 
 export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: ExerciseStepViewProps) {
@@ -148,9 +124,13 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
     if (!exercise || running) return;
     setRunning(true);
     try {
-      const userBody = stripImports(code);
-      const fullCode = reassembleFullCode(fullFile, exercise.number, userBody);
-      const result = await runTestsInSandbox(fullCode, testFileContent, exercise.number);
+      const result = await getRunner(module).run({
+        userCode: code,
+        moduleSource: fullFile,
+        spec: testFileContent,
+        exerciseNumber: exercise.number,
+        timeoutMs: DEFAULT_TIMEOUT_MS,
+      });
       setResults(result);
       saveTestResults(module.id, exerciseId, result);
     } catch (e) {
@@ -162,7 +142,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
     } finally {
       setRunning(false);
     }
-  }, [code, fullFile, testFileContent, exercise, module.id, exerciseId, running, saveTestResults, t]);
+  }, [code, fullFile, testFileContent, exercise, module, exerciseId, running, saveTestResults, t]);
 
   const handleReset = useCallback(() => {
     // Drop any queued save first, or the debounce would write the discarded
@@ -199,7 +179,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
           <span className="text-xs bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-2.5 py-0.5 rounded-full font-medium">
             {t('exercise.title', { number: exercise.number })}
           </span>
-          <span className="text-sm text-gray-700 dark:text-gray-300">{exercise.name}</span>
+          <span className="text-sm text-gray-700 dark:text-gray-300">{t(`exercises.${module.id}.${exercise.id}.name`)}</span>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="secondary" size="sm" onClick={handleReset}>
@@ -259,7 +239,7 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
           right={
             <div className="h-full flex flex-col">
               <div className="h-2/5 border-b border-gray-200 dark:border-gray-800 overflow-hidden">
-                <ExercisePanel exercise={exercise} moduleName={module.name} moduleId={module.id} />
+                <ExercisePanel exercise={exercise} moduleId={module.id} />
               </div>
               <div className="flex-1 min-h-0">
                 <TestResultsPanel

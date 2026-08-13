@@ -1,0 +1,27 @@
+# rn-19-ota-updates
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-19-ota-updates
+track: react-native
+number: 19
+status: available
+guide: arguments/chapters/rn-19-ota-updates.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: eas-update
+    section: 1. EAS Update
+  - lesson: what-can-be-ota
+    section: 2. What Can Be OTA'd
+  - lesson: update-strategy
+    section: 3. Update Strategy
+  - lesson: versioning-ota
+    section: 4. Versioning OTA with Native
+  - lesson: compliance
+    section: 5. Compliance

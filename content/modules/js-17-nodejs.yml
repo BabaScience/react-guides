@@ -1,0 +1,27 @@
+# js-17-nodejs
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-17-nodejs
+track: javascript
+number: 17
+status: available
+guide: arguments/chapters/js-17-nodejs.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: what-node-is
+    section: 1. What Node Is
+  - lesson: core-modules
+    section: 2. Core Modules
+  - lesson: streams
+    section: 3. Streams
+  - lesson: npm-ecosystem
+    section: 4. npm Ecosystem
+  - lesson: frameworks
+    section: 5. Frameworks

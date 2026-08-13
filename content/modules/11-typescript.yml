@@ -1,0 +1,14 @@
+# 11-typescript
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 11-typescript
+track: react
+number: 11
+status: coming-soon
+guide: null
+exerciseDir: src/11-typescript

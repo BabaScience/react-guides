@@ -1,0 +1,64 @@
+# 09-performance
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 09-performance
+track: react
+number: 9
+status: available
+guide: arguments/chapters/09-performance-optimization.md
+exerciseDir: src/09-performance
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: rendering-behavior
+    section: 1. React Rendering Behavior
+  - lesson: react-memo
+    section: "2. React.memo: Preventing Re-renders"
+  - exercise: memoized-child
+  - lesson: usememo-usecallback
+    section: 3. useMemo and useCallback Patterns
+  - exercise: use-expensive-calc
+  - exercise: use-stable-callback
+  - lesson: code-splitting
+    section: 4. Code Splitting and Lazy Loading
+  - lesson: bundle-size
+    section: 5. Bundle Size Optimization
+  - lesson: virtualization
+    section: 6. Virtual Scrolling for Large Lists
+  - exercise: virtual-list
+  - lesson: render-introspection
+    section: 7. Profiling with React DevTools
+  - exercise: use-render-count
+  - lesson: debouncing
+    section: 8. Advanced Optimization Techniques
+  - exercise: use-debounced-value
+  - lesson: performance-monitoring
+    section: 9. Performance Monitoring
+  - lesson: performance-selection-matrix
+    section: 10. Optimization Strategy Selection
+  - lesson: performance-conclusion
+    section: "Conclusion: Performance Mastery"
+exercises:
+  memoized-child:
+    number: 1
+    componentName: MemoizedChild
+  use-expensive-calc:
+    number: 2
+    componentName: useExpensiveCalc
+  use-stable-callback:
+    number: 3
+    componentName: useStableCallback
+  use-render-count:
+    number: 4
+    componentName: useRenderCount
+  use-debounced-value:
+    number: 5
+    componentName: useDebouncedValue
+  virtual-list:
+    number: 6
+    componentName: VirtualList

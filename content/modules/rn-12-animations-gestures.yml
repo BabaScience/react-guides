@@ -1,0 +1,25 @@
+# rn-12-animations-gestures
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-12-animations-gestures
+track: react-native
+number: 12
+status: available
+guide: arguments/chapters/rn-12-animations-gestures.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: reanimated-3
+    section: 1. Reanimated 3
+  - lesson: gesture-handler
+    section: 2. Gesture Handler
+  - lesson: other-animation-tools
+    section: 3. Other Animation Tools
+  - lesson: when-to-reach-for-what
+    section: 4. When to Reach for What

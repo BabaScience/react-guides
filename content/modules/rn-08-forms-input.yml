@@ -1,0 +1,23 @@
+# rn-08-forms-input
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-08-forms-input
+track: react-native
+number: 8
+status: available
+guide: arguments/chapters/rn-08-forms-input.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: core-inputs
+    section: 1. Core Input Primitives
+  - lesson: form-libraries
+    section: 2. Form Libraries
+  - lesson: specialized-inputs
+    section: 3. Specialized Inputs

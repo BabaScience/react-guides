@@ -1,0 +1,27 @@
+# js-16-browser-apis
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-16-browser-apis
+track: javascript
+number: 16
+status: available
+guide: arguments/chapters/js-16-browser-apis.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: the-dom
+    section: 1. The DOM
+  - lesson: events
+    section: 2. Events
+  - lesson: fetch-and-http
+    section: 3. Fetch and HTTP
+  - lesson: storage
+    section: 4. Storage
+  - lesson: other-essential-apis
+    section: 5. Other Essential APIs

@@ -5,9 +5,10 @@ the safety net comes first so nothing regresses while the rest is fixed.
 
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
-**Phase 0, Phase 1 and P2.1–P2.4 are complete.** Gate at the time of writing:
-`npm run validate` → *Content valid, 2 warnings* (both the documented
-JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0 errors ·
+**Phases 0, 1 and 2 are complete.** Phase 3 (pedagogy) and Phase 4 (new tracks)
+remain. Gate at the time of writing: `npm run manifest` → *57 modules, 384 steps,
+67 exercises* · `npm run validate` → *Content valid, 2 warnings* (both the
+documented JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0 errors ·
 `npm run build` → succeeds, entry chunk 528 KB / 172 KB gzip, 62 chunks.
 
 ---
@@ -233,26 +234,103 @@ list, and the data has no sub-grouping inside a track — search covers the "57 
 modules" problem that grouping was meant to solve, without adding a second
 navigation concept.
 
-### [ ] P2.5 — Content as data *(the big one)*
-Move module metadata out of `data/*.ts` into `content/<track>/<module>/meta.yml` +
-per-locale markdown with per-section frontmatter. Generate `manifest.json` at build time.
-Derive steps from headings and delete `findSection`'s fuzzy fallback entirely.
+### [x] P2.5 — Content as data *(the big one)*
 
-### [ ] P2.6 — Pluggable exercise runners
+Module metadata now lives in **`content/modules/<id>.yml`** — 57 hand-editable
+files — compiled by `scripts/build-manifest.mjs` into
+`platform/src/data/manifest.json`, which the app imports. The ~2,000 lines of
+hand-written TypeScript across `modules.ts` / `rn-modules.ts` / `js-modules.ts`
+are gone.
+
+**The invariant that makes the whole class of bug impossible.** The compiler
+refuses to emit a manifest unless every `## ` heading in a module's guide is
+either claimed by a lesson step or listed under `skipSections`. §4.1 of the
+analysis — 39 sections written, translated, and unreachable — can no longer
+happen: it is a build failure, not a silent gap. Verified by breaking a module
+file on purpose:
+
+```
+07-data-fetching.yml: 1 guide section(s) are neither a step nor skipped
+                      — "5. SWR: Stale-While-Revalidate"
+07-data-fetching.yml: steps[6] points at "8. Polling and Realtime Updates",
+                      which is not a heading in the guide
+```
+
+**Migration was proved lossless** before anything was deleted: the generated
+manifest was compared field-by-field against the compiled TypeScript —
+*IDENTICAL, 57 modules, 384 steps, 67 exercises*.
+
+**Ids are declared, not derived.** Deriving step ids by slugging headings would
+have been tidier, and would have silently wiped every learner's completed
+lessons — `lessonSteps["01-fundamentals/jsx-syntax"]` is a progress key. The YAML
+declares ids and the compiler enforces the correspondence instead.
+
+Also folded in:
+- `copy-content.js` derives its source list from the manifest. The hard-coded
+  directory list — a production-only 404 waiting for the next new module — is gone.
+- The validator no longer bundles TypeScript with esbuild; it calls the compiler
+  and keeps only the checks the compiler can't make (translated chapters,
+  exercise files on disk, locale coverage, encoding).
+- `getModuleByNumber(num, track)` now *requires* the track. It was optional, and
+  module numbers repeat across tracks.
+- `manifest.json` is committed and CI runs `--check`, so editing the YAML without
+  regenerating fails the build.
+
+Not done: moving the chapters themselves under `content/<track>/<module>/`.
+The metadata was the part that drifted; relocating 117 markdown files would
+churn every raw-content path for no correctness gain. `guide:` in each module
+file points wherever the chapter lives, so that move stays available later.
+
+### [x] P2.6 — Pluggable exercise runners
+
+Grading is now behind an interface. A module names its runner in
+`content/modules/<id>.yml`; omitted, it takes the track's default. Both exercise
+views dispatch through `getRunner(module)` and know nothing about how the code
+is executed.
+
 ```ts
 interface ExerciseRunner {
-  id: 'react-browser' | 'node-webcontainer' | 'python-pyodide' | 'map-interactive' | 'quiz';
-  compile(source: string): Promise<string>;
-  run(compiled: string, spec: string): Promise<TestRunResult>;
+  id: RunnerId;
+  run(request: ExerciseRunRequest): Promise<TestRunResult>;
 }
 ```
-Track declares its runner; `ExerciseStepView` dispatches. **Blocks all non-JS tracks.**
 
-Carries the deferred half of P2.2: each runner owns an isolated execution
-context (iframe / WebContainer / Pyodide worker) with a watchdog. The
-`react-browser` runner loads React's **development** build there, which gives it
-a working `act()` and closes the last test-runner gap — a handler reading state
-after `user.type` currently still sees the initial value.
+`react-browser` is implemented — it owns the reassembly, import-stripping and
+grading that `ExerciseStepView` used to do inline. `node-webcontainer`,
+`python-pyodide`, `map-interactive` and `quiz` are registered as *planned*
+runners that report themselves to the learner instead of throwing, so a track
+can ship its lessons before its grader exists. The manifest compiler rejects an
+unknown `runner:` value.
+
+**`while (true)` is survivable now.** It used to freeze the tab permanently —
+the click could not be undone, and unsaved work went with it. Every loop body
+gets a guard call, placed by offsets from a real parse so `"while (true)"` in a
+string or comment is untouched:
+
+> Your code ran too long — check for a loop that never ends.
+
+The guard's budget measures *time without the thread yielding*, not total run
+time. A `setInterval` pushes the deadline forward; timers only fire when the
+thread yields, so an honest slow run never trips it while a stuck one is caught
+within one budget however long the run had been going. A fixed deadline gets
+both halves wrong — the first attempt used one and took 23s to recover; this
+takes ~7s with a 2s budget, and cannot false-positive on a slow-but-honest run.
+
+A second `Promise.race` watchdog covers what the guard can't see: a runaway
+`setInterval`, a promise that never settles.
+
+Verified in a production build: a correct solution passes 3/3, a `while (true)`
+reports the loop message in ~7s, and the `user-event` exercise still scores its
+3/4 baseline — no regression from routing through the runner.
+
+**Still not done: real isolation.** Execution is `(0, eval)` in the main window.
+An iframe would give a separate realm but not a killable one — same-origin
+frames share the event loop, and a cross-origin frame can't load the app's
+modules without serving the sandbox from its own origin. That is a deployment
+change, and it is also what would finally allow React's **development** build in
+the sandbox, closing the last `user-event` gap. Both belong to the same piece of
+work; neither is blocking a new track, because Node and Python runners bring
+their own isolated contexts.
 
 ---
 

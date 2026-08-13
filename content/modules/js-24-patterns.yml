@@ -1,0 +1,27 @@
+# js-24-patterns
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-24-patterns
+track: javascript
+number: 24
+status: available
+guide: arguments/chapters/js-24-patterns.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: programming-paradigms
+    section: 1. Programming Paradigms
+  - lesson: design-patterns
+    section: 2. Design Patterns
+  - lesson: functional-patterns
+    section: 3. Functional Patterns
+  - lesson: code-organization
+    section: 4. Code Organization
+  - lesson: concurrency-patterns
+    section: 5. Concurrency Patterns

@@ -1,0 +1,25 @@
+# js-21-testing
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-21-testing
+track: javascript
+number: 21
+status: available
+guide: arguments/chapters/js-21-testing.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: test-runners
+    section: 1. Test Runners
+  - lesson: test-types
+    section: 2. Test Types
+  - lesson: end-to-end-testing
+    section: 3. End-to-End Testing
+  - lesson: coverage-and-strategy
+    section: 4. Coverage and Strategy

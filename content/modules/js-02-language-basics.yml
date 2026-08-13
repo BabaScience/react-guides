@@ -1,0 +1,29 @@
+# js-02-language-basics
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-02-language-basics
+track: javascript
+number: 2
+status: available
+guide: arguments/chapters/js-02-language-basics.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: what-javascript-is
+    section: 1. What JavaScript Is
+  - lesson: variables-and-declarations
+    section: 2. Variables and Declarations
+  - lesson: primitive-types
+    section: 3. Primitive Types
+  - lesson: reference-types
+    section: 4. Reference Types
+  - lesson: type-coercion
+    section: 5. Type Coercion
+  - lesson: typeof-and-type-checking
+    section: 6. typeof and Type Checking

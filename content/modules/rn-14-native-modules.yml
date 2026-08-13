@@ -1,0 +1,25 @@
+# rn-14-native-modules
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-14-native-modules
+track: react-native
+number: 14
+status: available
+guide: arguments/chapters/rn-14-native-modules.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: new-architecture
+    section: 1. The New Architecture
+  - lesson: when-to-write-native
+    section: 2. When to Write a Native Module
+  - lesson: native-skills-needed
+    section: 3. Skills Needed
+  - lesson: recommended-path
+    section: 4. Recommended Path

@@ -1,0 +1,43 @@
+# rn-21-advanced-topics
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-21-advanced-topics
+track: react-native
+number: 21
+status: available
+guide: arguments/chapters/rn-21-advanced-topics.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: monorepo
+    section: 1. Monorepo
+  - lesson: cross-platform-sharing
+    section: 2. Cross-Platform Code Sharing
+  - lesson: internationalization
+    section: 3. Internationalization
+  - lesson: accessibility
+    section: 4. Accessibility
+  - lesson: animations-at-scale
+    section: 5. Animations at Scale
+  - lesson: audio-video-at-scale
+    section: 6. Audio / Video at Scale
+  - lesson: maps
+    section: 7. Maps
+  - lesson: bluetooth-nfc
+    section: 8. Bluetooth / NFC / Hardware
+  - lesson: payments
+    section: 9. Payments
+  - lesson: architecture-patterns
+    section: 10. Architecture Patterns
+  - lesson: multi-environment
+    section: 11. Multi-Environment
+  - lesson: app-size-optimization
+    section: 12. App Size Optimization
+  - lesson: app-store-optimization
+    section: 13. App Store Optimization

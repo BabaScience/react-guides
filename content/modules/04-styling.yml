@@ -1,0 +1,64 @@
+# 04-styling
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 04-styling
+track: react
+number: 4
+status: available
+guide: arguments/chapters/04-react-styling.md
+exerciseDir: src/04-styling
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: styling-paradigms
+    section: 1. Styling Paradigms in React
+  - lesson: inline-styles
+    section: "2. Inline Styles: Mechanisms and Constraints"
+  - exercise: inline-styled
+  - lesson: css-modules
+    section: "3. CSS Modules: Scoped Styling Architecture"
+  - exercise: badge
+  - lesson: css-in-js
+    section: "4. CSS-in-JS: styled-components and Emotion"
+  - exercise: padded-box
+  - lesson: tailwind-utility-first
+    section: "5. Tailwind CSS: Utility-First Methodology"
+  - exercise: responsive-grid
+  - lesson: css-frameworks
+    section: 6. CSS Frameworks Integration
+  - exercise: alert
+  - lesson: styling-performance
+    section: 7. Performance Considerations
+  - lesson: advanced-styling-patterns
+    section: 8. Advanced Styling Patterns
+  - lesson: theming-design-systems
+    section: 9. Theming and Design Systems
+  - exercise: themed-text
+  - lesson: styling-selection-matrix
+    section: 10. Styling Strategy Selection Matrix
+  - lesson: styling-conclusion
+    section: "Conclusion: Architecting Stylistic Excellence"
+exercises:
+  inline-styled:
+    number: 1
+    componentName: InlineStyled
+  badge:
+    number: 2
+    componentName: Badge
+  padded-box:
+    number: 3
+    componentName: PaddedBox
+  themed-text:
+    number: 4
+    componentName: ThemedText
+  responsive-grid:
+    number: 5
+    componentName: ResponsiveGrid
+  alert:
+    number: 6
+    componentName: Alert

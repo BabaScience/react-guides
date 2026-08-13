@@ -1,0 +1,27 @@
+# js-19-typescript
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-19-typescript
+track: javascript
+number: 19
+status: available
+guide: arguments/chapters/js-19-typescript.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: what-typescript-adds
+    section: 1. What TypeScript Adds
+  - lesson: type-system-fundamentals
+    section: 2. Type System Fundamentals
+  - lesson: generics
+    section: 3. Generics
+  - lesson: utility-types
+    section: 4. Utility Types
+  - lesson: advanced-typescript
+    section: 5. Advanced TypeScript

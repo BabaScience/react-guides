@@ -9,6 +9,8 @@
     "allowImportingTsExtensions": true,
     "isolatedModules": true,
     "moduleDetection": "force",
+    // src/data/manifest.json is the generated module catalogue.
+    "resolveJsonModule": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,

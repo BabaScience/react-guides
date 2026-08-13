@@ -1,0 +1,27 @@
+# rn-09-networking-data
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-09-networking-data
+track: react-native
+number: 9
+status: available
+guide: arguments/chapters/rn-09-networking-data.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: http
+    section: 1. HTTP
+  - lesson: tanstack-query
+    section: 2. Server State with TanStack Query
+  - lesson: graphql
+    section: 3. GraphQL
+  - lesson: realtime
+    section: 4. Realtime
+  - lesson: offline-first
+    section: 5. Offline-First Patterns

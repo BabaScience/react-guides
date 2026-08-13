@@ -1,0 +1,29 @@
+# js-06-objects-prototypes
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-06-objects-prototypes
+track: javascript
+number: 6
+status: available
+guide: arguments/chapters/js-06-objects-prototypes.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: object-creation
+    section: 1. Object Creation
+  - lesson: property-access-and-descriptors
+    section: 2. Property Access and Descriptors
+  - lesson: object-methods
+    section: 3. Object Methods
+  - lesson: prototypes
+    section: 4. Prototypes
+  - lesson: cloning
+    section: 5. Cloning
+  - lesson: maps-and-sets
+    section: 6. Maps and Sets

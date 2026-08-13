@@ -2,16 +2,17 @@
 /**
  * Content validator.
  *
- * The platform joins three independently-maintained sources of truth:
+ * The platform joins three sources of truth:
  *
  *   1. markdown chapters       arguments/chapters/**.md
- *   2. module metadata         platform/src/data/*.ts
+ *   2. module metadata         content/modules/*.yml
  *   3. UI translations         platform/src/i18n/locales/*.json
  *
- * They are wired together by string matching (H2 text, `// EXERCISE N:` banners,
- * `t()` key paths). Nothing at runtime tells you when a join breaks — a lesson
- * just renders an error, or a whole section becomes unreachable. This script is
- * that missing check. Run it in CI.
+ * `scripts/build-manifest.mjs` owns the (1)↔(2) join — it refuses to compile a
+ * module whose steps and guide headings don't correspond exactly. This script
+ * runs that compiler first, then checks everything the compiler cannot see: the
+ * translated chapters, the exercise files on disk, the locale keys, and what the
+ * production build actually copies.
  *
  * Usage:
  *   node scripts/validate-content.mjs             # exit 1 on any error
@@ -22,7 +23,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
+import { buildManifest } from './build-manifest.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -32,8 +33,6 @@ const WARN_ONLY = process.argv.includes('--warn-only');
 const VERBOSE = process.argv.includes('--verbose');
 
 const LOCALES = ['en', 'fr', 'it'];
-/** H2s that intentionally have no step — the timeline replaces them. */
-const IGNORED_HEADINGS = new Set(['Table of Contents']);
 
 // ---------------------------------------------------------------- diagnostics
 
@@ -46,35 +45,6 @@ const warn = (check, msg) => warnings.push({ check, msg });
 const ok = (check, msg) => passed.push({ check, msg });
 
 // ------------------------------------------------------------------- loading
-
-/** Bundle the TS module graph so we can read the real `modules` array. */
-function loadModules() {
-  const require = createRequire(path.join(PLATFORM, 'package.json'));
-  let esbuild;
-  try {
-    esbuild = require('esbuild');
-  } catch {
-    console.error(
-      'esbuild not found. Run `npm install` in platform/ first ' +
-        '(esbuild ships with vite).'
-    );
-    process.exit(2);
-  }
-  const outfile = path.join(
-    fs.mkdtempSync(path.join(require('os').tmpdir(), 'validate-content-')),
-    'modules.cjs'
-  );
-  esbuild.buildSync({
-    entryPoints: [path.join(PLATFORM, 'src/data/modules.ts')],
-    bundle: true,
-    format: 'cjs',
-    platform: 'node',
-    outfile,
-    alias: { '@': path.join(PLATFORM, 'src') },
-    logLevel: 'error',
-  });
-  return require(outfile).modules;
-}
 
 function readJson(p) {
   return JSON.parse(fs.readFileSync(p, 'utf8'));
@@ -100,49 +70,6 @@ function guidePath(guideFile, locale) {
 
 // ------------------------------------------------------------------ the checks
 
-function checkIdentity(modules) {
-  const seenIds = new Set();
-  const seenTrackNumber = new Set();
-  for (const m of modules) {
-    if (seenIds.has(m.id)) err('identity', `duplicate module id: ${m.id}`);
-    seenIds.add(m.id);
-
-    const key = `${m.track}#${m.number}`;
-    if (seenTrackNumber.has(key))
-      err('identity', `duplicate (track, number): ${m.track} #${m.number} (${m.id})`);
-    seenTrackNumber.add(key);
-
-    const stepIds = new Set();
-    for (const s of m.steps) {
-      if (stepIds.has(s.id)) err('identity', `${m.id}: duplicate step id "${s.id}"`);
-      stepIds.add(s.id);
-    }
-    const exIds = new Set();
-    for (const e of m.exercises) {
-      if (exIds.has(e.id)) err('identity', `${m.id}: duplicate exercise id "${e.id}"`);
-      exIds.add(e.id);
-    }
-  }
-  ok('identity', `${modules.length} modules, ids and (track, number) pairs unique`);
-}
-
-function checkGuideFiles(modules) {
-  for (const m of modules) {
-    if (!m.guideFile) {
-      if (m.status === 'available')
-        err('guides', `${m.id}: status "available" but guideFile is empty`);
-      continue;
-    }
-    if (!fs.existsSync(guidePath(m.guideFile, 'en')))
-      err('guides', `${m.id}: guideFile not on disk — ${m.guideFile}`);
-  }
-}
-
-/**
- * Sections resolve by ordinal: we look the heading up in the ENGLISH chapter to
- * get its index, then take the same index from the localized chapter. That only
- * works if translations keep every H2, in order — so assert it.
- */
 function checkHeadingParity(modules) {
   let compared = 0;
   const missingTranslations = { fr: [], it: [] };
@@ -179,69 +106,6 @@ function checkHeadingParity(modules) {
       );
   }
   ok('heading-parity', `${compared} translated chapters match English H2 structure`);
-}
-
-function checkSectionResolution(modules) {
-  let resolved = 0;
-
-  for (const m of modules) {
-    if (!m.guideFile) continue;
-    const enPath = guidePath(m.guideFile, 'en');
-    if (!fs.existsSync(enPath)) continue;
-    const en = headings(fs.readFileSync(enPath, 'utf8'));
-
-    // 1. every lesson step resolves to exactly one English H2
-    const usedIndexes = new Map();
-    for (const step of m.steps) {
-      if (step.type !== 'lesson') continue;
-      const matches = en
-        .map((h, i) => (h === step.sectionHeading ? i : -1))
-        .filter((i) => i !== -1);
-
-      if (matches.length === 0) {
-        const near = en.find(
-          (h) =>
-            h.toLowerCase().includes(step.sectionHeading.toLowerCase()) ||
-            step.sectionHeading.toLowerCase().includes(h.toLowerCase())
-        );
-        err(
-          'sections',
-          `${m.id}/${step.id}: sectionHeading "${step.sectionHeading}" matches no H2` +
-            (near ? ` — did you mean "${near}"?` : '')
-        );
-        continue;
-      }
-      if (matches.length > 1) {
-        err(
-          'sections',
-          `${m.id}/${step.id}: sectionHeading "${step.sectionHeading}" matches ${matches.length} H2s`
-        );
-        continue;
-      }
-      const idx = matches[0];
-      if (usedIndexes.has(idx)) {
-        err(
-          'sections',
-          `${m.id}: steps "${usedIndexes.get(idx)}" and "${step.id}" both point at "${en[idx]}"`
-        );
-      }
-      usedIndexes.set(idx, step.id);
-      resolved++;
-    }
-
-    // 2. every H2 is reachable from the timeline
-    if (m.steps.length === 0) continue; // coming-soon modules
-    const orphans = en.filter((h, i) => !usedIndexes.has(i) && !IGNORED_HEADINGS.has(h));
-    if (orphans.length) {
-      err(
-        'sections',
-        `${m.id}: ${orphans.length} section(s) written but unreachable — ` +
-          orphans.map((h) => `"${h}"`).join(', ')
-      );
-    }
-  }
-
-  ok('sections', `${resolved} lesson steps resolve to exactly one section`);
 }
 
 function checkExercises(modules) {
@@ -387,22 +251,30 @@ function checkTranslations(modules) {
   ok('i18n', `${LOCALES.length} locales in key parity and covering every module/step/exercise`);
 }
 
+/**
+ * copy-content.js now derives its source list from the manifest, so the old
+ * "did someone forget to add the directory" check is obsolete by construction.
+ * What still needs asserting is that the manifest the app imports matches the
+ * module files on disk — otherwise the build ships a stale catalogue.
+ */
 function checkBuildInputs(modules) {
-  const src = fs.readFileSync(path.join(PLATFORM, 'scripts/copy-content.js'), 'utf8');
-  const listed = [...src.matchAll(/^\s*'([^']+)',\s*$/gm)].map((x) => x[1]);
+  const manifestPath = path.join(PLATFORM, 'src/data/manifest.json');
+  if (!fs.existsSync(manifestPath)) {
+    err('build', 'platform/src/data/manifest.json is missing — run `npm run manifest`');
+    return;
+  }
 
-  const needed = [...new Set(modules.filter((m) => m.exercises.length).map((m) => m.exerciseDir))];
-  const notCopied = needed.filter((d) => !listed.includes(d));
-  if (notCopied.length)
+  const committed = readJson(manifestPath).modules;
+  if (JSON.stringify(committed) !== JSON.stringify(modules)) {
     err(
       'build',
-      `exerciseDirs absent from copy-content.js — these 404 in production only: ${notCopied.join(', ')}`
+      'manifest.json is out of date with content/modules/*.yml — run `npm run manifest` and commit the result'
     );
+    return;
+  }
 
-  const stale = listed.filter((d) => d.startsWith('src/') && !fs.existsSync(path.join(ROOT, d)));
-  if (stale.length) warn('build', `copy-content.js lists directories that do not exist: ${stale.join(', ')}`);
-
-  ok('build', `${needed.length} exercise directories are copied into the production bundle`);
+  const dirs = [...new Set(modules.filter((m) => m.exercises.length).map((m) => m.exerciseDir))];
+  ok('build', `manifest is current; ${dirs.length} exercise directories will be copied`);
 }
 
 function checkEncoding() {
@@ -431,12 +303,16 @@ function checkEncoding() {
 
 // ---------------------------------------------------------------------- main
 
-const modules = loadModules();
+// The manifest compiler owns the module-file ↔ guide-heading join, including
+// the "nothing written is unreachable" invariant. If it can't compile, none of
+// the checks below would mean anything.
+const { modules, errors: manifestErrors } = buildManifest();
+for (const message of manifestErrors) err('modules', message);
+if (!manifestErrors.length) {
+  ok('modules', `${modules.length} module files compile; every guide section is claimed or skipped`);
+}
 
-checkIdentity(modules);
-checkGuideFiles(modules);
 checkHeadingParity(modules);
-checkSectionResolution(modules);
 checkExercises(modules);
 checkTranslations(modules);
 checkBuildInputs(modules);

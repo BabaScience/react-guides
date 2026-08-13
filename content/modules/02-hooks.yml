@@ -1,0 +1,68 @@
+# 02-hooks
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 02-hooks
+track: react
+number: 2
+status: available
+guide: arguments/chapters/02-react-hooks.md
+exerciseDir: src/02-hooks
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: understanding-hooks
+    section: 1. Understanding Hooks
+  - lesson: usestate
+    section: 2. useState
+  - exercise: counter-functional
+  - lesson: useeffect
+    section: 3. useEffect
+  - exercise: data-fetching
+  - lesson: usecontext
+    section: 4. useContext
+  - exercise: theme-context
+  - lesson: useref
+    section: 5. useRef
+  - exercise: focus-input
+  - lesson: usememo
+    section: 6. useMemo
+  - exercise: filtered-list-memo
+  - lesson: usecallback
+    section: 7. useCallback
+  - exercise: callback-parent
+  - lesson: usereducer
+    section: 8. useReducer
+  - exercise: todo-reducer
+  - lesson: custom-hooks
+    section: 9. Custom Hooks
+  - lesson: advanced-patterns
+    section: 10. Advanced Patterns
+  - lesson: hooks-wrap-up
+    section: Wrapping Up
+exercises:
+  counter-functional:
+    number: 1
+    componentName: CounterWithFunctionalUpdates
+  data-fetching:
+    number: 2
+    componentName: DataFetchingComponent
+  theme-context:
+    number: 3
+    componentName: ThemeProvider
+  focus-input:
+    number: 4
+    componentName: FocusInput
+  filtered-list-memo:
+    number: 5
+    componentName: FilteredList
+  callback-parent:
+    number: 6
+    componentName: ParentWithCallback
+  todo-reducer:
+    number: 7
+    componentName: TodoApp

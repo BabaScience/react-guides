@@ -1,0 +1,25 @@
+# rn-17-push-background
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-17-push-background
+track: react-native
+number: 17
+status: available
+guide: arguments/chapters/rn-17-push-background.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: push-notifications
+    section: 1. Push Notifications
+  - lesson: backend-services
+    section: 2. Backend Services
+  - lesson: background-work
+    section: 3. Background Work
+  - lesson: background-limits
+    section: 4. Background Limits

@@ -1,0 +1,62 @@
+# 10-testing
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 10-testing
+track: react
+number: 10
+status: available
+guide: arguments/chapters/10-testing.md
+exerciseDir: src/10-testing
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: testing-fundamentals
+    section: 1. Testing Fundamentals and Philosophy
+  - lesson: unit-testing-jest
+    section: 2. Unit Testing with Jest
+  - exercise: sum
+  - exercise: capitalize
+  - lesson: component-testing-rtl
+    section: 3. Component Testing with React Testing Library
+  - exercise: greeting
+  - lesson: effective-test-cases
+    section: 4. Writing Effective Test Cases
+  - exercise: use-counter
+  - lesson: mocking-dependencies
+    section: 5. Mocking API Calls and Dependencies
+  - exercise: event-emitter
+  - exercise: fetch-user-name
+  - lesson: integration-testing
+    section: 6. Integration Testing Strategies
+  - lesson: e2e-cypress
+    section: 7. End-to-End Testing with Cypress
+  - lesson: e2e-playwright
+    section: 8. End-to-End Testing with Playwright
+  - lesson: coverage-quality
+    section: 9. Test Coverage and Quality Metrics
+  - lesson: best-practices
+    section: 10. Testing Best Practices and Patterns
+exercises:
+  sum:
+    number: 1
+    componentName: sum
+  capitalize:
+    number: 2
+    componentName: capitalize
+  greeting:
+    number: 3
+    componentName: Greeting
+  use-counter:
+    number: 4
+    componentName: useCounter
+  event-emitter:
+    number: 5
+    componentName: EventEmitter
+  fetch-user-name:
+    number: 6
+    componentName: fetchUserName

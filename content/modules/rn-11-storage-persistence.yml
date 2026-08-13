@@ -1,0 +1,25 @@
+# rn-11-storage-persistence
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-11-storage-persistence
+track: react-native
+number: 11
+status: available
+guide: arguments/chapters/rn-11-storage-persistence.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: key-value-storage
+    section: 1. Key-Value Storage
+  - lesson: secure-storage
+    section: 2. Secure Storage
+  - lesson: relational-document
+    section: 3. Relational and Document Storage
+  - lesson: when-to-use-what
+    section: 4. When to Use What

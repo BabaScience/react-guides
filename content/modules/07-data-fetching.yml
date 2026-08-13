@@ -1,0 +1,64 @@
+# 07-data-fetching
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 07-data-fetching
+track: react
+number: 7
+status: available
+guide: arguments/chapters/07-data-fetching.md
+exerciseDir: src/07-data-fetching
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: fetching-paradigms
+    section: 1. Data Fetching Paradigms
+  - lesson: native-fetch
+    section: 2. Native Fetch API and Axios
+  - exercise: use-fetch
+  - lesson: loading-error-states
+    section: 3. Loading States and Error Handling
+  - exercise: use-debounce
+  - lesson: react-query
+    section: "4. React Query: Server State Management"
+  - lesson: swr
+    section: "5. SWR: Stale-While-Revalidate"
+  - lesson: polling
+    section: 8. Polling and Real-Time Updates
+  - exercise: use-interval
+  - lesson: cancellation
+    section: 9. Advanced Patterns
+  - exercise: use-abortable
+  - lesson: optimistic-updates
+    section: 6. Optimistic Updates
+  - exercise: use-optimistic
+  - lesson: cache-strategies
+    section: 7. Cache Management Strategies
+  - exercise: create-cache
+  - lesson: fetching-selection-matrix
+    section: 10. Data Fetching Strategy Selection
+  - lesson: fetching-conclusion
+    section: "Conclusion: Mastering Data Fetching"
+exercises:
+  use-fetch:
+    number: 1
+    componentName: useFetch
+  use-debounce:
+    number: 2
+    componentName: useDebounce
+  use-interval:
+    number: 3
+    componentName: useInterval
+  use-abortable:
+    number: 4
+    componentName: useAbortable
+  use-optimistic:
+    number: 5
+    componentName: useOptimistic
+  create-cache:
+    number: 6
+    componentName: createCache

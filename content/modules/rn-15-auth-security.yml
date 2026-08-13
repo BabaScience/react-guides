@@ -1,0 +1,25 @@
+# rn-15-auth-security
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-15-auth-security
+track: react-native
+number: 15
+status: available
+guide: arguments/chapters/rn-15-auth-security.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: auth-patterns
+    section: 1. Auth Patterns
+  - lesson: auth-providers
+    section: 2. Auth Providers
+  - lesson: token-handling
+    section: 3. Token Handling
+  - lesson: security-hardening
+    section: 4. Security Hardening

@@ -1,0 +1,19 @@
+# js-01-prerequisites
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-01-prerequisites
+track: javascript
+number: 1
+status: available
+guide: arguments/chapters/js-01-prerequisites.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: before-you-start
+    section: 1. Before You Start

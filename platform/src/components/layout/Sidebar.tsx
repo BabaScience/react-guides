@@ -38,8 +38,8 @@ export function Sidebar() {
     const q = deferredQuery.trim().toLowerCase();
     if (!q) return trackModules;
     return trackModules.filter((mod) => {
-      const name = t(`modules.${mod.id}.name`, mod.name).toLowerCase();
-      const description = t(`modules.${mod.id}.description`, mod.description).toLowerCase();
+      const name = t(`modules.${mod.id}.name`).toLowerCase();
+      const description = t(`modules.${mod.id}.description`).toLowerCase();
       // Step titles too: "useReducer" should find the hooks module even though
       // the module name never says it.
       const steps = mod.steps.some((s) =>
@@ -153,7 +153,7 @@ export function Sidebar() {
           const total = hasSteps ? stepProgress.total : exProgress.total;
           const isComingSoon = mod.status === 'coming-soon';
           const progressPct = total > 0 ? (passed / total) * 100 : 0;
-          const modName = t(`modules.${mod.id}.name`, mod.name);
+          const modName = t(`modules.${mod.id}.name`);
 
           return (
             <NavLink

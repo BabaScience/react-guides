@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "Multi-track interactive learning platform — content, exercises and validation",
   "scripts": {
+    "manifest": "node scripts/build-manifest.mjs",
+    "manifest:check": "node scripts/build-manifest.mjs --check",
     "validate": "node scripts/validate-content.mjs",
     "validate:warn": "node scripts/validate-content.mjs --warn-only",
     "test": "node scripts/test-runner.js",

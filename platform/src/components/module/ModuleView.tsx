@@ -40,10 +40,10 @@ export function ModuleView() {
           <span>{t('dashboard.modules', { count: mod ? getModulesByTrack(mod.track).length : 0 })}</span>
         </div>
         <h1 className="font-display text-2xl text-gray-900 dark:text-white mb-2">
-          {t(`modules.${mod.id}.name`, mod.name)}
+          {t(`modules.${mod.id}.name`)}
         </h1>
         <p className="text-gray-500 dark:text-gray-400">
-          {t(`modules.${mod.id}.description`, mod.description)}
+          {t(`modules.${mod.id}.description`)}
         </p>
       </div>
 

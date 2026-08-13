@@ -1,0 +1,29 @@
+# rn-18-build-deploy
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-18-build-deploy
+track: react-native
+number: 18
+status: available
+guide: arguments/chapters/rn-18-build-deploy.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: eas-build
+    section: 1. EAS Build
+  - lesson: local-builds
+    section: 2. Local Builds
+  - lesson: ios-submission
+    section: 3. iOS Submission
+  - lesson: android-submission
+    section: 4. Android Submission
+  - lesson: versioning
+    section: 5. Versioning
+  - lesson: ci-cd
+    section: 6. CI/CD

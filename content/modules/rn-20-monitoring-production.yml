@@ -1,0 +1,29 @@
+# rn-20-monitoring-production
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-20-monitoring-production
+track: react-native
+number: 20
+status: available
+guide: arguments/chapters/rn-20-monitoring-production.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: crash-reporting
+    section: 1. Crash Reporting
+  - lesson: analytics
+    section: 2. Analytics
+  - lesson: performance-monitoring
+    section: 3. Performance Monitoring
+  - lesson: feature-flags
+    section: 4. Feature Flags and Remote Config
+  - lesson: logging
+    section: 5. Logging
+  - lesson: ab-testing
+    section: 6. A/B Testing

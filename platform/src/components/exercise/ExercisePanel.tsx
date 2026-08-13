@@ -4,30 +4,28 @@ import type { Exercise } from '@/types/exercise';
 
 interface ExercisePanelProps {
   exercise: Exercise;
-  moduleName: string;
-  moduleId?: string;
+  moduleId: string;
 }
 
-export function ExercisePanel({ exercise, moduleName, moduleId }: ExercisePanelProps) {
+export function ExercisePanel({ exercise, moduleId }: ExercisePanelProps) {
   const { t } = useTranslation();
   const [showHints, setShowHints] = useState(false);
 
-  // Try to get translated exercise data, fall back to manifest
-  const exKey = moduleId ? `exercises.${moduleId}.${exercise.id}` : '';
-  const name = moduleId ? t(`${exKey}.name`, exercise.name) : exercise.name;
-  const description = moduleId ? t(`${exKey}.description`, exercise.description) : exercise.description;
-  const rawHints = moduleId
-    ? t(`${exKey}.hints`, { returnObjects: true, defaultValue: exercise.hints })
-    : exercise.hints;
-  // i18next returns the defaultValue if the key is missing, but a malformed
-  // translation can yield a non-array. Coerce to array of strings.
-  const hints: string[] = Array.isArray(rawHints) ? rawHints : exercise.hints ?? [];
+  // All learner-facing text comes from the locale files; the manifest carries
+  // identity and wiring only. `validate-content.mjs` guarantees these keys
+  // exist in every locale, so there is nothing to fall back to.
+  const exKey = `exercises.${moduleId}.${exercise.id}`;
+  const name = t(`${exKey}.name`);
+  const description = t(`${exKey}.description`);
+  const rawHints = t(`${exKey}.hints`, { returnObjects: true });
+  // A malformed translation can yield a non-array; don't let it crash the panel.
+  const hints: string[] = Array.isArray(rawHints) ? (rawHints as string[]) : [];
 
   return (
     <div className="p-4 space-y-4 overflow-y-auto h-full bg-white dark:bg-gray-950">
       <div>
         <div className="text-xs text-gray-400 dark:text-gray-500 mb-1 font-mono">
-          {moduleName} / {t('exercise.title', { number: exercise.number })}
+          {t(`modules.${moduleId}.name`)} / {t('exercise.title', { number: exercise.number })}
         </div>
         <h2 className="text-lg font-bold text-gray-900 dark:text-white">{name}</h2>
       </div>

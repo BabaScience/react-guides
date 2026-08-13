@@ -1,0 +1,27 @@
+# js-10-this-keyword
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-10-this-keyword
+track: javascript
+number: 10
+status: available
+guide: arguments/chapters/js-10-this-keyword.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: default-binding
+    section: 1. Default Binding
+  - lesson: implicit-binding
+    section: 2. Implicit Binding
+  - lesson: explicit-binding
+    section: 3. Explicit Binding
+  - lesson: new-binding
+    section: 4. new Binding
+  - lesson: arrow-functions-and-this
+    section: 5. Arrow Functions and this

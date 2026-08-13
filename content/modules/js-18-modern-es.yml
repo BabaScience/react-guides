@@ -1,0 +1,23 @@
+# js-18-modern-es
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-18-modern-es
+track: javascript
+number: 18
+status: available
+guide: arguments/chapters/js-18-modern-es.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: es2020-and-es2021
+    section: 1. ES2020 and ES2021
+  - lesson: es2022-and-es2023
+    section: 2. ES2022 and ES2023
+  - lesson: es2024-and-beyond
+    section: 3. ES2024 and Beyond

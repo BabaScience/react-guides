@@ -1,0 +1,27 @@
+# js-14-error-handling
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-14-error-handling
+track: javascript
+number: 14
+status: available
+guide: arguments/chapters/js-14-error-handling.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: throwing-and-catching
+    section: 1. Throwing and Catching
+  - lesson: error-types
+    section: 2. Error Types
+  - lesson: custom-errors
+    section: 3. Custom Errors
+  - lesson: async-error-handling
+    section: 4. Async Error Handling
+  - lesson: error-semantics
+    section: 5. Error Semantics

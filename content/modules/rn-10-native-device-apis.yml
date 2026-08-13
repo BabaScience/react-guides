@@ -1,0 +1,25 @@
+# rn-10-native-device-apis
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-10-native-device-apis
+track: react-native
+number: 10
+status: available
+guide: arguments/chapters/rn-10-native-device-apis.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: hardware-sensors
+    section: 1. Hardware and Sensors
+  - lesson: media
+    section: 2. Media
+  - lesson: system-apis
+    section: 3. System APIs
+  - lesson: permissions-philosophy
+    section: 4. Permissions Philosophy

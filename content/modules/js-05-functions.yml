@@ -1,0 +1,29 @@
+# js-05-functions
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-05-functions
+track: javascript
+number: 5
+status: available
+guide: arguments/chapters/js-05-functions.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: function-forms
+    section: 1. Function Forms
+  - lesson: parameters
+    section: 2. Parameters
+  - lesson: returns
+    section: 3. Returns
+  - lesson: higher-order-functions
+    section: 4. Higher-Order Functions
+  - lesson: pure-functions
+    section: 5. Pure Functions
+  - lesson: currying-and-partial-application
+    section: 6. Currying and Partial Application

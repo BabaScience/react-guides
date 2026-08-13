@@ -1,0 +1,25 @@
+# js-08-strings-numbers-dates
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-08-strings-numbers-dates
+track: javascript
+number: 8
+status: available
+guide: arguments/chapters/js-08-strings-numbers-dates.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: strings
+    section: 1. Strings
+  - lesson: numbers
+    section: 2. Numbers
+  - lesson: math-and-bigint
+    section: 3. Math and BigInt
+  - lesson: dates
+    section: 4. Dates

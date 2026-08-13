@@ -1,0 +1,25 @@
+# js-12-modules
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-12-modules
+track: javascript
+number: 12
+status: available
+guide: arguments/chapters/js-12-modules.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: es-modules
+    section: 1. ES Modules
+  - lesson: commonjs
+    section: 2. CommonJS
+  - lesson: dynamic-imports
+    section: 3. Dynamic Imports
+  - lesson: module-patterns
+    section: 4. Module Patterns

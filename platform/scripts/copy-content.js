@@ -3,9 +3,14 @@
  * available as static assets in production builds.
  *
  * Run before `vite build` via the "prebuild" npm script.
+ *
+ * The exercise directories are read from the generated manifest rather than
+ * listed here. The old hard-coded list was a silent production-only failure
+ * waiting to happen: adding a module and forgetting this file left the app
+ * working in dev and 404-ing in production.
  */
 
-import { cpSync, mkdirSync, rmSync, existsSync } from 'fs';
+import { cpSync, mkdirSync, rmSync, existsSync, readFileSync } from 'fs';
 import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -19,21 +24,16 @@ if (existsSync(DEST)) {
 }
 mkdirSync(DEST, { recursive: true });
 
+const { modules } = JSON.parse(
+  readFileSync(resolve(__dirname, '..', 'src', 'data', 'manifest.json'), 'utf8')
+);
+
+const exerciseDirs = [
+  ...new Set(modules.filter((m) => m.exercises.length > 0).map((m) => m.exerciseDir)),
+].sort();
+
 // Directories to copy (relative to repo root)
-const sources = [
-  'src/01-fundamentals',
-  'src/02-hooks',
-  'src/03-component-patterns',
-  'src/04-styling',
-  'src/05-routing',
-  'src/06-state-management',
-  'src/07-data-fetching',
-  'src/08-forms',
-  'src/09-performance',
-  'src/10-testing',
-  'src/rn-04-core-components',
-  'arguments/chapters',
-];
+const sources = [...exerciseDirs, 'arguments/chapters'];
 
 for (const src of sources) {
   const from = resolve(ROOT, src);

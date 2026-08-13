@@ -1,0 +1,25 @@
+# js-04-control-flow
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-04-control-flow
+track: javascript
+number: 4
+status: available
+guide: arguments/chapters/js-04-control-flow.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: conditionals
+    section: 1. Conditionals
+  - lesson: loops
+    section: 2. Loops
+  - lesson: loop-control
+    section: 3. Loop Control
+  - lesson: when-to-use-which
+    section: 4. When to Use Which

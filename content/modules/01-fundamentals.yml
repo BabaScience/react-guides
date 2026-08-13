@@ -1,0 +1,72 @@
+# 01-fundamentals
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 01-fundamentals
+track: react
+number: 1
+status: available
+guide: arguments/chapters/01-fundamentals.md
+exerciseDir: src/01-fundamentals
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: understanding-react
+    section: 1. Understanding React
+  - lesson: setup-environment
+    section: 2. Setting Up a React Development Environment
+  - lesson: jsx-syntax
+    section: 3. JSX Syntax
+  - lesson: components
+    section: 4. Components
+  - lesson: props
+    section: 5. Props
+  - exercise: greeting
+  - exercise: user-card
+  - lesson: lists-keys
+    section: 9. Lists and Keys
+  - exercise: todo-list
+  - lesson: state-usestate
+    section: 6. State Management
+  - exercise: counter
+  - lesson: conditional-rendering
+    section: 8. Conditional Rendering
+  - exercise: status-message
+  - lesson: event-handling
+    section: 7. Event Handling
+  - exercise: action-button
+  - lesson: forms-controlled
+    section: 10. Forms and Controlled Components
+  - exercise: contact-form
+  - exercise: filtered-list
+  - lesson: fundamentals-summary
+    section: "Summary: What You Just Learned"
+exercises:
+  greeting:
+    number: 1
+    componentName: Greeting
+  user-card:
+    number: 2
+    componentName: UserCard
+  todo-list:
+    number: 3
+    componentName: TodoList
+  counter:
+    number: 4
+    componentName: Counter
+  status-message:
+    number: 5
+    componentName: StatusMessage
+  action-button:
+    number: 6
+    componentName: ActionButton
+  contact-form:
+    number: 7
+    componentName: ContactForm
+  filtered-list:
+    number: 8
+    componentName: FilteredList

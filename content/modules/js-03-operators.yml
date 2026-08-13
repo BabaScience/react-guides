@@ -1,0 +1,29 @@
+# js-03-operators
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-03-operators
+track: javascript
+number: 3
+status: available
+guide: arguments/chapters/js-03-operators.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: arithmetic
+    section: 1. Arithmetic
+  - lesson: assignment
+    section: 2. Assignment
+  - lesson: comparison
+    section: 3. Comparison
+  - lesson: logical-operators
+    section: 4. Logical Operators
+  - lesson: spread-rest-destructuring
+    section: 5. Spread, Rest, Destructuring
+  - lesson: optional-chaining-and-nullish-access
+    section: 6. Optional Chaining and Nullish Access

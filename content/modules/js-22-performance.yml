@@ -1,0 +1,27 @@
+# js-22-performance
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: js-22-performance
+track: javascript
+number: 22
+status: available
+guide: arguments/chapters/js-22-performance.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: measurement
+    section: 1. Measurement
+  - lesson: javascript-specific
+    section: 2. JavaScript-Specific
+  - lesson: memory
+    section: 3. Memory
+  - lesson: bundle-size
+    section: 4. Bundle Size
+  - lesson: rendering
+    section: 5. Rendering

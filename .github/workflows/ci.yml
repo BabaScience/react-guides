@@ -26,8 +26,14 @@ jobs:
         working-directory: platform
         run: npm ci
 
-      # The content validator is the guard rail for the three sources of truth
-      # (markdown chapters, module metadata, locale files). See ANALYSIS.md §9.1.
+      # The manifest is generated from content/modules/*.yml and committed, so
+      # the app can import it directly. Fail if someone edited the YAML without
+      # regenerating, or edited the generated file by hand.
+      - name: Check manifest is up to date
+        run: node scripts/build-manifest.mjs --check
+
+      # The content validator is the guard rail across the three sources of truth
+      # (markdown chapters, module files, locale files). See ANALYSIS.md §9.1.
       - name: Validate content
         run: node scripts/validate-content.mjs
 

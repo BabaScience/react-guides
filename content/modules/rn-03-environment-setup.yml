@@ -1,0 +1,23 @@
+# rn-03-environment-setup
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-03-environment-setup
+track: react-native
+number: 3
+status: available
+guide: arguments/chapters/rn-03-environment-setup.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: expo-vs-bare
+    section: 1. Expo vs Bare React Native CLI
+  - lesson: required-installs
+    section: 2. Required Installs
+  - lesson: project-bootstrap
+    section: 3. Project Bootstrap

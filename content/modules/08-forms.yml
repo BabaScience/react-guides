@@ -1,0 +1,64 @@
+# 08-forms
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 08-forms
+track: react
+number: 8
+status: available
+guide: arguments/chapters/08-forms-and-validations.md
+exerciseDir: src/08-forms
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: form-paradigms
+    section: 1. Form Management Paradigms
+  - lesson: controlled-uncontrolled
+    section: 2. Controlled vs Uncontrolled Components
+  - exercise: validate-email
+  - exercise: validate-min-length
+  - lesson: react-hook-form
+    section: "3. React Hook Form: Modern Form Management"
+  - lesson: custom-field-hook
+    section: 8. Form State Management
+  - exercise: use-field
+  - lesson: form-validation
+    section: 4. Validation with Yup
+  - exercise: login-form
+  - lesson: validation-zod
+    section: 5. Validation with Zod
+  - lesson: file-upload
+    section: 6. File Upload Handling
+  - lesson: multi-step-forms
+    section: 7. Multi-Step Forms
+  - exercise: multi-step-form
+  - lesson: advanced-patterns
+    section: 9. Advanced Form Patterns
+  - exercise: form-errors
+  - lesson: forms-selection-matrix
+    section: 10. Form Strategy Selection Matrix
+  - lesson: forms-conclusion
+    section: "Conclusion: Mastering Form Management"
+exercises:
+  validate-email:
+    number: 1
+    componentName: validateEmail
+  validate-min-length:
+    number: 2
+    componentName: validateMinLength
+  use-field:
+    number: 3
+    componentName: useField
+  login-form:
+    number: 4
+    componentName: LoginForm
+  multi-step-form:
+    number: 5
+    componentName: MultiStepForm
+  form-errors:
+    number: 6
+    componentName: FormErrors

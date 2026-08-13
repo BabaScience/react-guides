@@ -1,0 +1,2829 @@
+{
+  "generator": "scripts/build-manifest.mjs",
+  "modules": [
+    {
+      "id": "01-fundamentals",
+      "number": 1,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/01-fundamentals.md",
+      "exerciseDir": "src/01-fundamentals",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "understanding-react",
+          "sectionHeading": "1. Understanding React"
+        },
+        {
+          "type": "lesson",
+          "id": "setup-environment",
+          "sectionHeading": "2. Setting Up a React Development Environment"
+        },
+        {
+          "type": "lesson",
+          "id": "jsx-syntax",
+          "sectionHeading": "3. JSX Syntax"
+        },
+        {
+          "type": "lesson",
+          "id": "components",
+          "sectionHeading": "4. Components"
+        },
+        {
+          "type": "lesson",
+          "id": "props",
+          "sectionHeading": "5. Props"
+        },
+        {
+          "type": "exercise",
+          "id": "greeting"
+        },
+        {
+          "type": "exercise",
+          "id": "user-card"
+        },
+        {
+          "type": "lesson",
+          "id": "lists-keys",
+          "sectionHeading": "9. Lists and Keys"
+        },
+        {
+          "type": "exercise",
+          "id": "todo-list"
+        },
+        {
+          "type": "lesson",
+          "id": "state-usestate",
+          "sectionHeading": "6. State Management"
+        },
+        {
+          "type": "exercise",
+          "id": "counter"
+        },
+        {
+          "type": "lesson",
+          "id": "conditional-rendering",
+          "sectionHeading": "8. Conditional Rendering"
+        },
+        {
+          "type": "exercise",
+          "id": "status-message"
+        },
+        {
+          "type": "lesson",
+          "id": "event-handling",
+          "sectionHeading": "7. Event Handling"
+        },
+        {
+          "type": "exercise",
+          "id": "action-button"
+        },
+        {
+          "type": "lesson",
+          "id": "forms-controlled",
+          "sectionHeading": "10. Forms and Controlled Components"
+        },
+        {
+          "type": "exercise",
+          "id": "contact-form"
+        },
+        {
+          "type": "exercise",
+          "id": "filtered-list"
+        },
+        {
+          "type": "lesson",
+          "id": "fundamentals-summary",
+          "sectionHeading": "Summary: What You Just Learned"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "greeting",
+          "number": 1,
+          "componentName": "Greeting"
+        },
+        {
+          "id": "user-card",
+          "number": 2,
+          "componentName": "UserCard"
+        },
+        {
+          "id": "todo-list",
+          "number": 3,
+          "componentName": "TodoList"
+        },
+        {
+          "id": "counter",
+          "number": 4,
+          "componentName": "Counter"
+        },
+        {
+          "id": "status-message",
+          "number": 5,
+          "componentName": "StatusMessage"
+        },
+        {
+          "id": "action-button",
+          "number": 6,
+          "componentName": "ActionButton"
+        },
+        {
+          "id": "contact-form",
+          "number": 7,
+          "componentName": "ContactForm"
+        },
+        {
+          "id": "filtered-list",
+          "number": 8,
+          "componentName": "FilteredList"
+        }
+      ]
+    },
+    {
+      "id": "02-hooks",
+      "number": 2,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/02-react-hooks.md",
+      "exerciseDir": "src/02-hooks",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "understanding-hooks",
+          "sectionHeading": "1. Understanding Hooks"
+        },
+        {
+          "type": "lesson",
+          "id": "usestate",
+          "sectionHeading": "2. useState"
+        },
+        {
+          "type": "exercise",
+          "id": "counter-functional"
+        },
+        {
+          "type": "lesson",
+          "id": "useeffect",
+          "sectionHeading": "3. useEffect"
+        },
+        {
+          "type": "exercise",
+          "id": "data-fetching"
+        },
+        {
+          "type": "lesson",
+          "id": "usecontext",
+          "sectionHeading": "4. useContext"
+        },
+        {
+          "type": "exercise",
+          "id": "theme-context"
+        },
+        {
+          "type": "lesson",
+          "id": "useref",
+          "sectionHeading": "5. useRef"
+        },
+        {
+          "type": "exercise",
+          "id": "focus-input"
+        },
+        {
+          "type": "lesson",
+          "id": "usememo",
+          "sectionHeading": "6. useMemo"
+        },
+        {
+          "type": "exercise",
+          "id": "filtered-list-memo"
+        },
+        {
+          "type": "lesson",
+          "id": "usecallback",
+          "sectionHeading": "7. useCallback"
+        },
+        {
+          "type": "exercise",
+          "id": "callback-parent"
+        },
+        {
+          "type": "lesson",
+          "id": "usereducer",
+          "sectionHeading": "8. useReducer"
+        },
+        {
+          "type": "exercise",
+          "id": "todo-reducer"
+        },
+        {
+          "type": "lesson",
+          "id": "custom-hooks",
+          "sectionHeading": "9. Custom Hooks"
+        },
+        {
+          "type": "lesson",
+          "id": "advanced-patterns",
+          "sectionHeading": "10. Advanced Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "hooks-wrap-up",
+          "sectionHeading": "Wrapping Up"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "counter-functional",
+          "number": 1,
+          "componentName": "CounterWithFunctionalUpdates"
+        },
+        {
+          "id": "data-fetching",
+          "number": 2,
+          "componentName": "DataFetchingComponent"
+        },
+        {
+          "id": "theme-context",
+          "number": 3,
+          "componentName": "ThemeProvider"
+        },
+        {
+          "id": "focus-input",
+          "number": 4,
+          "componentName": "FocusInput"
+        },
+        {
+          "id": "filtered-list-memo",
+          "number": 5,
+          "componentName": "FilteredList"
+        },
+        {
+          "id": "callback-parent",
+          "number": 6,
+          "componentName": "ParentWithCallback"
+        },
+        {
+          "id": "todo-reducer",
+          "number": 7,
+          "componentName": "TodoApp"
+        }
+      ]
+    },
+    {
+      "id": "03-component-patterns",
+      "number": 3,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/03-component-patterns-best-practices.md",
+      "exerciseDir": "src/03-component-patterns",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "composition-reusability",
+          "sectionHeading": "1. Component Composition and Reusability"
+        },
+        {
+          "type": "exercise",
+          "id": "card"
+        },
+        {
+          "type": "lesson",
+          "id": "prop-drilling",
+          "sectionHeading": "2. Prop Drilling: Problem and Solutions"
+        },
+        {
+          "type": "exercise",
+          "id": "button-variant"
+        },
+        {
+          "type": "lesson",
+          "id": "state-elevation",
+          "sectionHeading": "3. State Elevation Strategies"
+        },
+        {
+          "type": "lesson",
+          "id": "component-architecture",
+          "sectionHeading": "4. Component Architecture and Organization"
+        },
+        {
+          "type": "lesson",
+          "id": "presentational-container",
+          "sectionHeading": "5. Presentational vs Container Components"
+        },
+        {
+          "type": "exercise",
+          "id": "slot-card"
+        },
+        {
+          "type": "lesson",
+          "id": "hoc-pattern",
+          "sectionHeading": "6. Higher-Order Components (HOCs)"
+        },
+        {
+          "type": "exercise",
+          "id": "with-logger"
+        },
+        {
+          "type": "lesson",
+          "id": "render-props",
+          "sectionHeading": "7. Render Props Pattern"
+        },
+        {
+          "type": "exercise",
+          "id": "toggle"
+        },
+        {
+          "type": "lesson",
+          "id": "compound-components",
+          "sectionHeading": "8. Compound Components Pattern"
+        },
+        {
+          "type": "exercise",
+          "id": "tabs"
+        },
+        {
+          "type": "lesson",
+          "id": "advanced-composition",
+          "sectionHeading": "9. Advanced Composition Techniques"
+        },
+        {
+          "type": "lesson",
+          "id": "pattern-selection-matrix",
+          "sectionHeading": "10. Pattern Selection Decision Matrix"
+        },
+        {
+          "type": "lesson",
+          "id": "patterns-conclusion",
+          "sectionHeading": "Conclusion: Architecting Excellence"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "card",
+          "number": 1,
+          "componentName": "Card"
+        },
+        {
+          "id": "button-variant",
+          "number": 2,
+          "componentName": "ButtonVariant"
+        },
+        {
+          "id": "slot-card",
+          "number": 3,
+          "componentName": "SlotCard"
+        },
+        {
+          "id": "with-logger",
+          "number": 4,
+          "componentName": "withLogger"
+        },
+        {
+          "id": "toggle",
+          "number": 5,
+          "componentName": "Toggle"
+        },
+        {
+          "id": "tabs",
+          "number": 6,
+          "componentName": "Tabs"
+        }
+      ]
+    },
+    {
+      "id": "04-styling",
+      "number": 4,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/04-react-styling.md",
+      "exerciseDir": "src/04-styling",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "styling-paradigms",
+          "sectionHeading": "1. Styling Paradigms in React"
+        },
+        {
+          "type": "lesson",
+          "id": "inline-styles",
+          "sectionHeading": "2. Inline Styles: Mechanisms and Constraints"
+        },
+        {
+          "type": "exercise",
+          "id": "inline-styled"
+        },
+        {
+          "type": "lesson",
+          "id": "css-modules",
+          "sectionHeading": "3. CSS Modules: Scoped Styling Architecture"
+        },
+        {
+          "type": "exercise",
+          "id": "badge"
+        },
+        {
+          "type": "lesson",
+          "id": "css-in-js",
+          "sectionHeading": "4. CSS-in-JS: styled-components and Emotion"
+        },
+        {
+          "type": "exercise",
+          "id": "padded-box"
+        },
+        {
+          "type": "lesson",
+          "id": "tailwind-utility-first",
+          "sectionHeading": "5. Tailwind CSS: Utility-First Methodology"
+        },
+        {
+          "type": "exercise",
+          "id": "responsive-grid"
+        },
+        {
+          "type": "lesson",
+          "id": "css-frameworks",
+          "sectionHeading": "6. CSS Frameworks Integration"
+        },
+        {
+          "type": "exercise",
+          "id": "alert"
+        },
+        {
+          "type": "lesson",
+          "id": "styling-performance",
+          "sectionHeading": "7. Performance Considerations"
+        },
+        {
+          "type": "lesson",
+          "id": "advanced-styling-patterns",
+          "sectionHeading": "8. Advanced Styling Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "theming-design-systems",
+          "sectionHeading": "9. Theming and Design Systems"
+        },
+        {
+          "type": "exercise",
+          "id": "themed-text"
+        },
+        {
+          "type": "lesson",
+          "id": "styling-selection-matrix",
+          "sectionHeading": "10. Styling Strategy Selection Matrix"
+        },
+        {
+          "type": "lesson",
+          "id": "styling-conclusion",
+          "sectionHeading": "Conclusion: Architecting Stylistic Excellence"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "inline-styled",
+          "number": 1,
+          "componentName": "InlineStyled"
+        },
+        {
+          "id": "badge",
+          "number": 2,
+          "componentName": "Badge"
+        },
+        {
+          "id": "padded-box",
+          "number": 3,
+          "componentName": "PaddedBox"
+        },
+        {
+          "id": "themed-text",
+          "number": 4,
+          "componentName": "ThemedText"
+        },
+        {
+          "id": "responsive-grid",
+          "number": 5,
+          "componentName": "ResponsiveGrid"
+        },
+        {
+          "id": "alert",
+          "number": 6,
+          "componentName": "Alert"
+        }
+      ]
+    },
+    {
+      "id": "05-routing",
+      "number": 5,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/05-routing.md",
+      "exerciseDir": "src/05-routing",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "routing-paradigms",
+          "sectionHeading": "1. Routing Paradigms and Architecture"
+        },
+        {
+          "type": "lesson",
+          "id": "react-router-fundamentals",
+          "sectionHeading": "2. React Router Fundamentals"
+        },
+        {
+          "type": "lesson",
+          "id": "route-configuration",
+          "sectionHeading": "3. Route Configuration and Navigation"
+        },
+        {
+          "type": "exercise",
+          "id": "match"
+        },
+        {
+          "type": "exercise",
+          "id": "parse-query"
+        },
+        {
+          "type": "exercise",
+          "id": "link"
+        },
+        {
+          "type": "exercise",
+          "id": "route"
+        },
+        {
+          "type": "lesson",
+          "id": "dynamic-routing",
+          "sectionHeading": "4. Dynamic Routing with Parameters"
+        },
+        {
+          "type": "lesson",
+          "id": "nested-routes",
+          "sectionHeading": "5. Nested Routes and Layouts"
+        },
+        {
+          "type": "lesson",
+          "id": "programmatic-navigation",
+          "sectionHeading": "7. Programmatic Navigation"
+        },
+        {
+          "type": "exercise",
+          "id": "use-navigate"
+        },
+        {
+          "type": "lesson",
+          "id": "protected-routes",
+          "sectionHeading": "6. Protected Routes and Authentication"
+        },
+        {
+          "type": "exercise",
+          "id": "protected-route"
+        },
+        {
+          "type": "lesson",
+          "id": "route-guards",
+          "sectionHeading": "8. Route Guards and Redirects"
+        },
+        {
+          "type": "lesson",
+          "id": "advanced-routing",
+          "sectionHeading": "9. Advanced Routing Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "routing-performance",
+          "sectionHeading": "10. Performance Optimization"
+        },
+        {
+          "type": "lesson",
+          "id": "routing-conclusion",
+          "sectionHeading": "Conclusion: Mastering Navigation Architecture"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "match",
+          "number": 1,
+          "componentName": "match"
+        },
+        {
+          "id": "parse-query",
+          "number": 2,
+          "componentName": "parseQuery"
+        },
+        {
+          "id": "link",
+          "number": 3,
+          "componentName": "Link"
+        },
+        {
+          "id": "route",
+          "number": 4,
+          "componentName": "Route"
+        },
+        {
+          "id": "use-navigate",
+          "number": 5,
+          "componentName": "useNavigate"
+        },
+        {
+          "id": "protected-route",
+          "number": 6,
+          "componentName": "ProtectedRoute"
+        }
+      ]
+    },
+    {
+      "id": "06-state-management",
+      "number": 6,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/06-state-management.md",
+      "exerciseDir": "src/06-state-management",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "paradigms",
+          "sectionHeading": "1. State Management Paradigms"
+        },
+        {
+          "type": "lesson",
+          "id": "local-vs-global",
+          "sectionHeading": "2. Local vs Global State: Decision Framework"
+        },
+        {
+          "type": "exercise",
+          "id": "create-store"
+        },
+        {
+          "type": "lesson",
+          "id": "context-api",
+          "sectionHeading": "3. Context API: Simple Global State"
+        },
+        {
+          "type": "exercise",
+          "id": "count-context"
+        },
+        {
+          "type": "lesson",
+          "id": "redux-toolkit",
+          "sectionHeading": "4. Redux Toolkit: Modern Redux"
+        },
+        {
+          "type": "exercise",
+          "id": "use-counter-reducer"
+        },
+        {
+          "type": "lesson",
+          "id": "redux-core",
+          "sectionHeading": "5. Redux Core Concepts Deep Dive"
+        },
+        {
+          "type": "exercise",
+          "id": "combine-reducers"
+        },
+        {
+          "type": "lesson",
+          "id": "middleware-async",
+          "sectionHeading": "6. Middleware and Async Operations"
+        },
+        {
+          "type": "lesson",
+          "id": "zustand",
+          "sectionHeading": "7. Zustand: Minimalist State Management"
+        },
+        {
+          "type": "exercise",
+          "id": "use-toggle"
+        },
+        {
+          "type": "exercise",
+          "id": "use-local-storage"
+        },
+        {
+          "type": "lesson",
+          "id": "jotai",
+          "sectionHeading": "8. Jotai: Atomic State Management"
+        },
+        {
+          "type": "lesson",
+          "id": "recoil",
+          "sectionHeading": "9. Recoil: Graph-Based State"
+        },
+        {
+          "type": "lesson",
+          "id": "state-selection-matrix",
+          "sectionHeading": "10. State Management Selection Matrix"
+        },
+        {
+          "type": "lesson",
+          "id": "state-conclusion",
+          "sectionHeading": "Conclusion: State Management Mastery"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "create-store",
+          "number": 1,
+          "componentName": "createStore"
+        },
+        {
+          "id": "use-counter-reducer",
+          "number": 2,
+          "componentName": "useCounterReducer"
+        },
+        {
+          "id": "combine-reducers",
+          "number": 3,
+          "componentName": "combineReducers"
+        },
+        {
+          "id": "use-toggle",
+          "number": 4,
+          "componentName": "useToggle"
+        },
+        {
+          "id": "count-context",
+          "number": 5,
+          "componentName": "CountProvider"
+        },
+        {
+          "id": "use-local-storage",
+          "number": 6,
+          "componentName": "useLocalStorage"
+        }
+      ]
+    },
+    {
+      "id": "07-data-fetching",
+      "number": 7,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/07-data-fetching.md",
+      "exerciseDir": "src/07-data-fetching",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "fetching-paradigms",
+          "sectionHeading": "1. Data Fetching Paradigms"
+        },
+        {
+          "type": "lesson",
+          "id": "native-fetch",
+          "sectionHeading": "2. Native Fetch API and Axios"
+        },
+        {
+          "type": "exercise",
+          "id": "use-fetch"
+        },
+        {
+          "type": "lesson",
+          "id": "loading-error-states",
+          "sectionHeading": "3. Loading States and Error Handling"
+        },
+        {
+          "type": "exercise",
+          "id": "use-debounce"
+        },
+        {
+          "type": "lesson",
+          "id": "react-query",
+          "sectionHeading": "4. React Query: Server State Management"
+        },
+        {
+          "type": "lesson",
+          "id": "swr",
+          "sectionHeading": "5. SWR: Stale-While-Revalidate"
+        },
+        {
+          "type": "lesson",
+          "id": "polling",
+          "sectionHeading": "8. Polling and Real-Time Updates"
+        },
+        {
+          "type": "exercise",
+          "id": "use-interval"
+        },
+        {
+          "type": "lesson",
+          "id": "cancellation",
+          "sectionHeading": "9. Advanced Patterns"
+        },
+        {
+          "type": "exercise",
+          "id": "use-abortable"
+        },
+        {
+          "type": "lesson",
+          "id": "optimistic-updates",
+          "sectionHeading": "6. Optimistic Updates"
+        },
+        {
+          "type": "exercise",
+          "id": "use-optimistic"
+        },
+        {
+          "type": "lesson",
+          "id": "cache-strategies",
+          "sectionHeading": "7. Cache Management Strategies"
+        },
+        {
+          "type": "exercise",
+          "id": "create-cache"
+        },
+        {
+          "type": "lesson",
+          "id": "fetching-selection-matrix",
+          "sectionHeading": "10. Data Fetching Strategy Selection"
+        },
+        {
+          "type": "lesson",
+          "id": "fetching-conclusion",
+          "sectionHeading": "Conclusion: Mastering Data Fetching"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "use-fetch",
+          "number": 1,
+          "componentName": "useFetch"
+        },
+        {
+          "id": "use-debounce",
+          "number": 2,
+          "componentName": "useDebounce"
+        },
+        {
+          "id": "use-interval",
+          "number": 3,
+          "componentName": "useInterval"
+        },
+        {
+          "id": "use-abortable",
+          "number": 4,
+          "componentName": "useAbortable"
+        },
+        {
+          "id": "use-optimistic",
+          "number": 5,
+          "componentName": "useOptimistic"
+        },
+        {
+          "id": "create-cache",
+          "number": 6,
+          "componentName": "createCache"
+        }
+      ]
+    },
+    {
+      "id": "08-forms",
+      "number": 8,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/08-forms-and-validations.md",
+      "exerciseDir": "src/08-forms",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "form-paradigms",
+          "sectionHeading": "1. Form Management Paradigms"
+        },
+        {
+          "type": "lesson",
+          "id": "controlled-uncontrolled",
+          "sectionHeading": "2. Controlled vs Uncontrolled Components"
+        },
+        {
+          "type": "exercise",
+          "id": "validate-email"
+        },
+        {
+          "type": "exercise",
+          "id": "validate-min-length"
+        },
+        {
+          "type": "lesson",
+          "id": "react-hook-form",
+          "sectionHeading": "3. React Hook Form: Modern Form Management"
+        },
+        {
+          "type": "lesson",
+          "id": "custom-field-hook",
+          "sectionHeading": "8. Form State Management"
+        },
+        {
+          "type": "exercise",
+          "id": "use-field"
+        },
+        {
+          "type": "lesson",
+          "id": "form-validation",
+          "sectionHeading": "4. Validation with Yup"
+        },
+        {
+          "type": "exercise",
+          "id": "login-form"
+        },
+        {
+          "type": "lesson",
+          "id": "validation-zod",
+          "sectionHeading": "5. Validation with Zod"
+        },
+        {
+          "type": "lesson",
+          "id": "file-upload",
+          "sectionHeading": "6. File Upload Handling"
+        },
+        {
+          "type": "lesson",
+          "id": "multi-step-forms",
+          "sectionHeading": "7. Multi-Step Forms"
+        },
+        {
+          "type": "exercise",
+          "id": "multi-step-form"
+        },
+        {
+          "type": "lesson",
+          "id": "advanced-patterns",
+          "sectionHeading": "9. Advanced Form Patterns"
+        },
+        {
+          "type": "exercise",
+          "id": "form-errors"
+        },
+        {
+          "type": "lesson",
+          "id": "forms-selection-matrix",
+          "sectionHeading": "10. Form Strategy Selection Matrix"
+        },
+        {
+          "type": "lesson",
+          "id": "forms-conclusion",
+          "sectionHeading": "Conclusion: Mastering Form Management"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "validate-email",
+          "number": 1,
+          "componentName": "validateEmail"
+        },
+        {
+          "id": "validate-min-length",
+          "number": 2,
+          "componentName": "validateMinLength"
+        },
+        {
+          "id": "use-field",
+          "number": 3,
+          "componentName": "useField"
+        },
+        {
+          "id": "login-form",
+          "number": 4,
+          "componentName": "LoginForm"
+        },
+        {
+          "id": "multi-step-form",
+          "number": 5,
+          "componentName": "MultiStepForm"
+        },
+        {
+          "id": "form-errors",
+          "number": 6,
+          "componentName": "FormErrors"
+        }
+      ]
+    },
+    {
+      "id": "09-performance",
+      "number": 9,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/09-performance-optimization.md",
+      "exerciseDir": "src/09-performance",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "rendering-behavior",
+          "sectionHeading": "1. React Rendering Behavior"
+        },
+        {
+          "type": "lesson",
+          "id": "react-memo",
+          "sectionHeading": "2. React.memo: Preventing Re-renders"
+        },
+        {
+          "type": "exercise",
+          "id": "memoized-child"
+        },
+        {
+          "type": "lesson",
+          "id": "usememo-usecallback",
+          "sectionHeading": "3. useMemo and useCallback Patterns"
+        },
+        {
+          "type": "exercise",
+          "id": "use-expensive-calc"
+        },
+        {
+          "type": "exercise",
+          "id": "use-stable-callback"
+        },
+        {
+          "type": "lesson",
+          "id": "code-splitting",
+          "sectionHeading": "4. Code Splitting and Lazy Loading"
+        },
+        {
+          "type": "lesson",
+          "id": "bundle-size",
+          "sectionHeading": "5. Bundle Size Optimization"
+        },
+        {
+          "type": "lesson",
+          "id": "virtualization",
+          "sectionHeading": "6. Virtual Scrolling for Large Lists"
+        },
+        {
+          "type": "exercise",
+          "id": "virtual-list"
+        },
+        {
+          "type": "lesson",
+          "id": "render-introspection",
+          "sectionHeading": "7. Profiling with React DevTools"
+        },
+        {
+          "type": "exercise",
+          "id": "use-render-count"
+        },
+        {
+          "type": "lesson",
+          "id": "debouncing",
+          "sectionHeading": "8. Advanced Optimization Techniques"
+        },
+        {
+          "type": "exercise",
+          "id": "use-debounced-value"
+        },
+        {
+          "type": "lesson",
+          "id": "performance-monitoring",
+          "sectionHeading": "9. Performance Monitoring"
+        },
+        {
+          "type": "lesson",
+          "id": "performance-selection-matrix",
+          "sectionHeading": "10. Optimization Strategy Selection"
+        },
+        {
+          "type": "lesson",
+          "id": "performance-conclusion",
+          "sectionHeading": "Conclusion: Performance Mastery"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "memoized-child",
+          "number": 1,
+          "componentName": "MemoizedChild"
+        },
+        {
+          "id": "use-expensive-calc",
+          "number": 2,
+          "componentName": "useExpensiveCalc"
+        },
+        {
+          "id": "use-stable-callback",
+          "number": 3,
+          "componentName": "useStableCallback"
+        },
+        {
+          "id": "use-render-count",
+          "number": 4,
+          "componentName": "useRenderCount"
+        },
+        {
+          "id": "use-debounced-value",
+          "number": 5,
+          "componentName": "useDebouncedValue"
+        },
+        {
+          "id": "virtual-list",
+          "number": 6,
+          "componentName": "VirtualList"
+        }
+      ]
+    },
+    {
+      "id": "10-testing",
+      "number": 10,
+      "track": "react",
+      "status": "available",
+      "guideFile": "arguments/chapters/10-testing.md",
+      "exerciseDir": "src/10-testing",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "testing-fundamentals",
+          "sectionHeading": "1. Testing Fundamentals and Philosophy"
+        },
+        {
+          "type": "lesson",
+          "id": "unit-testing-jest",
+          "sectionHeading": "2. Unit Testing with Jest"
+        },
+        {
+          "type": "exercise",
+          "id": "sum"
+        },
+        {
+          "type": "exercise",
+          "id": "capitalize"
+        },
+        {
+          "type": "lesson",
+          "id": "component-testing-rtl",
+          "sectionHeading": "3. Component Testing with React Testing Library"
+        },
+        {
+          "type": "exercise",
+          "id": "greeting"
+        },
+        {
+          "type": "lesson",
+          "id": "effective-test-cases",
+          "sectionHeading": "4. Writing Effective Test Cases"
+        },
+        {
+          "type": "exercise",
+          "id": "use-counter"
+        },
+        {
+          "type": "lesson",
+          "id": "mocking-dependencies",
+          "sectionHeading": "5. Mocking API Calls and Dependencies"
+        },
+        {
+          "type": "exercise",
+          "id": "event-emitter"
+        },
+        {
+          "type": "exercise",
+          "id": "fetch-user-name"
+        },
+        {
+          "type": "lesson",
+          "id": "integration-testing",
+          "sectionHeading": "6. Integration Testing Strategies"
+        },
+        {
+          "type": "lesson",
+          "id": "e2e-cypress",
+          "sectionHeading": "7. End-to-End Testing with Cypress"
+        },
+        {
+          "type": "lesson",
+          "id": "e2e-playwright",
+          "sectionHeading": "8. End-to-End Testing with Playwright"
+        },
+        {
+          "type": "lesson",
+          "id": "coverage-quality",
+          "sectionHeading": "9. Test Coverage and Quality Metrics"
+        },
+        {
+          "type": "lesson",
+          "id": "best-practices",
+          "sectionHeading": "10. Testing Best Practices and Patterns"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "sum",
+          "number": 1,
+          "componentName": "sum"
+        },
+        {
+          "id": "capitalize",
+          "number": 2,
+          "componentName": "capitalize"
+        },
+        {
+          "id": "greeting",
+          "number": 3,
+          "componentName": "Greeting"
+        },
+        {
+          "id": "use-counter",
+          "number": 4,
+          "componentName": "useCounter"
+        },
+        {
+          "id": "event-emitter",
+          "number": 5,
+          "componentName": "EventEmitter"
+        },
+        {
+          "id": "fetch-user-name",
+          "number": 6,
+          "componentName": "fetchUserName"
+        }
+      ]
+    },
+    {
+      "id": "11-typescript",
+      "number": 11,
+      "track": "react",
+      "status": "coming-soon",
+      "guideFile": "",
+      "exerciseDir": "src/11-typescript",
+      "steps": [],
+      "exercises": []
+    },
+    {
+      "id": "12-advanced-patterns",
+      "number": 12,
+      "track": "react",
+      "status": "coming-soon",
+      "guideFile": "",
+      "exerciseDir": "src/12-advanced-patterns",
+      "steps": [],
+      "exercises": []
+    },
+    {
+      "id": "rn-01-prerequisites",
+      "number": 1,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-01-prerequisites.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "react-prerequisites",
+          "sectionHeading": "1. React (Non-Negotiable)"
+        },
+        {
+          "type": "lesson",
+          "id": "js-ts-prerequisites",
+          "sectionHeading": "2. JavaScript / TypeScript"
+        },
+        {
+          "type": "lesson",
+          "id": "tooling-prerequisites",
+          "sectionHeading": "3. Tooling"
+        },
+        {
+          "type": "lesson",
+          "id": "mobile-concepts",
+          "sectionHeading": "4. Mobile Concepts"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-02-fundamentals",
+      "number": 2,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-02-fundamentals.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "what-rn-is",
+          "sectionHeading": "1. What React Native Actually Is"
+        },
+        {
+          "type": "lesson",
+          "id": "mental-model-shift",
+          "sectionHeading": "2. Mental Model Shift from Web"
+        },
+        {
+          "type": "lesson",
+          "id": "architecture-overview",
+          "sectionHeading": "3. Architecture Overview"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-03-environment-setup",
+      "number": 3,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-03-environment-setup.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "expo-vs-bare",
+          "sectionHeading": "1. Expo vs Bare React Native CLI"
+        },
+        {
+          "type": "lesson",
+          "id": "required-installs",
+          "sectionHeading": "2. Required Installs"
+        },
+        {
+          "type": "lesson",
+          "id": "project-bootstrap",
+          "sectionHeading": "3. Project Bootstrap"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-04-core-components",
+      "number": 4,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-04-core-components.md",
+      "exerciseDir": "src/rn-04-core-components",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "building-block-components",
+          "sectionHeading": "1. Building-Block Components"
+        },
+        {
+          "type": "exercise",
+          "id": "profile-card"
+        },
+        {
+          "type": "exercise",
+          "id": "counter-button"
+        },
+        {
+          "type": "lesson",
+          "id": "core-apis",
+          "sectionHeading": "2. Core APIs to Internalize"
+        },
+        {
+          "type": "exercise",
+          "id": "contact-list"
+        },
+        {
+          "type": "exercise",
+          "id": "toggle-card"
+        }
+      ],
+      "exercises": [
+        {
+          "id": "profile-card",
+          "number": 1,
+          "componentName": "ProfileCard"
+        },
+        {
+          "id": "counter-button",
+          "number": 2,
+          "componentName": "CounterButton"
+        },
+        {
+          "id": "contact-list",
+          "number": 3,
+          "componentName": "ContactList"
+        },
+        {
+          "id": "toggle-card",
+          "number": 4,
+          "componentName": "ToggleCard"
+        }
+      ]
+    },
+    {
+      "id": "rn-05-styling-layout",
+      "number": 5,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-05-styling-layout.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "core-mechanics",
+          "sectionHeading": "1. Core Mechanics"
+        },
+        {
+          "type": "lesson",
+          "id": "responsive-design",
+          "sectionHeading": "2. Responsive Design"
+        },
+        {
+          "type": "lesson",
+          "id": "styling-libraries",
+          "sectionHeading": "3. Styling Libraries"
+        },
+        {
+          "type": "lesson",
+          "id": "theming",
+          "sectionHeading": "4. Theming"
+        },
+        {
+          "type": "lesson",
+          "id": "icons-and-assets",
+          "sectionHeading": "5. Icons and Assets"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-06-navigation",
+      "number": 6,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-06-navigation.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "react-navigation-v7",
+          "sectionHeading": "1. React Navigation v7"
+        },
+        {
+          "type": "lesson",
+          "id": "navigation-concepts",
+          "sectionHeading": "2. Concepts to Master"
+        },
+        {
+          "type": "lesson",
+          "id": "expo-router",
+          "sectionHeading": "3. Expo Router"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-07-state-management",
+      "number": 7,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-07-state-management.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "local-state",
+          "sectionHeading": "1. Local State"
+        },
+        {
+          "type": "lesson",
+          "id": "global-state",
+          "sectionHeading": "2. Global State"
+        },
+        {
+          "type": "lesson",
+          "id": "server-state",
+          "sectionHeading": "3. Server State"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-08-forms-input",
+      "number": 8,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-08-forms-input.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "core-inputs",
+          "sectionHeading": "1. Core Input Primitives"
+        },
+        {
+          "type": "lesson",
+          "id": "form-libraries",
+          "sectionHeading": "2. Form Libraries"
+        },
+        {
+          "type": "lesson",
+          "id": "specialized-inputs",
+          "sectionHeading": "3. Specialized Inputs"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-09-networking-data",
+      "number": 9,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-09-networking-data.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "http",
+          "sectionHeading": "1. HTTP"
+        },
+        {
+          "type": "lesson",
+          "id": "tanstack-query",
+          "sectionHeading": "2. Server State with TanStack Query"
+        },
+        {
+          "type": "lesson",
+          "id": "graphql",
+          "sectionHeading": "3. GraphQL"
+        },
+        {
+          "type": "lesson",
+          "id": "realtime",
+          "sectionHeading": "4. Realtime"
+        },
+        {
+          "type": "lesson",
+          "id": "offline-first",
+          "sectionHeading": "5. Offline-First Patterns"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-10-native-device-apis",
+      "number": 10,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-10-native-device-apis.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "hardware-sensors",
+          "sectionHeading": "1. Hardware and Sensors"
+        },
+        {
+          "type": "lesson",
+          "id": "media",
+          "sectionHeading": "2. Media"
+        },
+        {
+          "type": "lesson",
+          "id": "system-apis",
+          "sectionHeading": "3. System APIs"
+        },
+        {
+          "type": "lesson",
+          "id": "permissions-philosophy",
+          "sectionHeading": "4. Permissions Philosophy"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-11-storage-persistence",
+      "number": 11,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-11-storage-persistence.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "key-value-storage",
+          "sectionHeading": "1. Key-Value Storage"
+        },
+        {
+          "type": "lesson",
+          "id": "secure-storage",
+          "sectionHeading": "2. Secure Storage"
+        },
+        {
+          "type": "lesson",
+          "id": "relational-document",
+          "sectionHeading": "3. Relational and Document Storage"
+        },
+        {
+          "type": "lesson",
+          "id": "when-to-use-what",
+          "sectionHeading": "4. When to Use What"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-12-animations-gestures",
+      "number": 12,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-12-animations-gestures.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "reanimated-3",
+          "sectionHeading": "1. Reanimated 3"
+        },
+        {
+          "type": "lesson",
+          "id": "gesture-handler",
+          "sectionHeading": "2. Gesture Handler"
+        },
+        {
+          "type": "lesson",
+          "id": "other-animation-tools",
+          "sectionHeading": "3. Other Animation Tools"
+        },
+        {
+          "type": "lesson",
+          "id": "when-to-reach-for-what",
+          "sectionHeading": "4. When to Reach for What"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-13-performance",
+      "number": 13,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-13-performance.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "two-thread-model",
+          "sectionHeading": "1. The Two-Thread Mental Model"
+        },
+        {
+          "type": "lesson",
+          "id": "lists-performance",
+          "sectionHeading": "2. Lists"
+        },
+        {
+          "type": "lesson",
+          "id": "re-renders",
+          "sectionHeading": "3. Re-Renders"
+        },
+        {
+          "type": "lesson",
+          "id": "images-performance",
+          "sectionHeading": "4. Images"
+        },
+        {
+          "type": "lesson",
+          "id": "js-engine",
+          "sectionHeading": "5. JS Engine"
+        },
+        {
+          "type": "lesson",
+          "id": "perf-tools",
+          "sectionHeading": "6. Performance Tools"
+        },
+        {
+          "type": "lesson",
+          "id": "bundle-size",
+          "sectionHeading": "7. Bundle Size"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-14-native-modules",
+      "number": 14,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-14-native-modules.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "new-architecture",
+          "sectionHeading": "1. The New Architecture"
+        },
+        {
+          "type": "lesson",
+          "id": "when-to-write-native",
+          "sectionHeading": "2. When to Write a Native Module"
+        },
+        {
+          "type": "lesson",
+          "id": "native-skills-needed",
+          "sectionHeading": "3. Skills Needed"
+        },
+        {
+          "type": "lesson",
+          "id": "recommended-path",
+          "sectionHeading": "4. Recommended Path"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-15-auth-security",
+      "number": 15,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-15-auth-security.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "auth-patterns",
+          "sectionHeading": "1. Auth Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "auth-providers",
+          "sectionHeading": "2. Auth Providers"
+        },
+        {
+          "type": "lesson",
+          "id": "token-handling",
+          "sectionHeading": "3. Token Handling"
+        },
+        {
+          "type": "lesson",
+          "id": "security-hardening",
+          "sectionHeading": "4. Security Hardening"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-16-testing",
+      "number": 16,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-16-testing.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "unit-component-testing",
+          "sectionHeading": "1. Unit and Component Testing"
+        },
+        {
+          "type": "lesson",
+          "id": "integration-testing",
+          "sectionHeading": "2. Integration Testing"
+        },
+        {
+          "type": "lesson",
+          "id": "e2e-testing",
+          "sectionHeading": "3. End-to-End Testing"
+        },
+        {
+          "type": "lesson",
+          "id": "visual-regression",
+          "sectionHeading": "4. Visual Regression"
+        },
+        {
+          "type": "lesson",
+          "id": "performance-regression",
+          "sectionHeading": "5. Performance Regression"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-17-push-background",
+      "number": 17,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-17-push-background.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "push-notifications",
+          "sectionHeading": "1. Push Notifications"
+        },
+        {
+          "type": "lesson",
+          "id": "backend-services",
+          "sectionHeading": "2. Backend Services"
+        },
+        {
+          "type": "lesson",
+          "id": "background-work",
+          "sectionHeading": "3. Background Work"
+        },
+        {
+          "type": "lesson",
+          "id": "background-limits",
+          "sectionHeading": "4. Background Limits"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-18-build-deploy",
+      "number": 18,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-18-build-deploy.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "eas-build",
+          "sectionHeading": "1. EAS Build"
+        },
+        {
+          "type": "lesson",
+          "id": "local-builds",
+          "sectionHeading": "2. Local Builds"
+        },
+        {
+          "type": "lesson",
+          "id": "ios-submission",
+          "sectionHeading": "3. iOS Submission"
+        },
+        {
+          "type": "lesson",
+          "id": "android-submission",
+          "sectionHeading": "4. Android Submission"
+        },
+        {
+          "type": "lesson",
+          "id": "versioning",
+          "sectionHeading": "5. Versioning"
+        },
+        {
+          "type": "lesson",
+          "id": "ci-cd",
+          "sectionHeading": "6. CI/CD"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-19-ota-updates",
+      "number": 19,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-19-ota-updates.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "eas-update",
+          "sectionHeading": "1. EAS Update"
+        },
+        {
+          "type": "lesson",
+          "id": "what-can-be-ota",
+          "sectionHeading": "2. What Can Be OTA'd"
+        },
+        {
+          "type": "lesson",
+          "id": "update-strategy",
+          "sectionHeading": "3. Update Strategy"
+        },
+        {
+          "type": "lesson",
+          "id": "versioning-ota",
+          "sectionHeading": "4. Versioning OTA with Native"
+        },
+        {
+          "type": "lesson",
+          "id": "compliance",
+          "sectionHeading": "5. Compliance"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-20-monitoring-production",
+      "number": 20,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-20-monitoring-production.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "crash-reporting",
+          "sectionHeading": "1. Crash Reporting"
+        },
+        {
+          "type": "lesson",
+          "id": "analytics",
+          "sectionHeading": "2. Analytics"
+        },
+        {
+          "type": "lesson",
+          "id": "performance-monitoring",
+          "sectionHeading": "3. Performance Monitoring"
+        },
+        {
+          "type": "lesson",
+          "id": "feature-flags",
+          "sectionHeading": "4. Feature Flags and Remote Config"
+        },
+        {
+          "type": "lesson",
+          "id": "logging",
+          "sectionHeading": "5. Logging"
+        },
+        {
+          "type": "lesson",
+          "id": "ab-testing",
+          "sectionHeading": "6. A/B Testing"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "rn-21-advanced-topics",
+      "number": 21,
+      "track": "react-native",
+      "status": "available",
+      "guideFile": "arguments/chapters/rn-21-advanced-topics.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "monorepo",
+          "sectionHeading": "1. Monorepo"
+        },
+        {
+          "type": "lesson",
+          "id": "cross-platform-sharing",
+          "sectionHeading": "2. Cross-Platform Code Sharing"
+        },
+        {
+          "type": "lesson",
+          "id": "internationalization",
+          "sectionHeading": "3. Internationalization"
+        },
+        {
+          "type": "lesson",
+          "id": "accessibility",
+          "sectionHeading": "4. Accessibility"
+        },
+        {
+          "type": "lesson",
+          "id": "animations-at-scale",
+          "sectionHeading": "5. Animations at Scale"
+        },
+        {
+          "type": "lesson",
+          "id": "audio-video-at-scale",
+          "sectionHeading": "6. Audio / Video at Scale"
+        },
+        {
+          "type": "lesson",
+          "id": "maps",
+          "sectionHeading": "7. Maps"
+        },
+        {
+          "type": "lesson",
+          "id": "bluetooth-nfc",
+          "sectionHeading": "8. Bluetooth / NFC / Hardware"
+        },
+        {
+          "type": "lesson",
+          "id": "payments",
+          "sectionHeading": "9. Payments"
+        },
+        {
+          "type": "lesson",
+          "id": "architecture-patterns",
+          "sectionHeading": "10. Architecture Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "multi-environment",
+          "sectionHeading": "11. Multi-Environment"
+        },
+        {
+          "type": "lesson",
+          "id": "app-size-optimization",
+          "sectionHeading": "12. App Size Optimization"
+        },
+        {
+          "type": "lesson",
+          "id": "app-store-optimization",
+          "sectionHeading": "13. App Store Optimization"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-01-prerequisites",
+      "number": 1,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-01-prerequisites.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "before-you-start",
+          "sectionHeading": "1. Before You Start"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-02-language-basics",
+      "number": 2,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-02-language-basics.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "what-javascript-is",
+          "sectionHeading": "1. What JavaScript Is"
+        },
+        {
+          "type": "lesson",
+          "id": "variables-and-declarations",
+          "sectionHeading": "2. Variables and Declarations"
+        },
+        {
+          "type": "lesson",
+          "id": "primitive-types",
+          "sectionHeading": "3. Primitive Types"
+        },
+        {
+          "type": "lesson",
+          "id": "reference-types",
+          "sectionHeading": "4. Reference Types"
+        },
+        {
+          "type": "lesson",
+          "id": "type-coercion",
+          "sectionHeading": "5. Type Coercion"
+        },
+        {
+          "type": "lesson",
+          "id": "typeof-and-type-checking",
+          "sectionHeading": "6. typeof and Type Checking"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-03-operators",
+      "number": 3,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-03-operators.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "arithmetic",
+          "sectionHeading": "1. Arithmetic"
+        },
+        {
+          "type": "lesson",
+          "id": "assignment",
+          "sectionHeading": "2. Assignment"
+        },
+        {
+          "type": "lesson",
+          "id": "comparison",
+          "sectionHeading": "3. Comparison"
+        },
+        {
+          "type": "lesson",
+          "id": "logical-operators",
+          "sectionHeading": "4. Logical Operators"
+        },
+        {
+          "type": "lesson",
+          "id": "spread-rest-destructuring",
+          "sectionHeading": "5. Spread, Rest, Destructuring"
+        },
+        {
+          "type": "lesson",
+          "id": "optional-chaining-and-nullish-access",
+          "sectionHeading": "6. Optional Chaining and Nullish Access"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-04-control-flow",
+      "number": 4,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-04-control-flow.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "conditionals",
+          "sectionHeading": "1. Conditionals"
+        },
+        {
+          "type": "lesson",
+          "id": "loops",
+          "sectionHeading": "2. Loops"
+        },
+        {
+          "type": "lesson",
+          "id": "loop-control",
+          "sectionHeading": "3. Loop Control"
+        },
+        {
+          "type": "lesson",
+          "id": "when-to-use-which",
+          "sectionHeading": "4. When to Use Which"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-05-functions",
+      "number": 5,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-05-functions.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "function-forms",
+          "sectionHeading": "1. Function Forms"
+        },
+        {
+          "type": "lesson",
+          "id": "parameters",
+          "sectionHeading": "2. Parameters"
+        },
+        {
+          "type": "lesson",
+          "id": "returns",
+          "sectionHeading": "3. Returns"
+        },
+        {
+          "type": "lesson",
+          "id": "higher-order-functions",
+          "sectionHeading": "4. Higher-Order Functions"
+        },
+        {
+          "type": "lesson",
+          "id": "pure-functions",
+          "sectionHeading": "5. Pure Functions"
+        },
+        {
+          "type": "lesson",
+          "id": "currying-and-partial-application",
+          "sectionHeading": "6. Currying and Partial Application"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-06-objects-prototypes",
+      "number": 6,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-06-objects-prototypes.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "object-creation",
+          "sectionHeading": "1. Object Creation"
+        },
+        {
+          "type": "lesson",
+          "id": "property-access-and-descriptors",
+          "sectionHeading": "2. Property Access and Descriptors"
+        },
+        {
+          "type": "lesson",
+          "id": "object-methods",
+          "sectionHeading": "3. Object Methods"
+        },
+        {
+          "type": "lesson",
+          "id": "prototypes",
+          "sectionHeading": "4. Prototypes"
+        },
+        {
+          "type": "lesson",
+          "id": "cloning",
+          "sectionHeading": "5. Cloning"
+        },
+        {
+          "type": "lesson",
+          "id": "maps-and-sets",
+          "sectionHeading": "6. Maps and Sets"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-07-arrays",
+      "number": 7,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-07-arrays.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "creation",
+          "sectionHeading": "1. Creation"
+        },
+        {
+          "type": "lesson",
+          "id": "mutation-methods",
+          "sectionHeading": "2. Mutation Methods"
+        },
+        {
+          "type": "lesson",
+          "id": "non-mutating-methods",
+          "sectionHeading": "3. Non-Mutating Methods"
+        },
+        {
+          "type": "lesson",
+          "id": "reduction-and-search",
+          "sectionHeading": "4. Reduction and Search"
+        },
+        {
+          "type": "lesson",
+          "id": "iteration-patterns",
+          "sectionHeading": "5. Iteration Patterns"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-08-strings-numbers-dates",
+      "number": 8,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-08-strings-numbers-dates.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "strings",
+          "sectionHeading": "1. Strings"
+        },
+        {
+          "type": "lesson",
+          "id": "numbers",
+          "sectionHeading": "2. Numbers"
+        },
+        {
+          "type": "lesson",
+          "id": "math-and-bigint",
+          "sectionHeading": "3. Math and BigInt"
+        },
+        {
+          "type": "lesson",
+          "id": "dates",
+          "sectionHeading": "4. Dates"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-09-scope-closures",
+      "number": 9,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-09-scope-closures.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "scope",
+          "sectionHeading": "1. Scope"
+        },
+        {
+          "type": "lesson",
+          "id": "lexical-scoping",
+          "sectionHeading": "2. Lexical Scoping"
+        },
+        {
+          "type": "lesson",
+          "id": "hoisting",
+          "sectionHeading": "3. Hoisting"
+        },
+        {
+          "type": "lesson",
+          "id": "closures",
+          "sectionHeading": "4. Closures"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-10-this-keyword",
+      "number": 10,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-10-this-keyword.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "default-binding",
+          "sectionHeading": "1. Default Binding"
+        },
+        {
+          "type": "lesson",
+          "id": "implicit-binding",
+          "sectionHeading": "2. Implicit Binding"
+        },
+        {
+          "type": "lesson",
+          "id": "explicit-binding",
+          "sectionHeading": "3. Explicit Binding"
+        },
+        {
+          "type": "lesson",
+          "id": "new-binding",
+          "sectionHeading": "4. new Binding"
+        },
+        {
+          "type": "lesson",
+          "id": "arrow-functions-and-this",
+          "sectionHeading": "5. Arrow Functions and this"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-11-classes",
+      "number": 11,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-11-classes.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "class-syntax",
+          "sectionHeading": "1. Class Syntax"
+        },
+        {
+          "type": "lesson",
+          "id": "private-fields-and-static",
+          "sectionHeading": "2. Private Fields and Static"
+        },
+        {
+          "type": "lesson",
+          "id": "inheritance",
+          "sectionHeading": "3. Inheritance"
+        },
+        {
+          "type": "lesson",
+          "id": "when-to-use-classes-vs-functions",
+          "sectionHeading": "4. When to Use Classes vs Functions"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-12-modules",
+      "number": 12,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-12-modules.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "es-modules",
+          "sectionHeading": "1. ES Modules"
+        },
+        {
+          "type": "lesson",
+          "id": "commonjs",
+          "sectionHeading": "2. CommonJS"
+        },
+        {
+          "type": "lesson",
+          "id": "dynamic-imports",
+          "sectionHeading": "3. Dynamic Imports"
+        },
+        {
+          "type": "lesson",
+          "id": "module-patterns",
+          "sectionHeading": "4. Module Patterns"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-13-async",
+      "number": 13,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-13-async.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "callbacks",
+          "sectionHeading": "1. Callbacks"
+        },
+        {
+          "type": "lesson",
+          "id": "promises",
+          "sectionHeading": "2. Promises"
+        },
+        {
+          "type": "lesson",
+          "id": "promise-combinators",
+          "sectionHeading": "3. Promise Combinators"
+        },
+        {
+          "type": "lesson",
+          "id": "async-await",
+          "sectionHeading": "4. Async Await"
+        },
+        {
+          "type": "lesson",
+          "id": "parallel-vs-serial",
+          "sectionHeading": "5. Parallel vs Serial"
+        },
+        {
+          "type": "lesson",
+          "id": "cancellation",
+          "sectionHeading": "6. Cancellation"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-14-error-handling",
+      "number": 14,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-14-error-handling.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "throwing-and-catching",
+          "sectionHeading": "1. Throwing and Catching"
+        },
+        {
+          "type": "lesson",
+          "id": "error-types",
+          "sectionHeading": "2. Error Types"
+        },
+        {
+          "type": "lesson",
+          "id": "custom-errors",
+          "sectionHeading": "3. Custom Errors"
+        },
+        {
+          "type": "lesson",
+          "id": "async-error-handling",
+          "sectionHeading": "4. Async Error Handling"
+        },
+        {
+          "type": "lesson",
+          "id": "error-semantics",
+          "sectionHeading": "5. Error Semantics"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-15-event-loop",
+      "number": 15,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-15-event-loop.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "mental-model",
+          "sectionHeading": "1. Mental Model"
+        },
+        {
+          "type": "lesson",
+          "id": "the-loop",
+          "sectionHeading": "2. The Loop"
+        },
+        {
+          "type": "lesson",
+          "id": "microtasks-vs-macrotasks",
+          "sectionHeading": "3. Microtasks vs Macrotasks"
+        },
+        {
+          "type": "lesson",
+          "id": "browser-specific",
+          "sectionHeading": "4. Browser-Specific"
+        },
+        {
+          "type": "lesson",
+          "id": "node-specific",
+          "sectionHeading": "5. Node-Specific"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-16-browser-apis",
+      "number": 16,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-16-browser-apis.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "the-dom",
+          "sectionHeading": "1. The DOM"
+        },
+        {
+          "type": "lesson",
+          "id": "events",
+          "sectionHeading": "2. Events"
+        },
+        {
+          "type": "lesson",
+          "id": "fetch-and-http",
+          "sectionHeading": "3. Fetch and HTTP"
+        },
+        {
+          "type": "lesson",
+          "id": "storage",
+          "sectionHeading": "4. Storage"
+        },
+        {
+          "type": "lesson",
+          "id": "other-essential-apis",
+          "sectionHeading": "5. Other Essential APIs"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-17-nodejs",
+      "number": 17,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-17-nodejs.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "what-node-is",
+          "sectionHeading": "1. What Node Is"
+        },
+        {
+          "type": "lesson",
+          "id": "core-modules",
+          "sectionHeading": "2. Core Modules"
+        },
+        {
+          "type": "lesson",
+          "id": "streams",
+          "sectionHeading": "3. Streams"
+        },
+        {
+          "type": "lesson",
+          "id": "npm-ecosystem",
+          "sectionHeading": "4. npm Ecosystem"
+        },
+        {
+          "type": "lesson",
+          "id": "frameworks",
+          "sectionHeading": "5. Frameworks"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-18-modern-es",
+      "number": 18,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-18-modern-es.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "es2020-and-es2021",
+          "sectionHeading": "1. ES2020 and ES2021"
+        },
+        {
+          "type": "lesson",
+          "id": "es2022-and-es2023",
+          "sectionHeading": "2. ES2022 and ES2023"
+        },
+        {
+          "type": "lesson",
+          "id": "es2024-and-beyond",
+          "sectionHeading": "3. ES2024 and Beyond"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-19-typescript",
+      "number": 19,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-19-typescript.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "what-typescript-adds",
+          "sectionHeading": "1. What TypeScript Adds"
+        },
+        {
+          "type": "lesson",
+          "id": "type-system-fundamentals",
+          "sectionHeading": "2. Type System Fundamentals"
+        },
+        {
+          "type": "lesson",
+          "id": "generics",
+          "sectionHeading": "3. Generics"
+        },
+        {
+          "type": "lesson",
+          "id": "utility-types",
+          "sectionHeading": "4. Utility Types"
+        },
+        {
+          "type": "lesson",
+          "id": "advanced-typescript",
+          "sectionHeading": "5. Advanced TypeScript"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-20-tooling",
+      "number": 20,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-20-tooling.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "package-managers",
+          "sectionHeading": "1. Package Managers"
+        },
+        {
+          "type": "lesson",
+          "id": "bundlers",
+          "sectionHeading": "2. Bundlers"
+        },
+        {
+          "type": "lesson",
+          "id": "linters-and-formatters",
+          "sectionHeading": "3. Linters and Formatters"
+        },
+        {
+          "type": "lesson",
+          "id": "monorepo-tools",
+          "sectionHeading": "4. Monorepo Tools"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-21-testing",
+      "number": 21,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-21-testing.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "test-runners",
+          "sectionHeading": "1. Test Runners"
+        },
+        {
+          "type": "lesson",
+          "id": "test-types",
+          "sectionHeading": "2. Test Types"
+        },
+        {
+          "type": "lesson",
+          "id": "end-to-end-testing",
+          "sectionHeading": "3. End-to-End Testing"
+        },
+        {
+          "type": "lesson",
+          "id": "coverage-and-strategy",
+          "sectionHeading": "4. Coverage and Strategy"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-22-performance",
+      "number": 22,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-22-performance.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "measurement",
+          "sectionHeading": "1. Measurement"
+        },
+        {
+          "type": "lesson",
+          "id": "javascript-specific",
+          "sectionHeading": "2. JavaScript-Specific"
+        },
+        {
+          "type": "lesson",
+          "id": "memory",
+          "sectionHeading": "3. Memory"
+        },
+        {
+          "type": "lesson",
+          "id": "bundle-size",
+          "sectionHeading": "4. Bundle Size"
+        },
+        {
+          "type": "lesson",
+          "id": "rendering",
+          "sectionHeading": "5. Rendering"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-23-security",
+      "number": 23,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-23-security.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "xss",
+          "sectionHeading": "1. XSS"
+        },
+        {
+          "type": "lesson",
+          "id": "csrf-and-injection",
+          "sectionHeading": "2. CSRF and Injection"
+        },
+        {
+          "type": "lesson",
+          "id": "authentication",
+          "sectionHeading": "3. Authentication"
+        },
+        {
+          "type": "lesson",
+          "id": "dependencies-and-secrets",
+          "sectionHeading": "4. Dependencies and Secrets"
+        }
+      ],
+      "exercises": []
+    },
+    {
+      "id": "js-24-patterns",
+      "number": 24,
+      "track": "javascript",
+      "status": "available",
+      "guideFile": "arguments/chapters/js-24-patterns.md",
+      "exerciseDir": "",
+      "steps": [
+        {
+          "type": "lesson",
+          "id": "programming-paradigms",
+          "sectionHeading": "1. Programming Paradigms"
+        },
+        {
+          "type": "lesson",
+          "id": "design-patterns",
+          "sectionHeading": "2. Design Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "functional-patterns",
+          "sectionHeading": "3. Functional Patterns"
+        },
+        {
+          "type": "lesson",
+          "id": "code-organization",
+          "sectionHeading": "4. Code Organization"
+        },
+        {
+          "type": "lesson",
+          "id": "concurrency-patterns",
+          "sectionHeading": "5. Concurrency Patterns"
+        }
+      ],
+      "exercises": []
+    }
+  ]
+}

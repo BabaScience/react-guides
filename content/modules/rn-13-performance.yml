@@ -1,0 +1,31 @@
+# rn-13-performance
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-13-performance
+track: react-native
+number: 13
+status: available
+guide: arguments/chapters/rn-13-performance.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: two-thread-model
+    section: 1. The Two-Thread Mental Model
+  - lesson: lists-performance
+    section: 2. Lists
+  - lesson: re-renders
+    section: 3. Re-Renders
+  - lesson: images-performance
+    section: 4. Images
+  - lesson: js-engine
+    section: 5. JS Engine
+  - lesson: perf-tools
+    section: 6. Performance Tools
+  - lesson: bundle-size
+    section: 7. Bundle Size

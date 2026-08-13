@@ -1,0 +1,25 @@
+# rn-01-prerequisites
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: rn-01-prerequisites
+track: react-native
+number: 1
+status: available
+guide: arguments/chapters/rn-01-prerequisites.md
+exerciseDir: ""
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: react-prerequisites
+    section: 1. React (Non-Negotiable)
+  - lesson: js-ts-prerequisites
+    section: 2. JavaScript / TypeScript
+  - lesson: tooling-prerequisites
+    section: 3. Tooling
+  - lesson: mobile-concepts
+    section: 4. Mobile Concepts

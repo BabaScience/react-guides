@@ -1,0 +1,64 @@
+# 03-component-patterns
+#
+# Display text (module name, step titles, exercise names/descriptions/hints)
+# lives in platform/src/i18n/locales/*.json, keyed by the ids below.
+#
+# Every `## ` heading in the guide must appear exactly once under `steps`
+# or `skipSections`. `npm run validate` fails otherwise — that is what makes
+# an unreachable section impossible rather than merely unlikely.
+id: 03-component-patterns
+track: react
+number: 3
+status: available
+guide: arguments/chapters/03-component-patterns-best-practices.md
+exerciseDir: src/03-component-patterns
+skipSections:
+  - Table of Contents
+steps:
+  - lesson: composition-reusability
+    section: 1. Component Composition and Reusability
+  - exercise: card
+  - lesson: prop-drilling
+    section: "2. Prop Drilling: Problem and Solutions"
+  - exercise: button-variant
+  - lesson: state-elevation
+    section: 3. State Elevation Strategies
+  - lesson: component-architecture
+    section: 4. Component Architecture and Organization
+  - lesson: presentational-container
+    section: 5. Presentational vs Container Components
+  - exercise: slot-card
+  - lesson: hoc-pattern
+    section: 6. Higher-Order Components (HOCs)
+  - exercise: with-logger
+  - lesson: render-props
+    section: 7. Render Props Pattern
+  - exercise: toggle
+  - lesson: compound-components
+    section: 8. Compound Components Pattern
+  - exercise: tabs
+  - lesson: advanced-composition
+    section: 9. Advanced Composition Techniques
+  - lesson: pattern-selection-matrix
+    section: 10. Pattern Selection Decision Matrix
+  - lesson: patterns-conclusion
+    section: "Conclusion: Architecting Excellence"
+exercises:
+  card:
+    number: 1
+    componentName: Card
+  button-variant:
+    number: 2
+    componentName: ButtonVariant
+  slot-card:
+    number: 3
+    componentName: SlotCard
+  with-logger:
+    number: 4
+    componentName: withLogger
+  toggle:
+    number: 5
+    componentName: Toggle
+  tabs:
+    number: 6
+    componentName: Tabs
