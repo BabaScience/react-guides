@@ -5,7 +5,7 @@ the safety net comes first so nothing regresses while the rest is fixed.
 
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
-**Phase 0, Phase 1 and P2.1 are complete.** Gate at the time of writing:
+**Phase 0, Phase 1 and P2.1–P2.4 are complete.** Gate at the time of writing:
 `npm run validate` → *Content valid, 2 warnings* (both the documented
 JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0 errors ·
 `npm run build` → succeeds, entry chunk 528 KB / 172 KB gzip, 62 chunks.
@@ -156,21 +156,82 @@ hatch in `progress-store.ts` was built to work around. The last 1/4 is the
 `toHaveBeenCalledWith` now reports what the mock *was* called with, not only what
 was expected — that is how the remaining failure was diagnosed.
 
-### [ ] P2.2 — Real sandbox
-`<iframe sandbox="allow-scripts">` + `postMessage` + watchdog timeout.
-Allowlist the dev `/raw` middleware to `arguments/` and `src/<module>/`.
+### [~] P2.2 — Sandbox hardening
 
-Also carries the last piece of the production test-runner fix: the iframe gets
-its own React, so it can load the **development** build and have a working
-`act()`. That closes the remaining gap where `user-event` state updates don't
-commit under production React (see the KNOWN LIMITATION note in vite.config.ts).
+**Done — `/raw` middleware allowlist.** The dev middleware bypassed Vite's own
+`server.fs` guard and resolved any path under the repo root: `GET
+/raw/.git/config` returned the repository's remote URL, and `.env` would have
+been readable the same way. It is now restricted to `arguments/chapters`,
+`src/`, and the two `@types` directories Monaco needs, with an extension
+allowlist and decode-then-resolve traversal checks. Verified: `.git/config`,
+`package.json` and `%2e%2e` traversal all fall through; real content still
+serves.
 
-### [ ] P2.3 — Design system + a11y
-Adopt `Button`/`Card`/`Badge` across all 18 call sites. `aria-label` on icon-only
-controls, `aria-current` on nav, skip link, replace flag emojis with SVG.
+**Done — the flush moved to where it belongs.** `act` is now a plain
+pass-through and the single `flushSync` lives in the runner's `render`
+interceptor. Same results as the P2.1 fix (3/3, 3/4) with a much clearer
+rationale, and event dispatch is no longer wrapped in a sync flush.
 
-### [ ] P2.4 — Navigation at scale
-Sidebar search + collapsible track groups. Progress export/import JSON.
+**Tried and rejected — pinning `IS_REACT_ACT_ENVIRONMENT` to false.**
+The suspicion was right in principle: TL sets that flag around every render,
+which parks updates on an act queue that a pass-through `act` never drains.
+But forcing it false makes TL's `asyncWrapper` await something that never
+settles, and the whole run hangs. Recorded in test-runner.ts so nobody
+re-derives it.
+
+**Deferred into P2.6 — iframe isolation + execution timeout.** Deliberately,
+not for lack of time:
+- A same-origin iframe shares the event loop, so `while (true)` still freezes
+  the tab. A cross-origin one cannot load our modules without CORS. Neither
+  gives the watchdog its stated purpose, so an iframe built now would deliver
+  isolation but not the timeout.
+- The remaining `user-event` gap needs a context with React's **development**
+  build, which means a separate execution context with its own module graph —
+  exactly what the runner interface in P2.6 has to define anyway.
+- Node (WebContainers) and Python (Pyodide) bring their own isolated contexts.
+  Designing the host once, in P2.6, avoids building a React-only iframe and
+  then rebuilding it.
+
+### [x] P2.3 — Design system + a11y
+`Button` adopted for every real button (Run Tests, Mark complete, Reset ×2); `Badge`
+for the "coming soon" chip. The controls that stayed hand-rolled — track switcher,
+tab strips, sidebar collapse, disclosure toggles — are genuinely not `Button`
+variants, so they got the treatment they were missing instead: focus rings
+everywhere, and ARIA that carries state rather than colour.
+
+Fixed along the way:
+- **The language menu was hover-only** — unreachable by keyboard, invisible to
+  screen readers. Now a real disclosure with `aria-haspopup` / `aria-expanded`,
+  `role="menuitemradio"` + `aria-checked`, outside-click and Escape handling.
+- **The code-block copy button was `opacity-0` until hover**, so keyboard users
+  tabbed onto an invisible control. Added `focus-visible:opacity-100`.
+- **Flag emoji replaced with language codes + endonyms.** Regional-indicator pairs
+  don't render on Windows — the picker literally read "FR FR".
+- **Skip link** added; the sidebar is ~60 tab stops before the content.
+- `trackMeta.title.replace(' Mastery', '')` replaced with a stored `shortLabel` —
+  the old derivation breaks the moment a title is translated.
+
+Counts went from 0 aria attributes / 0 focus rings outside `ui/` to 17 labels,
+6 `aria-pressed`, 11 progressbars, 2 labelled `nav` landmarks, 24 focus rings.
+Documented in DESIGN_SYSTEM.md §6.5 and rendered as `/styleguide` §8.
+
+### [x] P2.4 — Navigation at scale
+**Sidebar search.** Filters on module name, description, id *and step titles* — so
+typing `usereducer` finds the Hooks module even though its name never says it
+(verified: 12 modules → 1). `useDeferredValue` keeps typing smooth at 57 modules,
+and the result count is announced via `role="status"`.
+
+**Progress export/import.** Progress lives only in this browser's localStorage —
+clearing site data or switching machine destroyed every solved exercise and every
+line of saved code. Now exportable as a dated JSON file and importable back,
+merging by default so importing from another machine doesn't discard local work.
+Verified round-trip including saved code, plus rejection of unrelated JSON and of
+files written by a newer store version.
+
+*Not done: collapsible track groups.* The track switcher already partitions the
+list, and the data has no sub-grouping inside a track — search covers the "57 → 120
+modules" problem that grouping was meant to solve, without adding a second
+navigation concept.
 
 ### [ ] P2.5 — Content as data *(the big one)*
 Move module metadata out of `data/*.ts` into `content/<track>/<module>/meta.yml` +
@@ -186,6 +247,12 @@ interface ExerciseRunner {
 }
 ```
 Track declares its runner; `ExerciseStepView` dispatches. **Blocks all non-JS tracks.**
+
+Carries the deferred half of P2.2: each runner owns an isolated execution
+context (iframe / WebContainer / Pyodide worker) with a watchdog. The
+`react-browser` runner loads React's **development** build there, which gives it
+a working `act()` and closes the last test-runner gap — a handler reading state
+after `user.type` currently still sees the initial value.
 
 ---
 

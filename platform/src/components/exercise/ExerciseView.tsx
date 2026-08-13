@@ -9,6 +9,7 @@ import { CodeEditorLazy as CodeEditor } from './CodeEditorLazy';
 import { ExercisePanel } from './ExercisePanel';
 import { TestResultsPanel } from './TestResultsPanel';
 import { LivePreview } from './LivePreview';
+import { Button } from '@/components/ui';
 import { runTestsInSandbox } from '@/sandbox/test-runner';
 import { buildExerciseCode, reassembleFullCode } from '@/sandbox/exercise-extractor';
 import type { TestRunResult } from '@/types/exercise';
@@ -156,12 +157,9 @@ export function ExerciseView() {
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleReset}
-            className="px-2.5 py-1 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white border border-gray-300 dark:border-gray-700 rounded-full transition-colors"
-          >
+          <Button variant="secondary" size="sm" onClick={handleReset}>
             {t('exercise.resetCode')}
-          </button>
+          </Button>
           {nextExercise && (
             <Link
               to={`/module/${moduleId}/exercise/${nextExercise.id}`}
@@ -292,8 +290,11 @@ function TabButton({
 }) {
   return (
     <button
+      type="button"
+      role="tab"
+      aria-selected={!!active}
       onClick={onClick}
-      className={`px-4 py-2 text-xs font-medium transition-colors ${
+      className={`px-4 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 ${
         active
           ? 'text-gray-900 dark:text-white border-b-2 border-primary-500 bg-gray-50 dark:bg-gray-900/50'
           : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'

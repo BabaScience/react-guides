@@ -17,7 +17,10 @@
     "completeModule": "Terminer le Module ✓",
     "startLearning": "Commencer",
     "readLesson": "Lire la Leçon",
-    "startExercises": "Commencer les Exercices →"
+    "startExercises": "Commencer les Exercices →",
+    "skipToContent": "Aller au contenu",
+    "breadcrumb": "Fil d'Ariane",
+    "changeLanguage": "Changer de langue — actuellement {{language}}"
   },
   "dashboard": {
     "stepsCompleted": "{{completed}}/{{total}} étapes complétées",
@@ -31,7 +34,8 @@
     "locked": "🔒 Complétez le module précédent pour débloquer",
     "learningPath": "Parcours d'Apprentissage",
     "comingSoonMessage": "Bientôt disponible — les exercices de ce module ne sont pas encore disponibles.",
-    "soon": "Bientôt"
+    "soon": "Bientôt",
+    "stepsCompletedIn": "Étapes terminées dans {{module}}"
   },
   "step": {
     "lesson": "Leçon",
@@ -86,11 +90,19 @@
   },
   "sidebar": {
     "expand": "Développer la barre latérale",
-    "collapse": "Réduire la barre latérale"
+    "collapse": "Réduire la barre latérale",
+    "chooseTrack": "Choisir un parcours",
+    "modulesIn": "Modules {{track}}",
+    "searchModules": "Rechercher des modules",
+    "searchPlaceholder": "Rechercher un module…",
+    "searchResults_one": "{{count}} module",
+    "searchResults_other": "{{count}} modules"
   },
   "common": {
     "copy": "Copier",
-    "code": "code"
+    "code": "code",
+    "copyCode": "Copier le code",
+    "copied": "Copié"
   },
   "errors": {
     "failedToLoadLesson": "Impossible de charger le contenu de la leçon",
@@ -1516,5 +1528,13 @@
         ]
       }
     }
+  },
+  "progress": {
+    "export": "Exporter",
+    "import": "Importer",
+    "exported": "Progression téléchargée",
+    "imported": "{{exercises}} exercices et {{lessons}} leçons importés",
+    "importNotRecognised": "Ce fichier n'est pas un export de progression",
+    "importNewerVersion": "Ce fichier provient d’une version plus récente de la plateforme"
   }
 }

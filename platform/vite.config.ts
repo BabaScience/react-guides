@@ -12,62 +12,33 @@ export default defineConfig({
       // @testing-library/react v14 calls `testUtils.act` on every render
       // and fireEvent, so under a prod bundle every sandbox test fails.
       //
-      // We patch TL's bundled source to swap its `testUtils.act` reference
-      // for a stub built on ReactDOM.flushSync. This only affects the
-      // in-browser test runner — the app's own React is untouched.
+      // We patch TL's bundled source to swap its `testUtils.act` reference for
+      // a plain pass-through. This only affects the in-browser test runner —
+      // the app's own React is untouched.
       //
-      // The callback MUST run *inside* flushSync, not before it. An earlier
-      // version did `cb(); flushSync(() => {})`, reasoning that the empty
-      // flush would drain whatever cb() scheduled. It doesn't: `root.render()`
-      // schedules at default (concurrent) lane, and a separate empty
-      // `flushSync` does not commit it. The container was still empty when the
-      // assertions ran, so *every rendering exercise failed in production* —
-      // which is what the "Mark as completed manually" escape hatch in
-      // progress-store.ts was built to work around.
+      // Pass-through, and nothing more, on purpose. Two earlier versions tried
+      // to make the stub flush React's work itself:
       //
-      // KNOWN LIMITATION: state updates driven by `@testing-library/user-event`
-      // still do not commit under a production React build. Assertions on DOM
-      // values pass (the browser types into the input for real), but a handler
-      // reading component state sees the initial value — e.g. a form's
-      // `onSubmit` receives `{ name: '', email: '' }` after `user.type`.
-      // No arrangement of flushSync fixes this, because production React has no
-      // working `act` to batch against. The real fix is to run the sandbox
-      // against React's *development* build inside an isolated iframe, which is
-      // PLAN.md P2.2 — the app's own production React cannot be swapped, but an
-      // iframe gets its own copy.
+      //   `cb(); flushSync(() => {})`  — never commits a `root.render()`,
+      //      because that render is scheduled on the default lane and a
+      //      separate empty flush does not pick it up. Every rendering
+      //      exercise failed in production.
+      //   `flushSync(() => cb())`      — commits the render, but now every
+      //      user-event dispatch also runs inside a sync flush, which defeats
+      //      React's own discrete-event flushing: after `user.type`, the
+      //      component's state was still its initial value.
+      //
+      // React already flushes discrete events synchronously on its own, so the
+      // event path needs no help. The only thing that genuinely needs a flush
+      // is the initial `render()`, and that is wrapped where it belongs — in
+      // the runner's `render` interceptor (src/sandbox/test-runner.ts).
       name: 'patch-testing-library-act',
       enforce: 'pre',
       transform(code, id) {
         if (id.includes('@testing-library/react') && id.endsWith('.esm.js')) {
           const patched = code.replace(
             /const\s+domAct\s*=\s*testUtils\.act\s*;?/,
-            `const domAct = (cb) => {
-              // An async callback (user.type / user.click) must NOT start
-              // inside flushSync: its promise chain re-enters this stub for
-              // every keystroke, and those nested flushes are swallowed. Branch
-              // on the function kind, which is known before calling it.
-              const flushAfter = (p) =>
-                Promise.resolve(p).then((v) => {
-                  ReactDOM.flushSync(() => {});
-                  return v;
-                });
-
-              if (cb.constructor && cb.constructor.name === "AsyncFunction") {
-                return flushAfter(cb());
-              }
-
-              let result;
-              ReactDOM.flushSync(() => {
-                result = cb();
-              });
-              if (result && typeof result.then === "function") {
-                return flushAfter(result);
-              }
-              // Effects scheduled by the commit (useEffect) land in a passive
-              // phase after flushSync returns; drain them too.
-              ReactDOM.flushSync(() => {});
-              return undefined;
-            };`,
+            `const domAct = (cb) => cb();`,
           );
           if (patched !== code) {
             return patched;
@@ -77,28 +48,69 @@ export default defineConfig({
       },
     },
     {
+      // Serves chapter markdown and exercise files to the running app in dev.
+      // In production the same files are copied into public/raw/ by
+      // scripts/copy-content.js and served as static assets.
+      //
+      // This middleware bypasses Vite's own `server.fs` restrictions, so it
+      // needs its own. Previously it resolved any path under the repo root,
+      // which meant `GET /raw/.git/config` returned the repository's remote URL
+      // and `/raw/.env` would have returned secrets. Only the directories the
+      // app actually reads from are reachable now.
       name: 'raw-file-server',
       configureServer(server) {
+        const repoRoot = path.resolve(__dirname, '..');
+
+        /** Prefixes (relative to the repo root) the app is allowed to read. */
+        const ALLOWED_PREFIXES = [
+          'arguments/chapters',
+          'src',
+          // React/ReactDOM .d.ts files, fetched to feed Monaco's autocomplete.
+          'platform/node_modules/@types/react',
+          'platform/node_modules/@types/react-dom',
+        ];
+
+        const ALLOWED_EXTENSIONS = new Set([
+          '.md',
+          '.ts',
+          '.tsx',
+          '.js',
+          '.jsx',
+          '.json',
+          '.css',
+        ]);
+
+        const MIME_TYPES: Record<string, string> = {
+          '.json': 'application/json',
+        };
+
         server.middlewares.use('/raw', (req, res, next) => {
-          const filePath = path.resolve(__dirname, '..', req.url!.slice(1));
-          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-            const content = fs.readFileSync(filePath, 'utf-8');
-            const ext = path.extname(filePath);
-            const mimeTypes: Record<string, string> = {
-              '.tsx': 'text/plain',
-              '.ts': 'text/plain',
-              '.jsx': 'text/plain',
-              '.js': 'text/plain',
-              '.md': 'text/plain',
-              '.json': 'application/json',
-              '.css': 'text/plain',
-            };
-            res.setHeader('Content-Type', mimeTypes[ext] || 'text/plain');
-            res.setHeader('Cache-Control', 'no-cache');
-            res.end(content);
-          } else {
-            next();
+          // Strip the query/hash and decode before resolving, so an encoded
+          // `%2e%2e` cannot smuggle a traversal past the prefix check below.
+          let requestPath: string;
+          try {
+            requestPath = decodeURIComponent((req.url ?? '').split(/[?#]/)[0]);
+          } catch {
+            return next();
           }
+
+          const filePath = path.resolve(repoRoot, `.${requestPath}`);
+          const relative = path.relative(repoRoot, filePath).split(path.sep).join('/');
+
+          const escapesRoot = relative.startsWith('..') || path.isAbsolute(relative);
+          const allowed = ALLOWED_PREFIXES.some(
+            (prefix) => relative === prefix || relative.startsWith(`${prefix}/`)
+          );
+          if (escapesRoot || !allowed) return next();
+
+          const ext = path.extname(filePath);
+          if (!ALLOWED_EXTENSIONS.has(ext)) return next();
+
+          if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) return next();
+
+          res.setHeader('Content-Type', MIME_TYPES[ext] ?? 'text/plain; charset=utf-8');
+          res.setHeader('Cache-Control', 'no-cache');
+          res.end(fs.readFileSync(filePath, 'utf-8'));
         });
       },
     },

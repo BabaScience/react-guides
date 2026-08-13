@@ -6,20 +6,26 @@ import { useUIStore } from '@/store/ui-store';
 import { ModuleCard } from './ModuleCard';
 import type { Track } from '@/types/exercise';
 
-const trackMeta: Record<Track, { icon: string; title: string; subtitle: string }> = {
+// `shortLabel` is stored rather than derived: the old code produced the pill
+// label with `title.replace(' Mastery', '')`, which silently breaks the moment a
+// title is translated or a track isn't named "<X> Mastery".
+const trackMeta: Record<Track, { icon: string; title: string; shortLabel: string; subtitle: string }> = {
   javascript: {
     icon: '🟨',
     title: 'JavaScript Mastery',
+    shortLabel: 'JavaScript',
     subtitle: 'From zero to production-grade JavaScript — the language, the runtime, the ecosystem',
   },
   react: {
     icon: '⚛️',
     title: 'React Mastery',
+    shortLabel: 'React',
     subtitle: 'Interactive learning platform for mastering React',
   },
   'react-native': {
     icon: '📱',
     title: 'React Native Mastery',
+    shortLabel: 'React Native',
     subtitle: 'From React developer to production-grade mobile engineer',
   },
 };
@@ -57,19 +63,27 @@ export function ProgressDashboard() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-8">
       <div className="mb-8">
-        <div className="flex items-center gap-3 mb-4">
+        <div
+          role="group"
+          aria-label={t('sidebar.chooseTrack')}
+          className="flex items-center gap-3 mb-4"
+        >
           {(Object.keys(trackMeta) as Track[]).map((track) => (
             <button
               key={track}
+              type="button"
               onClick={() => setActiveTrack(track)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              aria-pressed={activeTrack === track}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950 ${
                 activeTrack === track
                   ? 'bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 ring-1 ring-primary-300 dark:ring-primary-500/30'
                   : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-200'
               }`}
             >
-              <span className="text-lg">{trackMeta[track].icon}</span>
-              <span>{trackMeta[track].title.replace(' Mastery', '')}</span>
+              <span aria-hidden="true" className="text-lg">
+                {trackMeta[track].icon}
+              </span>
+              <span>{trackMeta[track].shortLabel}</span>
             </button>
           ))}
         </div>
@@ -78,7 +92,17 @@ export function ProgressDashboard() {
         <p className="text-gray-500 dark:text-gray-400 text-lg">{meta.subtitle}</p>
         <div className="mt-4 flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <div className="h-2 w-32 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div
+              role="progressbar"
+              aria-valuenow={totalCompleted}
+              aria-valuemin={0}
+              aria-valuemax={totalSteps}
+              aria-label={t('dashboard.stepsCompleted', {
+                completed: totalCompleted,
+                total: totalSteps,
+              })}
+              className="h-2 w-32 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden"
+            >
               <div
                 className="h-full bg-primary-500 rounded-full transition-all"
                 style={{ width: `${totalSteps > 0 ? (totalCompleted / totalSteps) * 100 : 0}%` }}

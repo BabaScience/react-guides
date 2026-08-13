@@ -200,14 +200,19 @@ export function LivePreview({ code, componentName, testSource }: LivePreviewProp
         <div className="border-b border-gray-200 dark:border-gray-800">
           <div className="flex items-center px-4 py-1.5 text-xs text-gray-500 dark:text-gray-400">
             <button
+              type="button"
               onClick={() => setShowProps((s) => !s)}
-              className="flex-1 text-left font-medium uppercase tracking-wide hover:text-gray-900 dark:hover:text-white transition-colors"
+              aria-expanded={showProps}
+              aria-controls="preview-props"
+              className="flex-1 text-left font-medium uppercase tracking-wide rounded-full hover:text-gray-900 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
             >
-              {showProps ? '▾' : '▸'} {t('preview.props')} ({propNames.length})
+              <span aria-hidden="true">{showProps ? '▾' : '▸'}</span> {t('preview.props')} (
+              {propNames.length})
             </button>
             <button
+              type="button"
               onClick={() => setCurrentProps(exampleProps)}
-              className="text-xs text-primary-600 dark:text-primary-400 hover:underline"
+              className="text-xs rounded-full px-1 text-primary-600 dark:text-primary-400 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
             >
               {t('preview.reset')}
             </button>
@@ -253,7 +258,10 @@ function PropsEditor({
   onChange: (name: string, value: unknown) => void;
 }) {
   return (
-    <div className="px-4 py-2 space-y-1.5 bg-gray-50 dark:bg-gray-900/30 max-h-56 overflow-y-auto">
+    <div
+      id="preview-props"
+      className="px-4 py-2 space-y-1.5 bg-gray-50 dark:bg-gray-900/30 max-h-56 overflow-y-auto"
+    >
       {Object.entries(props).map(([name, value]) => (
         <PropControl
           key={name}

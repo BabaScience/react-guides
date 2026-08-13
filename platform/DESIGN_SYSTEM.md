@@ -144,7 +144,36 @@ Unchanged from v1 — 4px grid, steps **1, 1.5, 2, 3, 4, 5, 6, 8**, same recipes
 
 ### 6.3 Focus — unchanged, required: `focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950` (built into `Button`).
 
+Two cases the plain recipe doesn't cover:
+
+- **Inside a bordered strip** (tab bars, toolbars) an offset ring is clipped — use
+  `focus-visible:ring-inset` and drop the offset.
+- **Hover-revealed controls** (`opacity-0 group-hover:opacity-100`) must also carry
+  `focus-visible:opacity-100`, or a keyboard user tabs onto an invisible button.
+  The code-block copy button is the reference case.
+
 ### 6.4 Disabled — unchanged (`disabled:opacity-50 disabled:cursor-not-allowed`).
+
+### 6.5 Accessibility floor
+
+Every change is held to these. They are cheap at authoring time and expensive to retrofit.
+
+| Pattern | Requirement |
+| --- | --- |
+| Icon-only / emoji-only control | `aria-label` with real words; the glyph gets `aria-hidden="true"`. `title` alone is not enough. |
+| Decorative emoji or glyph | `aria-hidden="true"` — including the `•` in lists and `▾ ▸` disclosure arrows. |
+| Toggle (track switcher, filters) | `aria-pressed`, so state isn't conveyed by colour alone. |
+| Disclosure (hints, props panel, menus) | `aria-expanded` + `aria-controls` pointing at a real `id`. |
+| Dropdown menu | `aria-haspopup="menu"`, `role="menu"`, `role="menuitemradio"` + `aria-checked` for single-select. Must open on click/keyboard — **never hover-only**. |
+| Tab strip | `role="tab"` + `aria-selected`. |
+| Progress bar | `role="progressbar"` with `aria-valuenow` / `aria-valuemin` / `aria-valuemax` and a label. |
+| Landmarks | One `<main id="main-content">`; every `<nav>` carries `aria-label` (there are several). |
+| Current page | `aria-current="page"` — `NavLink` supplies it; breadcrumbs set it by hand on the last crumb. |
+| Skip link | First focusable element in `AppShell`; `sr-only` until focused. The sidebar is ~60 tab stops. |
+
+**Language is not a flag.** Regional-indicator emoji don't render on Windows (the picker
+read "FR FR"), and a flag names a country, not a language. Use the language code plus its
+endonym — `EN / English`, `FR / Français`.
 
 ---
 

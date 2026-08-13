@@ -75,10 +75,14 @@ export function ShikiCode({ code, language }: ShikiCodeProps) {
           </span>
         </div>
         <button
+          type="button"
           onClick={onCopy}
-          className="text-[11px] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-0 group-hover:opacity-100 transition-opacity px-2 py-0.5 rounded"
+          aria-label={copied ? t('common.copied') : t('common.copyCode')}
+          // `focus-visible:opacity-100` matters: without it the control is
+          // hover-only, so a keyboard user tabs onto an invisible button.
+          className="text-[11px] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity px-2 py-0.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
         >
-          {copied ? '✓' : t('common.copy')}
+          <span aria-hidden="true">{copied ? '✓' : t('common.copy')}</span>
         </button>
       </div>
       {html ? (

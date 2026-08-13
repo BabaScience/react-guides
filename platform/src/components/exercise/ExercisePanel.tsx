@@ -38,16 +38,21 @@ export function ExercisePanel({ exercise, moduleName, moduleId }: ExercisePanelP
 
       <div>
         <button
+          type="button"
           onClick={() => setShowHints(!showHints)}
-          className="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 transition-colors"
+          aria-expanded={showHints}
+          aria-controls="exercise-hints"
+          className="text-sm rounded-full text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
         >
           {showHints ? t('exercise.hideHints') : t('exercise.showHints', { count: hints.length })}
         </button>
         {showHints && hints.length > 0 && (
-          <ul className="mt-2 space-y-1">
+          <ul id="exercise-hints" className="mt-2 space-y-1">
             {hints.map((hint, i) => (
               <li key={i} className="text-sm text-gray-500 dark:text-gray-400 flex items-start gap-2">
-                <span className="text-primary-500 mt-0.5">•</span>
+                <span aria-hidden="true" className="text-primary-500 mt-0.5">
+                  •
+                </span>
                 {hint}
               </li>
             ))}

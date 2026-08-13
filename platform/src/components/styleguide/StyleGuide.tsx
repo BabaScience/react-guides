@@ -242,6 +242,104 @@ export function StyleGuide() {
           </div>
         </div>
       </Section>
+
+      <Section title="8. Accessibility floor">
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+          Tab through this section — every control below must show a visible focus ring, and
+          nothing may rely on colour alone. Full table in DESIGN_SYSTEM.md §6.5.
+        </p>
+
+        <SubHeading>Focus rings</SubHeading>
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <Button variant="primary" size="lg">
+            Standard ring
+          </Button>
+          <div className="flex border border-gray-200 dark:border-gray-800 rounded-lg overflow-hidden">
+            <button
+              type="button"
+              role="tab"
+              aria-selected="true"
+              className="px-4 py-2 text-xs font-medium text-gray-900 dark:text-white border-b-2 border-primary-500 bg-white dark:bg-gray-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+            >
+              Inset ring (tab)
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected="false"
+              className="px-4 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500"
+            >
+              Inactive tab
+            </button>
+          </div>
+          <div className="group flex items-center gap-2 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800">
+            <span className="text-xs text-gray-500 dark:text-gray-400">Hover-revealed →</span>
+            <button
+              type="button"
+              aria-label="Copy code"
+              className="text-[11px] text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity px-2 py-0.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
+            >
+              <span aria-hidden="true">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <SubHeading>State carried by ARIA, not colour</SubHeading>
+        <div className="flex flex-wrap items-center gap-3 mb-6">
+          <button
+            type="button"
+            aria-pressed="true"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-600/20 text-primary-700 dark:text-primary-400 ring-1 ring-primary-300 dark:ring-primary-500/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
+          >
+            <span aria-hidden="true">⚛️</span>
+            <span>aria-pressed=&quot;true&quot;</span>
+          </button>
+          <button
+            type="button"
+            aria-pressed="false"
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-1 dark:focus-visible:ring-offset-gray-950"
+          >
+            <span aria-hidden="true">📱</span>
+            <span>aria-pressed=&quot;false&quot;</span>
+          </button>
+        </div>
+
+        <SubHeading>Labelled progress</SubHeading>
+        <div className="flex items-center gap-2 mb-6">
+          <div
+            role="progressbar"
+            aria-valuenow={7}
+            aria-valuemin={0}
+            aria-valuemax={12}
+            aria-label="Steps completed in this example"
+            className="flex-1 max-w-xs h-2 bg-gray-200 dark:bg-gray-800 rounded-full overflow-hidden"
+          >
+            <div className="h-full bg-emerald-500 rounded-full" style={{ width: '58%' }} />
+          </div>
+          <span aria-hidden="true" className="text-[10px] text-gray-400 dark:text-gray-500">
+            7/12
+          </span>
+        </div>
+
+        <SubHeading>Language — codes and endonyms, never flags</SubHeading>
+        <div className="flex flex-wrap items-center gap-2">
+          {[
+            { code: 'EN', label: 'English' },
+            { code: 'FR', label: 'Français' },
+            { code: 'IT', label: 'Italiano' },
+          ].map((l) => (
+            <span
+              key={l.code}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm border border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300"
+            >
+              <span className="font-mono text-[10px] text-gray-400 dark:text-gray-500">
+                {l.code}
+              </span>
+              {l.label}
+            </span>
+          ))}
+        </div>
+      </Section>
     </div>
   );
 }

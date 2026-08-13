@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui';
 import type { TestRunResult } from '@/types/exercise';
 
 interface TestResultsPanelProps {
@@ -73,13 +74,9 @@ export function TestResultsPanel({
     <div className="flex flex-col h-full bg-white dark:bg-gray-950">
       <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50">
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t('exercise.testResults')}</h3>
-        <button
-          onClick={onRun}
-          disabled={running}
-          className="px-3.5 py-1.5 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-full transition-colors"
-        >
+        <Button variant="success" size="md" onClick={onRun} disabled={running}>
           {running ? t('exercise.running') : t('exercise.runTests')}
-        </button>
+        </Button>
       </div>
 
       <div className="flex-1 overflow-y-auto p-4">
@@ -123,12 +120,14 @@ export function TestResultsPanel({
                 <div className="text-xs text-gray-600 dark:text-gray-400 mb-2">
                   {t('exercise.manualCompleteHint')}
                 </div>
-                <button
+                <Button
+                  variant="secondary"
+                  size="md"
                   onClick={onMarkComplete}
-                  className="px-3.5 py-1.5 text-xs font-medium border border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-full transition-colors"
+                  className="border-emerald-300 dark:border-emerald-700 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30"
                 >
                   {t('exercise.markCompleteManually')}
-                </button>
+                </Button>
               </div>
             )}
 

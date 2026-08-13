@@ -17,7 +17,10 @@
     "completeModule": "Complete Module ✓",
     "startLearning": "Start Learning",
     "readLesson": "Read Lesson",
-    "startExercises": "Start Exercises →"
+    "startExercises": "Start Exercises →",
+    "skipToContent": "Skip to content",
+    "breadcrumb": "Breadcrumb",
+    "changeLanguage": "Change language — currently {{language}}"
   },
   "dashboard": {
     "stepsCompleted": "{{completed}}/{{total}} steps completed",
@@ -31,7 +34,8 @@
     "locked": "🔒 Complete previous module to unlock",
     "learningPath": "Learning Path",
     "comingSoonMessage": "Coming soon — exercises for this module are not yet available.",
-    "soon": "Soon"
+    "soon": "Soon",
+    "stepsCompletedIn": "Steps completed in {{module}}"
   },
   "step": {
     "lesson": "Lesson",
@@ -86,11 +90,19 @@
   },
   "sidebar": {
     "expand": "Expand sidebar",
-    "collapse": "Collapse sidebar"
+    "collapse": "Collapse sidebar",
+    "chooseTrack": "Choose a track",
+    "modulesIn": "{{track}} modules",
+    "searchModules": "Search modules",
+    "searchPlaceholder": "Search modules…",
+    "searchResults_one": "{{count}} module",
+    "searchResults_other": "{{count}} modules"
   },
   "common": {
     "copy": "Copy",
-    "code": "code"
+    "code": "code",
+    "copyCode": "Copy code",
+    "copied": "Copied"
   },
   "errors": {
     "failedToLoadLesson": "Failed to load lesson content",
@@ -1516,5 +1528,13 @@
         ]
       }
     }
+  },
+  "progress": {
+    "export": "Export",
+    "import": "Import",
+    "exported": "Progress downloaded",
+    "imported": "Imported {{exercises}} exercises and {{lessons}} lessons",
+    "importNotRecognised": "That file isn't a progress export",
+    "importNewerVersion": "That file was made by a newer version of the platform"
   }
 }

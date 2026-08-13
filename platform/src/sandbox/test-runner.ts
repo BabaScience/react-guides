@@ -62,6 +62,16 @@ export async function runTestsInSandbox(
   container.id = 'test-root';
   document.body.appendChild(container);
 
+  // NOTE on `IS_REACT_ACT_ENVIRONMENT`: @testing-library/react sets it to true
+  // around every render, which tells React to park updates on the act queue
+  // rather than flush them. With no working `act` in a production build that
+  // queue is never drained — the suspected cause of the one remaining failure
+  // mode, where a handler reading state after `user.type` still sees the
+  // initial value. Pinning the flag to false was tried and makes it worse:
+  // TL's `asyncWrapper` then awaits something that never settles and the run
+  // hangs. Solving it properly needs a context with a real `act`, i.e. React's
+  // development build — see PLAN.md P2.6.
+
   // Defensive sweep: wipe test-root between tests AND remove any TL-managed
   // body children (in case user code rendered without our wrapped render).
   const tlCleanup =
@@ -86,22 +96,65 @@ export async function runTestsInSandbox(
   // like the exercise description and the test-results panel — those would
   // otherwise match `getByText(/increment/i)` etc).
   //
-  // We DON'T wrap `render` itself: React 18's event delegation gets confused
-  // when the container is repositioned post-render, and user-event v14's
-  // `user.type` stops firing onChange handlers. Leave render's default
-  // behavior alone — it attaches a fresh <div> to document.body, which is
-  // where React happily handles events.
+  // We don't reposition the render container — React 18's event delegation
+  // gets confused when a container moves post-render, and user-event v14's
+  // `user.type` stops firing onChange handlers. TL's default behaviour
+  // (a fresh <div> on document.body) is where React handles events happily.
   //
-  // To make `screen` follow the latest render, intercept `render` to track
-  // the container it created, and expose a Proxy `screen` that re-binds
-  // `within(...)` queries to that container on every access.
+  // The interceptor does two things:
+  //
+  //   1. Runs the render inside `flushSync`, so the initial mount is committed
+  //      before the test's first assertion. Production React has no working
+  //      `act()`, and `root.render()` is scheduled on the default lane — so
+  //      without this the container is still empty when the test queries it.
+  //      This is deliberately the *only* place we force a flush: React already
+  //      flushes discrete events itself, and wrapping those in flushSync breaks
+  //      state updates driven by user-event (see vite.config.ts).
+  //   2. Tracks the container it created, so the `screen` Proxy below can scope
+  //      queries to the most recent render instead of the whole document.
   const TL = TestingLib as any;
   const wrappedTL: Record<string, unknown> = { ...TL };
   let lastRenderContainer: HTMLElement | null = null;
+
+  /** Commit pending React work synchronously; safe to call outside render. */
+  const flush = () => {
+    const { flushSync } = ReactDOM as { flushSync?: (fn: () => void) => void };
+    try {
+      flushSync?.(() => {});
+    } catch {
+      /* flushSync throws if called during render — nothing to flush then */
+    }
+  };
+
   if (typeof TL.render === 'function') {
     wrappedTL.render = (ui: unknown, options?: Record<string, unknown>) => {
-      const result = TL.render(ui, options);
-      lastRenderContainer = (result && (result as { container?: HTMLElement }).container) || null;
+      const { flushSync } = ReactDOM as { flushSync?: (fn: () => void) => void };
+      let result: unknown;
+      if (flushSync) {
+        flushSync(() => {
+          result = TL.render(ui, options);
+        });
+      } else {
+        result = TL.render(ui, options);
+      }
+      // Effects scheduled during the commit land in a passive phase afterwards.
+      flush();
+
+      const rendered = result as {
+        container?: HTMLElement;
+        rerender?: (ui: unknown) => void;
+      };
+      lastRenderContainer = rendered?.container ?? null;
+
+      // `rerender` needs the same treatment as the initial mount.
+      if (typeof rendered?.rerender === 'function') {
+        const originalRerender = rendered.rerender.bind(rendered);
+        rendered.rerender = (nextUi: unknown) => {
+          if (flushSync) flushSync(() => originalRerender(nextUi));
+          else originalRerender(nextUi);
+          flush();
+        };
+      }
       return result;
     };
   }

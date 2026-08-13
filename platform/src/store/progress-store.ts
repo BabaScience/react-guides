@@ -29,6 +29,46 @@ interface ProgressStore {
    */
   markExerciseComplete: (moduleId: string, exerciseId: string) => void;
   resetExercise: (moduleId: string, exerciseId: string) => void;
+  /** Everything worth keeping, as a plain object — see `ProgressExport`. */
+  exportProgress: () => ProgressExport;
+  /** Replace or merge saved progress from a previously exported file. */
+  importProgress: (data: unknown, mode?: 'merge' | 'replace') => ImportResult;
+}
+
+/**
+ * Portable progress file.
+ *
+ * Progress lives only in this browser's localStorage: no account, no sync.
+ * Clearing site data, switching machine or using a second browser loses every
+ * solved exercise and every line of saved code. Until there are accounts, an
+ * explicit export/import is what makes that recoverable.
+ */
+export interface ProgressExport {
+  kind: 'learning-platform-progress';
+  version: number;
+  exportedAt: string;
+  exercises: Record<string, ExerciseProgress>;
+  lessonSteps: Record<string, boolean>;
+}
+
+export interface ImportResult {
+  ok: boolean;
+  /** Translation key describing the failure, when `ok` is false. */
+  errorKey?: string;
+  exercises: number;
+  lessons: number;
+}
+
+function isProgressExport(data: unknown): data is ProgressExport {
+  if (!data || typeof data !== 'object') return false;
+  const d = data as Partial<ProgressExport>;
+  return (
+    d.kind === 'learning-platform-progress' &&
+    typeof d.exercises === 'object' &&
+    d.exercises !== null &&
+    typeof d.lessonSteps === 'object' &&
+    d.lessonSteps !== null
+  );
 }
 
 const defaultProgress: ExerciseProgress = {
@@ -197,6 +237,39 @@ export const useProgressStore = create<ProgressStore>()(
           delete newExercises[key];
           return { exercises: newExercises };
         });
+      },
+
+      exportProgress: () => ({
+        kind: 'learning-platform-progress',
+        version: PROGRESS_STORE_VERSION,
+        exportedAt: new Date().toISOString(),
+        exercises: get().exercises,
+        lessonSteps: get().lessonSteps,
+      }),
+
+      importProgress: (data, mode = 'merge') => {
+        if (!isProgressExport(data)) {
+          return { ok: false, errorKey: 'progress.importNotRecognised', exercises: 0, lessons: 0 };
+        }
+        if (data.version > PROGRESS_STORE_VERSION) {
+          return { ok: false, errorKey: 'progress.importNewerVersion', exercises: 0, lessons: 0 };
+        }
+
+        set((state) => ({
+          // Merge is the default: importing a file from another machine should
+          // add to what's here, not silently discard it. Incoming entries win
+          // on conflict — the user chose that file deliberately.
+          exercises:
+            mode === 'replace' ? data.exercises : { ...state.exercises, ...data.exercises },
+          lessonSteps:
+            mode === 'replace' ? data.lessonSteps : { ...state.lessonSteps, ...data.lessonSteps },
+        }));
+
+        return {
+          ok: true,
+          exercises: Object.keys(data.exercises).length,
+          lessons: Object.keys(data.lessonSteps).length,
+        };
       },
     }),
     {

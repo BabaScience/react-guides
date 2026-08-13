@@ -17,7 +17,10 @@
     "completeModule": "Completa Modulo ✓",
     "startLearning": "Inizia a Imparare",
     "readLesson": "Leggi Lezione",
-    "startExercises": "Inizia Esercizi →"
+    "startExercises": "Inizia Esercizi →",
+    "skipToContent": "Vai al contenuto",
+    "breadcrumb": "Percorso di navigazione",
+    "changeLanguage": "Cambia lingua — attualmente {{language}}"
   },
   "dashboard": {
     "stepsCompleted": "{{completed}}/{{total}} passi completati",
@@ -31,7 +34,8 @@
     "locked": "🔒 Completa il modulo precedente per sbloccare",
     "learningPath": "Percorso di Apprendimento",
     "comingSoonMessage": "Prossimamente — gli esercizi per questo modulo non sono ancora disponibili.",
-    "soon": "Presto"
+    "soon": "Presto",
+    "stepsCompletedIn": "Passaggi completati in {{module}}"
   },
   "step": {
     "lesson": "Lezione",
@@ -86,11 +90,19 @@
   },
   "sidebar": {
     "expand": "Espandi barra laterale",
-    "collapse": "Comprimi barra laterale"
+    "collapse": "Comprimi barra laterale",
+    "chooseTrack": "Scegli un percorso",
+    "modulesIn": "Moduli {{track}}",
+    "searchModules": "Cerca moduli",
+    "searchPlaceholder": "Cerca un modulo…",
+    "searchResults_one": "{{count}} modulo",
+    "searchResults_other": "{{count}} moduli"
   },
   "common": {
     "copy": "Copia",
-    "code": "codice"
+    "code": "codice",
+    "copyCode": "Copia il codice",
+    "copied": "Copiato"
   },
   "errors": {
     "failedToLoadLesson": "Impossibile caricare il contenuto della lezione",
@@ -1516,5 +1528,13 @@
         ]
       }
     }
+  },
+  "progress": {
+    "export": "Esporta",
+    "import": "Importa",
+    "exported": "Progressi scaricati",
+    "imported": "Importati {{exercises}} esercizi e {{lessons}} lezioni",
+    "importNotRecognised": "Questo file non è un export dei progressi",
+    "importNewerVersion": "Questo file proviene da una versione più recente della piattaforma"
   }
 }
