@@ -369,7 +369,8 @@
       "forms-controlled": "Forms and Controlled Components",
       "contact-form": "Exercise: ContactForm",
       "filtered-list": "Exercise: FilteredList",
-      "fundamentals-summary": "Recap: What You Just Learned"
+      "fundamentals-summary": "Recap: What You Just Learned",
+      "checkpoint": "Checkpoint: React Fundamentals"
     },
     "02-hooks": {
       "understanding-hooks": "Understanding Hooks",
@@ -1536,5 +1537,20 @@
     "imported": "Imported {{exercises}} exercises and {{lessons}} lessons",
     "importNotRecognised": "That file isn't a progress export",
     "importNewerVersion": "That file was made by a newer version of the platform"
+  },
+  "quiz": {
+    "checkpoint": "Checkpoint",
+    "title": "Check what stuck",
+    "intro_one": "{{count}} question. Answer, then see why.",
+    "intro_other": "{{count}} questions. Answer them, then see why.",
+    "selectAll": "Select all that apply",
+    "answered": "{{answered}} of {{total}} answered",
+    "check": "Check answers",
+    "retry": "Try again",
+    "score": "You got {{correct}} of {{total}}",
+    "right": "Right",
+    "notQuite": "Not quite",
+    "correctLabel": "correct",
+    "empty": "This checkpoint has no questions yet."
   }
 }

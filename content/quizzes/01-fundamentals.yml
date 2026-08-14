@@ -1,0 +1,233 @@
+# Checkpoint quiz — 01-fundamentals
+#
+# Text is inline here, in every locale, rather than split across the locale
+# JSONs. A question, its options and its explanation are one unit; separating
+# them by key path is exactly the drift this project has been removing, and a
+# translator needs to see the question to translate the answers.
+#
+# `en` is required. A missing locale falls back to English, the same way an
+# untranslated chapter does.
+#
+# A question with more than one `correct: true` option is answered as a
+# multi-select; the view works that out rather than making you declare it.
+
+module: 01-fundamentals
+
+questions:
+  - id: jsx-compiles-to
+    prompt:
+      en: What does JSX actually become once it is compiled?
+      fr: En quoi le JSX est-il réellement transformé une fois compilé ?
+      it: In cosa si trasforma davvero il JSX una volta compilato?
+    options:
+      - id: create-element
+        correct: true
+        text:
+          en: Calls to `React.createElement()`
+          fr: Des appels à `React.createElement()`
+          it: Chiamate a `React.createElement()`
+      - id: html-string
+        text:
+          en: An HTML string that is inserted into the page
+          fr: Une chaîne HTML insérée dans la page
+          it: Una stringa HTML inserita nella pagina
+      - id: dom-nodes
+        text:
+          en: Real DOM nodes, created immediately
+          fr: De vrais nœuds DOM, créés immédiatement
+          it: Veri nodi DOM, creati immediatamente
+    explanation:
+      en: >-
+        JSX is syntax sugar. `<h1>Hi</h1>` becomes `React.createElement('h1',
+        null, 'Hi')`, which returns a plain object describing what to render —
+        not DOM. React decides when and whether to touch the real DOM.
+      fr: >-
+        Le JSX est du sucre syntaxique. `<h1>Hi</h1>` devient
+        `React.createElement('h1', null, 'Hi')`, qui renvoie un simple objet
+        décrivant ce qu'il faut rendre — pas du DOM. C'est React qui décide
+        quand toucher au DOM réel.
+      it: >-
+        Il JSX è zucchero sintattico. `<h1>Hi</h1>` diventa
+        `React.createElement('h1', null, 'Hi')`, che restituisce un semplice
+        oggetto che descrive cosa rendere — non DOM. È React a decidere quando
+        toccare il DOM reale.
+
+  - id: props-are-readonly
+    prompt:
+      en: A component receives `props.title`. Which statements are true?
+      fr: Un composant reçoit `props.title`. Quelles affirmations sont vraies ?
+      it: Un componente riceve `props.title`. Quali affermazioni sono vere?
+    options:
+      - id: readonly
+        correct: true
+        text:
+          en: The component must not modify it
+          fr: Le composant ne doit pas le modifier
+          it: Il componente non deve modificarlo
+      - id: parent-owns
+        correct: true
+        text:
+          en: Only the parent can change what is passed down
+          fr: Seul le parent peut changer ce qui est transmis
+          it: Solo il genitore può cambiare ciò che viene passato
+      - id: rerender-on-mutate
+        text:
+          en: Assigning to it re-renders the component
+          fr: Lui assigner une valeur provoque un nouveau rendu
+          it: Assegnarle un valore provoca un nuovo render
+    explanation:
+      en: >-
+        Props flow one way. A component reads them and never writes them —
+        mutating a prop changes nothing on screen because React has no idea it
+        happened. To change what a child sees, change the parent's state.
+      fr: >-
+        Les props circulent dans un seul sens. Un composant les lit sans jamais
+        les écrire — muter une prop ne change rien à l'écran, car React n'en
+        sait rien. Pour changer ce que voit un enfant, changez l'état du parent.
+      it: >-
+        Le props scorrono in una sola direzione. Un componente le legge e non le
+        scrive mai — mutare una prop non cambia nulla a schermo, perché React
+        non se ne accorge. Per cambiare ciò che vede un figlio, cambia lo stato
+        del genitore.
+
+  - id: setstate-is-async
+    prompt:
+      en: >-
+        `count` is 0. You call `setCount(count + 1)` three times in one click
+        handler. What is `count` after the click?
+      fr: >-
+        `count` vaut 0. Vous appelez `setCount(count + 1)` trois fois dans le
+        même gestionnaire de clic. Que vaut `count` après le clic ?
+      it: >-
+        `count` è 0. Chiami `setCount(count + 1)` tre volte nello stesso
+        gestore di clic. Quanto vale `count` dopo il clic?
+    options:
+      - id: one
+        correct: true
+        text: { en: '1', fr: '1', it: '1' }
+      - id: three
+        text: { en: '3', fr: '3', it: '3' }
+      - id: zero
+        text: { en: '0', fr: '0', it: '0' }
+    explanation:
+      en: >-
+        All three calls close over the same `count` of 0, so each one sets it to
+        1. Use the functional form — `setCount(c => c + 1)` — when the next value
+        depends on the previous one; that gives 3.
+      fr: >-
+        Les trois appels capturent le même `count` valant 0 : chacun le met donc
+        à 1. Utilisez la forme fonctionnelle — `setCount(c => c + 1)` — quand la
+        valeur suivante dépend de la précédente ; on obtient alors 3.
+      it: >-
+        Tutte e tre le chiamate catturano lo stesso `count` pari a 0, quindi
+        ognuna lo imposta a 1. Usa la forma funzionale — `setCount(c => c + 1)` —
+        quando il valore successivo dipende dal precedente: così ottieni 3.
+
+  - id: keys-purpose
+    prompt:
+      en: Why does React ask for a `key` when rendering a list?
+      fr: Pourquoi React demande-t-il une `key` lors du rendu d'une liste ?
+      it: Perché React chiede una `key` quando renderizza una lista?
+    options:
+      - id: identity
+        correct: true
+        text:
+          en: To match each item to the same element across re-renders
+          fr: Pour associer chaque élément au même nœud entre deux rendus
+          it: Per associare ogni elemento allo stesso nodo tra un render e l'altro
+      - id: speed-only
+        text:
+          en: Purely as a performance hint; behaviour is unaffected
+          fr: Uniquement comme indice de performance ; le comportement ne change pas
+          it: Solo come suggerimento di performance; il comportamento non cambia
+      - id: css
+        text:
+          en: So the item can be targeted from CSS
+          fr: Pour pouvoir cibler l'élément depuis le CSS
+          it: Per poter selezionare l'elemento dal CSS
+    explanation:
+      en: >-
+        Keys are about identity, not speed. With array indexes as keys,
+        inserting at the top makes React reuse the wrong elements — state such
+        as a typed input value follows the position instead of the item. Use an
+        id that belongs to the data.
+      fr: >-
+        Les clés servent à l'identité, pas à la vitesse. Avec des index de
+        tableau, une insertion en tête pousse React à réutiliser les mauvais
+        éléments : l'état, comme la valeur saisie dans un champ, suit la
+        position au lieu de l'élément. Utilisez un id issu des données.
+      it: >-
+        Le key riguardano l'identità, non la velocità. Con gli indici
+        dell'array, inserire in cima porta React a riutilizzare gli elementi
+        sbagliati: lo stato, come il testo digitato in un input, segue la
+        posizione invece dell'elemento. Usa un id che appartiene ai dati.
+
+  - id: conditional-zero
+    prompt:
+      en: '`{items.length && <List />}` renders a stray `0` when the list is empty. Why?'
+      fr: '`{items.length && <List />}` affiche un `0` parasite quand la liste est vide. Pourquoi ?'
+      it: '`{items.length && <List />}` mostra uno `0` di troppo quando la lista è vuota. Perché?'
+    options:
+      - id: falsy-rendered
+        correct: true
+        text:
+          en: '`&&` returns `0`, and React renders the number 0'
+          fr: '`&&` renvoie `0`, et React affiche le nombre 0'
+          it: '`&&` restituisce `0`, e React mostra il numero 0'
+      - id: react-bug
+        text:
+          en: React cannot render an empty array
+          fr: React ne peut pas rendre un tableau vide
+          it: React non riesce a renderizzare un array vuoto
+      - id: needs-key
+        text:
+          en: The expression is missing a `key`
+          fr: L'expression n'a pas de `key`
+          it: All'espressione manca una `key`
+    explanation:
+      en: >-
+        React skips `false`, `null` and `undefined` — but `0` is a number, so it
+        prints. Write `items.length > 0 && <List />`, or use a ternary.
+      fr: >-
+        React ignore `false`, `null` et `undefined` — mais `0` est un nombre, il
+        s'affiche donc. Écrivez `items.length > 0 && <List />`, ou un ternaire.
+      it: >-
+        React salta `false`, `null` e `undefined` — ma `0` è un numero, quindi
+        viene stampato. Scrivi `items.length > 0 && <List />`, oppure un ternario.
+
+  - id: controlled-input
+    prompt:
+      en: What makes an input "controlled"?
+      fr: Qu'est-ce qui rend un champ « contrôlé » ?
+      it: Che cosa rende un input «controllato»?
+    options:
+      - id: value-plus-onchange
+        correct: true
+        text:
+          en: Its `value` comes from state and `onChange` writes back to that state
+          fr: Sa `value` vient de l'état et `onChange` réécrit dans cet état
+          it: Il suo `value` viene dallo stato e `onChange` riscrive quello stato
+      - id: ref
+        text:
+          en: It is read through a `ref` when the form is submitted
+          fr: Il est lu via une `ref` au moment de la soumission
+          it: Viene letto tramite una `ref` al momento dell'invio
+      - id: required
+        text:
+          en: It has the `required` attribute
+          fr: Il possède l'attribut `required`
+          it: Ha l'attributo `required`
+    explanation:
+      en: >-
+        In a controlled input React owns the value: state renders it, and every
+        keystroke goes through `onChange` back into state. Supplying `value`
+        without `onChange` makes the field read-only — a common first bug.
+      fr: >-
+        Dans un champ contrôlé, React possède la valeur : l'état l'affiche et
+        chaque frappe repasse par `onChange` vers l'état. Fournir `value` sans
+        `onChange` rend le champ en lecture seule — un bug classique du début.
+      it: >-
+        In un input controllato React possiede il valore: lo stato lo mostra e
+        ogni battuta passa da `onChange` per tornare nello stato. Fornire
+        `value` senza `onChange` rende il campo di sola lettura — un errore
+        classico all'inizio.

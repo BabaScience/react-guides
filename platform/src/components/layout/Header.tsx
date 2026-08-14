@@ -164,7 +164,7 @@ function buildBreadcrumbs(pathname: string, t: TFunction): Crumb[] {
         const stepIdx = parseInt(parts[3], 10);
         const step = Number.isInteger(stepIdx) ? mod.steps[stepIdx] : undefined;
         if (step) {
-          crumbs.push({ label: t(`steps.${mod.id}.${step.id}`, step.title) });
+          crumbs.push({ label: t(`steps.${mod.id}.${step.id}`) });
         }
       }
     }

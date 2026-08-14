@@ -40,7 +40,6 @@ const RUNNERS: Record<RunnerId, ExerciseRunner> = {
   'node-webcontainer': plannedRunner('node-webcontainer', 'a Node runtime in the browser'),
   'python-pyodide': plannedRunner('python-pyodide', 'CPython compiled to WebAssembly'),
   'map-interactive': plannedRunner('map-interactive', 'an interactive map component'),
-  quiz: plannedRunner('quiz', 'the quiz format from Phase 3'),
 };
 
 /** Tracks whose exercises are JavaScript-family code graded in this page. */

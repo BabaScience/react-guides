@@ -369,7 +369,8 @@
       "forms-controlled": "Formulaires et Composants Contrôlés",
       "contact-form": "Exercice : ContactForm",
       "filtered-list": "Exercice : FilteredList",
-      "fundamentals-summary": "Récapitulatif : ce que vous venez d'apprendre"
+      "fundamentals-summary": "Récapitulatif : ce que vous venez d'apprendre",
+      "checkpoint": "Point d’étape : fondamentaux de React"
     },
     "02-hooks": {
       "understanding-hooks": "Comprendre les Hooks",
@@ -1536,5 +1537,20 @@
     "imported": "{{exercises}} exercices et {{lessons}} leçons importés",
     "importNotRecognised": "Ce fichier n'est pas un export de progression",
     "importNewerVersion": "Ce fichier provient d’une version plus récente de la plateforme"
+  },
+  "quiz": {
+    "checkpoint": "Point d’étape",
+    "title": "Vérifions ce qui est acquis",
+    "intro_one": "{{count}} question. Répondez, puis voyez pourquoi.",
+    "intro_other": "{{count}} questions. Répondez-y, puis voyez pourquoi.",
+    "selectAll": "Sélectionnez toutes les bonnes réponses",
+    "answered": "{{answered}} sur {{total}} répondues",
+    "check": "Vérifier les réponses",
+    "retry": "Réessayer",
+    "score": "Vous avez {{correct}} bonnes réponses sur {{total}}",
+    "right": "Correct",
+    "notQuite": "Pas tout à fait",
+    "correctLabel": "correcte",
+    "empty": "Ce point d'étape n'a pas encore de questions."
   }
 }

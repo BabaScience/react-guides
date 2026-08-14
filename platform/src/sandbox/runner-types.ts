@@ -10,12 +10,16 @@ import type { TestRunResult } from '@/types/exercise';
  * not a test runner. Adding those tracks without this indirection would mean
  * shipping them read-only.
  */
+/**
+ * `quiz` was listed here when this interface was sketched. Building it showed
+ * the mistake: a quiz isn't graded by running code, so it would have needed a
+ * fake code-shaped request. It is its own step type instead — see `QuizStep`.
+ */
 export type RunnerId =
   | 'react-browser'
   | 'node-webcontainer'
   | 'python-pyodide'
-  | 'map-interactive'
-  | 'quiz';
+  | 'map-interactive';
 
 export interface ExerciseRunRequest {
   /** The learner's code for this exercise, as it appears in the editor. */

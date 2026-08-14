@@ -43,7 +43,7 @@ export function Sidebar() {
       // Step titles too: "useReducer" should find the hooks module even though
       // the module name never says it.
       const steps = mod.steps.some((s) =>
-        t(`steps.${mod.id}.${s.id}`, s.title).toLowerCase().includes(q)
+        t(`steps.${mod.id}.${s.id}`).toLowerCase().includes(q)
       );
       return name.includes(q) || description.includes(q) || steps || mod.id.includes(q);
     });

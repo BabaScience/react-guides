@@ -14,20 +14,54 @@ export interface Exercise {
   componentName: string;
 }
 
+/**
+ * Steps carry identity and wiring only — the title a learner reads comes from
+ * `steps.<module>.<step>` in the locale files, like every other visible string.
+ */
 export interface LessonStep {
   type: 'lesson';
   id: string;
-  title: string;
   sectionHeading: string;
 }
 
 export interface ExerciseStep {
   type: 'exercise';
   id: string;
-  title: string;
 }
 
-export type Step = LessonStep | ExerciseStep;
+/**
+ * A checkpoint. Deliberately *not* an `ExerciseRunner`: a quiz isn't graded by
+ * running code, so routing it through the runner interface would have meant
+ * inventing a code-shaped request for a form. It is its own step type.
+ */
+export interface QuizStep {
+  type: 'quiz';
+  id: string;
+}
+
+export type Step = LessonStep | ExerciseStep | QuizStep;
+
+/** A localized string from a quiz file. `en` is always present. */
+export type LocalizedText = { en: string } & Partial<Record<string, string>>;
+
+export interface QuizOption {
+  id: string;
+  correct: boolean;
+  text: LocalizedText;
+}
+
+export interface QuizQuestion {
+  id: string;
+  prompt: LocalizedText;
+  /** True when more than one option is correct — derived, not authored. */
+  multiple: boolean;
+  options: QuizOption[];
+  explanation: LocalizedText | null;
+}
+
+export interface Quiz {
+  questions: QuizQuestion[];
+}
 
 import type { RunnerId } from '@/sandbox/runner-types';
 
@@ -48,6 +82,8 @@ export interface Module {
    */
   runner?: RunnerId;
   exercises: Exercise[];
+  /** The module's checkpoint quiz, if `content/quizzes/<id>.yml` exists. */
+  quiz?: Quiz;
   steps: Step[];
 }
 

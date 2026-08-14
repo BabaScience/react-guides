@@ -6,6 +6,7 @@ import { useProgressStore } from '@/store/progress-store';
 import { useUIStore } from '@/store/ui-store';
 import { LessonStepView } from './LessonStepView';
 import { ExerciseStepView } from './ExerciseStepView';
+import { QuizStepView } from './QuizStepView';
 
 export function StepView() {
   const { t } = useTranslation();
@@ -54,7 +55,7 @@ export function StepView() {
             {t('step.stepProgress', { current: stepIndex + 1, total: mod.steps.length })}
           </span>
           <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
-            {t(`steps.${mod.id}.${step.id}`, step.title)}
+            {t(`steps.${mod.id}.${step.id}`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -79,17 +80,26 @@ export function StepView() {
 
       {/* Step content */}
       <div className="flex-1 min-h-0 overflow-auto">
-        {step.type === 'lesson' ? (
+        {step.type === 'lesson' && (
           <LessonStepView
             module={mod}
             step={step}
             stepIndex={stepIndex}
             totalSteps={mod.steps.length}
           />
-        ) : (
+        )}
+        {step.type === 'exercise' && (
           <ExerciseStepView
             module={mod}
             exerciseId={step.id}
+            stepIndex={stepIndex}
+            totalSteps={mod.steps.length}
+          />
+        )}
+        {step.type === 'quiz' && (
+          <QuizStepView
+            module={mod}
+            stepId={step.id}
             stepIndex={stepIndex}
             totalSteps={mod.steps.length}
           />

@@ -45,6 +45,7 @@ steps:
   - exercise: filtered-list
   - lesson: fundamentals-summary
     section: "Summary: What You Just Learned"
+  - quiz: checkpoint
 exercises:
   greeting:
     number: 1

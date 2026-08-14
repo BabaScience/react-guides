@@ -29,7 +29,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const ROOT = path.resolve(__dirname, '..');
 const PLATFORM = path.join(ROOT, 'platform');
 const MODULES_DIR = path.join(ROOT, 'content', 'modules');
+const QUIZZES_DIR = path.join(ROOT, 'content', 'quizzes');
 const MANIFEST_PATH = path.join(PLATFORM, 'src', 'data', 'manifest.json');
+
+/** Locales a quiz may supply. `en` is required; the rest fall back to it. */
+const QUIZ_LOCALES = ['en', 'fr', 'it'];
 
 const require = createRequire(path.join(PLATFORM, 'package.json'));
 const YAML = require('yaml');
@@ -45,7 +49,6 @@ const RUNNERS = [
   'node-webcontainer',
   'python-pyodide',
   'map-interactive',
-  'quiz',
 ];
 
 /** H2 headings of a markdown file, in document order. */
@@ -55,6 +58,86 @@ export function guideHeadings(absPath) {
     .split('\n')
     .filter((line) => line.startsWith('## '))
     .map((line) => line.replace(/^## /, '').trim());
+}
+
+/**
+ * Compile a module's checkpoint quiz, if it has one.
+ *
+ * Quiz text is inline and multi-locale: a question, its options and its
+ * explanation are one unit, and splitting them across the locale JSONs by key
+ * path is the drift pattern this project has been removing. `en` is required;
+ * other locales fall back to it, exactly like an untranslated chapter.
+ */
+function compileQuiz(moduleId, fail) {
+  const file = path.join(QUIZZES_DIR, `${moduleId}.yml`);
+  if (!fs.existsSync(file)) return null;
+  const rel = `quizzes/${moduleId}.yml`;
+
+  let doc;
+  try {
+    doc = YAML.parse(fs.readFileSync(file, 'utf8'));
+  } catch (e) {
+    fail(rel, `invalid YAML — ${e.message}`);
+    return null;
+  }
+  if (!doc || !Array.isArray(doc.questions) || doc.questions.length === 0) {
+    fail(rel, 'needs a non-empty `questions:` list');
+    return null;
+  }
+  if (doc.module !== moduleId) fail(rel, `module: "${doc.module}" does not match the filename`);
+
+  /** Normalise a localized string to `{ en, fr?, it? }`, requiring English. */
+  const text = (value, where) => {
+    if (typeof value === 'string') return { en: value };
+    if (!value || typeof value !== 'object' || typeof value.en !== 'string') {
+      fail(rel, `${where} needs at least an \`en:\` string`);
+      return { en: '' };
+    }
+    const out = {};
+    for (const locale of QUIZ_LOCALES) {
+      if (typeof value[locale] === 'string') out[locale] = value[locale];
+    }
+    return out;
+  };
+
+  const seen = new Set();
+  const questions = doc.questions.map((q, i) => {
+    const where = `questions[${i}]`;
+    if (typeof q?.id !== 'string') fail(rel, `${where} needs an id`);
+    else if (seen.has(q.id)) fail(rel, `duplicate question id "${q.id}"`);
+    else seen.add(q.id);
+
+    const options = Array.isArray(q?.options) ? q.options : [];
+    if (options.length < 2) fail(rel, `${where} ("${q?.id}") needs at least two options`);
+    const correct = options.filter((o) => o?.correct === true);
+    if (correct.length === 0)
+      fail(rel, `${where} ("${q?.id}") has no option marked \`correct: true\``);
+    if (correct.length === options.length)
+      fail(rel, `${where} ("${q?.id}") marks every option correct`);
+
+    const optionIds = new Set();
+    for (const [j, o] of options.entries()) {
+      if (typeof o?.id !== 'string') fail(rel, `${where}.options[${j}] needs an id`);
+      else if (optionIds.has(o.id)) fail(rel, `${where} has duplicate option id "${o.id}"`);
+      else optionIds.add(o.id);
+    }
+
+    return {
+      id: q?.id ?? `question-${i}`,
+      prompt: text(q?.prompt, `${where}.prompt`),
+      // More than one correct answer means multi-select; the view reads this
+      // rather than making authors declare a type that can contradict itself.
+      multiple: correct.length > 1,
+      options: options.map((o, j) => ({
+        id: o?.id ?? `option-${j}`,
+        correct: o?.correct === true,
+        text: text(o?.text, `${where}.options[${j}].text`),
+      })),
+      explanation: q?.explanation ? text(q.explanation, `${where}.explanation`) : null,
+    };
+  });
+
+  return { questions };
 }
 
 /**
@@ -114,13 +197,16 @@ export function buildManifest() {
     const claimed = new Map(); // heading -> step id
     const compiledSteps = [];
 
+    const quiz = compileQuiz(doc.id, fail);
+
     for (const [i, step] of steps.entries()) {
       const where = `steps[${i}]`;
       const isLesson = typeof step.lesson === 'string';
       const isExercise = typeof step.exercise === 'string';
+      const isQuiz = typeof step.quiz === 'string';
 
-      if (isLesson === isExercise) {
-        fail(file, `${where} must have exactly one of "lesson" or "exercise"`);
+      if ([isLesson, isExercise, isQuiz].filter(Boolean).length !== 1) {
+        fail(file, `${where} must have exactly one of "lesson", "exercise" or "quiz"`);
         continue;
       }
 
@@ -130,6 +216,15 @@ export function buildManifest() {
           continue;
         }
         compiledSteps.push({ type: 'exercise', id: step.exercise });
+        continue;
+      }
+
+      if (isQuiz) {
+        if (!quiz) {
+          fail(file, `${where} adds a quiz step but content/quizzes/${doc.id}.yml does not exist`);
+          continue;
+        }
+        compiledSteps.push({ type: 'quiz', id: step.quiz });
         continue;
       }
 
@@ -173,6 +268,14 @@ export function buildManifest() {
       }
     }
 
+    // A quiz nobody can reach is the same failure as an unreachable section.
+    if (quiz && !compiledSteps.some((s) => s.type === 'quiz')) {
+      fail(
+        file,
+        `content/quizzes/${doc.id}.yml exists but no step references it — add a "- quiz: <id>" entry`
+      );
+    }
+
     // --- exercises must all be reachable from the timeline
     const stepExerciseIds = compiledSteps.filter((s) => s.type === 'exercise').map((s) => s.id);
     for (const id of Object.keys(exercises)) {
@@ -192,6 +295,7 @@ export function buildManifest() {
       ...(doc.runner ? { runner: doc.runner } : {}),
       guideFile: doc.guide ?? '',
       exerciseDir: doc.exerciseDir ?? '',
+      ...(quiz ? { quiz } : {}),
       steps: compiledSteps,
       exercises: Object.entries(exercises)
         .map(([id, ex]) => ({ id, number: ex.number, componentName: ex.componentName }))

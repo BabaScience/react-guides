@@ -369,7 +369,8 @@
       "forms-controlled": "Form e Componenti Controllati",
       "contact-form": "Esercizio: ContactForm",
       "filtered-list": "Esercizio: FilteredList",
-      "fundamentals-summary": "Riepilogo: cosa hai imparato"
+      "fundamentals-summary": "Riepilogo: cosa hai imparato",
+      "checkpoint": "Checkpoint: fondamenti di React"
     },
     "02-hooks": {
       "understanding-hooks": "Comprendere gli Hook",
@@ -1536,5 +1537,20 @@
     "imported": "Importati {{exercises}} esercizi e {{lessons}} lezioni",
     "importNotRecognised": "Questo file non è un export dei progressi",
     "importNewerVersion": "Questo file proviene da una versione più recente della piattaforma"
+  },
+  "quiz": {
+    "checkpoint": "Checkpoint",
+    "title": "Verifica cosa è rimasto",
+    "intro_one": "{{count}} domanda. Rispondi, poi scopri il perché.",
+    "intro_other": "{{count}} domande. Rispondi, poi scopri il perché.",
+    "selectAll": "Seleziona tutte le risposte corrette",
+    "answered": "{{answered}} di {{total}} completate",
+    "check": "Verifica le risposte",
+    "retry": "Riprova",
+    "score": "Hai indovinato {{correct}} su {{total}}",
+    "right": "Corretto",
+    "notQuite": "Non proprio",
+    "correctLabel": "corretta",
+    "empty": "Questo checkpoint non ha ancora domande."
   }
 }

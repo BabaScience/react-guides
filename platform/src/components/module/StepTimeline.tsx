@@ -54,6 +54,7 @@ interface StepItemProps {
 function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast }: StepItemProps) {
   const { t } = useTranslation();
   const isExercise = step.type === 'exercise';
+  const isQuiz = step.type === 'quiz';
 
   const content = (
     <div className="flex items-start gap-3">
@@ -70,7 +71,9 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
                 : 'bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-400 dark:text-gray-500'
           }`}
         >
-          {complete ? '✓' : isExercise ? '⚡' : '📖'}
+          <span aria-hidden="true">
+            {complete ? '✓' : isExercise ? '⚡' : isQuiz ? '✓?' : '📖'}
+          </span>
         </div>
         {!isLast && (
           <div
@@ -91,16 +94,18 @@ function StepItem({ step, index, moduleId, complete, isCurrent, isLocked, isLast
                   : 'text-gray-500'
             }`}
           >
-            {t(`steps.${moduleId}.${step.id}`, step.title)}
+            {t(`steps.${moduleId}.${step.id}`)}
           </span>
           <span
             className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
               isExercise
                 ? 'bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
+                : isQuiz
+                  ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300'
+                  : 'bg-gray-100 dark:bg-gray-800 text-gray-500'
             }`}
           >
-            {isExercise ? t('step.exercise') : t('step.lesson')}
+            {isExercise ? t('step.exercise') : isQuiz ? t('quiz.checkpoint') : t('step.lesson')}
           </span>
           {complete && (
             <span className="text-[10px] text-emerald-500">{t('status.complete')}</span>

@@ -7,9 +7,27 @@ import { modules } from '@/data/modules';
 /** Bump when the persisted shape changes, and add a `migrate` branch for it. */
 const PROGRESS_STORE_VERSION = 1;
 
+/** What a learner scored on a checkpoint quiz, and what they chose. */
+export interface QuizResult {
+  /** `questionId` → selected option ids. */
+  answers: Record<string, string[]>;
+  correct: number;
+  total: number;
+  completedAt: string;
+}
+
 interface ProgressStore {
   exercises: Record<string, ExerciseProgress>;
   lessonSteps: Record<string, boolean>;
+  /**
+   * `moduleId/stepId` → result. A new key on an existing store: zustand's
+   * persist merges the initial state under whatever it loads, so older saves
+   * pick up `{}` without needing a version bump.
+   */
+  quizResults: Record<string, QuizResult>;
+  getQuizResult: (moduleId: string, stepId: string) => QuizResult | null;
+  saveQuizResult: (moduleId: string, stepId: string, result: Omit<QuizResult, 'completedAt'>) => void;
+  resetQuiz: (moduleId: string, stepId: string) => void;
   getExerciseProgress: (moduleId: string, exerciseId: string) => ExerciseProgress;
   getExerciseStatus: (moduleId: string, exerciseId: string) => ExerciseStatus;
   isModuleUnlocked: (moduleId: string) => boolean;
@@ -49,6 +67,7 @@ export interface ProgressExport {
   exportedAt: string;
   exercises: Record<string, ExerciseProgress>;
   lessonSteps: Record<string, boolean>;
+  quizResults: Record<string, QuizResult>;
 }
 
 export interface ImportResult {
@@ -87,6 +106,28 @@ export const useProgressStore = create<ProgressStore>()(
     (set, get) => ({
       exercises: {},
       lessonSteps: {},
+      quizResults: {},
+
+      getQuizResult: (moduleId, stepId) => get().quizResults[getKey(moduleId, stepId)] ?? null,
+
+      saveQuizResult: (moduleId, stepId, result) => {
+        const key = getKey(moduleId, stepId);
+        set((state) => ({
+          quizResults: {
+            ...state.quizResults,
+            [key]: { ...result, completedAt: new Date().toISOString() },
+          },
+        }));
+      },
+
+      resetQuiz: (moduleId, stepId) => {
+        const key = getKey(moduleId, stepId);
+        set((state) => {
+          const next = { ...state.quizResults };
+          delete next[key];
+          return { quizResults: next };
+        });
+      },
 
       getExerciseProgress: (moduleId, exerciseId) => {
         return get().exercises[getKey(moduleId, exerciseId)] ?? defaultProgress;
@@ -141,22 +182,21 @@ export const useProgressStore = create<ProgressStore>()(
         if (!mod) return { completed: 0, total: 0 };
 
         const completed = mod.steps.filter((step) => {
-          if (step.type === 'lesson') {
-            return get().lessonSteps[getKey(moduleId, step.id)] === true;
-          }
-          const progress = get().exercises[getKey(moduleId, step.id)];
-          return progress?.status === 'passed';
+          const key = getKey(moduleId, step.id);
+          if (step.type === 'lesson') return get().lessonSteps[key] === true;
+          if (step.type === 'quiz') return get().quizResults[key] !== undefined;
+          return get().exercises[key]?.status === 'passed';
         }).length;
 
         return { completed, total: mod.steps.length };
       },
 
       isStepComplete: (moduleId, stepId) => {
-        // Check lesson steps first
-        if (get().lessonSteps[getKey(moduleId, stepId)] === true) return true;
-        // Check exercise steps
-        const progress = get().exercises[getKey(moduleId, stepId)];
-        return progress?.status === 'passed';
+        const key = getKey(moduleId, stepId);
+        // Step ids are unique within a module, so one lookup per kind is enough.
+        if (get().lessonSteps[key] === true) return true;
+        if (get().quizResults[key] !== undefined) return true;
+        return get().exercises[key]?.status === 'passed';
       },
 
       isLessonComplete: (moduleId, stepId) => {
@@ -245,6 +285,7 @@ export const useProgressStore = create<ProgressStore>()(
         exportedAt: new Date().toISOString(),
         exercises: get().exercises,
         lessonSteps: get().lessonSteps,
+        quizResults: get().quizResults,
       }),
 
       importProgress: (data, mode = 'merge') => {
@@ -255,6 +296,9 @@ export const useProgressStore = create<ProgressStore>()(
           return { ok: false, errorKey: 'progress.importNewerVersion', exercises: 0, lessons: 0 };
         }
 
+        // Files written before quizzes existed have no `quizResults`.
+        const incomingQuizzes = data.quizResults ?? {};
+
         set((state) => ({
           // Merge is the default: importing a file from another machine should
           // add to what's here, not silently discard it. Incoming entries win
@@ -263,6 +307,8 @@ export const useProgressStore = create<ProgressStore>()(
             mode === 'replace' ? data.exercises : { ...state.exercises, ...data.exercises },
           lessonSteps:
             mode === 'replace' ? data.lessonSteps : { ...state.lessonSteps, ...data.lessonSteps },
+          quizResults:
+            mode === 'replace' ? incomingQuizzes : { ...state.quizResults, ...incomingQuizzes },
         }));
 
         return {

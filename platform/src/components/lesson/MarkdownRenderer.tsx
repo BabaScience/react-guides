@@ -104,6 +104,35 @@ const components: Components = {
   },
 };
 
+// Short strings that live inside an existing text element — a quiz prompt in a
+// <legend>, an answer option in a <span>. Only the inline marks are supported,
+// and <p> renders transparently so nothing block-level lands inside a phrase.
+const inlineComponents: Components = {
+  p({ children }) {
+    return <>{children}</>;
+  },
+  code({ children, ...props }) {
+    return (
+      <code
+        className="bg-gray-100 dark:bg-gray-800 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded text-[0.9em]"
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  },
+  strong: components.strong,
+  a: components.a,
+};
+
+export function InlineMarkdown({ content }: MarkdownRendererProps) {
+  return (
+    <ReactMarkdown remarkPlugins={[remarkGfm]} components={inlineComponents}>
+      {content}
+    </ReactMarkdown>
+  );
+}
+
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   return (
     <div className="max-w-4xl mx-auto">
