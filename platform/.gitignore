@@ -1,3 +1,5 @@
 node_modules
 dist
 public/raw
+# Built by `npm run sandbox:build` (vite.sandbox.config.ts).
+public/sandbox-host.js

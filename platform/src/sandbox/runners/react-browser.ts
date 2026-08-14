@@ -1,19 +1,21 @@
 import { reassembleFullCode } from '@/sandbox/exercise-extractor';
 import { withLoopGuard } from '@/sandbox/loop-guard';
-import { runTestsInSandbox } from '@/sandbox/test-runner';
+import { transpile } from '@/sandbox/transpiler';
+import { runInIsolatedFrame } from '@/sandbox/isolated-frame';
 import { failureResult, type ExerciseRunner, type ExerciseRunRequest } from '@/sandbox/runner-types';
 import type { TestRunResult } from '@/types/exercise';
 
 /**
- * Grades React / React Native / JavaScript exercises in this page.
+ * Grades React / React Native / JavaScript exercises.
  *
  * Exercises for these tracks share one file split by `// EXERCISE N:` banners,
  * so the learner's block is spliced back into the full stub before running —
  * the spec imports the module as a whole and the other exports must still exist.
  *
- * Isolation note: execution is `(0, eval)` in the main window, not a sandbox.
- * That is acceptable while the only code being run is code the learner typed.
- * See `isolationLevel` below and PLAN.md for what changes that.
+ * The work is split across the origin boundary: this side reassembles,
+ * loop-guards and transpiles (so a compile error is reported with the context
+ * the learner needs), and an isolated frame executes. See `isolated-frame.ts`
+ * for why the frame is shaped the way it is.
  */
 
 /**
@@ -70,8 +72,37 @@ export const reactBrowserRunner: ExerciseRunner = {
       'Your code ran too long — check for a loop that never ends.'
     );
 
-    // Covers everything the guard cannot: a runaway `setInterval`, a promise
-    // that never settles, an `await` on a request that hangs.
+    // Transpiling here rather than in the frame keeps Sucrase out of the
+    // sandbox bundle, and lets a compile error name which file it came from.
+    let compiledUser: string;
+    let compiledSpec: string;
+    try {
+      compiledUser = await transpile(guarded, 'index.tsx');
+    } catch (e) {
+      return failureResult('Compilation Error in your code', e);
+    }
+    try {
+      compiledSpec = await transpile(spec, 'index.test.tsx');
+    } catch (e) {
+      return failureResult('Compilation Error in test file', e);
+    }
+
+    let frame: { result: Promise<TestRunResult>; dispose: () => void };
+    try {
+      frame = await runInIsolatedFrame({
+        userCode: compiledUser,
+        spec: compiledSpec,
+        exerciseNumber,
+        timeoutMs,
+      });
+    } catch (e) {
+      return failureResult('Could not start the exercise runner', e);
+    }
+
+    // Covers everything the loop guard cannot: a runaway `setInterval`, a
+    // promise that never settles, an `await` on a request that hangs. Unlike
+    // the old in-page race, `dispose()` in the `finally` actually ends the
+    // work — tearing down the frame takes its timers and promises with it.
     let watchdog: number | undefined;
     const deadline = new Promise<TestRunResult>((resolve) => {
       watchdog = window.setTimeout(
@@ -81,11 +112,12 @@ export const reactBrowserRunner: ExerciseRunner = {
     });
 
     try {
-      return await Promise.race([runTestsInSandbox(guarded, spec, exerciseNumber), deadline]);
+      return await Promise.race([frame.result, deadline]);
     } catch (e) {
       return failureResult('Could not run tests', e);
     } finally {
       if (watchdog !== undefined) window.clearTimeout(watchdog);
+      frame.dispose();
     }
   },
 };

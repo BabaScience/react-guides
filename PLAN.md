@@ -5,11 +5,19 @@ the safety net comes first so nothing regresses while the rest is fixed.
 
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
-**Phases 0, 1 and 2 are complete.** Phase 3 (pedagogy) and Phase 4 (new tracks)
-remain. Gate at the time of writing: `npm run manifest` → *57 modules, 384 steps,
-67 exercises* · `npm run validate` → *Content valid, 2 warnings* (both the
-documented JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0 errors ·
-`npm run build` → succeeds, entry chunk 528 KB / 172 KB gzip, 62 chunks.
+**Phases 0, 1 and 2 are complete**, P2.2 included — grading now runs in an
+isolated frame. Phase 3 (pedagogy) is started: P3.1 has its machinery and one
+module's content. Phase 4 (new tracks) has not begun.
+
+Gate, re-run against the current tree: `npm run manifest` → *57 modules, 385
+steps, 67 exercises* · `npm run validate` → *Content valid, 2 warnings* (both
+the documented JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0
+errors · `npm run build` → succeeds, entry chunk 532 KB / 172 KB gzip, 60
+chunks, `dist/assets` 17 MB.
+
+`npm run dev` and `npm run build` both run `sandbox:build` first (via `predev` /
+`prebuild`), so `public/sandbox-host.js` is never stale. Editing anything under
+`sandbox-host/` while a dev server is already running needs a restart.
 
 ---
 
@@ -157,7 +165,7 @@ hatch in `progress-store.ts` was built to work around. The last 1/4 is the
 `toHaveBeenCalledWith` now reports what the mock *was* called with, not only what
 was expected — that is how the remaining failure was diagnosed.
 
-### [~] P2.2 — Sandbox hardening
+### [x] P2.2 — Sandbox hardening
 
 **Done — `/raw` middleware allowlist.** The dev middleware bypassed Vite's own
 `server.fs` guard and resolved any path under the repo root: `GET
@@ -168,10 +176,12 @@ allowlist and decode-then-resolve traversal checks. Verified: `.git/config`,
 `package.json` and `%2e%2e` traversal all fall through; real content still
 serves.
 
-**Done — the flush moved to where it belongs.** `act` is now a plain
-pass-through and the single `flushSync` lives in the runner's `render`
+**Done — the flush moved to where it belongs.** `act` became a plain
+pass-through and the single `flushSync` moved into the runner's `render`
 interceptor. Same results as the P2.1 fix (3/3, 3/4) with a much clearer
-rationale, and event dispatch is no longer wrapped in a sync flush.
+rationale, and event dispatch was no longer wrapped in a sync flush.
+*(Superseded: the isolated frame runs development React, whose `act()` works,
+so both the pass-through and the interceptor are gone — see below.)*
 
 **Tried and rejected — pinning `IS_REACT_ACT_ENVIRONMENT` to false.**
 The suspicion was right in principle: TL sets that flag around every render,
@@ -180,18 +190,61 @@ But forcing it false makes TL's `asyncWrapper` await something that never
 settles, and the whole run hangs. Recorded in test-runner.ts so nobody
 re-derives it.
 
-**Deferred into P2.6 — iframe isolation + execution timeout.** Deliberately,
-not for lack of time:
-- A same-origin iframe shares the event loop, so `while (true)` still freezes
-  the tab. A cross-origin one cannot load our modules without CORS. Neither
-  gives the watchdog its stated purpose, so an iframe built now would deliver
-  isolation but not the timeout.
-- The remaining `user-event` gap needs a context with React's **development**
-  build, which means a separate execution context with its own module graph —
-  exactly what the runner interface in P2.6 has to define anyway.
-- Node (WebContainers) and Python (Pyodide) bring their own isolated contexts.
-  Designing the host once, in P2.6, avoids building a React-only iframe and
-  then rebuilding it.
+**Done — real isolation.** Grading runs in an
+`<iframe sandbox="allow-scripts allow-forms">`. Omitting `allow-same-origin` is
+the whole mechanism: it puts the frame on an **opaque origin**, so learner code
+gets a `SecurityError` for `localStorage` (which holds every solved exercise and
+every line of saved code) and for `parent.document`. Verified through the real
+runner, not a mock — a solution that reads either one fails the exercise with
+`ISOLATION LEAK`; it passes 3/3, so both were blocked.
+
+The deferral above assumed this needed "a deployment change" — a second origin
+to serve the sandbox from. **It doesn't, and that assumption was the only thing
+keeping the work parked.** An opaque origin is already cross-origin to the
+parent, and the CORS problem disappears if nothing is ever fetched *from* the
+frame: the parent fetches the runtime (an ordinary same-origin request) and
+hands it over as inline text in `srcdoc`.
+
+- `sandbox-host/main.ts` + `vite.sandbox.config.ts` build one self-contained
+  IIFE to `public/sandbox-host.js`, carrying React's **development** build.
+  Emitted into `public/` so dev and prod load it by the identical path —
+  §4.2(b) was a bug that existed only because the two resolved differently.
+- `src/sandbox/isolated-frame.ts` owns the frame, handshake and RPC. Each run
+  gets a fresh frame, and `dispose()` is now a real kill switch: tearing down
+  the frame takes its timers and pending promises with it, which the in-page
+  `Promise.race` never could.
+- `test-runner.ts` (317 lines) is deleted, and with it the
+  `patch-testing-library-act` Vite plugin, the `flushSync` render interceptor
+  and the `test-root` + `screen` Proxy scoping. The frame's body holds the
+  render output and nothing else, so TL's own `screen` is correctly scoped.
+  `@testing-library` is now absent from the app bundle entirely: 63 → 60
+  chunks, `dist/assets` 18 MB → 17 MB, entry chunk unchanged at 172 KB gzip.
+
+Two things the browser enforces that the design had to answer for:
+`allow-forms` is required or the browser blocks form submission outright and
+every controlled-form spec fails with "onSubmit was never called"; and the
+frame must be genuinely laid out and visible (off-screen, not `display:none`
+or 0×0), because user-event v14 refuses to type into an element it computes as
+invisible — that one cost 23s per keystroke and an input whose value never
+changed.
+
+**Disproved — the `user-event` gap is not about production `act()`.** The
+premise below, repeated in P2.6, was that the last failing case needs React's
+development build. The frame now *has* one — verified in the built bundle: no
+`Minified React error` strings, dev-only diagnostics present, and the
+"act is not supported in production builds" throw path absent. Module 01
+exercise 7 still scores exactly 3/4, failing the same case in the same way
+(`onSubmit` receives `{name: "", email: ""}` while the DOM shows the typed
+values). Setting `IS_REACT_ACT_ENVIRONMENT` before React initialises, rather
+than after, changes nothing either. Whatever causes it, a real `act()` is not
+the missing piece — so that lead is closed, and the next attempt should start
+somewhere else.
+
+**Still open — `LivePreview` is not isolated.** ANALYSIS.md §4.5 names two
+call sites; this closed the grading one. `LivePreview.tsx` still evaluates
+learner code in the main window. It renders into the page, so moving it behind
+the frame is a UI change (render inside the frame, show the frame) rather than
+a swap of the execution path.
 
 ### [x] P2.3 — Design system + a11y
 `Button` adopted for every real button (Run Tests, Mark complete, Reset ×2); `Badge`
@@ -323,20 +376,34 @@ Verified in a production build: a correct solution passes 3/3, a `while (true)`
 reports the loop message in ~7s, and the `user-event` exercise still scores its
 3/4 baseline — no regression from routing through the runner.
 
-**Still not done: real isolation.** Execution is `(0, eval)` in the main window.
-An iframe would give a separate realm but not a killable one — same-origin
-frames share the event loop, and a cross-origin frame can't load the app's
-modules without serving the sandbox from its own origin. That is a deployment
-change, and it is also what would finally allow React's **development** build in
-the sandbox, closing the last `user-event` gap. Both belong to the same piece of
-work; neither is blocking a new track, because Node and Python runners bring
-their own isolated contexts.
+**Done in P2.2: real isolation.** Execution was `(0, eval)` in the main window
+when this was written. It now runs in an opaque-origin frame carrying
+development React — no deployment change was needed, and the frame *is*
+killable. The prediction that this would close the last `user-event` gap turned
+out to be wrong; see P2.2 for what was measured.
 
 ---
 
 ## Phase 3 — Close the pedagogy gap
 
-### [ ] P3.1 — Quizzes (`quiz.yml` per module, 5–8 questions, instant feedback)
+### [~] P3.1 — Quizzes (5–8 questions, instant feedback)
+Machinery done, content barely started: **1 of 57 modules has a quiz.**
+
+Text lives inline in `content/quizzes/<module>.yml`, all locales together — a
+question, its options and its explanation are one unit, and splitting them
+across the locale JSONs by key path is the drift this project has been
+removing. `en` is required; a missing locale falls back to it. A question with
+more than one `correct: true` option is answered as a multi-select, worked out
+by the view rather than declared.
+
+The compiler enforces the correspondence in both directions, the same invariant
+as P2.5: a step referencing a missing quiz file fails the build, and so does a
+quiz file no step references — an unreachable quiz is the same failure as an
+unreachable section.
+
+`quiz` was dropped from `RunnerId`. It was listed there when the runner
+interface was sketched; building it showed a quiz isn't graded by running code
+and would have needed a fake code-shaped request. It is its own step type.
 ### [ ] P3.2 — Mini-projects per module + one capstone per track
 ### [ ] P3.3 — Reference solutions revealed after passing
 ### [ ] P3.4 — Time estimates, difficulty, prerequisites graph

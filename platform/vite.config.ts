@@ -7,47 +7,6 @@ export default defineConfig({
   plugins: [
     react(),
     {
-      // React's production build ships an `act()` that throws
-      // "act(...) is not supported in production builds of React." But
-      // @testing-library/react v14 calls `testUtils.act` on every render
-      // and fireEvent, so under a prod bundle every sandbox test fails.
-      //
-      // We patch TL's bundled source to swap its `testUtils.act` reference for
-      // a plain pass-through. This only affects the in-browser test runner —
-      // the app's own React is untouched.
-      //
-      // Pass-through, and nothing more, on purpose. Two earlier versions tried
-      // to make the stub flush React's work itself:
-      //
-      //   `cb(); flushSync(() => {})`  — never commits a `root.render()`,
-      //      because that render is scheduled on the default lane and a
-      //      separate empty flush does not pick it up. Every rendering
-      //      exercise failed in production.
-      //   `flushSync(() => cb())`      — commits the render, but now every
-      //      user-event dispatch also runs inside a sync flush, which defeats
-      //      React's own discrete-event flushing: after `user.type`, the
-      //      component's state was still its initial value.
-      //
-      // React already flushes discrete events synchronously on its own, so the
-      // event path needs no help. The only thing that genuinely needs a flush
-      // is the initial `render()`, and that is wrapped where it belongs — in
-      // the runner's `render` interceptor (src/sandbox/test-runner.ts).
-      name: 'patch-testing-library-act',
-      enforce: 'pre',
-      transform(code, id) {
-        if (id.includes('@testing-library/react') && id.endsWith('.esm.js')) {
-          const patched = code.replace(
-            /const\s+domAct\s*=\s*testUtils\.act\s*;?/,
-            `const domAct = (cb) => cb();`,
-          );
-          if (patched !== code) {
-            return patched;
-          }
-        }
-        return null;
-      },
-    },
-    {
       // Serves chapter markdown and exercise files to the running app in dev.
       // In production the same files are copied into public/raw/ by
       // scripts/copy-content.js and served as static assets.

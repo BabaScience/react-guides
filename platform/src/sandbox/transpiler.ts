@@ -9,8 +9,9 @@
  * that is already running the app.
  *
  * The `imports` transform is what makes the output loadable by
- * `executeAsCommonJS` in test-runner.ts: it emits `require(...)` calls,
- * assigns to `exports.*`, and marks the module with `__esModule`.
+ * `executeAsCommonJS` in the isolated frame (sandbox-host/main.ts): it emits
+ * `require(...)` calls, assigns to `exports.*`, and marks the module with
+ * `__esModule`.
  *
  * There is deliberately no pre-processing step. An earlier version stripped
  * `import type`, `export type` and `export interface` with regexes before

@@ -1,10 +1,17 @@
 # Project Analysis — Pre-Scaling Audit
 
-> **Status:** this is the audit as taken. Phase 0 and Phase 1 of
-> [PLAN.md](PLAN.md) have since been implemented — §4.1, §4.2, §4.3, §4.4,
-> §4.7, §4.8, §4.9, §5.1 and the missing guard rails in §5.4 are fixed and
-> verified. The findings below are kept as written so the reasoning stays
-> readable; PLAN.md is the live checklist.
+> **Status:** this is the audit as taken. Phases 0, 1 and 2 of
+> [PLAN.md](PLAN.md) have since been implemented.
+>
+> Fixed and verified: §4.1, §4.2, §4.3, §4.4, §4.6, §4.7, §4.8, §4.9, §5.1,
+> §5.2, §5.3, §5.5, the guard rails in §5.4, and the structural work in §7.1,
+> §7.2, §8.1–§8.4. §4.5 is **half** closed — grading runs in an opaque-origin
+> iframe now, but `LivePreview` still evaluates in the main window.
+>
+> Of §6 (the pedagogy gap), only checkpoint quizzes exist, on one module.
+>
+> The findings below are kept as written so the reasoning stays readable;
+> PLAN.md is the live checklist.
 
 **Date:** 2026-08-10
 **Scope:** whole repo (`arguments/`, `src/`, `platform/`, docs, build, deploy)

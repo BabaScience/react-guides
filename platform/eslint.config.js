@@ -5,7 +5,10 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default tseslint.config(
-  { ignores: ['dist', 'public/raw', 'node_modules'] },
+  // `public/sandbox-host.js` is a build artifact (vite.sandbox.config.ts), not
+  // source. Linting it reports errors from eslint-disable comments carried in
+  // React's own bundled source, for rules this config doesn't define.
+  { ignores: ['dist', 'public/raw', 'public/sandbox-host.js', 'node_modules'] },
   {
     extends: [js.configs.recommended, ...tseslint.configs.recommended],
     files: ['**/*.{ts,tsx}'],
