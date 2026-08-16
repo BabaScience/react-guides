@@ -10,6 +10,9 @@ id: js-23-security
 track: javascript
 number: 23
 status: available
+difficulty: advanced
+prerequisites:
+  - js-16-browser-apis
 guide: arguments/chapters/js-23-security.md
 exerciseDir: ""
 skipSections:

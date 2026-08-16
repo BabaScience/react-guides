@@ -10,6 +10,9 @@ id: rn-08-forms-input
 track: react-native
 number: 8
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-04-core-components
 guide: arguments/chapters/rn-08-forms-input.md
 exerciseDir: ""
 skipSections:

@@ -35,7 +35,11 @@
     "learningPath": "Percorso di Apprendimento",
     "comingSoonMessage": "Prossimamente — gli esercizi per questo modulo non sono ancora disponibili.",
     "soon": "Presto",
-    "stepsCompletedIn": "Passaggi completati in {{module}}"
+    "stepsCompletedIn": "Passaggi completati in {{module}}",
+    "prerequisites": "Presuppone",
+    "minutes": "{{count}} min",
+    "hours": "{{count}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}}"
   },
   "step": {
     "lesson": "Lezione",
@@ -1564,5 +1568,10 @@
     "notQuite": "Non proprio",
     "correctLabel": "corretta",
     "empty": "Questo checkpoint non ha ancora domande."
+  },
+  "difficulty": {
+    "beginner": "Base",
+    "intermediate": "Intermedio",
+    "advanced": "Avanzato"
   }
 }

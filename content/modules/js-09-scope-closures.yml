@@ -10,6 +10,9 @@ id: js-09-scope-closures
 track: javascript
 number: 9
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-05-functions
 guide: arguments/chapters/js-09-scope-closures.md
 exerciseDir: ""
 skipSections:

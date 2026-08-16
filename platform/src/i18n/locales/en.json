@@ -35,7 +35,11 @@
     "learningPath": "Learning Path",
     "comingSoonMessage": "Coming soon — exercises for this module are not yet available.",
     "soon": "Soon",
-    "stepsCompletedIn": "Steps completed in {{module}}"
+    "stepsCompletedIn": "Steps completed in {{module}}",
+    "prerequisites": "Assumes you know",
+    "minutes": "{{count}} min",
+    "hours": "{{count}}h",
+    "hoursMinutes": "{{hours}}h {{minutes}}"
   },
   "step": {
     "lesson": "Lesson",
@@ -1564,5 +1568,10 @@
     "notQuite": "Not quite",
     "correctLabel": "correct",
     "empty": "This checkpoint has no questions yet."
+  },
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
   }
 }

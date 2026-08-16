@@ -10,6 +10,9 @@ id: rn-07-state-management
 track: react-native
 number: 7
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-04-core-components
 guide: arguments/chapters/rn-07-state-management.md
 exerciseDir: ""
 skipSections:

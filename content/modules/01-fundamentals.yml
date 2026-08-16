@@ -10,6 +10,7 @@ id: 01-fundamentals
 track: react
 number: 1
 status: available
+difficulty: beginner
 guide: arguments/chapters/01-fundamentals.md
 exerciseDir: src/01-fundamentals
 skipSections:

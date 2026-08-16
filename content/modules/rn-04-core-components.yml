@@ -10,6 +10,10 @@ id: rn-04-core-components
 track: react-native
 number: 4
 status: available
+difficulty: beginner
+prerequisites:
+  - rn-02-fundamentals
+  - rn-03-environment-setup
 guide: arguments/chapters/rn-04-core-components.md
 exerciseDir: src/rn-04-core-components
 skipSections:

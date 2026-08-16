@@ -10,6 +10,9 @@ id: rn-14-native-modules
 track: react-native
 number: 14
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-10-native-device-apis
 guide: arguments/chapters/rn-14-native-modules.md
 exerciseDir: ""
 skipSections:

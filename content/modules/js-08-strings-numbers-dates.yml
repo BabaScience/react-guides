@@ -10,6 +10,9 @@ id: js-08-strings-numbers-dates
 track: javascript
 number: 8
 status: available
+difficulty: beginner
+prerequisites:
+  - js-02-language-basics
 guide: arguments/chapters/js-08-strings-numbers-dates.md
 exerciseDir: ""
 skipSections:

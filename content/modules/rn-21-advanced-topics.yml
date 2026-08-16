@@ -10,6 +10,10 @@ id: rn-21-advanced-topics
 track: react-native
 number: 21
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-13-performance
+  - rn-14-native-modules
 guide: arguments/chapters/rn-21-advanced-topics.md
 exerciseDir: ""
 skipSections:

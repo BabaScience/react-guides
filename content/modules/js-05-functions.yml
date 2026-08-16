@@ -10,6 +10,9 @@ id: js-05-functions
 track: javascript
 number: 5
 status: available
+difficulty: beginner
+prerequisites:
+  - js-04-control-flow
 guide: arguments/chapters/js-05-functions.md
 exerciseDir: ""
 skipSections:

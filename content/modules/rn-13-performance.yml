@@ -10,6 +10,9 @@ id: rn-13-performance
 track: react-native
 number: 13
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-12-animations-gestures
 guide: arguments/chapters/rn-13-performance.md
 exerciseDir: ""
 skipSections:

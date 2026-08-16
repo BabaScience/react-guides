@@ -10,6 +10,9 @@ id: js-15-event-loop
 track: javascript
 number: 15
 status: available
+difficulty: advanced
+prerequisites:
+  - js-13-async
 guide: arguments/chapters/js-15-event-loop.md
 exerciseDir: ""
 skipSections:

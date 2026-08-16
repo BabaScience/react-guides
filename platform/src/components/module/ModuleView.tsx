@@ -4,7 +4,54 @@ import { useTranslation } from 'react-i18next';
 import { getModule, getModulesByTrack } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
 import { useUIStore } from '@/store/ui-store';
+import { ModuleMeta } from '@/components/progress/ModuleMeta';
+import type { Module } from '@/types/exercise';
 import { StepTimeline } from './StepTimeline';
+
+/**
+ * What this module assumes you already know, and whether you have it.
+ *
+ * Shown rather than enforced. The point is to answer "am I ready for this?" —
+ * and to make the honest answer visible for someone who arrived from a search
+ * or a link rather than by working through the track in order. Nothing is
+ * locked: a reader who already knows hooks from elsewhere is not our problem
+ * to gatekeep.
+ */
+function Prerequisites({ module: mod }: { module: Module }) {
+  const { t } = useTranslation();
+  const stepProgress = useProgressStore((s) => s.getStepProgress);
+
+  if (!mod.prerequisites?.length) return null;
+
+  return (
+    <div className="mt-4 flex flex-wrap items-center gap-2">
+      <span className="text-xs text-gray-500 dark:text-gray-400">{t('module.prerequisites')}</span>
+      {mod.prerequisites.map((id) => {
+        const prereq = getModule(id);
+        if (!prereq) return null;
+        const { completed, total } = stepProgress(id);
+        const done = total > 0 && completed === total;
+        return (
+          <Link
+            key={id}
+            to={`/module/${id}`}
+            className={`text-xs px-2.5 py-1 rounded-full border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 ${
+              done
+                ? 'border-emerald-300 dark:border-emerald-600/40 text-emerald-700 dark:text-emerald-400'
+                : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-gray-700'
+            }`}
+          >
+            {done && <span aria-hidden="true">✓ </span>}
+            {t(`modules.${id}.name`)}
+            {/* `status.complete` rather than `module.complete`: the latter has a
+                ✓ baked into the string, which a screen reader would read out. */}
+            {done && <span className="sr-only"> — {t('status.complete')}</span>}
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
 
 export function ModuleView() {
   const { t } = useTranslation();
@@ -45,6 +92,8 @@ export function ModuleView() {
         <p className="text-gray-500 dark:text-gray-400">
           {t(`modules.${mod.id}.description`)}
         </p>
+        <ModuleMeta module={mod} className="mt-3" />
+        <Prerequisites module={mod} />
       </div>
 
       <div className="flex items-center gap-4 mb-8">

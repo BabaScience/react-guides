@@ -10,6 +10,10 @@ id: rn-15-auth-security
 track: react-native
 number: 15
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-09-networking-data
+  - rn-11-storage-persistence
 guide: arguments/chapters/rn-15-auth-security.md
 exerciseDir: ""
 skipSections:

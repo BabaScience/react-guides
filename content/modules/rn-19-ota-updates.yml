@@ -10,6 +10,9 @@ id: rn-19-ota-updates
 track: react-native
 number: 19
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-18-build-deploy
 guide: arguments/chapters/rn-19-ota-updates.md
 exerciseDir: ""
 skipSections:

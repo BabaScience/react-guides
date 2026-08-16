@@ -10,6 +10,9 @@ id: js-10-this-keyword
 track: javascript
 number: 10
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-06-objects-prototypes
 guide: arguments/chapters/js-10-this-keyword.md
 exerciseDir: ""
 skipSections:

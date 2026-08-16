@@ -35,7 +35,11 @@
     "learningPath": "Parcours d'Apprentissage",
     "comingSoonMessage": "Bientôt disponible — les exercices de ce module ne sont pas encore disponibles.",
     "soon": "Bientôt",
-    "stepsCompletedIn": "Étapes terminées dans {{module}}"
+    "stepsCompletedIn": "Étapes terminées dans {{module}}",
+    "prerequisites": "Suppose acquis",
+    "minutes": "{{count}} min",
+    "hours": "{{count}} h",
+    "hoursMinutes": "{{hours}} h {{minutes}}"
   },
   "step": {
     "lesson": "Leçon",
@@ -1564,5 +1568,10 @@
     "notQuite": "Pas tout à fait",
     "correctLabel": "correcte",
     "empty": "Ce point d'étape n'a pas encore de questions."
+  },
+  "difficulty": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé"
   }
 }

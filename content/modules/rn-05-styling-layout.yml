@@ -10,6 +10,9 @@ id: rn-05-styling-layout
 track: react-native
 number: 5
 status: available
+difficulty: beginner
+prerequisites:
+  - rn-04-core-components
 guide: arguments/chapters/rn-05-styling-layout.md
 exerciseDir: ""
 skipSections:

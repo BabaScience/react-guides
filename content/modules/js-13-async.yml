@@ -10,6 +10,9 @@ id: js-13-async
 track: javascript
 number: 13
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-09-scope-closures
 guide: arguments/chapters/js-13-async.md
 exerciseDir: ""
 skipSections:

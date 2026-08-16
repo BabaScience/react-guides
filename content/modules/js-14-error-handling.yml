@@ -10,6 +10,9 @@ id: js-14-error-handling
 track: javascript
 number: 14
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-13-async
 guide: arguments/chapters/js-14-error-handling.md
 exerciseDir: ""
 skipSections:

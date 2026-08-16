@@ -10,6 +10,9 @@ id: js-21-testing
 track: javascript
 number: 21
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-12-modules
 guide: arguments/chapters/js-21-testing.md
 exerciseDir: ""
 skipSections:

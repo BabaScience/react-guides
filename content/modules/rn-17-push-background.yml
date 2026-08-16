@@ -10,6 +10,9 @@ id: rn-17-push-background
 track: react-native
 number: 17
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-10-native-device-apis
 guide: arguments/chapters/rn-17-push-background.md
 exerciseDir: ""
 skipSections:

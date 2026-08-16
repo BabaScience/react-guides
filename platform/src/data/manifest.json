@@ -6,6 +6,8 @@
       "number": 1,
       "track": "react",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 180,
       "guideFile": "arguments/chapters/01-fundamentals.md",
       "exerciseDir": "src/01-fundamentals",
       "hasSolutions": true,
@@ -412,6 +414,11 @@
       "number": 2,
       "track": "react",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 230,
+      "prerequisites": [
+        "01-fundamentals"
+      ],
       "guideFile": "arguments/chapters/02-react-hooks.md",
       "exerciseDir": "src/02-hooks",
       "quiz": {
@@ -808,6 +815,11 @@
       "number": 3,
       "track": "react",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 200,
+      "prerequisites": [
+        "02-hooks"
+      ],
       "guideFile": "arguments/chapters/03-component-patterns-best-practices.md",
       "exerciseDir": "src/03-component-patterns",
       "quiz": {
@@ -1195,6 +1207,11 @@
       "number": 4,
       "track": "react",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 185,
+      "prerequisites": [
+        "01-fundamentals"
+      ],
       "guideFile": "arguments/chapters/04-react-styling.md",
       "exerciseDir": "src/04-styling",
       "quiz": {
@@ -1582,6 +1599,11 @@
       "number": 5,
       "track": "react",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 180,
+      "prerequisites": [
+        "02-hooks"
+      ],
       "guideFile": "arguments/chapters/05-routing.md",
       "exerciseDir": "src/05-routing",
       "quiz": {
@@ -1969,6 +1991,12 @@
       "number": 6,
       "track": "react",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 175,
+      "prerequisites": [
+        "02-hooks",
+        "03-component-patterns"
+      ],
       "guideFile": "arguments/chapters/06-state-management.md",
       "exerciseDir": "src/06-state-management",
       "quiz": {
@@ -2356,6 +2384,11 @@
       "number": 7,
       "track": "react",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 175,
+      "prerequisites": [
+        "02-hooks"
+      ],
       "guideFile": "arguments/chapters/07-data-fetching.md",
       "exerciseDir": "src/07-data-fetching",
       "quiz": {
@@ -2743,6 +2776,11 @@
       "number": 8,
       "track": "react",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 200,
+      "prerequisites": [
+        "02-hooks"
+      ],
       "guideFile": "arguments/chapters/08-forms-and-validations.md",
       "exerciseDir": "src/08-forms",
       "quiz": {
@@ -3130,6 +3168,12 @@
       "number": 9,
       "track": "react",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 165,
+      "prerequisites": [
+        "02-hooks",
+        "03-component-patterns"
+      ],
       "guideFile": "arguments/chapters/09-performance-optimization.md",
       "exerciseDir": "src/09-performance",
       "quiz": {
@@ -3517,6 +3561,11 @@
       "number": 10,
       "track": "react",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 200,
+      "prerequisites": [
+        "02-hooks"
+      ],
       "guideFile": "arguments/chapters/10-testing.md",
       "exerciseDir": "src/10-testing",
       "quiz": {
@@ -3919,6 +3968,8 @@
       "number": 1,
       "track": "react-native",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 45,
       "guideFile": "arguments/chapters/rn-01-prerequisites.md",
       "exerciseDir": "",
       "steps": [
@@ -3950,6 +4001,12 @@
       "number": 2,
       "track": "react-native",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 45,
+      "prerequisites": [
+        "rn-01-prerequisites",
+        "01-fundamentals"
+      ],
       "guideFile": "arguments/chapters/rn-02-fundamentals.md",
       "exerciseDir": "",
       "steps": [
@@ -3976,6 +4033,11 @@
       "number": 3,
       "track": "react-native",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 30,
+      "prerequisites": [
+        "rn-01-prerequisites"
+      ],
       "guideFile": "arguments/chapters/rn-03-environment-setup.md",
       "exerciseDir": "",
       "steps": [
@@ -4002,6 +4064,12 @@
       "number": 4,
       "track": "react-native",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 100,
+      "prerequisites": [
+        "rn-02-fundamentals",
+        "rn-03-environment-setup"
+      ],
       "guideFile": "arguments/chapters/rn-04-core-components.md",
       "exerciseDir": "src/rn-04-core-components",
       "steps": [
@@ -4060,6 +4128,11 @@
       "number": 5,
       "track": "react-native",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 55,
+      "prerequisites": [
+        "rn-04-core-components"
+      ],
       "guideFile": "arguments/chapters/rn-05-styling-layout.md",
       "exerciseDir": "",
       "steps": [
@@ -4096,6 +4169,11 @@
       "number": 6,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-04-core-components"
+      ],
       "guideFile": "arguments/chapters/rn-06-navigation.md",
       "exerciseDir": "",
       "steps": [
@@ -4122,6 +4200,11 @@
       "number": 7,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 50,
+      "prerequisites": [
+        "rn-04-core-components"
+      ],
       "guideFile": "arguments/chapters/rn-07-state-management.md",
       "exerciseDir": "",
       "steps": [
@@ -4148,6 +4231,11 @@
       "number": 8,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 45,
+      "prerequisites": [
+        "rn-04-core-components"
+      ],
       "guideFile": "arguments/chapters/rn-08-forms-input.md",
       "exerciseDir": "",
       "steps": [
@@ -4174,6 +4262,11 @@
       "number": 9,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 45,
+      "prerequisites": [
+        "rn-07-state-management"
+      ],
       "guideFile": "arguments/chapters/rn-09-networking-data.md",
       "exerciseDir": "",
       "steps": [
@@ -4210,6 +4303,11 @@
       "number": 10,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-04-core-components"
+      ],
       "guideFile": "arguments/chapters/rn-10-native-device-apis.md",
       "exerciseDir": "",
       "steps": [
@@ -4241,6 +4339,11 @@
       "number": 11,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "rn-09-networking-data"
+      ],
       "guideFile": "arguments/chapters/rn-11-storage-persistence.md",
       "exerciseDir": "",
       "steps": [
@@ -4272,6 +4375,11 @@
       "number": 12,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "rn-05-styling-layout"
+      ],
       "guideFile": "arguments/chapters/rn-12-animations-gestures.md",
       "exerciseDir": "",
       "steps": [
@@ -4303,6 +4411,11 @@
       "number": 13,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-12-animations-gestures"
+      ],
       "guideFile": "arguments/chapters/rn-13-performance.md",
       "exerciseDir": "",
       "steps": [
@@ -4349,6 +4462,11 @@
       "number": 14,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "rn-10-native-device-apis"
+      ],
       "guideFile": "arguments/chapters/rn-14-native-modules.md",
       "exerciseDir": "",
       "steps": [
@@ -4380,6 +4498,12 @@
       "number": 15,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-09-networking-data",
+        "rn-11-storage-persistence"
+      ],
       "guideFile": "arguments/chapters/rn-15-auth-security.md",
       "exerciseDir": "",
       "steps": [
@@ -4411,6 +4535,11 @@
       "number": 16,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-04-core-components"
+      ],
       "guideFile": "arguments/chapters/rn-16-testing.md",
       "exerciseDir": "",
       "steps": [
@@ -4447,6 +4576,11 @@
       "number": 17,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-10-native-device-apis"
+      ],
       "guideFile": "arguments/chapters/rn-17-push-background.md",
       "exerciseDir": "",
       "steps": [
@@ -4478,6 +4612,11 @@
       "number": 18,
       "track": "react-native",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-03-environment-setup"
+      ],
       "guideFile": "arguments/chapters/rn-18-build-deploy.md",
       "exerciseDir": "",
       "steps": [
@@ -4519,6 +4658,11 @@
       "number": 19,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 30,
+      "prerequisites": [
+        "rn-18-build-deploy"
+      ],
       "guideFile": "arguments/chapters/rn-19-ota-updates.md",
       "exerciseDir": "",
       "steps": [
@@ -4555,6 +4699,11 @@
       "number": 20,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 40,
+      "prerequisites": [
+        "rn-18-build-deploy"
+      ],
       "guideFile": "arguments/chapters/rn-20-monitoring-production.md",
       "exerciseDir": "",
       "steps": [
@@ -4596,6 +4745,12 @@
       "number": 21,
       "track": "react-native",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 55,
+      "prerequisites": [
+        "rn-13-performance",
+        "rn-14-native-modules"
+      ],
       "guideFile": "arguments/chapters/rn-21-advanced-topics.md",
       "exerciseDir": "",
       "steps": [
@@ -4672,6 +4827,8 @@
       "number": 1,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 10,
       "guideFile": "arguments/chapters/js-01-prerequisites.md",
       "exerciseDir": "",
       "steps": [
@@ -4688,6 +4845,11 @@
       "number": 2,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-01-prerequisites"
+      ],
       "guideFile": "arguments/chapters/js-02-language-basics.md",
       "exerciseDir": "",
       "steps": [
@@ -4729,6 +4891,11 @@
       "number": 3,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 30,
+      "prerequisites": [
+        "js-02-language-basics"
+      ],
       "guideFile": "arguments/chapters/js-03-operators.md",
       "exerciseDir": "",
       "steps": [
@@ -4770,6 +4937,11 @@
       "number": 4,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-03-operators"
+      ],
       "guideFile": "arguments/chapters/js-04-control-flow.md",
       "exerciseDir": "",
       "steps": [
@@ -4801,6 +4973,11 @@
       "number": 5,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-04-control-flow"
+      ],
       "guideFile": "arguments/chapters/js-05-functions.md",
       "exerciseDir": "",
       "steps": [
@@ -4842,6 +5019,11 @@
       "number": 6,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 30,
+      "prerequisites": [
+        "js-05-functions"
+      ],
       "guideFile": "arguments/chapters/js-06-objects-prototypes.md",
       "exerciseDir": "",
       "steps": [
@@ -4883,6 +5065,11 @@
       "number": 7,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-05-functions"
+      ],
       "guideFile": "arguments/chapters/js-07-arrays.md",
       "exerciseDir": "",
       "steps": [
@@ -4919,6 +5106,11 @@
       "number": 8,
       "track": "javascript",
       "status": "available",
+      "difficulty": "beginner",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-02-language-basics"
+      ],
       "guideFile": "arguments/chapters/js-08-strings-numbers-dates.md",
       "exerciseDir": "",
       "steps": [
@@ -4950,6 +5142,11 @@
       "number": 9,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-05-functions"
+      ],
       "guideFile": "arguments/chapters/js-09-scope-closures.md",
       "exerciseDir": "",
       "steps": [
@@ -4981,6 +5178,11 @@
       "number": 10,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-06-objects-prototypes"
+      ],
       "guideFile": "arguments/chapters/js-10-this-keyword.md",
       "exerciseDir": "",
       "steps": [
@@ -5017,6 +5219,12 @@
       "number": 11,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 20,
+      "prerequisites": [
+        "js-06-objects-prototypes",
+        "js-10-this-keyword"
+      ],
       "guideFile": "arguments/chapters/js-11-classes.md",
       "exerciseDir": "",
       "steps": [
@@ -5048,6 +5256,11 @@
       "number": 12,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-05-functions"
+      ],
       "guideFile": "arguments/chapters/js-12-modules.md",
       "exerciseDir": "",
       "steps": [
@@ -5079,6 +5292,11 @@
       "number": 13,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-09-scope-closures"
+      ],
       "guideFile": "arguments/chapters/js-13-async.md",
       "exerciseDir": "",
       "steps": [
@@ -5120,6 +5338,11 @@
       "number": 14,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-13-async"
+      ],
       "guideFile": "arguments/chapters/js-14-error-handling.md",
       "exerciseDir": "",
       "steps": [
@@ -5156,6 +5379,11 @@
       "number": 15,
       "track": "javascript",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-13-async"
+      ],
       "guideFile": "arguments/chapters/js-15-event-loop.md",
       "exerciseDir": "",
       "steps": [
@@ -5192,6 +5420,11 @@
       "number": 16,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-13-async"
+      ],
       "guideFile": "arguments/chapters/js-16-browser-apis.md",
       "exerciseDir": "",
       "steps": [
@@ -5228,6 +5461,12 @@
       "number": 17,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-12-modules",
+        "js-13-async"
+      ],
       "guideFile": "arguments/chapters/js-17-nodejs.md",
       "exerciseDir": "",
       "steps": [
@@ -5264,6 +5503,11 @@
       "number": 18,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-12-modules"
+      ],
       "guideFile": "arguments/chapters/js-18-modern-es.md",
       "exerciseDir": "",
       "steps": [
@@ -5290,6 +5534,12 @@
       "number": 19,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-11-classes",
+        "js-12-modules"
+      ],
       "guideFile": "arguments/chapters/js-19-typescript.md",
       "exerciseDir": "",
       "steps": [
@@ -5326,6 +5576,11 @@
       "number": 20,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-12-modules"
+      ],
       "guideFile": "arguments/chapters/js-20-tooling.md",
       "exerciseDir": "",
       "steps": [
@@ -5357,6 +5612,11 @@
       "number": 21,
       "track": "javascript",
       "status": "available",
+      "difficulty": "intermediate",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-12-modules"
+      ],
       "guideFile": "arguments/chapters/js-21-testing.md",
       "exerciseDir": "",
       "steps": [
@@ -5388,6 +5648,11 @@
       "number": 22,
       "track": "javascript",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 35,
+      "prerequisites": [
+        "js-15-event-loop"
+      ],
       "guideFile": "arguments/chapters/js-22-performance.md",
       "exerciseDir": "",
       "steps": [
@@ -5424,6 +5689,11 @@
       "number": 23,
       "track": "javascript",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 25,
+      "prerequisites": [
+        "js-16-browser-apis"
+      ],
       "guideFile": "arguments/chapters/js-23-security.md",
       "exerciseDir": "",
       "steps": [
@@ -5455,6 +5725,12 @@
       "number": 24,
       "track": "javascript",
       "status": "available",
+      "difficulty": "advanced",
+      "estimatedMinutes": 30,
+      "prerequisites": [
+        "js-11-classes",
+        "js-12-modules"
+      ],
       "guideFile": "arguments/chapters/js-24-patterns.md",
       "exerciseDir": "",
       "steps": [

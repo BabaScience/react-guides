@@ -40,6 +40,8 @@ const YAML = require('yaml');
 
 const TRACKS = ['react', 'react-native', 'javascript'];
 const STATUSES = ['available', 'coming-soon'];
+/** Ordered easiest first; the UI relies on the order for its badge colours. */
+const DIFFICULTIES = ['beginner', 'intermediate', 'advanced'];
 /**
  * Keep in step with `RunnerId` in platform/src/sandbox/runner-types.ts. A module
  * may name one explicitly; omitting it means "the default for the track".
@@ -58,6 +60,73 @@ export function guideHeadings(absPath) {
     .split('\n')
     .filter((line) => line.startsWith('## '))
     .map((line) => line.replace(/^## /, '').trim());
+}
+
+/** Reading speed for technical prose, in words per minute. */
+const WORDS_PER_MINUTE = 150;
+/**
+ * Code is read line by line, not at prose speed. Minutes per line.
+ *
+ * Blended on purpose: dense example lines take longer than this, and imports,
+ * closing braces and JSX wrappers take far less. At 6s/line module 02 came out
+ * at 5.5 hours, of which 3.3 was code — an intimidating number that says more
+ * about how much of the chapter is fenced than about how long it takes.
+ */
+const MINUTES_PER_CODE_LINE = 0.05;
+/** Roughly what an exercise and a checkpoint cost a learner. */
+const MINUTES_PER_EXERCISE = 12;
+const MINUTES_PER_QUIZ = 8;
+
+/**
+ * Per-section reading cost of a guide, as `heading -> minutes`.
+ *
+ * Derived rather than declared, deliberately. Fifty-seven hand-written
+ * estimates would be guesses on day one and wrong the first time a chapter is
+ * edited; this is recomputed from the text on every build. A module can still
+ * override the total with `estimatedMinutes:` when the number is plainly wrong.
+ *
+ * Prose and code are counted separately because they are not read at the same
+ * speed — a 40-line example is not 300 words of narrative.
+ */
+export function guideSectionMinutes(absPath) {
+  const lines = fs.readFileSync(absPath, 'utf8').split('\n');
+  const minutes = new Map();
+
+  let heading = null;
+  let prose = 0;
+  let code = 0;
+  let inFence = false;
+
+  const flush = () => {
+    if (heading === null) return;
+    minutes.set(heading, prose / WORDS_PER_MINUTE + code * MINUTES_PER_CODE_LINE);
+  };
+
+  for (const line of lines) {
+    if (line.startsWith('## ')) {
+      flush();
+      heading = line.replace(/^## /, '').trim();
+      prose = 0;
+      code = 0;
+      inFence = false;
+      continue;
+    }
+    if (heading === null) continue;
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    if (inFence) code++;
+    else prose += (line.match(/\S+/g) ?? []).length;
+  }
+  flush();
+
+  return minutes;
+}
+
+/** Round to the nearest 5 minutes; never claim an available module takes 0. */
+function roundMinutes(raw) {
+  return Math.max(5, Math.round(raw / 5) * 5);
 }
 
 /**
@@ -188,16 +257,32 @@ export function buildManifest() {
 
     // --- the guide, and the two invariants that make orphans impossible
     let available = [];
+    let sectionMinutes = new Map();
     if (doc.guide) {
       const abs = path.join(ROOT, doc.guide);
       if (!fs.existsSync(abs)) {
         fail(file, `guide not found on disk — ${doc.guide}`);
       } else {
         available = guideHeadings(abs);
+        sectionMinutes = guideSectionMinutes(abs);
       }
     } else if (doc.status === 'available') {
       fail(file, 'status is "available" but no guide is set');
     }
+
+    // --- difficulty and prerequisites (§6 of ANALYSIS: "Module 06 assumes
+    // hooks; nothing says so"). Editorial judgements, so they are declared.
+    if (doc.difficulty !== undefined && !DIFFICULTIES.includes(doc.difficulty))
+      fail(file, `difficulty "${doc.difficulty}" is not one of ${DIFFICULTIES.join(', ')}`);
+    if (doc.status === 'available' && doc.difficulty === undefined)
+      fail(file, 'an available module needs a difficulty');
+
+    const prerequisites = doc.prerequisites ?? [];
+    if (!Array.isArray(prerequisites)) fail(file, 'prerequisites must be a list of module ids');
+    if (prerequisites.includes(doc.id)) fail(file, 'a module cannot be its own prerequisite');
+
+    if (doc.estimatedMinutes !== undefined && !(Number.isInteger(doc.estimatedMinutes) && doc.estimatedMinutes > 0))
+      fail(file, 'estimatedMinutes must be a positive whole number of minutes');
 
     const claimed = new Map(); // heading -> step id
     const compiledSteps = [];
@@ -292,11 +377,31 @@ export function buildManifest() {
       if (typeof ex?.componentName !== 'string') fail(file, `exercise "${id}" needs a componentName`);
     }
 
+    // Only the sections a step actually points at count — unreachable prose
+    // costs the learner nothing, and `skipSections` is there precisely to say
+    // "this is not part of the path".
+    const lessonMinutes = [...claimed.keys()].reduce(
+      (sum, heading) => sum + (sectionMinutes.get(heading) ?? 0),
+      0
+    );
+    const estimatedMinutes =
+      doc.estimatedMinutes ??
+      (doc.status === 'available'
+        ? roundMinutes(
+            lessonMinutes +
+              compiledSteps.filter((s) => s.type === 'exercise').length * MINUTES_PER_EXERCISE +
+              compiledSteps.filter((s) => s.type === 'quiz').length * MINUTES_PER_QUIZ
+          )
+        : 0);
+
     modules.push({
       id: doc.id,
       number: doc.number,
       track: doc.track,
       status: doc.status,
+      ...(doc.difficulty ? { difficulty: doc.difficulty } : {}),
+      ...(estimatedMinutes ? { estimatedMinutes } : {}),
+      ...(prerequisites.length ? { prerequisites } : {}),
       ...(doc.runner ? { runner: doc.runner } : {}),
       guideFile: doc.guide ?? '',
       exerciseDir: doc.exerciseDir ?? '',
@@ -312,6 +417,38 @@ export function buildManifest() {
         .sort((a, b) => a.number - b.number),
     });
   }
+
+  // --- the prerequisite graph must resolve, and must be a graph, not a knot.
+  // A dangling id would render as a dead link; a cycle would tell a learner to
+  // finish A before B and B before A, and would hang any future "what can I
+  // start now" traversal.
+  const byId = new Map(modules.map((m) => [m.id, m]));
+  for (const m of modules) {
+    for (const p of m.prerequisites ?? []) {
+      if (!byId.has(p)) errors.push(`${m.id}: prerequisite "${p}" is not a module id`);
+    }
+  }
+
+  const WHITE = 0, GREY = 1, BLACK = 2;
+  const mark = new Map(modules.map((m) => [m.id, WHITE]));
+  const reported = new Set();
+  const visit = (id, trail) => {
+    if (mark.get(id) === BLACK) return;
+    if (mark.get(id) === GREY) {
+      const cycle = [...trail.slice(trail.indexOf(id)), id].join(' → ');
+      if (!reported.has(cycle)) {
+        reported.add(cycle);
+        errors.push(`prerequisite cycle: ${cycle}`);
+      }
+      return;
+    }
+    mark.set(id, GREY);
+    for (const p of byId.get(id)?.prerequisites ?? []) {
+      if (byId.has(p)) visit(p, [...trail, id]);
+    }
+    mark.set(id, BLACK);
+  };
+  for (const m of modules) visit(m.id, []);
 
   // --- cross-module identity
   const seenTrackNumber = new Set();

@@ -10,6 +10,9 @@ id: 02-hooks
 track: react
 number: 2
 status: available
+difficulty: beginner
+prerequisites:
+  - 01-fundamentals
 guide: arguments/chapters/02-react-hooks.md
 exerciseDir: src/02-hooks
 skipSections:

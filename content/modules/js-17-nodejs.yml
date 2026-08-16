@@ -10,6 +10,10 @@ id: js-17-nodejs
 track: javascript
 number: 17
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-12-modules
+  - js-13-async
 guide: arguments/chapters/js-17-nodejs.md
 exerciseDir: ""
 skipSections:

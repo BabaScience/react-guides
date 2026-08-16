@@ -10,6 +10,9 @@ id: 05-routing
 track: react
 number: 5
 status: available
+difficulty: intermediate
+prerequisites:
+  - 02-hooks
 guide: arguments/chapters/05-routing.md
 exerciseDir: src/05-routing
 skipSections:

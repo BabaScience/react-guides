@@ -10,6 +10,9 @@ id: rn-03-environment-setup
 track: react-native
 number: 3
 status: available
+difficulty: beginner
+prerequisites:
+  - rn-01-prerequisites
 guide: arguments/chapters/rn-03-environment-setup.md
 exerciseDir: ""
 skipSections:

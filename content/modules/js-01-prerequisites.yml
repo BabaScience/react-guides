@@ -10,6 +10,7 @@ id: js-01-prerequisites
 track: javascript
 number: 1
 status: available
+difficulty: beginner
 guide: arguments/chapters/js-01-prerequisites.md
 exerciseDir: ""
 skipSections:

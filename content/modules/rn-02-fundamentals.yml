@@ -10,6 +10,10 @@ id: rn-02-fundamentals
 track: react-native
 number: 2
 status: available
+difficulty: beginner
+prerequisites:
+  - rn-01-prerequisites
+  - 01-fundamentals
 guide: arguments/chapters/rn-02-fundamentals.md
 exerciseDir: ""
 skipSections:

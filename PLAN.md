@@ -510,7 +510,47 @@ interface was sketched; building it showed a quiz isn't graded by running code
 and would have needed a fake code-shaped request. It is its own step type.
 ### [ ] P3.2 — Mini-projects per module + one capstone per track
 ### [ ] P3.3 — Reference solutions revealed after passing
-### [ ] P3.4 — Time estimates, difficulty, prerequisites graph
+### [x] P3.4 — Time estimates, difficulty, prerequisites graph
+
+All 55 available modules carry all three. The two coming-soon modules carry
+none, and the compiler requires `difficulty` only of an available module.
+
+**Estimates are derived, not declared.** Fifty-seven hand-written numbers would
+be guesses on day one and wrong the first time a chapter was edited. The
+compiler counts the prose and code of *the sections a step actually points at*
+— skipped sections cost the learner nothing — and adds a fixed price per
+exercise and quiz. `estimatedMinutes:` still overrides it where the number is
+plainly wrong.
+
+Prose and code are counted separately, because a 40-line example is not 300
+words of narrative. The first pass priced code at 6s/line and made module 02
+a 5.5-hour commitment, 3.3 of it code — a number that described how heavily
+fenced the chapter is rather than how long it takes. At a blended 3s/line the
+spread is 10 min to 3h 50, median 35 min: React 32h, JavaScript 11h, React
+Native 15h, **58h** of material in total.
+
+**Prerequisites are a graph, not chapter order.** Styling does not require
+component patterns; routing does not require styling; `rn-02-fundamentals`
+requires `01-fundamentals` from the React track, which is the first cross-track
+link in the project and answers §6's "the JS track defines closures; the React
+track uses them without linking back". The compiler rejects a prerequisite that
+is not a module id, a module that is its own prerequisite, and any cycle —
+verified by breaking each on purpose:
+
+```
+prerequisite cycle: 01-fundamentals → 02-hooks → 01-fundamentals
+02-hooks: prerequisite "99-nonexistent" is not a module id
+01-fundamentals.yml: difficulty "easy" is not one of beginner, intermediate, advanced
+```
+
+Surfaced in `ModuleMeta` (shared by the dashboard card and the module header so
+the two cannot drift) and as prerequisite chips on the module page, each a link
+that shows a ✓ once that module is complete. Shown, never enforced: someone who
+learned hooks elsewhere is not ours to gatekeep. Verified in en/fr/it.
+
+*Not done: a visual graph.* The data supports one, and the per-module "assumes
+you know" list is what answers "am I ready for this?" — a whole-track diagram
+is a different feature, and would want the capstone work in P3.2 to point at.
 ### [ ] P3.5 — Exercises for the JS (0 today) and RN (4 today) tracks
 ### [ ] P3.6 — Glossary + cross-track links
 

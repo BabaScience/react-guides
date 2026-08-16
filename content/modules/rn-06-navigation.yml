@@ -10,6 +10,9 @@ id: rn-06-navigation
 track: react-native
 number: 6
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-04-core-components
 guide: arguments/chapters/rn-06-navigation.md
 exerciseDir: ""
 skipSections:

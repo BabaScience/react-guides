@@ -10,6 +10,10 @@ id: js-19-typescript
 track: javascript
 number: 19
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-11-classes
+  - js-12-modules
 guide: arguments/chapters/js-19-typescript.md
 exerciseDir: ""
 skipSections:

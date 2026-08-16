@@ -10,6 +10,9 @@ id: js-04-control-flow
 track: javascript
 number: 4
 status: available
+difficulty: beginner
+prerequisites:
+  - js-03-operators
 guide: arguments/chapters/js-04-control-flow.md
 exerciseDir: ""
 skipSections:

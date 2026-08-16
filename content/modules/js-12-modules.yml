@@ -10,6 +10,9 @@ id: js-12-modules
 track: javascript
 number: 12
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-05-functions
 guide: arguments/chapters/js-12-modules.md
 exerciseDir: ""
 skipSections:

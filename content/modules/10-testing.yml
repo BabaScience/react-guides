@@ -10,6 +10,9 @@ id: 10-testing
 track: react
 number: 10
 status: available
+difficulty: advanced
+prerequisites:
+  - 02-hooks
 guide: arguments/chapters/10-testing.md
 exerciseDir: src/10-testing
 skipSections:

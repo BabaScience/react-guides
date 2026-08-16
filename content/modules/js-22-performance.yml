@@ -10,6 +10,9 @@ id: js-22-performance
 track: javascript
 number: 22
 status: available
+difficulty: advanced
+prerequisites:
+  - js-15-event-loop
 guide: arguments/chapters/js-22-performance.md
 exerciseDir: ""
 skipSections:

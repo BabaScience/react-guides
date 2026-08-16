@@ -10,6 +10,9 @@ id: rn-18-build-deploy
 track: react-native
 number: 18
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-03-environment-setup
 guide: arguments/chapters/rn-18-build-deploy.md
 exerciseDir: ""
 skipSections:

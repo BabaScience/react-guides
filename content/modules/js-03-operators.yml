@@ -10,6 +10,9 @@ id: js-03-operators
 track: javascript
 number: 3
 status: available
+difficulty: beginner
+prerequisites:
+  - js-02-language-basics
 guide: arguments/chapters/js-03-operators.md
 exerciseDir: ""
 skipSections:

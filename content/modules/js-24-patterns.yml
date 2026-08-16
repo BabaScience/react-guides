@@ -10,6 +10,10 @@ id: js-24-patterns
 track: javascript
 number: 24
 status: available
+difficulty: advanced
+prerequisites:
+  - js-11-classes
+  - js-12-modules
 guide: arguments/chapters/js-24-patterns.md
 exerciseDir: ""
 skipSections:

@@ -10,6 +10,10 @@ id: js-11-classes
 track: javascript
 number: 11
 status: available
+difficulty: intermediate
+prerequisites:
+  - js-06-objects-prototypes
+  - js-10-this-keyword
 guide: arguments/chapters/js-11-classes.md
 exerciseDir: ""
 skipSections:

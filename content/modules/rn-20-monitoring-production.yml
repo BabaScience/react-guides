@@ -10,6 +10,9 @@ id: rn-20-monitoring-production
 track: react-native
 number: 20
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-18-build-deploy
 guide: arguments/chapters/rn-20-monitoring-production.md
 exerciseDir: ""
 skipSections:

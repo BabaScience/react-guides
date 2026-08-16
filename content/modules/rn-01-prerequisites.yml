@@ -10,6 +10,7 @@ id: rn-01-prerequisites
 track: react-native
 number: 1
 status: available
+difficulty: beginner
 guide: arguments/chapters/rn-01-prerequisites.md
 exerciseDir: ""
 skipSections:

@@ -10,6 +10,9 @@ id: js-02-language-basics
 track: javascript
 number: 2
 status: available
+difficulty: beginner
+prerequisites:
+  - js-01-prerequisites
 guide: arguments/chapters/js-02-language-basics.md
 exerciseDir: ""
 skipSections:

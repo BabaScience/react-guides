@@ -10,6 +10,9 @@ id: rn-11-storage-persistence
 track: react-native
 number: 11
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-09-networking-data
 guide: arguments/chapters/rn-11-storage-persistence.md
 exerciseDir: ""
 skipSections:

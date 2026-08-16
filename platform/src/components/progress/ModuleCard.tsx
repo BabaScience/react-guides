@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { Module } from '@/types/exercise';
 import { useProgressStore } from '@/store/progress-store';
+import { ModuleMeta } from '@/components/progress/ModuleMeta';
 
 interface ModuleCardProps {
   module: Module;
@@ -62,9 +63,10 @@ export function ModuleCard({ module }: ModuleCardProps) {
       <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
         {t(`modules.${module.id}.name`)}
       </h3>
-      <p className="text-sm text-gray-500 dark:text-gray-400 flex-1 mb-3">
+      <p className="text-sm text-gray-500 dark:text-gray-400 flex-1 mb-2">
         {t(`modules.${module.id}.description`)}
       </p>
+      {!isComingSoon && <ModuleMeta module={module} className="mb-3" />}
 
       {isComingSoon ? (
         <span className="text-xs bg-gray-100 dark:bg-gray-800 text-gray-500 px-2.5 py-1 rounded-full self-start">

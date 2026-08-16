@@ -10,6 +10,10 @@ id: 09-performance
 track: react
 number: 9
 status: available
+difficulty: advanced
+prerequisites:
+  - 02-hooks
+  - 03-component-patterns
 guide: arguments/chapters/09-performance-optimization.md
 exerciseDir: src/09-performance
 skipSections:

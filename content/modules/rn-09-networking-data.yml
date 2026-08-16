@@ -10,6 +10,9 @@ id: rn-09-networking-data
 track: react-native
 number: 9
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-07-state-management
 guide: arguments/chapters/rn-09-networking-data.md
 exerciseDir: ""
 skipSections:

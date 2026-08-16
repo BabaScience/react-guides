@@ -10,6 +10,9 @@ id: rn-10-native-device-apis
 track: react-native
 number: 10
 status: available
+difficulty: intermediate
+prerequisites:
+  - rn-04-core-components
 guide: arguments/chapters/rn-10-native-device-apis.md
 exerciseDir: ""
 skipSections:

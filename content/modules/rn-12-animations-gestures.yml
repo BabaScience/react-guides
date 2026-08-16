@@ -10,6 +10,9 @@ id: rn-12-animations-gestures
 track: react-native
 number: 12
 status: available
+difficulty: advanced
+prerequisites:
+  - rn-05-styling-layout
 guide: arguments/chapters/rn-12-animations-gestures.md
 exerciseDir: ""
 skipSections:

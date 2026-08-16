@@ -10,6 +10,9 @@ id: js-07-arrays
 track: javascript
 number: 7
 status: available
+difficulty: beginner
+prerequisites:
+  - js-05-functions
 guide: arguments/chapters/js-07-arrays.md
 exerciseDir: ""
 skipSections:

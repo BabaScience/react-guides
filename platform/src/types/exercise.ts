@@ -81,6 +81,22 @@ export interface Module {
    * a new track.
    */
   runner?: RunnerId;
+  /** Editorial, declared per module. Ordered easiest first. */
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  /**
+   * Time to work through the module, in minutes. Derived by the manifest
+   * compiler from the prose and code of the sections a step actually points
+   * at, plus a fixed cost per exercise and quiz — so it cannot drift away from
+   * the content. A module may override it with `estimatedMinutes:`.
+   */
+  estimatedMinutes?: number;
+  /**
+   * Module ids this one assumes. A real dependency graph, not chapter order:
+   * styling does not require component patterns, and React Native's
+   * fundamentals do require React's. Guaranteed by the compiler to resolve and
+   * to be acyclic.
+   */
+  prerequisites?: string[];
   exercises: Exercise[];
   /**
    * True when `<exerciseDir>/solution.tsx` exists. Set by the manifest
