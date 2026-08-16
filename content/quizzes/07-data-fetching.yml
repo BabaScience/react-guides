@@ -1,0 +1,325 @@
+# Checkpoint quiz — 07-data-fetching
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 07-data-fetching
+
+questions:
+  - id: stale-response
+    prompt:
+      en: >-
+        An effect fetches `/api/users/{id}` whenever `id` changes. The user
+        clicks quickly through three profiles and the page settles on the wrong
+        one. What happened?
+      fr: >-
+        Un effet appelle `/api/users/{id}` à chaque changement d'`id`.
+        L'utilisateur parcourt vite trois profils et la page s'arrête sur le
+        mauvais. Que s'est-il passé ?
+      it: >-
+        Un effetto chiama `/api/users/{id}` a ogni cambio di `id`. L'utente
+        scorre rapidamente tre profili e la pagina si ferma su quello sbagliato.
+        Cosa è successo?
+    options:
+      - id: out-of-order
+        correct: true
+        text:
+          en: >-
+            An earlier request resolved last, and its response overwrote the
+            newer one
+          fr: >-
+            Une requête antérieure s'est résolue en dernier et sa réponse a
+            écrasé la plus récente
+          it: >-
+            Una richiesta precedente si è risolta per ultima e la sua risposta
+            ha sovrascritto quella più recente
+      - id: cache
+        text:
+          en: The browser served all three from its HTTP cache
+          fr: Le navigateur a servi les trois depuis son cache HTTP
+          it: Il browser ha servito tutte e tre dalla cache HTTP
+      - id: rerender
+        text:
+          en: >-
+            React batched the three renders into one
+          fr: >-
+            React a regroupé les trois rendus en un seul
+          it: >-
+            React ha raggruppato i tre render in uno solo
+    explanation:
+      en: >-
+        Requests do not come back in the order they were sent. Without
+        protection, whichever finishes last wins — which may be the one you no
+        longer want. The cleanup function is the fix: set an `isCancelled` flag
+        or call `AbortController.abort()` so a superseded response is ignored.
+        A data-fetching library handles this for you, which is much of the point.
+      fr: >-
+        Les requêtes ne reviennent pas dans l'ordre où elles sont parties. Sans
+        protection, celle qui finit en dernier l'emporte — et ce peut être celle
+        dont vous ne voulez plus. La fonction de nettoyage est le correctif :
+        posez un drapeau `isCancelled` ou appelez `AbortController.abort()` pour
+        ignorer une réponse dépassée. Une bibliothèque de récupération de
+        données s'en charge, et c'est une grande part de son intérêt.
+      it: >-
+        Le richieste non tornano nell'ordine in cui sono partite. Senza
+        protezione vince quella che finisce per ultima — e può essere quella che
+        non vuoi più. La funzione di pulizia è la correzione: imposta un flag
+        `isCancelled` o chiama `AbortController.abort()` per ignorare una
+        risposta superata. Una libreria di data fetching se ne occupa da sé, ed
+        è gran parte del motivo per usarla.
+
+  - id: fetch-error-handling
+    prompt:
+      en: >-
+        `fetch()` returns a 404. Does the promise reject?
+      fr: >-
+        `fetch()` renvoie un 404. La promesse est-elle rejetée ?
+      it: >-
+        `fetch()` restituisce un 404. La promise viene rifiutata?
+    options:
+      - id: no-check-ok
+        correct: true
+        text:
+          en: >-
+            No — it resolves, so you must check `res.ok` yourself
+          fr: >-
+            Non — elle se résout, il faut donc vérifier `res.ok` soi-même
+          it: >-
+            No — si risolve, quindi devi controllare tu `res.ok`
+      - id: rejects
+        text:
+          en: >-
+            Yes, any status outside 2xx rejects and lands in `catch`
+          fr: >-
+            Oui, tout statut hors 2xx est rejeté et arrive dans `catch`
+          it: >-
+            Sì, ogni stato fuori dal 2xx viene rifiutato e finisce nel `catch`
+      - id: throws-sync
+        text:
+          en: It throws synchronously before returning a promise
+          fr: Elle lève une erreur de façon synchrone avant de renvoyer une promesse
+          it: Lancia un errore in modo sincrono prima di restituire una promise
+    explanation:
+      en: >-
+        `fetch` only rejects on a network-level failure — offline, DNS, CORS, an
+        aborted request. An HTTP error is still a successful exchange as far as
+        it is concerned, so a 404 or 500 arrives as a resolved response with
+        `ok: false`. Forgetting the check is why error branches silently render
+        an error page's JSON as if it were data. Axios throws on non-2xx instead.
+      fr: >-
+        `fetch` ne rejette qu'en cas d'échec réseau — hors ligne, DNS, CORS,
+        requête annulée. Une erreur HTTP reste pour elle un échange réussi : un
+        404 ou un 500 arrive donc en réponse résolue avec `ok: false`. Oublier
+        la vérification, c'est afficher le JSON d'une page d'erreur comme s'il
+        s'agissait de données. Axios, lui, lève une erreur hors 2xx.
+      it: >-
+        `fetch` rifiuta solo per un errore di rete — offline, DNS, CORS,
+        richiesta annullata. Un errore HTTP resta per lei uno scambio riuscito:
+        un 404 o un 500 arriva quindi come risposta risolta con `ok: false`.
+        Dimenticare il controllo è il motivo per cui il JSON di una pagina di
+        errore viene mostrato come se fossero dati. Axios invece lancia un
+        errore fuori dal 2xx.
+
+  - id: stale-while-revalidate
+    prompt:
+      en: What does "stale-while-revalidate" actually do?
+      fr: Que fait réellement le « stale-while-revalidate » ?
+      it: Cosa fa davvero lo "stale-while-revalidate"?
+    options:
+      - id: show-then-refresh
+        correct: true
+        text:
+          en: >-
+            Show the cached value immediately, refetch in the background, then
+            update if it changed
+          fr: >-
+            Afficher la valeur en cache aussitôt, revalider en arrière-plan,
+            puis mettre à jour si elle a changé
+          it: >-
+            Mostrare subito il valore in cache, rifetchare in background e poi
+            aggiornare se è cambiato
+      - id: block
+        text:
+          en: Block rendering until fresh data has arrived
+          fr: Bloquer le rendu jusqu'à l'arrivée de données fraîches
+          it: Bloccare il rendering finché non arrivano dati freschi
+      - id: never-refetch
+        text:
+          en: Serve the cache and skip the network until it is manually cleared
+          fr: Servir le cache et éviter le réseau jusqu'à un vidage manuel
+          it: Servire la cache ed evitare la rete fino a uno svuotamento manuale
+    explanation:
+      en: >-
+        The user sees something instantly instead of a spinner, and correctness
+        catches up a moment later. The trade is that what is on screen may be
+        briefly out of date — fine for a list of articles, wrong for an account
+        balance you are about to act on. Choosing the staleness window is the
+        real decision.
+      fr: >-
+        L'utilisateur voit quelque chose immédiatement plutôt qu'un indicateur
+        de chargement, et l'exactitude rattrape un instant plus tard. En
+        contrepartie, l'affichage peut être brièvement périmé — acceptable pour
+        une liste d'articles, non pour un solde sur lequel on va agir. Choisir
+        la fenêtre de péremption est la vraie décision.
+      it: >-
+        L'utente vede subito qualcosa invece di uno spinner, e la correttezza
+        arriva un istante dopo. In cambio, ciò che è a schermo può essere
+        brevemente non aggiornato — accettabile per un elenco di articoli,
+        sbagliato per un saldo su cui si sta per agire. Scegliere la finestra di
+        obsolescenza è la vera decisione.
+
+  - id: optimistic-updates
+    prompt:
+      en: An optimistic update needs which pieces to be safe?
+      fr: De quels éléments une mise à jour optimiste a-t-elle besoin pour être sûre ?
+      it: Di quali elementi ha bisogno un aggiornamento ottimistico per essere sicuro?
+    options:
+      - id: snapshot-rollback
+        correct: true
+        text:
+          en: A snapshot of the previous cache, to roll back if the request fails
+          fr: Un instantané du cache précédent, pour revenir en arrière en cas d'échec
+          it: Uno snapshot della cache precedente, per tornare indietro se fallisce
+      - id: reconcile
+        correct: true
+        text:
+          en: Replacing the guess with the server's canonical response on success
+          fr: Remplacer la supposition par la réponse canonique du serveur en cas de succès
+          it: Sostituire la supposizione con la risposta canonica del server in caso di successo
+      - id: disable-ui
+        text:
+          en: Disabling the interface until the server replies
+          fr: Désactiver l'interface jusqu'à la réponse du serveur
+          it: Disabilitare l'interfaccia fino alla risposta del server
+    explanation:
+      en: >-
+        You are showing a guess before you know it is true, so you need a way
+        back and a way to confirm. Keep the snapshot, apply the guess, then
+        either overwrite it with what the server actually returned or restore
+        the snapshot. Disabling the UI while waiting is exactly the latency
+        optimistic updates exist to hide.
+      fr: >-
+        Vous affichez une supposition avant de la savoir vraie : il faut donc un
+        retour en arrière et une confirmation. Conservez l'instantané, appliquez
+        la supposition, puis écrasez-la avec ce que le serveur a réellement
+        renvoyé ou restaurez l'instantané. Désactiver l'interface pendant
+        l'attente, c'est justement la latence que la mise à jour optimiste
+        cherche à masquer.
+      it: >-
+        Stai mostrando una supposizione prima di sapere se è vera: servono
+        quindi una via di ritorno e una conferma. Conserva lo snapshot, applica
+        la supposizione, poi sovrascrivila con ciò che il server ha davvero
+        restituito oppure ripristina lo snapshot. Disabilitare l'interfaccia
+        durante l'attesa è proprio la latenza che l'aggiornamento ottimistico
+        vuole nascondere.
+
+  - id: query-key
+    prompt:
+      en: >-
+        Why does a query library ask for a key like `['user', id]` rather than
+        just the fetch function?
+      fr: >-
+        Pourquoi une bibliothèque de requêtes demande-t-elle une clé comme
+        `['user', id]` plutôt que la seule fonction de récupération ?
+      it: >-
+        Perché una libreria di query chiede una chiave come `['user', id]`
+        invece della sola funzione di fetch?
+    options:
+      - id: identity
+        correct: true
+        text:
+          en: >-
+            The key identifies the cache entry, so it can dedupe, refetch and
+            invalidate precisely
+          fr: >-
+            La clé identifie l'entrée de cache, permettant déduplication,
+            revalidation et invalidation précises
+          it: >-
+            La chiave identifica la voce di cache, permettendo deduplicazione,
+            rifetch e invalidazione precisi
+      - id: ordering
+        text:
+          en: It sets the order requests are sent in
+          fr: Elle fixe l'ordre d'envoi des requêtes
+          it: Stabilisce l'ordine di invio delle richieste
+      - id: auth
+        text:
+          en: It is sent to the server to authorise the request
+          fr: Elle est envoyée au serveur pour autoriser la requête
+          it: Viene inviata al server per autorizzare la richiesta
+    explanation:
+      en: >-
+        The key is the cache's identity for that piece of server state. Two
+        components asking for `['user', 7]` share one request instead of firing
+        two; changing the id makes it a different entry; and after a mutation
+        you can invalidate `['user', 7]` alone rather than throwing away
+        everything.
+      fr: >-
+        La clé est l'identité de cette donnée serveur dans le cache. Deux
+        composants demandant `['user', 7]` partagent une requête au lieu d'en
+        lancer deux ; changer l'identifiant crée une autre entrée ; et après une
+        mutation vous pouvez invalider `['user', 7]` seul plutôt que tout jeter.
+      it: >-
+        La chiave è l'identità di quel dato del server nella cache. Due
+        componenti che chiedono `['user', 7]` condividono una richiesta invece
+        di lanciarne due; cambiare l'id crea un'altra voce; e dopo una mutazione
+        puoi invalidare solo `['user', 7]` invece di buttare via tutto.
+
+  - id: why-a-library
+    prompt:
+      en: >-
+        What do you end up rebuilding by hand if you fetch with `useEffect`
+        everywhere?
+      fr: >-
+        Que finit-on par réimplémenter à la main en récupérant les données avec
+        `useEffect` partout ?
+      it: >-
+        Cosa si finisce per riscrivere a mano recuperando i dati con
+        `useEffect` ovunque?
+    options:
+      - id: the-hard-parts
+        correct: true
+        text:
+          en: >-
+            Caching, deduplication, retries, invalidation and cancellation — in
+            every component
+          fr: >-
+            Cache, déduplication, reprises, invalidation et annulation — dans
+            chaque composant
+          it: >-
+            Cache, deduplicazione, tentativi, invalidazione e annullamento — in
+            ogni componente
+      - id: jsx
+        text:
+          en: JSX rendering of the results
+          fr: Le rendu JSX des résultats
+          it: Il rendering JSX dei risultati
+      - id: nothing
+        text:
+          en: >-
+            Nothing — `useEffect` already covers all of it
+          fr: >-
+            Rien — `useEffect` couvre déjà tout cela
+          it: >-
+            Niente — `useEffect` copre già tutto
+    explanation:
+      en: >-
+        The fetch itself is three lines; everything around it is not. Server
+        state needs to be shared between components, kept fresh, deduplicated,
+        retried, cancelled and invalidated after writes. Writing that once per
+        component is how `isLoading` flags multiply and quietly diverge —
+        which is the argument for a library rather than a matter of taste.
+      fr: >-
+        La récupération elle-même tient en trois lignes ; tout ce qui l'entoure,
+        non. L'état serveur doit être partagé entre composants, maintenu à jour,
+        dédupliqué, réessayé, annulé et invalidé après écriture. Écrire cela une
+        fois par composant, c'est ainsi que les drapeaux `isLoading` se
+        multiplient et divergent en silence — d'où l'argument pour une
+        bibliothèque, au-delà du goût.
+      it: >-
+        Il fetch in sé sono tre righe; tutto ciò che gli sta intorno no. Lo
+        stato del server va condiviso fra componenti, tenuto fresco,
+        deduplicato, ritentato, annullato e invalidato dopo le scritture.
+        Scriverlo una volta per componente è il modo in cui i flag `isLoading`
+        si moltiplicano e divergono in silenzio — da cui l'argomento per una
+        libreria, al di là dei gusti.

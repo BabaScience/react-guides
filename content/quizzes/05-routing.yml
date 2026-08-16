@@ -1,0 +1,311 @@
+# Checkpoint quiz — 05-routing
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 05-routing
+
+questions:
+  - id: link-vs-anchor
+    prompt:
+      en: >-
+        Inside a React Router app, what happens if you navigate with
+        `<a href="/profile">` instead of `<Link to="/profile">`?
+      fr: >-
+        Dans une application React Router, que se passe-t-il si vous naviguez
+        avec `<a href="/profile">` au lieu de `<Link to="/profile">` ?
+      it: >-
+        In un'app React Router, cosa succede se navighi con
+        `<a href="/profile">` invece di `<Link to="/profile">`?
+    options:
+      - id: full-reload
+        correct: true
+        text:
+          en: The browser reloads the whole page and in-memory state is lost
+          fr: Le navigateur recharge toute la page et l'état en mémoire est perdu
+          it: Il browser ricarica l'intera pagina e lo stato in memoria va perso
+      - id: identical
+        text:
+          en: Nothing differs; `Link` renders an `<a>` and behaves the same
+          fr: Rien ne change ; `Link` rend un `<a>` et se comporte pareil
+          it: Non cambia nulla; `Link` rende un `<a>` e si comporta uguale
+      - id: error
+        text:
+          en: React Router throws, because the route was not matched
+          fr: React Router lève une erreur, la route n'ayant pas été trouvée
+          it: React Router lancia un errore, perché la rotta non è stata trovata
+    explanation:
+      en: >-
+        `Link` does render an `<a>`, but it intercepts the click and uses the
+        History API — the URL changes and the router swaps components, with no
+        server round trip. A bare `<a>` is a real navigation: the document is
+        thrown away and rebuilt, so every piece of state your app was holding
+        starts again from scratch.
+      fr: >-
+        `Link` rend bien un `<a>`, mais il intercepte le clic et passe par
+        l'History API : l'URL change et le routeur échange les composants, sans
+        aller-retour serveur. Un `<a>` nu est une vraie navigation : le document
+        est jeté puis reconstruit, et tout l'état que gardait l'application
+        repart de zéro.
+      it: >-
+        `Link` rende davvero un `<a>`, ma intercetta il clic e usa la History
+        API: l'URL cambia e il router sostituisce i componenti, senza andata e
+        ritorno al server. Un `<a>` semplice è una navigazione vera: il
+        documento viene buttato e ricostruito, e tutto lo stato che l'app
+        teneva riparte da zero.
+
+  - id: outlet-role
+    prompt:
+      en: >-
+        A layout route renders a sidebar and `<Outlet />`. What does `Outlet`
+        put on the page?
+      fr: >-
+        Une route de mise en page affiche une barre latérale et `<Outlet />`.
+        Qu'affiche `Outlet` ?
+      it: >-
+        Una route di layout mostra una sidebar e `<Outlet />`. Cosa mette in
+        pagina `Outlet`?
+    options:
+      - id: matched-child
+        correct: true
+        text:
+          en: Whichever child route currently matches the URL
+          fr: La route enfant qui correspond actuellement à l'URL
+          it: La route figlia che corrisponde attualmente all'URL
+      - id: all-children
+        text:
+          en: Every child route at once, stacked
+          fr: Toutes les routes enfants à la fois, empilées
+          it: Tutte le route figlie insieme, impilate
+      - id: parent
+        text:
+          en: The parent route's own element, a second time
+          fr: L'élément de la route parente, une seconde fois
+          it: L'elemento della route genitore, una seconda volta
+    explanation:
+      en: >-
+        `Outlet` is the hole the matched child is rendered into. That is what
+        makes the layout persist: the sidebar mounts once and stays mounted
+        while the content beside it changes, instead of every page repeating
+        the chrome and remounting it on each navigation.
+      fr: >-
+        `Outlet` est l'emplacement où la route enfant correspondante est
+        rendue. C'est ce qui fait persister la mise en page : la barre latérale
+        est montée une fois et le reste pendant que le contenu à côté change,
+        au lieu que chaque page répète l'habillage et le remonte à chaque
+        navigation.
+      it: >-
+        `Outlet` è il punto in cui viene reso il figlio corrispondente. È ciò
+        che fa persistere il layout: la sidebar viene montata una volta e resta
+        montata mentre il contenuto accanto cambia, invece che ogni pagina
+        ripeta la cornice e la rimonti a ogni navigazione.
+
+  - id: index-route
+    prompt:
+      en: >-
+        Inside `<Route path="/dashboard">`, what does
+        `<Route index element={<Overview />} />` mean?
+      fr: >-
+        Dans `<Route path="/dashboard">`, que signifie
+        `<Route index element={<Overview />} />` ?
+      it: >-
+        Dentro `<Route path="/dashboard">`, cosa significa
+        `<Route index element={<Overview />} />`?
+    options:
+      - id: exact-parent
+        correct: true
+        text:
+          en: >-
+            Render `Overview` in the outlet when the URL is exactly `/dashboard`
+          fr: >-
+            Afficher `Overview` dans l'outlet quand l'URL est exactement `/dashboard`
+          it: >-
+            Mostrare `Overview` nell'outlet quando l'URL è esattamente `/dashboard`
+      - id: first
+        text:
+          en: Render it first, above the other children
+          fr: L'afficher en premier, au-dessus des autres enfants
+          it: Mostrarlo per primo, sopra gli altri figli
+      - id: fallback
+        text:
+          en: Use it whenever no other child route matches
+          fr: L'utiliser dès qu'aucune autre route enfant ne correspond
+          it: Usarlo ogni volta che nessun'altra route figlia corrisponde
+    explanation:
+      en: >-
+        An index route is the default child: it fills the parent's `Outlet` at
+        the parent's own path, so `/dashboard` isn't an empty shell. It is not a
+        catch-all — an unmatched path like `/dashboard/nope` falls through to a
+        `path="*"` route, not to the index.
+      fr: >-
+        Une route index est l'enfant par défaut : elle remplit l'`Outlet` du
+        parent à l'URL du parent, pour que `/dashboard` ne soit pas une coquille
+        vide. Ce n'est pas un fourre-tout — un chemin non trouvé comme
+        `/dashboard/nope` tombe sur une route `path="*"`, pas sur l'index.
+      it: >-
+        Una route index è il figlio predefinito: riempie l'`Outlet` del genitore
+        al percorso del genitore, così `/dashboard` non è un guscio vuoto. Non è
+        un catch-all — un percorso non trovato come `/dashboard/nope` finisce su
+        una route `path="*"`, non sull'index.
+
+  - id: params-vs-search
+    prompt:
+      en: >-
+        For `/products/42?sort=price`, which hook reads which part?
+      fr: >-
+        Pour `/products/42?sort=price`, quel hook lit quelle partie ?
+      it: >-
+        Per `/products/42?sort=price`, quale hook legge quale parte?
+    options:
+      - id: correct-split
+        correct: true
+        text:
+          en: >-
+            `useParams` gives `42`; `useSearchParams` gives `sort`
+          fr: >-
+            `useParams` donne `42` ; `useSearchParams` donne `sort`
+          it: >-
+            `useParams` dà `42`; `useSearchParams` dà `sort`
+      - id: swapped
+        text:
+          en: >-
+            `useParams` gives `sort`; `useSearchParams` gives `42`
+          fr: >-
+            `useParams` donne `sort` ; `useSearchParams` donne `42`
+          it: >-
+            `useParams` dà `sort`; `useSearchParams` dà `42`
+      - id: both-params
+        text:
+          en: >-
+            `useParams` returns both, since both are in the URL
+          fr: >-
+            `useParams` renvoie les deux, tous deux étant dans l'URL
+          it: >-
+            `useParams` restituisce entrambi, dato che sono entrambi nell'URL
+    explanation:
+      en: >-
+        Path params come from the pattern you declared — `path="/products/:id"`
+        makes `useParams().id` be `'42'`. The query string is not part of route
+        matching at all; `useSearchParams` reads it and gives you a setter that
+        updates the URL. Both are always strings, so parse before doing maths.
+      fr: >-
+        Les paramètres de chemin viennent du motif déclaré :
+        `path="/products/:id"` fait que `useParams().id` vaut `'42'`. La chaîne
+        de requête ne participe pas au filtrage des routes ;
+        `useSearchParams` la lit et fournit un setter qui met l'URL à jour. Les
+        deux sont toujours des chaînes : convertissez avant tout calcul.
+      it: >-
+        I parametri di percorso vengono dal pattern dichiarato:
+        `path="/products/:id"` fa sì che `useParams().id` valga `'42'`. La query
+        string non partecipa affatto al matching delle route;
+        `useSearchParams` la legge e fornisce un setter che aggiorna l'URL.
+        Entrambi sono sempre stringhe: converti prima di fare calcoli.
+
+  - id: protected-route
+    prompt:
+      en: >-
+        A `RequireAuth` wrapper redirects signed-out visitors to `/login`.
+        Which statements are true?
+      fr: >-
+        Un composant `RequireAuth` redirige les visiteurs non connectés vers
+        `/login`. Quelles affirmations sont vraies ?
+      it: >-
+        Un wrapper `RequireAuth` reindirizza i visitatori non autenticati a
+        `/login`. Quali affermazioni sono vere?
+    options:
+      - id: remember-target
+        correct: true
+        text:
+          en: >-
+            It should record where the user was heading, to return them there
+            after login
+          fr: >-
+            Il doit mémoriser la destination visée, pour y ramener l'utilisateur
+            après connexion
+          it: >-
+            Deve ricordare dove l'utente stava andando, per riportarlo lì dopo
+            il login
+      - id: not-security
+        correct: true
+        text:
+          en: It improves the experience but does not secure the data
+          fr: Il améliore l'expérience mais ne sécurise pas les données
+          it: Migliora l'esperienza ma non mette al sicuro i dati
+      - id: hides-code
+        text:
+          en: It prevents the protected page's code from reaching the browser
+          fr: Il empêche le code de la page protégée d'atteindre le navigateur
+          it: Impedisce al codice della pagina protetta di arrivare al browser
+    explanation:
+      en: >-
+        A route guard is UI logic, and it runs on a machine the visitor
+        controls: they can edit the bundle or call your API directly. It exists
+        so that people are not shown a broken empty page — the server must
+        still authorise every request. Redirecting with the attempted location
+        in state is what lets login send them onward instead of dumping them
+        on a generic home page.
+      fr: >-
+        Un garde de route est de la logique d'interface, exécutée sur une
+        machine que le visiteur contrôle : il peut modifier le bundle ou
+        appeler votre API directement. Il existe pour éviter d'afficher une
+        page vide cassée — le serveur doit toujours autoriser chaque requête.
+        Rediriger en gardant la destination dans l'état permet à la connexion
+        d'y renvoyer, plutôt que de déposer l'utilisateur sur l'accueil.
+      it: >-
+        Una route guard è logica di interfaccia, eseguita su una macchina che il
+        visitatore controlla: può modificare il bundle o chiamare la tua API
+        direttamente. Esiste per non mostrare una pagina vuota rotta — il server
+        deve comunque autorizzare ogni richiesta. Reindirizzare tenendo nello
+        stato la destinazione tentata è ciò che permette al login di mandarlo lì
+        invece che su una home generica.
+
+  - id: route-splitting
+    prompt:
+      en: >-
+        Why pair `React.lazy` with routes rather than importing every page
+        normally?
+      fr: >-
+        Pourquoi associer `React.lazy` aux routes plutôt qu'importer chaque page
+        normalement ?
+      it: >-
+        Perché abbinare `React.lazy` alle route invece di importare ogni pagina
+        normalmente?
+    options:
+      - id: per-route-chunk
+        correct: true
+        text:
+          en: >-
+            Each page becomes its own chunk, downloaded only when visited
+          fr: >-
+            Chaque page devient un chunk séparé, téléchargé seulement si visitée
+          it: >-
+            Ogni pagina diventa un chunk a sé, scaricato solo se visitata
+      - id: faster-render
+        text:
+          en: Lazy components render faster once loaded
+          fr: Les composants lazy s'affichent plus vite une fois chargés
+          it: I componenti lazy si rendono più velocemente una volta caricati
+      - id: no-suspense
+        text:
+          en: It removes the need for a loading state
+          fr: Cela supprime le besoin d'un état de chargement
+          it: Elimina la necessità di uno stato di caricamento
+    explanation:
+      en: >-
+        A route is a natural split point: someone who never opens the admin
+        panel should never pay for its code. The saving is in what the first
+        load *doesn't* fetch — once a chunk has arrived the component renders
+        at normal speed. It does need a `<Suspense>` boundary above it to show
+        something while the chunk is in flight.
+      fr: >-
+        Une route est un point de découpe naturel : quelqu'un qui n'ouvre jamais
+        le panneau d'administration ne devrait pas payer son code. Le gain porte
+        sur ce que le premier chargement ne récupère *pas* — une fois le chunk
+        arrivé, le composant s'affiche à vitesse normale. Il faut une frontière
+        `<Suspense>` au-dessus pour afficher quelque chose pendant le transfert.
+      it: >-
+        Una route è un punto di divisione naturale: chi non apre mai il pannello
+        di amministrazione non dovrebbe pagarne il codice. Il risparmio sta in
+        ciò che il primo caricamento *non* scarica — una volta arrivato il
+        chunk, il componente si rende a velocità normale. Serve però un confine
+        `<Suspense>` sopra, per mostrare qualcosa durante il trasferimento.

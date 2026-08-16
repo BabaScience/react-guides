@@ -43,6 +43,7 @@ steps:
     section: 10. Pattern Selection Decision Matrix
   - lesson: patterns-conclusion
     section: "Conclusion: Architecting Excellence"
+  - quiz: checkpoint
 exercises:
   card:
     number: 1

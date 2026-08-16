@@ -43,6 +43,7 @@ steps:
     section: 10. State Management Selection Matrix
   - lesson: state-conclusion
     section: "Conclusion: State Management Mastery"
+  - quiz: checkpoint
 exercises:
   create-store:
     number: 1

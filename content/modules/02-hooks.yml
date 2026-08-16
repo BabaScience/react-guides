@@ -44,6 +44,7 @@ steps:
     section: 10. Advanced Patterns
   - lesson: hooks-wrap-up
     section: Wrapping Up
+  - quiz: checkpoint
 exercises:
   counter-functional:
     number: 1

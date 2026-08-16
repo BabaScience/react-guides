@@ -41,6 +41,7 @@ steps:
     section: 9. Test Coverage and Quality Metrics
   - lesson: best-practices
     section: 10. Testing Best Practices and Patterns
+  - quiz: checkpoint
 exercises:
   sum:
     number: 1

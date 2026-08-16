@@ -1,0 +1,324 @@
+# Checkpoint quiz — 06-state-management
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 06-state-management
+
+questions:
+  - id: when-global
+    prompt:
+      en: When does a piece of state genuinely belong in a global store?
+      fr: Quand un morceau d'état a-t-il vraiment sa place dans un store global ?
+      it: Quando un pezzo di stato appartiene davvero a uno store globale?
+    options:
+      - id: disconnected
+        correct: true
+        text:
+          en: >-
+            When components that are not related by the tree must agree on it
+          fr: >-
+            Quand des composants sans lien dans l'arbre doivent s'accorder dessus
+          it: >-
+            Quando componenti non collegati nell'albero devono concordare su di esso
+      - id: many-fields
+        text:
+          en: As soon as the component holds more than a few fields
+          fr: Dès que le composant détient plus de quelques champs
+          it: Appena il componente ha più di qualche campo
+      - id: any-shared
+        text:
+          en: Whenever two components share it, including parent and child
+          fr: Dès que deux composants le partagent, y compris parent et enfant
+          it: Ogni volta che due componenti lo condividono, genitore e figlio inclusi
+    explanation:
+      en: >-
+        The ladder goes local → lift to a common ancestor → global. A parent and
+        its child sharing a value is what lifting state is for; reaching for a
+        store there adds indirection and buys nothing. Global earns its place
+        when the components are far apart or genuinely unrelated, like the
+        signed-in user or a theme.
+      fr: >-
+        L'échelle est : local → remonter à un ancêtre commun → global. Un parent
+        et son enfant qui partagent une valeur, c'est exactement le rôle de la
+        remontée d'état ; sortir un store à ce stade ajoute de l'indirection
+        sans rien apporter. Le global se justifie quand les composants sont
+        éloignés ou sans rapport, comme l'utilisateur connecté ou un thème.
+      it: >-
+        La scala è: locale → sollevare a un antenato comune → globale. Un
+        genitore e un figlio che condividono un valore sono esattamente il caso
+        del sollevamento di stato; tirare fuori uno store lì aggiunge
+        indirezione senza dare nulla. Il globale si giustifica quando i
+        componenti sono lontani o davvero scollegati, come l'utente connesso o
+        un tema.
+
+  - id: context-rerenders
+    prompt:
+      en: >-
+        One context holds `{ user, theme, cart }`. Changing `cart` re-renders
+        components that only read `theme`. Why, and what fixes it?
+      fr: >-
+        Un seul context contient `{ user, theme, cart }`. Modifier `cart`
+        provoque le rendu de composants qui ne lisent que `theme`. Pourquoi, et
+        comment corriger ?
+      it: >-
+        Un solo context contiene `{ user, theme, cart }`. Cambiare `cart` fa
+        rirenderizzare componenti che leggono solo `theme`. Perché, e come si
+        risolve?
+    options:
+      - id: split-contexts
+        correct: true
+        text:
+          en: >-
+            Every consumer re-renders when the value changes — split it into
+            contexts by update frequency
+          fr: >-
+            Tout consommateur se rend à nouveau quand la valeur change — séparez
+            en contexts selon la fréquence de mise à jour
+          it: >-
+            Ogni consumatore si rirenderizza quando il valore cambia — dividilo
+            in context per frequenza di aggiornamento
+      - id: memo-consumer
+        text:
+          en: >-
+            Wrap each consumer in `React.memo`; that stops context updates
+          fr: >-
+            Envelopper chaque consommateur dans `React.memo` arrête les mises à jour
+          it: >-
+            Avvolgere ogni consumatore in `React.memo` ferma gli aggiornamenti
+      - id: selector
+        text:
+          en: >-
+            Pass a selector to `useContext` so it subscribes to one key
+          fr: >-
+            Passer un sélecteur à `useContext` pour ne s'abonner qu'à une clé
+          it: >-
+            Passare un selettore a `useContext` per iscriversi a una sola chiave
+    explanation:
+      en: >-
+        Context has no selectors: `useContext` subscribes to the whole value, so
+        any change notifies every consumer, and `React.memo` cannot stop it —
+        the update arrives through context, not through props. Splitting into
+        several contexts is the fix that matches how the API actually works.
+        A store with selectors is the other answer.
+      fr: >-
+        Le context n'a pas de sélecteurs : `useContext` s'abonne à la valeur
+        entière, donc tout changement notifie chaque consommateur, et
+        `React.memo` n'y peut rien — la mise à jour passe par le context, pas
+        par les props. Découper en plusieurs contexts est le correctif adapté au
+        fonctionnement réel de l'API. Un store à sélecteurs est l'autre réponse.
+      it: >-
+        Il context non ha selettori: `useContext` si iscrive all'intero valore,
+        quindi ogni cambiamento avvisa tutti i consumatori, e `React.memo` non
+        può fermarlo — l'aggiornamento arriva dal context, non dalle props.
+        Dividere in più context è la correzione adatta a come funziona davvero
+        l'API. Uno store con selettori è l'altra risposta.
+
+  - id: store-selector
+    prompt:
+      en: >-
+        A Zustand component calls `useStore(state => state.count)`. Another
+        slice of the store changes. What happens?
+      fr: >-
+        Un composant Zustand appelle `useStore(state => state.count)`. Une autre
+        partie du store change. Que se passe-t-il ?
+      it: >-
+        Un componente Zustand chiama `useStore(state => state.count)`. Cambia
+        un'altra porzione dello store. Cosa succede?
+    options:
+      - id: skipped
+        correct: true
+        text:
+          en: >-
+            The selector runs, the value is unchanged, and the component does
+            not re-render
+          fr: >-
+            Le sélecteur s'exécute, la valeur est inchangée, et le composant ne
+            se rend pas à nouveau
+          it: >-
+            Il selettore viene eseguito, il valore non cambia e il componente
+            non si rirenderizza
+      - id: always
+        text:
+          en: It re-renders, because the store object is new
+          fr: Il se rend à nouveau, car l'objet du store est nouveau
+          it: Si rirenderizza, perché l'oggetto dello store è nuovo
+      - id: never
+        text:
+          en: Nothing runs; subscriptions only fire for the selected key
+          fr: Rien ne s'exécute ; les abonnements ne visent que la clé sélectionnée
+          it: Non viene eseguito nulla; le sottoscrizioni riguardano solo la chiave scelta
+    explanation:
+      en: >-
+        The store lives outside React and notifies every subscriber on any
+        change, but each subscription re-runs its selector and compares the
+        result. Same value, no render. That comparison is the whole reason a
+        selector-based store scales where a single large context does not — so
+        select the narrowest slice you need, not the whole state object.
+      fr: >-
+        Le store vit hors de React et notifie tous les abonnés à chaque
+        changement, mais chaque abonnement réexécute son sélecteur et compare le
+        résultat. Même valeur, pas de rendu. Cette comparaison explique
+        pourquoi un store à sélecteurs passe à l'échelle là où un gros context
+        unique échoue — sélectionnez donc la plus petite part utile, pas l'état
+        entier.
+      it: >-
+        Lo store vive fuori da React e avvisa ogni sottoscrittore a ogni
+        cambiamento, ma ogni sottoscrizione riesegue il proprio selettore e
+        confronta il risultato. Stesso valore, nessun render. Quel confronto è
+        il motivo per cui uno store con selettori scala dove un unico context
+        grande non ce la fa — quindi seleziona la porzione più piccola che ti
+        serve, non l'intero stato.
+
+  - id: reducer-purity
+    prompt:
+      en: Which belong inside a reducer?
+      fr: Qu'est-ce qui a sa place dans un reducer ?
+      it: Cosa va messo dentro un reducer?
+    options:
+      - id: derive-next
+        correct: true
+        text:
+          en: Computing the next state from the previous state and the action
+          fr: Calculer l'état suivant à partir de l'état précédent et de l'action
+          it: Calcolare lo stato successivo da stato precedente e azione
+      - id: fetch
+        text:
+          en: Awaiting an API call and storing the response
+          fr: Attendre un appel d'API et stocker la réponse
+          it: Attendere una chiamata API e salvarne la risposta
+      - id: random
+        text:
+          en: >-
+            Reading `Date.now()` to timestamp the change
+          fr: >-
+            Lire `Date.now()` pour horodater le changement
+          it: >-
+            Leggere `Date.now()` per marcare temporalmente il cambiamento
+    explanation:
+      en: >-
+        A reducer must be pure: same state and action in, same state out, every
+        time. That is what makes the state predictable, replayable and easy to
+        test. Anything asynchronous or non-deterministic — requests, timestamps,
+        random ids — belongs in middleware or a thunk, which dispatches a plain
+        action once it has the value.
+      fr: >-
+        Un reducer doit être pur : mêmes état et action en entrée, même état en
+        sortie, à chaque fois. C'est ce qui rend l'état prévisible, rejouable et
+        facile à tester. Tout ce qui est asynchrone ou non déterministe —
+        requêtes, horodatages, identifiants aléatoires — relève d'un middleware
+        ou d'un thunk, qui émet une action simple une fois la valeur obtenue.
+      it: >-
+        Un reducer deve essere puro: stesso stato e stessa azione in ingresso,
+        stesso stato in uscita, ogni volta. È ciò che rende lo stato
+        prevedibile, riproducibile e facile da testare. Tutto ciò che è
+        asincrono o non deterministico — richieste, timestamp, id casuali — va
+        in un middleware o in un thunk, che invia un'azione semplice una volta
+        ottenuto il valore.
+
+  - id: atomic-model
+    prompt:
+      en: >-
+        How does an atomic library like Jotai differ from one big store object?
+      fr: >-
+        En quoi une bibliothèque atomique comme Jotai diffère-t-elle d'un gros
+        objet de store unique ?
+      it: >-
+        In cosa differisce una libreria atomica come Jotai da un unico grande
+        oggetto store?
+    options:
+      - id: atoms-compose
+        correct: true
+        text:
+          en: >-
+            State is many small atoms, and derived atoms recompute only when
+            their own inputs change
+          fr: >-
+            L'état est fait de nombreux petits atomes, et les atomes dérivés ne
+            se recalculent que si leurs entrées changent
+          it: >-
+            Lo stato è fatto di molti piccoli atomi, e gli atomi derivati si
+            ricalcolano solo se cambiano i loro input
+      - id: no-provider
+        text:
+          en: Atoms are global variables, so no React integration is needed
+          fr: Les atomes sont des variables globales, sans intégration React
+          it: Gli atomi sono variabili globali, senza integrazione con React
+      - id: sync-only
+        text:
+          en: Atoms cannot hold asynchronous values
+          fr: Les atomes ne peuvent pas contenir de valeurs asynchrones
+          it: Gli atomi non possono contenere valori asincroni
+    explanation:
+      en: >-
+        The atomic model inverts the usual arrangement: instead of one object
+        that components select slices out of, state is composed upward from
+        independent atoms, and a derived atom tracks exactly which atoms it
+        read. Subscriptions are therefore precise by construction rather than
+        by careful selector-writing.
+      fr: >-
+        Le modèle atomique inverse l'agencement habituel : au lieu d'un objet
+        unique dont les composants extraient des parts, l'état se compose vers
+        le haut à partir d'atomes indépendants, et un atome dérivé sait
+        exactement quels atomes il a lus. Les abonnements sont donc précis par
+        construction, et non à force de sélecteurs bien écrits.
+      it: >-
+        Il modello atomico ribalta l'assetto abituale: invece di un unico
+        oggetto da cui i componenti estraggono porzioni, lo stato si compone
+        verso l'alto da atomi indipendenti, e un atomo derivato sa esattamente
+        quali atomi ha letto. Le sottoscrizioni sono quindi precise per
+        costruzione, non a forza di selettori scritti bene.
+
+  - id: server-vs-client-state
+    prompt:
+      en: >-
+        Which of these is a poor fit for a client state store like Redux or
+        Zustand?
+      fr: >-
+        Lequel de ces éléments convient mal à un store client comme Redux ou
+        Zustand ?
+      it: >-
+        Quale di questi si adatta male a uno store client come Redux o Zustand?
+    options:
+      - id: server-cache
+        correct: true
+        text:
+          en: >-
+            A cached copy of data owned by the server, needing refetch and
+            invalidation
+          fr: >-
+            Une copie en cache de données appartenant au serveur, à revalider et
+            à invalider
+          it: >-
+            Una copia in cache di dati posseduti dal server, da rifetchare e
+            invalidare
+      - id: auth
+        text:
+          en: The signed-in user and their permissions
+          fr: L'utilisateur connecté et ses permissions
+          it: L'utente connesso e i suoi permessi
+      - id: ui-prefs
+        text:
+          en: Theme, language and sidebar collapsed state
+          fr: Thème, langue et état replié de la barre latérale
+          it: Tema, lingua e stato compresso della sidebar
+    explanation:
+      en: >-
+        Server data is not really state you own — it is a cache of someone
+        else's, and it needs staleness, refetching, deduplication and error
+        retries. Hand-rolling that inside a client store is how reducers end up
+        full of `isLoading` flags. That job belongs to a data-fetching library,
+        which the next module covers.
+      fr: >-
+        Les données du serveur ne sont pas vraiment votre état : c'est le cache
+        de celui d'un autre, avec péremption, revalidation, déduplication et
+        reprises sur erreur. Réimplémenter cela à la main dans un store client,
+        c'est ainsi que les reducers se remplissent de drapeaux `isLoading`.
+        Ce travail revient à une bibliothèque de récupération de données, sujet
+        du module suivant.
+      it: >-
+        I dati del server non sono davvero stato tuo: sono la cache di quelli di
+        qualcun altro, con scadenza, rifetch, deduplicazione e nuovi tentativi
+        in caso di errore. Riscrivere tutto ciò a mano dentro uno store client è
+        il modo in cui i reducer si riempiono di flag `isLoading`. È compito di
+        una libreria di data fetching, argomento del modulo successivo.

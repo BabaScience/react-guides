@@ -1,0 +1,290 @@
+# Checkpoint quiz — 03-component-patterns
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 03-component-patterns
+
+questions:
+  - id: prop-drilling-definition
+    prompt:
+      en: >-
+        `App` holds `user`. `Dashboard` and `Sidebar` pass it down untouched so
+        `UserAvatar` can read it. What is the actual cost of this?
+      fr: >-
+        `App` détient `user`. `Dashboard` et `Sidebar` le transmettent tel quel
+        pour que `UserAvatar` puisse le lire. Quel en est le vrai coût ?
+      it: >-
+        `App` contiene `user`. `Dashboard` e `Sidebar` lo passano invariato
+        perché `UserAvatar` possa leggerlo. Qual è il costo reale?
+    options:
+      - id: coupling
+        correct: true
+        text:
+          en: >-
+            Components that don't use `user` are now coupled to its shape
+          fr: >-
+            Des composants qui n'utilisent pas `user` sont désormais couplés à sa forme
+          it: >-
+            Componenti che non usano `user` sono ora accoppiati alla sua forma
+      - id: slow
+        text:
+          en: Each extra layer measurably slows rendering
+          fr: Chaque niveau supplémentaire ralentit sensiblement le rendu
+          it: Ogni livello in più rallenta sensibilmente il rendering
+      - id: broken
+        text:
+          en: Props cannot travel more than three levels deep
+          fr: Les props ne peuvent pas descendre au-delà de trois niveaux
+          it: Le props non possono scendere oltre tre livelli
+    explanation:
+      en: >-
+        Prop drilling works — that is what makes it easy to live with for too
+        long. The problem is maintenance: changing `user`'s shape means editing
+        every component that merely relays it, and those components can no
+        longer be understood on their own.
+      fr: >-
+        Le prop drilling fonctionne — c'est ce qui le rend supportable trop
+        longtemps. Le problème est la maintenance : changer la forme de `user`
+        oblige à modifier tous les composants qui ne font que le relayer, et
+        ces composants ne se comprennent plus isolément.
+      it: >-
+        Il prop drilling funziona — ed è ciò che lo rende sopportabile troppo a
+        lungo. Il problema è la manutenzione: cambiare la forma di `user`
+        obbliga a modificare ogni componente che si limita a inoltrarlo, e quei
+        componenti non si capiscono più da soli.
+
+  - id: composition-fix
+    prompt:
+      en: >-
+        How does passing `children` remove prop drilling, when Context is not
+        involved at all?
+      fr: >-
+        Comment le passage de `children` supprime-t-il le prop drilling, sans
+        aucun recours au Context ?
+      it: >-
+        Come fa il passaggio di `children` a eliminare il prop drilling, senza
+        coinvolgere il Context?
+    options:
+      - id: element-built-above
+        correct: true
+        text:
+          en: >-
+            The element is created where the data already is, so the layers in
+            between only render a slot
+          fr: >-
+            L'élément est créé là où la donnée se trouve déjà ; les niveaux
+            intermédiaires ne rendent qu'un emplacement
+          it: >-
+            L'elemento è creato dove il dato già si trova, così i livelli
+            intermedi rendono solo uno slot
+      - id: auto-context
+        text:
+          en: >-
+            React passes props to `children` automatically behind the scenes
+          fr: >-
+            React transmet automatiquement les props aux `children` en coulisses
+          it: >-
+            React passa automaticamente le props ai `children` dietro le quinte
+      - id: global
+        text:
+          en: >-
+            `children` is a global scope every descendant can read
+          fr: >-
+            `children` est une portée globale lisible par tous les descendants
+          it: >-
+            `children` è uno scope globale leggibile da ogni discendente
+    explanation:
+      en: >-
+        `<Sidebar><UserSection user={user} /></Sidebar>` builds the element in
+        `App`, where `user` already exists, and hands `Sidebar` a finished node.
+        `Sidebar` renders `{children}` without knowing what is inside. Nothing
+        is passed down — the tree shape changed instead.
+      fr: >-
+        `<Sidebar><UserSection user={user} /></Sidebar>` construit l'élément
+        dans `App`, où `user` existe déjà, et donne à `Sidebar` un nœud tout
+        prêt. `Sidebar` rend `{children}` sans savoir ce qu'il contient. Rien
+        n'est transmis vers le bas : c'est la forme de l'arbre qui a changé.
+      it: >-
+        `<Sidebar><UserSection user={user} /></Sidebar>` costruisce l'elemento
+        in `App`, dove `user` esiste già, e passa a `Sidebar` un nodo pronto.
+        `Sidebar` rende `{children}` senza sapere cosa contiene. Nulla viene
+        passato verso il basso: è cambiata la forma dell'albero.
+
+  - id: state-colocation
+    prompt:
+      en: Where should a piece of state live?
+      fr: Où doit vivre un morceau d'état ?
+      it: Dove deve vivere un pezzo di stato?
+    options:
+      - id: closest
+        correct: true
+        text:
+          en: As close as possible to where it is used
+          fr: Aussi près que possible de l'endroit où il est utilisé
+          it: Il più vicino possibile a dove viene usato
+      - id: top
+        text:
+          en: At the top of the app, so anything can reach it
+          fr: En haut de l'application, pour que tout puisse y accéder
+          it: In cima all'app, così tutto può raggiungerlo
+      - id: store
+        text:
+          en: In a store, since local state does not scale
+          fr: Dans un store, l'état local ne passant pas à l'échelle
+          it: In uno store, dato che lo stato locale non scala
+    explanation:
+      en: >-
+        Colocation: push state down until exactly the components that need it
+        can see it, and lift it only when two siblings must agree. State kept
+        higher than necessary re-renders subtrees that don't care and turns a
+        local detail into everyone's business.
+      fr: >-
+        Colocation : descendez l'état jusqu'à ce que seuls les composants qui
+        en ont besoin le voient, et ne le remontez que si deux frères doivent
+        s'accorder. Un état placé plus haut que nécessaire provoque le rendu de
+        sous-arbres indifférents et transforme un détail local en affaire de tous.
+      it: >-
+        Colocation: spingi lo stato in basso finché lo vedono solo i componenti
+        che ne hanno bisogno, e sollevalo solo quando due fratelli devono
+        accordarsi. Uno stato tenuto più in alto del necessario fa rirenderizzare
+        sottoalberi indifferenti e trasforma un dettaglio locale in un problema
+        di tutti.
+
+  - id: container-presentational
+    prompt:
+      en: >-
+        In the container / presentational split, which belong to the
+        *presentational* side?
+      fr: >-
+        Dans la séparation conteneur / présentation, qu'est-ce qui relève du
+        côté *présentation* ?
+      it: >-
+        Nella separazione container / presentazione, cosa appartiene al lato
+        *presentazione*?
+    options:
+      - id: via-props
+        correct: true
+        text:
+          en: Receives its data through props
+          fr: Reçoit ses données par les props
+          it: Riceve i suoi dati tramite le props
+      - id: appearance
+        correct: true
+        text:
+          en: Concerned with how things look
+          fr: S'occupe de l'apparence
+          it: Si occupa dell'aspetto
+      - id: fetches
+        text:
+          en: Calls the API and holds the loading and error state
+          fr: Appelle l'API et détient l'état de chargement et d'erreur
+          it: Chiama l'API e detiene lo stato di caricamento ed errore
+    explanation:
+      en: >-
+        Presentational components take props and render; they rarely hold state
+        and cause no side effects, which makes them trivial to test and reuse.
+        Fetching, business logic and state belong to the container that feeds
+        them.
+      fr: >-
+        Les composants de présentation reçoivent des props et affichent ; ils
+        ont rarement de l'état et ne produisent pas d'effets de bord, ce qui les
+        rend triviaux à tester et à réutiliser. La récupération de données, la
+        logique métier et l'état appartiennent au conteneur qui les alimente.
+      it: >-
+        I componenti di presentazione ricevono props e rendono; raramente hanno
+        stato e non producono side effect, il che li rende banali da testare e
+        riusare. Il fetching, la logica di business e lo stato appartengono al
+        container che li alimenta.
+
+  - id: compound-components
+    prompt:
+      en: >-
+        `<Tabs><TabList><Tab/></TabList></Tabs>` — no `activeTab` prop appears
+        anywhere. How do the children know which tab is active?
+      fr: >-
+        `<Tabs><TabList><Tab/></TabList></Tabs>` — aucune prop `activeTab`
+        n'apparaît. Comment les enfants savent-ils quel onglet est actif ?
+      it: >-
+        `<Tabs><TabList><Tab/></TabList></Tabs>` — non compare nessuna prop
+        `activeTab`. Come fanno i figli a sapere quale tab è attiva?
+    options:
+      - id: implicit-context
+        correct: true
+        text:
+          en: The parent holds the state and shares it implicitly through context
+          fr: Le parent détient l'état et le partage implicitement via un context
+          it: Il genitore detiene lo stato e lo condivide implicitamente tramite un context
+      - id: clone
+        text:
+          en: React automatically clones children with the parent's state
+          fr: React clone automatiquement les enfants avec l'état du parent
+          it: React clona automaticamente i figli con lo stato del genitore
+      - id: dom-query
+        text:
+          en: Each `Tab` queries the DOM for its parent's active index
+          fr: Chaque `Tab` interroge le DOM pour connaître l'index actif du parent
+          it: Ogni `Tab` interroga il DOM per l'indice attivo del genitore
+    explanation:
+      en: >-
+        Compound components put the shared state in the parent and expose it
+        through a context the children consume. That is what buys the
+        declarative API: the caller arranges the pieces freely and never wires
+        state between them — at the cost of a more involved implementation.
+      fr: >-
+        Les composants composés placent l'état partagé dans le parent et
+        l'exposent via un context que les enfants consomment. C'est ce qui
+        permet l'API déclarative : l'appelant agence librement les morceaux
+        sans jamais câbler l'état — au prix d'une implémentation plus complexe.
+      it: >-
+        I componenti composti mettono lo stato condiviso nel genitore e lo
+        espongono tramite un context che i figli consumano. È questo a dare
+        l'API dichiarativa: chi la usa dispone i pezzi liberamente senza mai
+        collegare lo stato — al prezzo di un'implementazione più complessa.
+
+  - id: hook-vs-compound
+    prompt:
+      en: >-
+        You want to reuse stateful logic across unrelated components. Which
+        pattern fits, and why not the others?
+      fr: >-
+        Vous voulez réutiliser une logique à état dans des composants sans
+        rapport. Quel motif convient, et pourquoi pas les autres ?
+      it: >-
+        Vuoi riusare logica con stato in componenti non correlati. Quale
+        pattern è adatto, e perché non gli altri?
+    options:
+      - id: custom-hook
+        correct: true
+        text:
+          en: A custom hook — it shares logic without dictating any markup
+          fr: Un hook personnalisé — il partage la logique sans imposer de balisage
+          it: Un hook personalizzato — condivide la logica senza imporre markup
+      - id: compound
+        text:
+          en: Compound components, which exist to share logic anywhere
+          fr: Des composants composés, faits pour partager la logique partout
+          it: Componenti composti, fatti per condividere logica ovunque
+      - id: drilling
+        text:
+          en: Prop drilling, the only pattern that crosses unrelated trees
+          fr: Le prop drilling, seul motif à traverser des arbres sans rapport
+          it: Il prop drilling, unico pattern che attraversa alberi non correlati
+    explanation:
+      en: >-
+        A custom hook is the default answer for logic reuse: composable,
+        testable, and it renders nothing, so each caller keeps its own markup.
+        Compound components solve a different problem — a set of *related* UI
+        pieces that must cooperate, like tabs or an accordion.
+      fr: >-
+        Un hook personnalisé est la réponse par défaut pour réutiliser de la
+        logique : composable, testable, et il n'affiche rien, chaque appelant
+        gardant son propre balisage. Les composants composés résolvent un autre
+        problème — un ensemble d'éléments d'interface *liés* qui doivent
+        coopérer, comme des onglets ou un accordéon.
+      it: >-
+        Un hook personalizzato è la risposta predefinita per riusare logica:
+        componibile, testabile, e non rende nulla, così ogni chiamante mantiene
+        il proprio markup. I componenti composti risolvono un altro problema —
+        un insieme di elementi di interfaccia *correlati* che devono cooperare,
+        come tab o una fisarmonica.

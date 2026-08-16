@@ -1,0 +1,299 @@
+# Checkpoint quiz — 04-styling
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 04-styling
+
+questions:
+  - id: inline-style-keys
+    prompt:
+      en: >-
+        `style={{ 'background-color': 'blue' }}` does not work. What does React
+        expect instead?
+      fr: >-
+        `style={{ 'background-color': 'blue' }}` ne fonctionne pas. Qu'attend
+        React à la place ?
+      it: >-
+        `style={{ 'background-color': 'blue' }}` non funziona. Cosa si aspetta
+        React?
+    options:
+      - id: camel
+        correct: true
+        text:
+          en: >-
+            `backgroundColor` — the object is JavaScript, so keys are camelCase
+          fr: >-
+            `backgroundColor` — l'objet est du JavaScript, les clés sont en camelCase
+          it: >-
+            `backgroundColor` — l'oggetto è JavaScript, quindi le chiavi sono camelCase
+      - id: string
+        text:
+          en: A single CSS string, exactly as it would appear in a stylesheet
+          fr: Une seule chaîne CSS, telle qu'elle apparaîtrait dans une feuille de style
+          it: Un'unica stringa CSS, come apparirebbe in un foglio di stile
+      - id: array
+        text:
+          en: An array of `[property, value]` pairs
+          fr: Un tableau de paires `[propriété, valeur]`
+          it: Un array di coppie `[proprietà, valore]`
+    explanation:
+      en: >-
+        The `style` prop takes a plain JavaScript object, not CSS text, so
+        properties follow JavaScript naming: `backgroundColor`, `fontSize`,
+        `borderRadius`. Numeric values for length properties get `px` appended
+        automatically — `fontSize: 16` and `fontSize: '16px'` are the same.
+      fr: >-
+        La prop `style` reçoit un objet JavaScript ordinaire, pas du texte CSS ;
+        les propriétés suivent donc la nomenclature JavaScript :
+        `backgroundColor`, `fontSize`, `borderRadius`. Les valeurs numériques
+        des propriétés de longueur reçoivent `px` automatiquement — `fontSize: 16`
+        équivaut à `fontSize: '16px'`.
+      it: >-
+        La prop `style` riceve un normale oggetto JavaScript, non testo CSS, e
+        le proprietà seguono la notazione JavaScript: `backgroundColor`,
+        `fontSize`, `borderRadius`. Ai valori numerici delle proprietà di
+        lunghezza viene aggiunto `px` automaticamente — `fontSize: 16` equivale
+        a `fontSize: '16px'`.
+
+  - id: inline-limitations
+    prompt:
+      en: Which of these can inline styles *not* express?
+      fr: Que ne peuvent *pas* exprimer les styles en ligne ?
+      it: Cosa *non* possono esprimere gli stili inline?
+    options:
+      - id: pseudo
+        correct: true
+        text:
+          en: >-
+            Pseudo-classes and pseudo-elements such as `:hover` and `::before`
+          fr: >-
+            Les pseudo-classes et pseudo-éléments comme `:hover` et `::before`
+          it: >-
+            Pseudo-classi e pseudo-elementi come `:hover` e `::before`
+      - id: media
+        correct: true
+        text:
+          en: Media queries
+          fr: Les media queries
+          it: Le media query
+      - id: computed
+        text:
+          en: A value computed from state at render time
+          fr: Une valeur calculée depuis l'état au moment du rendu
+          it: Un valore calcolato dallo stato al momento del render
+    explanation:
+      en: >-
+        An inline style sets properties on one element, and that is all the DOM
+        `style` attribute can do — there is nowhere for a selector or a
+        condition to live. Values computed from state are the one thing inline
+        styles are genuinely good at. Anything needing a selector belongs in a
+        stylesheet.
+      fr: >-
+        Un style en ligne fixe des propriétés sur un élément, et c'est tout ce
+        que l'attribut DOM `style` sait faire — un sélecteur ou une condition
+        n'ont nulle part où vivre. Les valeurs calculées depuis l'état sont
+        justement ce que les styles en ligne font bien. Tout ce qui exige un
+        sélecteur appartient à une feuille de style.
+      it: >-
+        Uno stile inline imposta proprietà su un elemento, ed è tutto ciò che
+        l'attributo DOM `style` sa fare — un selettore o una condizione non
+        hanno dove stare. I valori calcolati dallo stato sono proprio ciò in cui
+        gli stili inline sono bravi. Tutto ciò che richiede un selettore va in
+        un foglio di stile.
+
+  - id: css-modules-scoping
+    prompt:
+      en: >-
+        Two files both define `.button`. With CSS Modules they don't collide.
+        What makes that true?
+      fr: >-
+        Deux fichiers définissent chacun `.button`. Avec les CSS Modules, ils
+        n'entrent pas en conflit. Pourquoi ?
+      it: >-
+        Due file definiscono entrambi `.button`. Con i CSS Modules non
+        collidono. Perché?
+    options:
+      - id: build-rename
+        correct: true
+        text:
+          en: The build step rewrites each class to a unique generated name
+          fr: L'étape de build réécrit chaque classe en un nom unique généré
+          it: Il build riscrive ogni classe con un nome unico generato
+      - id: shadow-dom
+        text:
+          en: Each component is rendered inside its own shadow DOM
+          fr: Chaque composant est rendu dans son propre shadow DOM
+          it: Ogni componente è reso dentro il proprio shadow DOM
+      - id: runtime
+        text:
+          en: The browser scopes styles per module at runtime
+          fr: Le navigateur limite les styles par module à l'exécution
+          it: Il browser limita gli stili per modulo a runtime
+    explanation:
+      en: >-
+        Scoping happens at build time, not in the browser. `.button` in
+        `Card.module.css` becomes something like `Card_button__3kT9`, and the
+        import gives you an object mapping your name to the generated one. The
+        CSS that ships is ordinary global CSS whose names simply cannot clash.
+      fr: >-
+        La portée est établie au build, pas dans le navigateur. `.button` dans
+        `Card.module.css` devient par exemple `Card_button__3kT9`, et l'import
+        fournit un objet reliant votre nom au nom généré. Le CSS livré est du
+        CSS global ordinaire dont les noms ne peuvent tout simplement pas
+        entrer en conflit.
+      it: >-
+        Lo scoping avviene in fase di build, non nel browser. `.button` in
+        `Card.module.css` diventa qualcosa come `Card_button__3kT9`, e l'import
+        fornisce un oggetto che mappa il tuo nome a quello generato. Il CSS
+        spedito è normale CSS globale i cui nomi semplicemente non possono
+        collidere.
+
+  - id: tailwind-tradeoff
+    prompt:
+      en: What is the defining trade-off of a utility-first approach like Tailwind?
+      fr: Quel est le compromis central d'une approche utility-first comme Tailwind ?
+      it: Qual è il compromesso centrale di un approccio utility-first come Tailwind?
+    options:
+      - id: markup-noise
+        correct: true
+        text:
+          en: >-
+            No context switch and no naming, paid for with busier markup
+          fr: >-
+            Ni changement de fichier ni nommage, au prix d'un balisage plus chargé
+          it: >-
+            Nessun cambio di file né naming, al prezzo di un markup più carico
+      - id: no-css
+        text:
+          en: It removes CSS from the project entirely
+          fr: Elle supprime totalement le CSS du projet
+          it: Elimina del tutto il CSS dal progetto
+      - id: runtime-cost
+        text:
+          en: Styles are computed in JavaScript on every render
+          fr: Les styles sont calculés en JavaScript à chaque rendu
+          it: Gli stili sono calcolati in JavaScript a ogni render
+    explanation:
+      en: >-
+        Utilities keep you in one file and spare you inventing class names,
+        which is why they scale well across a team. The cost is a long `class`
+        attribute — and the answer to that is extracting a component, not
+        inventing a wrapper class. Tailwind is still plain CSS, generated ahead
+        of time with no runtime.
+      fr: >-
+        Les utilitaires vous gardent dans un seul fichier et vous épargnent
+        l'invention de noms de classes, d'où leur bonne tenue en équipe. Le coût
+        est un attribut `class` à rallonge — et la réponse est d'extraire un
+        composant, non d'inventer une classe enveloppe. Tailwind reste du CSS
+        ordinaire, généré à l'avance et sans exécution.
+      it: >-
+        Le utility ti tengono in un solo file e ti risparmiano l'invenzione dei
+        nomi di classe, ed è per questo che reggono bene in team. Il costo è un
+        attributo `class` lunghissimo — e la risposta è estrarre un componente,
+        non inventare una classe contenitore. Tailwind resta normale CSS,
+        generato in anticipo e senza runtime.
+
+  - id: theming-approach
+    prompt:
+      en: >-
+        A design system needs one place to change a brand colour everywhere.
+        Which approaches deliver that?
+      fr: >-
+        Un design system a besoin d'un seul endroit pour changer une couleur de
+        marque partout. Quelles approches le permettent ?
+      it: >-
+        Un design system ha bisogno di un solo punto per cambiare un colore del
+        brand ovunque. Quali approcci lo consentono?
+    options:
+      - id: css-vars
+        correct: true
+        text:
+          en: CSS custom properties read by every rule that needs the colour
+          fr: Des propriétés CSS personnalisées lues par chaque règle concernée
+          it: Proprietà CSS personalizzate lette da ogni regola interessata
+      - id: theme-provider
+        correct: true
+        text:
+          en: >-
+            A `ThemeProvider` supplying the value to styled components
+          fr: >-
+            Un `ThemeProvider` fournissant la valeur aux composants stylés
+          it: >-
+            Un `ThemeProvider` che fornisce il valore ai componenti stilizzati
+      - id: copy
+        text:
+          en: Repeating the hex value in each component and updating them together
+          fr: Répéter la valeur hexadécimale dans chaque composant et tout mettre à jour
+          it: Ripetere il valore esadecimale in ogni componente e aggiornarli insieme
+    explanation:
+      en: >-
+        Both work, at different layers: CSS variables live in the stylesheet and
+        can be re-declared per theme or per subtree with no JavaScript, while a
+        `ThemeProvider` puts the same idea in React's tree. Repeating the literal
+        is the thing a design system exists to prevent.
+      fr: >-
+        Les deux fonctionnent, à des niveaux différents : les variables CSS
+        vivent dans la feuille de style et se redéclarent par thème ou par
+        sous-arbre sans JavaScript, tandis qu'un `ThemeProvider` porte la même
+        idée dans l'arbre React. Répéter la valeur littérale est précisément ce
+        qu'un design system existe pour éviter.
+      it: >-
+        Entrambi funzionano, a livelli diversi: le variabili CSS vivono nel
+        foglio di stile e si ridichiarano per tema o per sottoalbero senza
+        JavaScript, mentre un `ThemeProvider` porta la stessa idea nell'albero
+        di React. Ripetere il valore letterale è esattamente ciò che un design
+        system esiste per evitare.
+
+  - id: strategy-choice
+    prompt:
+      en: >-
+        Which question actually decides your styling strategy for a new project?
+      fr: >-
+        Quelle question détermine réellement votre stratégie de style pour un
+        nouveau projet ?
+      it: >-
+        Quale domanda decide davvero la strategia di stile per un nuovo progetto?
+    options:
+      - id: team-fit
+        correct: true
+        text:
+          en: >-
+            What the team can maintain consistently, given the project's size
+            and lifespan
+          fr: >-
+            Ce que l'équipe peut maintenir de façon cohérente, vu la taille et
+            la durée de vie du projet
+          it: >-
+            Cosa il team riesce a mantenere con coerenza, viste dimensione e
+            durata del progetto
+      - id: newest
+        text:
+          en: Which approach is the most recent
+          fr: Quelle approche est la plus récente
+          it: Quale approccio è il più recente
+      - id: least-bytes
+        text:
+          en: Which produces the fewest bytes of CSS, always
+          fr: Laquelle produit le moins d'octets de CSS, toujours
+          it: Quale produce meno byte di CSS, sempre
+    explanation:
+      en: >-
+        All the mainstream options ship working, reasonably fast CSS; none is
+        disqualified on technical grounds. What separates them is fit —
+        consistency across a team, how the codebase will read in two years, and
+        what your component library already assumes. Pick one and apply it
+        uniformly; mixing three is the real failure mode.
+      fr: >-
+        Toutes les options courantes produisent du CSS fonctionnel et
+        raisonnablement rapide ; aucune n'est disqualifiée techniquement. Ce qui
+        les sépare, c'est l'adéquation : la cohérence en équipe, la lisibilité
+        du code dans deux ans, et ce que votre bibliothèque de composants
+        suppose déjà. Choisissez-en une et appliquez-la partout ; en mélanger
+        trois est le vrai échec.
+      it: >-
+        Tutte le opzioni diffuse producono CSS funzionante e ragionevolmente
+        veloce; nessuna è squalificata su basi tecniche. A separarle è
+        l'adeguatezza: la coerenza nel team, come si leggerà il codice fra due
+        anni e cosa la tua libreria di componenti già presuppone. Scegline una e
+        applicala ovunque; mescolarne tre è il vero fallimento.

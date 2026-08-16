@@ -413,6 +413,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/02-react-hooks.md",
       "exerciseDir": "src/02-hooks",
+      "quiz": {
+        "questions": [
+          {
+            "id": "hook-call-order",
+            "prompt": {
+              "en": "Why may a hook never be called inside an `if` or a loop?",
+              "fr": "Pourquoi un hook ne doit-il jamais être appelé dans un `if` ou une boucle ?",
+              "it": "Perché un hook non va mai chiamato dentro un `if` o un ciclo?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "call-order",
+                "correct": true,
+                "text": {
+                  "en": "React identifies each hook by the order in which it is called",
+                  "fr": "React identifie chaque hook par l'ordre dans lequel il est appelé",
+                  "it": "React identifica ogni hook dall'ordine in cui viene chiamato"
+                }
+              },
+              {
+                "id": "performance",
+                "correct": false,
+                "text": {
+                  "en": "Conditional calls are slower, so React forbids them",
+                  "fr": "Les appels conditionnels sont plus lents, React les interdit donc",
+                  "it": "Le chiamate condizionali sono più lente, quindi React le vieta"
+                }
+              },
+              {
+                "id": "async",
+                "correct": false,
+                "text": {
+                  "en": "Hooks are asynchronous and a branch could skip the await",
+                  "fr": "Les hooks sont asynchrones et une branche pourrait sauter l'await",
+                  "it": "Gli hook sono asincroni e un ramo potrebbe saltare l'await"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "React stores hook values in call slots, not by name. Skip a call on one render and every hook after it shifts up a slot, so they all read the wrong value. Put the condition *inside* the hook instead of putting the hook inside the condition. `eslint-plugin-react-hooks` catches this.",
+              "fr": "React range les valeurs des hooks dans des emplacements d'appel, pas par nom. Sautez un appel lors d'un rendu et tous les hooks suivants se décalent d'un cran : ils lisent alors la mauvaise valeur. Mettez la condition *dans* le hook plutôt que le hook dans la condition. `eslint-plugin-react-hooks` le détecte.",
+              "it": "React memorizza i valori degli hook in slot di chiamata, non per nome. Salta una chiamata in un render e tutti gli hook successivi slittano di una posizione, leggendo il valore sbagliato. Metti la condizione *dentro* l'hook invece dell'hook dentro la condizione. `eslint-plugin-react-hooks` lo segnala."
+            }
+          },
+          {
+            "id": "effect-cleanup-timing",
+            "prompt": {
+              "en": "When does the cleanup function returned by `useEffect` run?",
+              "fr": "Quand s'exécute la fonction de nettoyage renvoyée par `useEffect` ?",
+              "it": "Quando viene eseguita la funzione di pulizia restituita da `useEffect`?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "before-next",
+                "correct": true,
+                "text": {
+                  "en": "Before the next time that effect runs",
+                  "fr": "Avant la prochaine exécution de cet effet",
+                  "it": "Prima della successiva esecuzione di quell'effetto"
+                }
+              },
+              {
+                "id": "on-unmount",
+                "correct": true,
+                "text": {
+                  "en": "One final time when the component is removed",
+                  "fr": "Une dernière fois quand le composant est retiré",
+                  "it": "Un'ultima volta quando il componente viene rimosso"
+                }
+              },
+              {
+                "id": "before-paint",
+                "correct": false,
+                "text": {
+                  "en": "Before the browser paints each render",
+                  "fr": "Avant que le navigateur ne peigne chaque rendu",
+                  "it": "Prima che il browser disegni ogni render"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Cleanup is tied to the lifetime of the effect, not to the render. It runs before the effect is set up again, and once more at unmount — which is what lets one `useEffect` own both `addEventListener` and its matching `removeEventListener` without either leaking.",
+              "fr": "Le nettoyage est lié à la durée de vie de l'effet, pas au rendu. Il s'exécute avant que l'effet ne soit remis en place, puis une dernière fois au démontage — c'est ce qui permet à un seul `useEffect` de porter à la fois `addEventListener` et son `removeEventListener`, sans fuite.",
+              "it": "La pulizia è legata alla vita dell'effetto, non al render. Viene eseguita prima che l'effetto venga rimontato e un'ultima volta allo smontaggio — è ciò che permette a un solo `useEffect` di gestire sia `addEventListener` sia il suo `removeEventListener`, senza perdite."
+            }
+          },
+          {
+            "id": "ref-not-reactive",
+            "prompt": {
+              "en": "A click handler does `countRef.current += 1`, and the JSX renders `{countRef.current}`. The number on screen never changes. Why?",
+              "fr": "Un gestionnaire de clic fait `countRef.current += 1`, et le JSX affiche `{countRef.current}`. Le nombre à l'écran ne change jamais. Pourquoi ?",
+              "it": "Un gestore di clic esegue `countRef.current += 1` e il JSX mostra `{countRef.current}`. Il numero a schermo non cambia mai. Perché?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "no-rerender",
+                "correct": true,
+                "text": {
+                  "en": "Mutating a ref triggers no re-render, so the JSX is never recomputed",
+                  "fr": "Muter une ref ne déclenche aucun rendu, le JSX n'est donc jamais recalculé",
+                  "it": "Mutare una ref non provoca alcun render, quindi il JSX non viene ricalcolato"
+                }
+              },
+              {
+                "id": "readonly",
+                "correct": false,
+                "text": {
+                  "en": "`ref.current` is read-only and the assignment is silently ignored",
+                  "fr": "`ref.current` est en lecture seule et l'affectation est ignorée",
+                  "it": "`ref.current` è di sola lettura e l'assegnazione viene ignorata"
+                }
+              },
+              {
+                "id": "needs-effect",
+                "correct": false,
+                "text": {
+                  "en": "Refs can only be changed inside a `useEffect`",
+                  "fr": "Une ref ne peut être modifiée que dans un `useEffect`",
+                  "it": "Una ref può essere modificata solo dentro un `useEffect`"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The assignment works — `countRef.current` really does increase. Refs simply are not reactive: they are a plain `{ current }` object React keeps between renders, and writing to it is an ordinary property write. If a value should appear on screen, it belongs in state.",
+              "fr": "L'affectation fonctionne : `countRef.current` augmente bel et bien. Les refs ne sont simplement pas réactives — c'est un objet `{ current }` ordinaire que React conserve d'un rendu à l'autre, et y écrire est une écriture de propriété comme une autre. Si une valeur doit s'afficher, sa place est dans l'état.",
+              "it": "L'assegnazione funziona: `countRef.current` aumenta davvero. Le ref semplicemente non sono reattive — sono un normale oggetto `{ current }` che React conserva tra un render e l'altro, e scriverci è una comune scrittura di proprietà. Se un valore deve comparire a schermo, va nello stato."
+            }
+          },
+          {
+            "id": "not-a-side-effect",
+            "prompt": {
+              "en": "Which of these does *not* belong in a `useEffect`?",
+              "fr": "Laquelle de ces opérations n'a *pas* sa place dans un `useEffect` ?",
+              "it": "Quale di queste operazioni *non* va in un `useEffect`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "derived-value",
+                "correct": true,
+                "text": {
+                  "en": "Computing a filtered list from a prop and a search term",
+                  "fr": "Calculer une liste filtrée à partir d'une prop et d'un terme de recherche",
+                  "it": "Calcolare una lista filtrata da una prop e da un termine di ricerca"
+                }
+              },
+              {
+                "id": "subscribe",
+                "correct": false,
+                "text": {
+                  "en": "Subscribing to a WebSocket",
+                  "fr": "S'abonner à un WebSocket",
+                  "it": "Sottoscriversi a un WebSocket"
+                }
+              },
+              {
+                "id": "title",
+                "correct": false,
+                "text": {
+                  "en": "Updating `document.title`",
+                  "fr": "Mettre à jour `document.title`",
+                  "it": "Aggiornare `document.title`"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A side effect is something that escapes the component — the network, storage, timers, subscriptions, the DOM. Code that only derives a value from props and state is not one: compute it in the body of the component. Routing it through an effect and a piece of state adds an extra render and a chance for the two to drift apart.",
+              "fr": "Un effet de bord, c'est ce qui sort du composant : le réseau, le stockage, les timers, les abonnements, le DOM. Du code qui se contente de dériver une valeur des props et de l'état n'en est pas un : calculez-le dans le corps du composant. Passer par un effet et un état ajoute un rendu de plus et un risque de désynchronisation.",
+              "it": "Un side effect è ciò che esce dal componente: la rete, lo storage, i timer, le sottoscrizioni, il DOM. Il codice che si limita a derivare un valore da props e stato non lo è: calcolalo nel corpo del componente. Passare da un effetto e da uno stato aggiunge un render in più e la possibilità che i due divergano."
+            }
+          },
+          {
+            "id": "usecallback-purpose",
+            "prompt": {
+              "en": "When does wrapping a function in `useCallback` actually change anything?",
+              "fr": "Quand envelopper une fonction dans `useCallback` change-t-il vraiment quelque chose ?",
+              "it": "Quando avvolgere una funzione in `useCallback` cambia davvero qualcosa?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "memo-child",
+                "correct": true,
+                "text": {
+                  "en": "When it is passed to a child wrapped in `React.memo`",
+                  "fr": "Quand elle est passée à un enfant enveloppé dans `React.memo`",
+                  "it": "Quando viene passata a un figlio avvolto in `React.memo`"
+                }
+              },
+              {
+                "id": "hook-dep",
+                "correct": true,
+                "text": {
+                  "en": "When it is listed in another hook's dependency array",
+                  "fr": "Quand elle figure dans le tableau de dépendances d'un autre hook",
+                  "it": "Quando compare nell'array di dipendenze di un altro hook"
+                }
+              },
+              {
+                "id": "any-handler",
+                "correct": false,
+                "text": {
+                  "en": "On any `onClick`, since a new function each render is a leak",
+                  "fr": "Sur tout `onClick`, une nouvelle fonction à chaque rendu étant une fuite",
+                  "it": "Su ogni `onClick`, dato che una nuova funzione a ogni render è una perdita"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Every render creates new function objects, and almost nothing cares — a DOM handler just calls whatever it was given. It matters only where something compares by reference: a memoised child seeing a new prop, or a dependency array deciding an effect must run again. Elsewhere `useCallback` adds a dependency array to maintain and buys nothing.",
+              "fr": "Chaque rendu crée de nouveaux objets fonction, et presque rien ne s'en soucie : un gestionnaire DOM appelle simplement ce qu'on lui a donné. Cela ne compte que là où quelque chose compare par référence — un enfant mémoïsé qui voit une nouvelle prop, ou un tableau de dépendances qui relance un effet. Ailleurs, `useCallback` ajoute un tableau de dépendances à maintenir sans rien apporter.",
+              "it": "Ogni render crea nuovi oggetti funzione e quasi nulla se ne cura: un gestore DOM chiama semplicemente ciò che ha ricevuto. Conta solo dove qualcosa confronta per riferimento — un figlio memoizzato che vede una nuova prop, o un array di dipendenze che fa ripartire un effetto. Altrove `useCallback` aggiunge un array di dipendenze da mantenere senza dare nulla in cambio."
+            }
+          },
+          {
+            "id": "usereducer-benefit",
+            "prompt": {
+              "en": "A form tracks `values`, `errors`, `touched` and `isSubmitting`. What does moving it to `useReducer` mainly buy you?",
+              "fr": "Un formulaire suit `values`, `errors`, `touched` et `isSubmitting`. Que gagne-t-on principalement à passer à `useReducer` ?",
+              "it": "Un form gestisce `values`, `errors`, `touched` e `isSubmitting`. Cosa si guadagna soprattutto passando a `useReducer`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "one-place",
+                "correct": true,
+                "text": {
+                  "en": "The transitions between those fields live in one function instead of being spread across handlers",
+                  "fr": "Les transitions entre ces champs tiennent dans une seule fonction au lieu d'être éparpillées dans les gestionnaires",
+                  "it": "Le transizioni fra quei campi stanno in un'unica funzione invece di essere sparse fra i gestori"
+                }
+              },
+              {
+                "id": "faster",
+                "correct": false,
+                "text": {
+                  "en": "Reducers re-render faster than multiple `useState` calls",
+                  "fr": "Un reducer provoque des rendus plus rapides que plusieurs `useState`",
+                  "it": "Un reducer produce render più veloci di più chiamate a `useState`"
+                }
+              },
+              {
+                "id": "async",
+                "correct": false,
+                "text": {
+                  "en": "It lets state updates be awaited",
+                  "fr": "Il permet d'attendre les mises à jour d'état avec await",
+                  "it": "Permette di attendere gli aggiornamenti di stato con await"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "With four `useState` calls, the rules about how the fields move together exist only in whichever handler happens to touch them. `useReducer` puts every transition in the reducer: the component says *what happened* by dispatching an action, and one function decides what the next state is. Performance is not the reason to reach for it.",
+              "fr": "Avec quatre `useState`, les règles décrivant comment les champs évoluent ensemble n'existent que dans le gestionnaire qui les touche. `useReducer` place chaque transition dans le reducer : le composant dit *ce qui s'est passé* en émettant une action, et une seule fonction décide de l'état suivant. La performance n'est pas la raison de l'utiliser.",
+              "it": "Con quattro `useState`, le regole su come i campi si muovono insieme esistono solo nel gestore che li tocca. `useReducer` mette ogni transizione nel reducer: il componente dice *cosa è successo* inviando un'azione e un'unica funzione decide lo stato successivo. Le prestazioni non sono il motivo per usarlo."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -496,6 +758,10 @@
           "type": "lesson",
           "id": "hooks-wrap-up",
           "sectionHeading": "Wrapping Up"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -543,6 +809,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/03-component-patterns-best-practices.md",
       "exerciseDir": "src/03-component-patterns",
+      "quiz": {
+        "questions": [
+          {
+            "id": "prop-drilling-definition",
+            "prompt": {
+              "en": "`App` holds `user`. `Dashboard` and `Sidebar` pass it down untouched so `UserAvatar` can read it. What is the actual cost of this?",
+              "fr": "`App` détient `user`. `Dashboard` et `Sidebar` le transmettent tel quel pour que `UserAvatar` puisse le lire. Quel en est le vrai coût ?",
+              "it": "`App` contiene `user`. `Dashboard` e `Sidebar` lo passano invariato perché `UserAvatar` possa leggerlo. Qual è il costo reale?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "coupling",
+                "correct": true,
+                "text": {
+                  "en": "Components that don't use `user` are now coupled to its shape",
+                  "fr": "Des composants qui n'utilisent pas `user` sont désormais couplés à sa forme",
+                  "it": "Componenti che non usano `user` sono ora accoppiati alla sua forma"
+                }
+              },
+              {
+                "id": "slow",
+                "correct": false,
+                "text": {
+                  "en": "Each extra layer measurably slows rendering",
+                  "fr": "Chaque niveau supplémentaire ralentit sensiblement le rendu",
+                  "it": "Ogni livello in più rallenta sensibilmente il rendering"
+                }
+              },
+              {
+                "id": "broken",
+                "correct": false,
+                "text": {
+                  "en": "Props cannot travel more than three levels deep",
+                  "fr": "Les props ne peuvent pas descendre au-delà de trois niveaux",
+                  "it": "Le props non possono scendere oltre tre livelli"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Prop drilling works — that is what makes it easy to live with for too long. The problem is maintenance: changing `user`'s shape means editing every component that merely relays it, and those components can no longer be understood on their own.",
+              "fr": "Le prop drilling fonctionne — c'est ce qui le rend supportable trop longtemps. Le problème est la maintenance : changer la forme de `user` oblige à modifier tous les composants qui ne font que le relayer, et ces composants ne se comprennent plus isolément.",
+              "it": "Il prop drilling funziona — ed è ciò che lo rende sopportabile troppo a lungo. Il problema è la manutenzione: cambiare la forma di `user` obbliga a modificare ogni componente che si limita a inoltrarlo, e quei componenti non si capiscono più da soli."
+            }
+          },
+          {
+            "id": "composition-fix",
+            "prompt": {
+              "en": "How does passing `children` remove prop drilling, when Context is not involved at all?",
+              "fr": "Comment le passage de `children` supprime-t-il le prop drilling, sans aucun recours au Context ?",
+              "it": "Come fa il passaggio di `children` a eliminare il prop drilling, senza coinvolgere il Context?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "element-built-above",
+                "correct": true,
+                "text": {
+                  "en": "The element is created where the data already is, so the layers in between only render a slot",
+                  "fr": "L'élément est créé là où la donnée se trouve déjà ; les niveaux intermédiaires ne rendent qu'un emplacement",
+                  "it": "L'elemento è creato dove il dato già si trova, così i livelli intermedi rendono solo uno slot"
+                }
+              },
+              {
+                "id": "auto-context",
+                "correct": false,
+                "text": {
+                  "en": "React passes props to `children` automatically behind the scenes",
+                  "fr": "React transmet automatiquement les props aux `children` en coulisses",
+                  "it": "React passa automaticamente le props ai `children` dietro le quinte"
+                }
+              },
+              {
+                "id": "global",
+                "correct": false,
+                "text": {
+                  "en": "`children` is a global scope every descendant can read",
+                  "fr": "`children` est une portée globale lisible par tous les descendants",
+                  "it": "`children` è uno scope globale leggibile da ogni discendente"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "`<Sidebar><UserSection user={user} /></Sidebar>` builds the element in `App`, where `user` already exists, and hands `Sidebar` a finished node. `Sidebar` renders `{children}` without knowing what is inside. Nothing is passed down — the tree shape changed instead.",
+              "fr": "`<Sidebar><UserSection user={user} /></Sidebar>` construit l'élément dans `App`, où `user` existe déjà, et donne à `Sidebar` un nœud tout prêt. `Sidebar` rend `{children}` sans savoir ce qu'il contient. Rien n'est transmis vers le bas : c'est la forme de l'arbre qui a changé.",
+              "it": "`<Sidebar><UserSection user={user} /></Sidebar>` costruisce l'elemento in `App`, dove `user` esiste già, e passa a `Sidebar` un nodo pronto. `Sidebar` rende `{children}` senza sapere cosa contiene. Nulla viene passato verso il basso: è cambiata la forma dell'albero."
+            }
+          },
+          {
+            "id": "state-colocation",
+            "prompt": {
+              "en": "Where should a piece of state live?",
+              "fr": "Où doit vivre un morceau d'état ?",
+              "it": "Dove deve vivere un pezzo di stato?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "closest",
+                "correct": true,
+                "text": {
+                  "en": "As close as possible to where it is used",
+                  "fr": "Aussi près que possible de l'endroit où il est utilisé",
+                  "it": "Il più vicino possibile a dove viene usato"
+                }
+              },
+              {
+                "id": "top",
+                "correct": false,
+                "text": {
+                  "en": "At the top of the app, so anything can reach it",
+                  "fr": "En haut de l'application, pour que tout puisse y accéder",
+                  "it": "In cima all'app, così tutto può raggiungerlo"
+                }
+              },
+              {
+                "id": "store",
+                "correct": false,
+                "text": {
+                  "en": "In a store, since local state does not scale",
+                  "fr": "Dans un store, l'état local ne passant pas à l'échelle",
+                  "it": "In uno store, dato che lo stato locale non scala"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Colocation: push state down until exactly the components that need it can see it, and lift it only when two siblings must agree. State kept higher than necessary re-renders subtrees that don't care and turns a local detail into everyone's business.",
+              "fr": "Colocation : descendez l'état jusqu'à ce que seuls les composants qui en ont besoin le voient, et ne le remontez que si deux frères doivent s'accorder. Un état placé plus haut que nécessaire provoque le rendu de sous-arbres indifférents et transforme un détail local en affaire de tous.",
+              "it": "Colocation: spingi lo stato in basso finché lo vedono solo i componenti che ne hanno bisogno, e sollevalo solo quando due fratelli devono accordarsi. Uno stato tenuto più in alto del necessario fa rirenderizzare sottoalberi indifferenti e trasforma un dettaglio locale in un problema di tutti."
+            }
+          },
+          {
+            "id": "container-presentational",
+            "prompt": {
+              "en": "In the container / presentational split, which belong to the *presentational* side?",
+              "fr": "Dans la séparation conteneur / présentation, qu'est-ce qui relève du côté *présentation* ?",
+              "it": "Nella separazione container / presentazione, cosa appartiene al lato *presentazione*?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "via-props",
+                "correct": true,
+                "text": {
+                  "en": "Receives its data through props",
+                  "fr": "Reçoit ses données par les props",
+                  "it": "Riceve i suoi dati tramite le props"
+                }
+              },
+              {
+                "id": "appearance",
+                "correct": true,
+                "text": {
+                  "en": "Concerned with how things look",
+                  "fr": "S'occupe de l'apparence",
+                  "it": "Si occupa dell'aspetto"
+                }
+              },
+              {
+                "id": "fetches",
+                "correct": false,
+                "text": {
+                  "en": "Calls the API and holds the loading and error state",
+                  "fr": "Appelle l'API et détient l'état de chargement et d'erreur",
+                  "it": "Chiama l'API e detiene lo stato di caricamento ed errore"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Presentational components take props and render; they rarely hold state and cause no side effects, which makes them trivial to test and reuse. Fetching, business logic and state belong to the container that feeds them.",
+              "fr": "Les composants de présentation reçoivent des props et affichent ; ils ont rarement de l'état et ne produisent pas d'effets de bord, ce qui les rend triviaux à tester et à réutiliser. La récupération de données, la logique métier et l'état appartiennent au conteneur qui les alimente.",
+              "it": "I componenti di presentazione ricevono props e rendono; raramente hanno stato e non producono side effect, il che li rende banali da testare e riusare. Il fetching, la logica di business e lo stato appartengono al container che li alimenta."
+            }
+          },
+          {
+            "id": "compound-components",
+            "prompt": {
+              "en": "`<Tabs><TabList><Tab/></TabList></Tabs>` — no `activeTab` prop appears anywhere. How do the children know which tab is active?",
+              "fr": "`<Tabs><TabList><Tab/></TabList></Tabs>` — aucune prop `activeTab` n'apparaît. Comment les enfants savent-ils quel onglet est actif ?",
+              "it": "`<Tabs><TabList><Tab/></TabList></Tabs>` — non compare nessuna prop `activeTab`. Come fanno i figli a sapere quale tab è attiva?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "implicit-context",
+                "correct": true,
+                "text": {
+                  "en": "The parent holds the state and shares it implicitly through context",
+                  "fr": "Le parent détient l'état et le partage implicitement via un context",
+                  "it": "Il genitore detiene lo stato e lo condivide implicitamente tramite un context"
+                }
+              },
+              {
+                "id": "clone",
+                "correct": false,
+                "text": {
+                  "en": "React automatically clones children with the parent's state",
+                  "fr": "React clone automatiquement les enfants avec l'état du parent",
+                  "it": "React clona automaticamente i figli con lo stato del genitore"
+                }
+              },
+              {
+                "id": "dom-query",
+                "correct": false,
+                "text": {
+                  "en": "Each `Tab` queries the DOM for its parent's active index",
+                  "fr": "Chaque `Tab` interroge le DOM pour connaître l'index actif du parent",
+                  "it": "Ogni `Tab` interroga il DOM per l'indice attivo del genitore"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Compound components put the shared state in the parent and expose it through a context the children consume. That is what buys the declarative API: the caller arranges the pieces freely and never wires state between them — at the cost of a more involved implementation.",
+              "fr": "Les composants composés placent l'état partagé dans le parent et l'exposent via un context que les enfants consomment. C'est ce qui permet l'API déclarative : l'appelant agence librement les morceaux sans jamais câbler l'état — au prix d'une implémentation plus complexe.",
+              "it": "I componenti composti mettono lo stato condiviso nel genitore e lo espongono tramite un context che i figli consumano. È questo a dare l'API dichiarativa: chi la usa dispone i pezzi liberamente senza mai collegare lo stato — al prezzo di un'implementazione più complessa."
+            }
+          },
+          {
+            "id": "hook-vs-compound",
+            "prompt": {
+              "en": "You want to reuse stateful logic across unrelated components. Which pattern fits, and why not the others?",
+              "fr": "Vous voulez réutiliser une logique à état dans des composants sans rapport. Quel motif convient, et pourquoi pas les autres ?",
+              "it": "Vuoi riusare logica con stato in componenti non correlati. Quale pattern è adatto, e perché non gli altri?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "custom-hook",
+                "correct": true,
+                "text": {
+                  "en": "A custom hook — it shares logic without dictating any markup",
+                  "fr": "Un hook personnalisé — il partage la logique sans imposer de balisage",
+                  "it": "Un hook personalizzato — condivide la logica senza imporre markup"
+                }
+              },
+              {
+                "id": "compound",
+                "correct": false,
+                "text": {
+                  "en": "Compound components, which exist to share logic anywhere",
+                  "fr": "Des composants composés, faits pour partager la logique partout",
+                  "it": "Componenti composti, fatti per condividere logica ovunque"
+                }
+              },
+              {
+                "id": "drilling",
+                "correct": false,
+                "text": {
+                  "en": "Prop drilling, the only pattern that crosses unrelated trees",
+                  "fr": "Le prop drilling, seul motif à traverser des arbres sans rapport",
+                  "it": "Il prop drilling, unico pattern che attraversa alberi non correlati"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A custom hook is the default answer for logic reuse: composable, testable, and it renders nothing, so each caller keeps its own markup. Compound components solve a different problem — a set of *related* UI pieces that must cooperate, like tabs or an accordion.",
+              "fr": "Un hook personnalisé est la réponse par défaut pour réutiliser de la logique : composable, testable, et il n'affiche rien, chaque appelant gardant son propre balisage. Les composants composés résolvent un autre problème — un ensemble d'éléments d'interface *liés* qui doivent coopérer, comme des onglets ou un accordéon.",
+              "it": "Un hook personalizzato è la risposta predefinita per riusare logica: componibile, testabile, e non rende nulla, così ogni chiamante mantiene il proprio markup. I componenti composti risolvono un altro problema — un insieme di elementi di interfaccia *correlati* che devono cooperare, come tab o una fisarmonica."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -622,6 +1150,10 @@
           "type": "lesson",
           "id": "patterns-conclusion",
           "sectionHeading": "Conclusion: Architecting Excellence"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -664,6 +1196,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/04-react-styling.md",
       "exerciseDir": "src/04-styling",
+      "quiz": {
+        "questions": [
+          {
+            "id": "inline-style-keys",
+            "prompt": {
+              "en": "`style={{ 'background-color': 'blue' }}` does not work. What does React expect instead?",
+              "fr": "`style={{ 'background-color': 'blue' }}` ne fonctionne pas. Qu'attend React à la place ?",
+              "it": "`style={{ 'background-color': 'blue' }}` non funziona. Cosa si aspetta React?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "camel",
+                "correct": true,
+                "text": {
+                  "en": "`backgroundColor` — the object is JavaScript, so keys are camelCase",
+                  "fr": "`backgroundColor` — l'objet est du JavaScript, les clés sont en camelCase",
+                  "it": "`backgroundColor` — l'oggetto è JavaScript, quindi le chiavi sono camelCase"
+                }
+              },
+              {
+                "id": "string",
+                "correct": false,
+                "text": {
+                  "en": "A single CSS string, exactly as it would appear in a stylesheet",
+                  "fr": "Une seule chaîne CSS, telle qu'elle apparaîtrait dans une feuille de style",
+                  "it": "Un'unica stringa CSS, come apparirebbe in un foglio di stile"
+                }
+              },
+              {
+                "id": "array",
+                "correct": false,
+                "text": {
+                  "en": "An array of `[property, value]` pairs",
+                  "fr": "Un tableau de paires `[propriété, valeur]`",
+                  "it": "Un array di coppie `[proprietà, valore]`"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The `style` prop takes a plain JavaScript object, not CSS text, so properties follow JavaScript naming: `backgroundColor`, `fontSize`, `borderRadius`. Numeric values for length properties get `px` appended automatically — `fontSize: 16` and `fontSize: '16px'` are the same.",
+              "fr": "La prop `style` reçoit un objet JavaScript ordinaire, pas du texte CSS ; les propriétés suivent donc la nomenclature JavaScript : `backgroundColor`, `fontSize`, `borderRadius`. Les valeurs numériques des propriétés de longueur reçoivent `px` automatiquement — `fontSize: 16` équivaut à `fontSize: '16px'`.",
+              "it": "La prop `style` riceve un normale oggetto JavaScript, non testo CSS, e le proprietà seguono la notazione JavaScript: `backgroundColor`, `fontSize`, `borderRadius`. Ai valori numerici delle proprietà di lunghezza viene aggiunto `px` automaticamente — `fontSize: 16` equivale a `fontSize: '16px'`."
+            }
+          },
+          {
+            "id": "inline-limitations",
+            "prompt": {
+              "en": "Which of these can inline styles *not* express?",
+              "fr": "Que ne peuvent *pas* exprimer les styles en ligne ?",
+              "it": "Cosa *non* possono esprimere gli stili inline?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "pseudo",
+                "correct": true,
+                "text": {
+                  "en": "Pseudo-classes and pseudo-elements such as `:hover` and `::before`",
+                  "fr": "Les pseudo-classes et pseudo-éléments comme `:hover` et `::before`",
+                  "it": "Pseudo-classi e pseudo-elementi come `:hover` e `::before`"
+                }
+              },
+              {
+                "id": "media",
+                "correct": true,
+                "text": {
+                  "en": "Media queries",
+                  "fr": "Les media queries",
+                  "it": "Le media query"
+                }
+              },
+              {
+                "id": "computed",
+                "correct": false,
+                "text": {
+                  "en": "A value computed from state at render time",
+                  "fr": "Une valeur calculée depuis l'état au moment du rendu",
+                  "it": "Un valore calcolato dallo stato al momento del render"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "An inline style sets properties on one element, and that is all the DOM `style` attribute can do — there is nowhere for a selector or a condition to live. Values computed from state are the one thing inline styles are genuinely good at. Anything needing a selector belongs in a stylesheet.",
+              "fr": "Un style en ligne fixe des propriétés sur un élément, et c'est tout ce que l'attribut DOM `style` sait faire — un sélecteur ou une condition n'ont nulle part où vivre. Les valeurs calculées depuis l'état sont justement ce que les styles en ligne font bien. Tout ce qui exige un sélecteur appartient à une feuille de style.",
+              "it": "Uno stile inline imposta proprietà su un elemento, ed è tutto ciò che l'attributo DOM `style` sa fare — un selettore o una condizione non hanno dove stare. I valori calcolati dallo stato sono proprio ciò in cui gli stili inline sono bravi. Tutto ciò che richiede un selettore va in un foglio di stile."
+            }
+          },
+          {
+            "id": "css-modules-scoping",
+            "prompt": {
+              "en": "Two files both define `.button`. With CSS Modules they don't collide. What makes that true?",
+              "fr": "Deux fichiers définissent chacun `.button`. Avec les CSS Modules, ils n'entrent pas en conflit. Pourquoi ?",
+              "it": "Due file definiscono entrambi `.button`. Con i CSS Modules non collidono. Perché?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "build-rename",
+                "correct": true,
+                "text": {
+                  "en": "The build step rewrites each class to a unique generated name",
+                  "fr": "L'étape de build réécrit chaque classe en un nom unique généré",
+                  "it": "Il build riscrive ogni classe con un nome unico generato"
+                }
+              },
+              {
+                "id": "shadow-dom",
+                "correct": false,
+                "text": {
+                  "en": "Each component is rendered inside its own shadow DOM",
+                  "fr": "Chaque composant est rendu dans son propre shadow DOM",
+                  "it": "Ogni componente è reso dentro il proprio shadow DOM"
+                }
+              },
+              {
+                "id": "runtime",
+                "correct": false,
+                "text": {
+                  "en": "The browser scopes styles per module at runtime",
+                  "fr": "Le navigateur limite les styles par module à l'exécution",
+                  "it": "Il browser limita gli stili per modulo a runtime"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Scoping happens at build time, not in the browser. `.button` in `Card.module.css` becomes something like `Card_button__3kT9`, and the import gives you an object mapping your name to the generated one. The CSS that ships is ordinary global CSS whose names simply cannot clash.",
+              "fr": "La portée est établie au build, pas dans le navigateur. `.button` dans `Card.module.css` devient par exemple `Card_button__3kT9`, et l'import fournit un objet reliant votre nom au nom généré. Le CSS livré est du CSS global ordinaire dont les noms ne peuvent tout simplement pas entrer en conflit.",
+              "it": "Lo scoping avviene in fase di build, non nel browser. `.button` in `Card.module.css` diventa qualcosa come `Card_button__3kT9`, e l'import fornisce un oggetto che mappa il tuo nome a quello generato. Il CSS spedito è normale CSS globale i cui nomi semplicemente non possono collidere."
+            }
+          },
+          {
+            "id": "tailwind-tradeoff",
+            "prompt": {
+              "en": "What is the defining trade-off of a utility-first approach like Tailwind?",
+              "fr": "Quel est le compromis central d'une approche utility-first comme Tailwind ?",
+              "it": "Qual è il compromesso centrale di un approccio utility-first come Tailwind?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "markup-noise",
+                "correct": true,
+                "text": {
+                  "en": "No context switch and no naming, paid for with busier markup",
+                  "fr": "Ni changement de fichier ni nommage, au prix d'un balisage plus chargé",
+                  "it": "Nessun cambio di file né naming, al prezzo di un markup più carico"
+                }
+              },
+              {
+                "id": "no-css",
+                "correct": false,
+                "text": {
+                  "en": "It removes CSS from the project entirely",
+                  "fr": "Elle supprime totalement le CSS du projet",
+                  "it": "Elimina del tutto il CSS dal progetto"
+                }
+              },
+              {
+                "id": "runtime-cost",
+                "correct": false,
+                "text": {
+                  "en": "Styles are computed in JavaScript on every render",
+                  "fr": "Les styles sont calculés en JavaScript à chaque rendu",
+                  "it": "Gli stili sono calcolati in JavaScript a ogni render"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Utilities keep you in one file and spare you inventing class names, which is why they scale well across a team. The cost is a long `class` attribute — and the answer to that is extracting a component, not inventing a wrapper class. Tailwind is still plain CSS, generated ahead of time with no runtime.",
+              "fr": "Les utilitaires vous gardent dans un seul fichier et vous épargnent l'invention de noms de classes, d'où leur bonne tenue en équipe. Le coût est un attribut `class` à rallonge — et la réponse est d'extraire un composant, non d'inventer une classe enveloppe. Tailwind reste du CSS ordinaire, généré à l'avance et sans exécution.",
+              "it": "Le utility ti tengono in un solo file e ti risparmiano l'invenzione dei nomi di classe, ed è per questo che reggono bene in team. Il costo è un attributo `class` lunghissimo — e la risposta è estrarre un componente, non inventare una classe contenitore. Tailwind resta normale CSS, generato in anticipo e senza runtime."
+            }
+          },
+          {
+            "id": "theming-approach",
+            "prompt": {
+              "en": "A design system needs one place to change a brand colour everywhere. Which approaches deliver that?",
+              "fr": "Un design system a besoin d'un seul endroit pour changer une couleur de marque partout. Quelles approches le permettent ?",
+              "it": "Un design system ha bisogno di un solo punto per cambiare un colore del brand ovunque. Quali approcci lo consentono?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "css-vars",
+                "correct": true,
+                "text": {
+                  "en": "CSS custom properties read by every rule that needs the colour",
+                  "fr": "Des propriétés CSS personnalisées lues par chaque règle concernée",
+                  "it": "Proprietà CSS personalizzate lette da ogni regola interessata"
+                }
+              },
+              {
+                "id": "theme-provider",
+                "correct": true,
+                "text": {
+                  "en": "A `ThemeProvider` supplying the value to styled components",
+                  "fr": "Un `ThemeProvider` fournissant la valeur aux composants stylés",
+                  "it": "Un `ThemeProvider` che fornisce il valore ai componenti stilizzati"
+                }
+              },
+              {
+                "id": "copy",
+                "correct": false,
+                "text": {
+                  "en": "Repeating the hex value in each component and updating them together",
+                  "fr": "Répéter la valeur hexadécimale dans chaque composant et tout mettre à jour",
+                  "it": "Ripetere il valore esadecimale in ogni componente e aggiornarli insieme"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Both work, at different layers: CSS variables live in the stylesheet and can be re-declared per theme or per subtree with no JavaScript, while a `ThemeProvider` puts the same idea in React's tree. Repeating the literal is the thing a design system exists to prevent.",
+              "fr": "Les deux fonctionnent, à des niveaux différents : les variables CSS vivent dans la feuille de style et se redéclarent par thème ou par sous-arbre sans JavaScript, tandis qu'un `ThemeProvider` porte la même idée dans l'arbre React. Répéter la valeur littérale est précisément ce qu'un design system existe pour éviter.",
+              "it": "Entrambi funzionano, a livelli diversi: le variabili CSS vivono nel foglio di stile e si ridichiarano per tema o per sottoalbero senza JavaScript, mentre un `ThemeProvider` porta la stessa idea nell'albero di React. Ripetere il valore letterale è esattamente ciò che un design system esiste per evitare."
+            }
+          },
+          {
+            "id": "strategy-choice",
+            "prompt": {
+              "en": "Which question actually decides your styling strategy for a new project?",
+              "fr": "Quelle question détermine réellement votre stratégie de style pour un nouveau projet ?",
+              "it": "Quale domanda decide davvero la strategia di stile per un nuovo progetto?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "team-fit",
+                "correct": true,
+                "text": {
+                  "en": "What the team can maintain consistently, given the project's size and lifespan",
+                  "fr": "Ce que l'équipe peut maintenir de façon cohérente, vu la taille et la durée de vie du projet",
+                  "it": "Cosa il team riesce a mantenere con coerenza, viste dimensione e durata del progetto"
+                }
+              },
+              {
+                "id": "newest",
+                "correct": false,
+                "text": {
+                  "en": "Which approach is the most recent",
+                  "fr": "Quelle approche est la plus récente",
+                  "it": "Quale approccio è il più recente"
+                }
+              },
+              {
+                "id": "least-bytes",
+                "correct": false,
+                "text": {
+                  "en": "Which produces the fewest bytes of CSS, always",
+                  "fr": "Laquelle produit le moins d'octets de CSS, toujours",
+                  "it": "Quale produce meno byte di CSS, sempre"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "All the mainstream options ship working, reasonably fast CSS; none is disqualified on technical grounds. What separates them is fit — consistency across a team, how the codebase will read in two years, and what your component library already assumes. Pick one and apply it uniformly; mixing three is the real failure mode.",
+              "fr": "Toutes les options courantes produisent du CSS fonctionnel et raisonnablement rapide ; aucune n'est disqualifiée techniquement. Ce qui les sépare, c'est l'adéquation : la cohérence en équipe, la lisibilité du code dans deux ans, et ce que votre bibliothèque de composants suppose déjà. Choisissez-en une et appliquez-la partout ; en mélanger trois est le vrai échec.",
+              "it": "Tutte le opzioni diffuse producono CSS funzionante e ragionevolmente veloce; nessuna è squalificata su basi tecniche. A separarle è l'adeguatezza: la coerenza nel team, come si leggerà il codice fra due anni e cosa la tua libreria di componenti già presuppone. Scegline una e applicala ovunque; mescolarne tre è il vero fallimento."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -743,6 +1537,10 @@
           "type": "lesson",
           "id": "styling-conclusion",
           "sectionHeading": "Conclusion: Architecting Stylistic Excellence"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -785,6 +1583,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/05-routing.md",
       "exerciseDir": "src/05-routing",
+      "quiz": {
+        "questions": [
+          {
+            "id": "link-vs-anchor",
+            "prompt": {
+              "en": "Inside a React Router app, what happens if you navigate with `<a href=\"/profile\">` instead of `<Link to=\"/profile\">`?",
+              "fr": "Dans une application React Router, que se passe-t-il si vous naviguez avec `<a href=\"/profile\">` au lieu de `<Link to=\"/profile\">` ?",
+              "it": "In un'app React Router, cosa succede se navighi con `<a href=\"/profile\">` invece di `<Link to=\"/profile\">`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "full-reload",
+                "correct": true,
+                "text": {
+                  "en": "The browser reloads the whole page and in-memory state is lost",
+                  "fr": "Le navigateur recharge toute la page et l'état en mémoire est perdu",
+                  "it": "Il browser ricarica l'intera pagina e lo stato in memoria va perso"
+                }
+              },
+              {
+                "id": "identical",
+                "correct": false,
+                "text": {
+                  "en": "Nothing differs; `Link` renders an `<a>` and behaves the same",
+                  "fr": "Rien ne change ; `Link` rend un `<a>` et se comporte pareil",
+                  "it": "Non cambia nulla; `Link` rende un `<a>` e si comporta uguale"
+                }
+              },
+              {
+                "id": "error",
+                "correct": false,
+                "text": {
+                  "en": "React Router throws, because the route was not matched",
+                  "fr": "React Router lève une erreur, la route n'ayant pas été trouvée",
+                  "it": "React Router lancia un errore, perché la rotta non è stata trovata"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "`Link` does render an `<a>`, but it intercepts the click and uses the History API — the URL changes and the router swaps components, with no server round trip. A bare `<a>` is a real navigation: the document is thrown away and rebuilt, so every piece of state your app was holding starts again from scratch.",
+              "fr": "`Link` rend bien un `<a>`, mais il intercepte le clic et passe par l'History API : l'URL change et le routeur échange les composants, sans aller-retour serveur. Un `<a>` nu est une vraie navigation : le document est jeté puis reconstruit, et tout l'état que gardait l'application repart de zéro.",
+              "it": "`Link` rende davvero un `<a>`, ma intercetta il clic e usa la History API: l'URL cambia e il router sostituisce i componenti, senza andata e ritorno al server. Un `<a>` semplice è una navigazione vera: il documento viene buttato e ricostruito, e tutto lo stato che l'app teneva riparte da zero."
+            }
+          },
+          {
+            "id": "outlet-role",
+            "prompt": {
+              "en": "A layout route renders a sidebar and `<Outlet />`. What does `Outlet` put on the page?",
+              "fr": "Une route de mise en page affiche une barre latérale et `<Outlet />`. Qu'affiche `Outlet` ?",
+              "it": "Una route di layout mostra una sidebar e `<Outlet />`. Cosa mette in pagina `Outlet`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "matched-child",
+                "correct": true,
+                "text": {
+                  "en": "Whichever child route currently matches the URL",
+                  "fr": "La route enfant qui correspond actuellement à l'URL",
+                  "it": "La route figlia che corrisponde attualmente all'URL"
+                }
+              },
+              {
+                "id": "all-children",
+                "correct": false,
+                "text": {
+                  "en": "Every child route at once, stacked",
+                  "fr": "Toutes les routes enfants à la fois, empilées",
+                  "it": "Tutte le route figlie insieme, impilate"
+                }
+              },
+              {
+                "id": "parent",
+                "correct": false,
+                "text": {
+                  "en": "The parent route's own element, a second time",
+                  "fr": "L'élément de la route parente, une seconde fois",
+                  "it": "L'elemento della route genitore, una seconda volta"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "`Outlet` is the hole the matched child is rendered into. That is what makes the layout persist: the sidebar mounts once and stays mounted while the content beside it changes, instead of every page repeating the chrome and remounting it on each navigation.",
+              "fr": "`Outlet` est l'emplacement où la route enfant correspondante est rendue. C'est ce qui fait persister la mise en page : la barre latérale est montée une fois et le reste pendant que le contenu à côté change, au lieu que chaque page répète l'habillage et le remonte à chaque navigation.",
+              "it": "`Outlet` è il punto in cui viene reso il figlio corrispondente. È ciò che fa persistere il layout: la sidebar viene montata una volta e resta montata mentre il contenuto accanto cambia, invece che ogni pagina ripeta la cornice e la rimonti a ogni navigazione."
+            }
+          },
+          {
+            "id": "index-route",
+            "prompt": {
+              "en": "Inside `<Route path=\"/dashboard\">`, what does `<Route index element={<Overview />} />` mean?",
+              "fr": "Dans `<Route path=\"/dashboard\">`, que signifie `<Route index element={<Overview />} />` ?",
+              "it": "Dentro `<Route path=\"/dashboard\">`, cosa significa `<Route index element={<Overview />} />`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "exact-parent",
+                "correct": true,
+                "text": {
+                  "en": "Render `Overview` in the outlet when the URL is exactly `/dashboard`",
+                  "fr": "Afficher `Overview` dans l'outlet quand l'URL est exactement `/dashboard`",
+                  "it": "Mostrare `Overview` nell'outlet quando l'URL è esattamente `/dashboard`"
+                }
+              },
+              {
+                "id": "first",
+                "correct": false,
+                "text": {
+                  "en": "Render it first, above the other children",
+                  "fr": "L'afficher en premier, au-dessus des autres enfants",
+                  "it": "Mostrarlo per primo, sopra gli altri figli"
+                }
+              },
+              {
+                "id": "fallback",
+                "correct": false,
+                "text": {
+                  "en": "Use it whenever no other child route matches",
+                  "fr": "L'utiliser dès qu'aucune autre route enfant ne correspond",
+                  "it": "Usarlo ogni volta che nessun'altra route figlia corrisponde"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "An index route is the default child: it fills the parent's `Outlet` at the parent's own path, so `/dashboard` isn't an empty shell. It is not a catch-all — an unmatched path like `/dashboard/nope` falls through to a `path=\"*\"` route, not to the index.",
+              "fr": "Une route index est l'enfant par défaut : elle remplit l'`Outlet` du parent à l'URL du parent, pour que `/dashboard` ne soit pas une coquille vide. Ce n'est pas un fourre-tout — un chemin non trouvé comme `/dashboard/nope` tombe sur une route `path=\"*\"`, pas sur l'index.",
+              "it": "Una route index è il figlio predefinito: riempie l'`Outlet` del genitore al percorso del genitore, così `/dashboard` non è un guscio vuoto. Non è un catch-all — un percorso non trovato come `/dashboard/nope` finisce su una route `path=\"*\"`, non sull'index."
+            }
+          },
+          {
+            "id": "params-vs-search",
+            "prompt": {
+              "en": "For `/products/42?sort=price`, which hook reads which part?",
+              "fr": "Pour `/products/42?sort=price`, quel hook lit quelle partie ?",
+              "it": "Per `/products/42?sort=price`, quale hook legge quale parte?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "correct-split",
+                "correct": true,
+                "text": {
+                  "en": "`useParams` gives `42`; `useSearchParams` gives `sort`",
+                  "fr": "`useParams` donne `42` ; `useSearchParams` donne `sort`",
+                  "it": "`useParams` dà `42`; `useSearchParams` dà `sort`"
+                }
+              },
+              {
+                "id": "swapped",
+                "correct": false,
+                "text": {
+                  "en": "`useParams` gives `sort`; `useSearchParams` gives `42`",
+                  "fr": "`useParams` donne `sort` ; `useSearchParams` donne `42`",
+                  "it": "`useParams` dà `sort`; `useSearchParams` dà `42`"
+                }
+              },
+              {
+                "id": "both-params",
+                "correct": false,
+                "text": {
+                  "en": "`useParams` returns both, since both are in the URL",
+                  "fr": "`useParams` renvoie les deux, tous deux étant dans l'URL",
+                  "it": "`useParams` restituisce entrambi, dato che sono entrambi nell'URL"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Path params come from the pattern you declared — `path=\"/products/:id\"` makes `useParams().id` be `'42'`. The query string is not part of route matching at all; `useSearchParams` reads it and gives you a setter that updates the URL. Both are always strings, so parse before doing maths.",
+              "fr": "Les paramètres de chemin viennent du motif déclaré : `path=\"/products/:id\"` fait que `useParams().id` vaut `'42'`. La chaîne de requête ne participe pas au filtrage des routes ; `useSearchParams` la lit et fournit un setter qui met l'URL à jour. Les deux sont toujours des chaînes : convertissez avant tout calcul.",
+              "it": "I parametri di percorso vengono dal pattern dichiarato: `path=\"/products/:id\"` fa sì che `useParams().id` valga `'42'`. La query string non partecipa affatto al matching delle route; `useSearchParams` la legge e fornisce un setter che aggiorna l'URL. Entrambi sono sempre stringhe: converti prima di fare calcoli."
+            }
+          },
+          {
+            "id": "protected-route",
+            "prompt": {
+              "en": "A `RequireAuth` wrapper redirects signed-out visitors to `/login`. Which statements are true?",
+              "fr": "Un composant `RequireAuth` redirige les visiteurs non connectés vers `/login`. Quelles affirmations sont vraies ?",
+              "it": "Un wrapper `RequireAuth` reindirizza i visitatori non autenticati a `/login`. Quali affermazioni sono vere?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "remember-target",
+                "correct": true,
+                "text": {
+                  "en": "It should record where the user was heading, to return them there after login",
+                  "fr": "Il doit mémoriser la destination visée, pour y ramener l'utilisateur après connexion",
+                  "it": "Deve ricordare dove l'utente stava andando, per riportarlo lì dopo il login"
+                }
+              },
+              {
+                "id": "not-security",
+                "correct": true,
+                "text": {
+                  "en": "It improves the experience but does not secure the data",
+                  "fr": "Il améliore l'expérience mais ne sécurise pas les données",
+                  "it": "Migliora l'esperienza ma non mette al sicuro i dati"
+                }
+              },
+              {
+                "id": "hides-code",
+                "correct": false,
+                "text": {
+                  "en": "It prevents the protected page's code from reaching the browser",
+                  "fr": "Il empêche le code de la page protégée d'atteindre le navigateur",
+                  "it": "Impedisce al codice della pagina protetta di arrivare al browser"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A route guard is UI logic, and it runs on a machine the visitor controls: they can edit the bundle or call your API directly. It exists so that people are not shown a broken empty page — the server must still authorise every request. Redirecting with the attempted location in state is what lets login send them onward instead of dumping them on a generic home page.",
+              "fr": "Un garde de route est de la logique d'interface, exécutée sur une machine que le visiteur contrôle : il peut modifier le bundle ou appeler votre API directement. Il existe pour éviter d'afficher une page vide cassée — le serveur doit toujours autoriser chaque requête. Rediriger en gardant la destination dans l'état permet à la connexion d'y renvoyer, plutôt que de déposer l'utilisateur sur l'accueil.",
+              "it": "Una route guard è logica di interfaccia, eseguita su una macchina che il visitatore controlla: può modificare il bundle o chiamare la tua API direttamente. Esiste per non mostrare una pagina vuota rotta — il server deve comunque autorizzare ogni richiesta. Reindirizzare tenendo nello stato la destinazione tentata è ciò che permette al login di mandarlo lì invece che su una home generica."
+            }
+          },
+          {
+            "id": "route-splitting",
+            "prompt": {
+              "en": "Why pair `React.lazy` with routes rather than importing every page normally?",
+              "fr": "Pourquoi associer `React.lazy` aux routes plutôt qu'importer chaque page normalement ?",
+              "it": "Perché abbinare `React.lazy` alle route invece di importare ogni pagina normalmente?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "per-route-chunk",
+                "correct": true,
+                "text": {
+                  "en": "Each page becomes its own chunk, downloaded only when visited",
+                  "fr": "Chaque page devient un chunk séparé, téléchargé seulement si visitée",
+                  "it": "Ogni pagina diventa un chunk a sé, scaricato solo se visitata"
+                }
+              },
+              {
+                "id": "faster-render",
+                "correct": false,
+                "text": {
+                  "en": "Lazy components render faster once loaded",
+                  "fr": "Les composants lazy s'affichent plus vite une fois chargés",
+                  "it": "I componenti lazy si rendono più velocemente una volta caricati"
+                }
+              },
+              {
+                "id": "no-suspense",
+                "correct": false,
+                "text": {
+                  "en": "It removes the need for a loading state",
+                  "fr": "Cela supprime le besoin d'un état de chargement",
+                  "it": "Elimina la necessità di uno stato di caricamento"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A route is a natural split point: someone who never opens the admin panel should never pay for its code. The saving is in what the first load *doesn't* fetch — once a chunk has arrived the component renders at normal speed. It does need a `<Suspense>` boundary above it to show something while the chunk is in flight.",
+              "fr": "Une route est un point de découpe naturel : quelqu'un qui n'ouvre jamais le panneau d'administration ne devrait pas payer son code. Le gain porte sur ce que le premier chargement ne récupère *pas* — une fois le chunk arrivé, le composant s'affiche à vitesse normale. Il faut une frontière `<Suspense>` au-dessus pour afficher quelque chose pendant le transfert.",
+              "it": "Una route è un punto di divisione naturale: chi non apre mai il pannello di amministrazione non dovrebbe pagarne il codice. Il risparmio sta in ciò che il primo caricamento *non* scarica — una volta arrivato il chunk, il componente si rende a velocità normale. Serve però un confine `<Suspense>` sopra, per mostrare qualcosa durante il trasferimento."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -864,6 +1924,10 @@
           "type": "lesson",
           "id": "routing-conclusion",
           "sectionHeading": "Conclusion: Mastering Navigation Architecture"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -906,6 +1970,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/06-state-management.md",
       "exerciseDir": "src/06-state-management",
+      "quiz": {
+        "questions": [
+          {
+            "id": "when-global",
+            "prompt": {
+              "en": "When does a piece of state genuinely belong in a global store?",
+              "fr": "Quand un morceau d'état a-t-il vraiment sa place dans un store global ?",
+              "it": "Quando un pezzo di stato appartiene davvero a uno store globale?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "disconnected",
+                "correct": true,
+                "text": {
+                  "en": "When components that are not related by the tree must agree on it",
+                  "fr": "Quand des composants sans lien dans l'arbre doivent s'accorder dessus",
+                  "it": "Quando componenti non collegati nell'albero devono concordare su di esso"
+                }
+              },
+              {
+                "id": "many-fields",
+                "correct": false,
+                "text": {
+                  "en": "As soon as the component holds more than a few fields",
+                  "fr": "Dès que le composant détient plus de quelques champs",
+                  "it": "Appena il componente ha più di qualche campo"
+                }
+              },
+              {
+                "id": "any-shared",
+                "correct": false,
+                "text": {
+                  "en": "Whenever two components share it, including parent and child",
+                  "fr": "Dès que deux composants le partagent, y compris parent et enfant",
+                  "it": "Ogni volta che due componenti lo condividono, genitore e figlio inclusi"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The ladder goes local → lift to a common ancestor → global. A parent and its child sharing a value is what lifting state is for; reaching for a store there adds indirection and buys nothing. Global earns its place when the components are far apart or genuinely unrelated, like the signed-in user or a theme.",
+              "fr": "L'échelle est : local → remonter à un ancêtre commun → global. Un parent et son enfant qui partagent une valeur, c'est exactement le rôle de la remontée d'état ; sortir un store à ce stade ajoute de l'indirection sans rien apporter. Le global se justifie quand les composants sont éloignés ou sans rapport, comme l'utilisateur connecté ou un thème.",
+              "it": "La scala è: locale → sollevare a un antenato comune → globale. Un genitore e un figlio che condividono un valore sono esattamente il caso del sollevamento di stato; tirare fuori uno store lì aggiunge indirezione senza dare nulla. Il globale si giustifica quando i componenti sono lontani o davvero scollegati, come l'utente connesso o un tema."
+            }
+          },
+          {
+            "id": "context-rerenders",
+            "prompt": {
+              "en": "One context holds `{ user, theme, cart }`. Changing `cart` re-renders components that only read `theme`. Why, and what fixes it?",
+              "fr": "Un seul context contient `{ user, theme, cart }`. Modifier `cart` provoque le rendu de composants qui ne lisent que `theme`. Pourquoi, et comment corriger ?",
+              "it": "Un solo context contiene `{ user, theme, cart }`. Cambiare `cart` fa rirenderizzare componenti che leggono solo `theme`. Perché, e come si risolve?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "split-contexts",
+                "correct": true,
+                "text": {
+                  "en": "Every consumer re-renders when the value changes — split it into contexts by update frequency",
+                  "fr": "Tout consommateur se rend à nouveau quand la valeur change — séparez en contexts selon la fréquence de mise à jour",
+                  "it": "Ogni consumatore si rirenderizza quando il valore cambia — dividilo in context per frequenza di aggiornamento"
+                }
+              },
+              {
+                "id": "memo-consumer",
+                "correct": false,
+                "text": {
+                  "en": "Wrap each consumer in `React.memo`; that stops context updates",
+                  "fr": "Envelopper chaque consommateur dans `React.memo` arrête les mises à jour",
+                  "it": "Avvolgere ogni consumatore in `React.memo` ferma gli aggiornamenti"
+                }
+              },
+              {
+                "id": "selector",
+                "correct": false,
+                "text": {
+                  "en": "Pass a selector to `useContext` so it subscribes to one key",
+                  "fr": "Passer un sélecteur à `useContext` pour ne s'abonner qu'à une clé",
+                  "it": "Passare un selettore a `useContext` per iscriversi a una sola chiave"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Context has no selectors: `useContext` subscribes to the whole value, so any change notifies every consumer, and `React.memo` cannot stop it — the update arrives through context, not through props. Splitting into several contexts is the fix that matches how the API actually works. A store with selectors is the other answer.",
+              "fr": "Le context n'a pas de sélecteurs : `useContext` s'abonne à la valeur entière, donc tout changement notifie chaque consommateur, et `React.memo` n'y peut rien — la mise à jour passe par le context, pas par les props. Découper en plusieurs contexts est le correctif adapté au fonctionnement réel de l'API. Un store à sélecteurs est l'autre réponse.",
+              "it": "Il context non ha selettori: `useContext` si iscrive all'intero valore, quindi ogni cambiamento avvisa tutti i consumatori, e `React.memo` non può fermarlo — l'aggiornamento arriva dal context, non dalle props. Dividere in più context è la correzione adatta a come funziona davvero l'API. Uno store con selettori è l'altra risposta."
+            }
+          },
+          {
+            "id": "store-selector",
+            "prompt": {
+              "en": "A Zustand component calls `useStore(state => state.count)`. Another slice of the store changes. What happens?",
+              "fr": "Un composant Zustand appelle `useStore(state => state.count)`. Une autre partie du store change. Que se passe-t-il ?",
+              "it": "Un componente Zustand chiama `useStore(state => state.count)`. Cambia un'altra porzione dello store. Cosa succede?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "skipped",
+                "correct": true,
+                "text": {
+                  "en": "The selector runs, the value is unchanged, and the component does not re-render",
+                  "fr": "Le sélecteur s'exécute, la valeur est inchangée, et le composant ne se rend pas à nouveau",
+                  "it": "Il selettore viene eseguito, il valore non cambia e il componente non si rirenderizza"
+                }
+              },
+              {
+                "id": "always",
+                "correct": false,
+                "text": {
+                  "en": "It re-renders, because the store object is new",
+                  "fr": "Il se rend à nouveau, car l'objet du store est nouveau",
+                  "it": "Si rirenderizza, perché l'oggetto dello store è nuovo"
+                }
+              },
+              {
+                "id": "never",
+                "correct": false,
+                "text": {
+                  "en": "Nothing runs; subscriptions only fire for the selected key",
+                  "fr": "Rien ne s'exécute ; les abonnements ne visent que la clé sélectionnée",
+                  "it": "Non viene eseguito nulla; le sottoscrizioni riguardano solo la chiave scelta"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The store lives outside React and notifies every subscriber on any change, but each subscription re-runs its selector and compares the result. Same value, no render. That comparison is the whole reason a selector-based store scales where a single large context does not — so select the narrowest slice you need, not the whole state object.",
+              "fr": "Le store vit hors de React et notifie tous les abonnés à chaque changement, mais chaque abonnement réexécute son sélecteur et compare le résultat. Même valeur, pas de rendu. Cette comparaison explique pourquoi un store à sélecteurs passe à l'échelle là où un gros context unique échoue — sélectionnez donc la plus petite part utile, pas l'état entier.",
+              "it": "Lo store vive fuori da React e avvisa ogni sottoscrittore a ogni cambiamento, ma ogni sottoscrizione riesegue il proprio selettore e confronta il risultato. Stesso valore, nessun render. Quel confronto è il motivo per cui uno store con selettori scala dove un unico context grande non ce la fa — quindi seleziona la porzione più piccola che ti serve, non l'intero stato."
+            }
+          },
+          {
+            "id": "reducer-purity",
+            "prompt": {
+              "en": "Which belong inside a reducer?",
+              "fr": "Qu'est-ce qui a sa place dans un reducer ?",
+              "it": "Cosa va messo dentro un reducer?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "derive-next",
+                "correct": true,
+                "text": {
+                  "en": "Computing the next state from the previous state and the action",
+                  "fr": "Calculer l'état suivant à partir de l'état précédent et de l'action",
+                  "it": "Calcolare lo stato successivo da stato precedente e azione"
+                }
+              },
+              {
+                "id": "fetch",
+                "correct": false,
+                "text": {
+                  "en": "Awaiting an API call and storing the response",
+                  "fr": "Attendre un appel d'API et stocker la réponse",
+                  "it": "Attendere una chiamata API e salvarne la risposta"
+                }
+              },
+              {
+                "id": "random",
+                "correct": false,
+                "text": {
+                  "en": "Reading `Date.now()` to timestamp the change",
+                  "fr": "Lire `Date.now()` pour horodater le changement",
+                  "it": "Leggere `Date.now()` per marcare temporalmente il cambiamento"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A reducer must be pure: same state and action in, same state out, every time. That is what makes the state predictable, replayable and easy to test. Anything asynchronous or non-deterministic — requests, timestamps, random ids — belongs in middleware or a thunk, which dispatches a plain action once it has the value.",
+              "fr": "Un reducer doit être pur : mêmes état et action en entrée, même état en sortie, à chaque fois. C'est ce qui rend l'état prévisible, rejouable et facile à tester. Tout ce qui est asynchrone ou non déterministe — requêtes, horodatages, identifiants aléatoires — relève d'un middleware ou d'un thunk, qui émet une action simple une fois la valeur obtenue.",
+              "it": "Un reducer deve essere puro: stesso stato e stessa azione in ingresso, stesso stato in uscita, ogni volta. È ciò che rende lo stato prevedibile, riproducibile e facile da testare. Tutto ciò che è asincrono o non deterministico — richieste, timestamp, id casuali — va in un middleware o in un thunk, che invia un'azione semplice una volta ottenuto il valore."
+            }
+          },
+          {
+            "id": "atomic-model",
+            "prompt": {
+              "en": "How does an atomic library like Jotai differ from one big store object?",
+              "fr": "En quoi une bibliothèque atomique comme Jotai diffère-t-elle d'un gros objet de store unique ?",
+              "it": "In cosa differisce una libreria atomica come Jotai da un unico grande oggetto store?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "atoms-compose",
+                "correct": true,
+                "text": {
+                  "en": "State is many small atoms, and derived atoms recompute only when their own inputs change",
+                  "fr": "L'état est fait de nombreux petits atomes, et les atomes dérivés ne se recalculent que si leurs entrées changent",
+                  "it": "Lo stato è fatto di molti piccoli atomi, e gli atomi derivati si ricalcolano solo se cambiano i loro input"
+                }
+              },
+              {
+                "id": "no-provider",
+                "correct": false,
+                "text": {
+                  "en": "Atoms are global variables, so no React integration is needed",
+                  "fr": "Les atomes sont des variables globales, sans intégration React",
+                  "it": "Gli atomi sono variabili globali, senza integrazione con React"
+                }
+              },
+              {
+                "id": "sync-only",
+                "correct": false,
+                "text": {
+                  "en": "Atoms cannot hold asynchronous values",
+                  "fr": "Les atomes ne peuvent pas contenir de valeurs asynchrones",
+                  "it": "Gli atomi non possono contenere valori asincroni"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The atomic model inverts the usual arrangement: instead of one object that components select slices out of, state is composed upward from independent atoms, and a derived atom tracks exactly which atoms it read. Subscriptions are therefore precise by construction rather than by careful selector-writing.",
+              "fr": "Le modèle atomique inverse l'agencement habituel : au lieu d'un objet unique dont les composants extraient des parts, l'état se compose vers le haut à partir d'atomes indépendants, et un atome dérivé sait exactement quels atomes il a lus. Les abonnements sont donc précis par construction, et non à force de sélecteurs bien écrits.",
+              "it": "Il modello atomico ribalta l'assetto abituale: invece di un unico oggetto da cui i componenti estraggono porzioni, lo stato si compone verso l'alto da atomi indipendenti, e un atomo derivato sa esattamente quali atomi ha letto. Le sottoscrizioni sono quindi precise per costruzione, non a forza di selettori scritti bene."
+            }
+          },
+          {
+            "id": "server-vs-client-state",
+            "prompt": {
+              "en": "Which of these is a poor fit for a client state store like Redux or Zustand?",
+              "fr": "Lequel de ces éléments convient mal à un store client comme Redux ou Zustand ?",
+              "it": "Quale di questi si adatta male a uno store client come Redux o Zustand?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "server-cache",
+                "correct": true,
+                "text": {
+                  "en": "A cached copy of data owned by the server, needing refetch and invalidation",
+                  "fr": "Une copie en cache de données appartenant au serveur, à revalider et à invalider",
+                  "it": "Una copia in cache di dati posseduti dal server, da rifetchare e invalidare"
+                }
+              },
+              {
+                "id": "auth",
+                "correct": false,
+                "text": {
+                  "en": "The signed-in user and their permissions",
+                  "fr": "L'utilisateur connecté et ses permissions",
+                  "it": "L'utente connesso e i suoi permessi"
+                }
+              },
+              {
+                "id": "ui-prefs",
+                "correct": false,
+                "text": {
+                  "en": "Theme, language and sidebar collapsed state",
+                  "fr": "Thème, langue et état replié de la barre latérale",
+                  "it": "Tema, lingua e stato compresso della sidebar"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Server data is not really state you own — it is a cache of someone else's, and it needs staleness, refetching, deduplication and error retries. Hand-rolling that inside a client store is how reducers end up full of `isLoading` flags. That job belongs to a data-fetching library, which the next module covers.",
+              "fr": "Les données du serveur ne sont pas vraiment votre état : c'est le cache de celui d'un autre, avec péremption, revalidation, déduplication et reprises sur erreur. Réimplémenter cela à la main dans un store client, c'est ainsi que les reducers se remplissent de drapeaux `isLoading`. Ce travail revient à une bibliothèque de récupération de données, sujet du module suivant.",
+              "it": "I dati del server non sono davvero stato tuo: sono la cache di quelli di qualcun altro, con scadenza, rifetch, deduplicazione e nuovi tentativi in caso di errore. Riscrivere tutto ciò a mano dentro uno store client è il modo in cui i reducer si riempiono di flag `isLoading`. È compito di una libreria di data fetching, argomento del modulo successivo."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -985,6 +2311,10 @@
           "type": "lesson",
           "id": "state-conclusion",
           "sectionHeading": "Conclusion: State Management Mastery"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -1027,6 +2357,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/07-data-fetching.md",
       "exerciseDir": "src/07-data-fetching",
+      "quiz": {
+        "questions": [
+          {
+            "id": "stale-response",
+            "prompt": {
+              "en": "An effect fetches `/api/users/{id}` whenever `id` changes. The user clicks quickly through three profiles and the page settles on the wrong one. What happened?",
+              "fr": "Un effet appelle `/api/users/{id}` à chaque changement d'`id`. L'utilisateur parcourt vite trois profils et la page s'arrête sur le mauvais. Que s'est-il passé ?",
+              "it": "Un effetto chiama `/api/users/{id}` a ogni cambio di `id`. L'utente scorre rapidamente tre profili e la pagina si ferma su quello sbagliato. Cosa è successo?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "out-of-order",
+                "correct": true,
+                "text": {
+                  "en": "An earlier request resolved last, and its response overwrote the newer one",
+                  "fr": "Une requête antérieure s'est résolue en dernier et sa réponse a écrasé la plus récente",
+                  "it": "Una richiesta precedente si è risolta per ultima e la sua risposta ha sovrascritto quella più recente"
+                }
+              },
+              {
+                "id": "cache",
+                "correct": false,
+                "text": {
+                  "en": "The browser served all three from its HTTP cache",
+                  "fr": "Le navigateur a servi les trois depuis son cache HTTP",
+                  "it": "Il browser ha servito tutte e tre dalla cache HTTP"
+                }
+              },
+              {
+                "id": "rerender",
+                "correct": false,
+                "text": {
+                  "en": "React batched the three renders into one",
+                  "fr": "React a regroupé les trois rendus en un seul",
+                  "it": "React ha raggruppato i tre render in uno solo"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Requests do not come back in the order they were sent. Without protection, whichever finishes last wins — which may be the one you no longer want. The cleanup function is the fix: set an `isCancelled` flag or call `AbortController.abort()` so a superseded response is ignored. A data-fetching library handles this for you, which is much of the point.",
+              "fr": "Les requêtes ne reviennent pas dans l'ordre où elles sont parties. Sans protection, celle qui finit en dernier l'emporte — et ce peut être celle dont vous ne voulez plus. La fonction de nettoyage est le correctif : posez un drapeau `isCancelled` ou appelez `AbortController.abort()` pour ignorer une réponse dépassée. Une bibliothèque de récupération de données s'en charge, et c'est une grande part de son intérêt.",
+              "it": "Le richieste non tornano nell'ordine in cui sono partite. Senza protezione vince quella che finisce per ultima — e può essere quella che non vuoi più. La funzione di pulizia è la correzione: imposta un flag `isCancelled` o chiama `AbortController.abort()` per ignorare una risposta superata. Una libreria di data fetching se ne occupa da sé, ed è gran parte del motivo per usarla."
+            }
+          },
+          {
+            "id": "fetch-error-handling",
+            "prompt": {
+              "en": "`fetch()` returns a 404. Does the promise reject?",
+              "fr": "`fetch()` renvoie un 404. La promesse est-elle rejetée ?",
+              "it": "`fetch()` restituisce un 404. La promise viene rifiutata?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "no-check-ok",
+                "correct": true,
+                "text": {
+                  "en": "No — it resolves, so you must check `res.ok` yourself",
+                  "fr": "Non — elle se résout, il faut donc vérifier `res.ok` soi-même",
+                  "it": "No — si risolve, quindi devi controllare tu `res.ok`"
+                }
+              },
+              {
+                "id": "rejects",
+                "correct": false,
+                "text": {
+                  "en": "Yes, any status outside 2xx rejects and lands in `catch`",
+                  "fr": "Oui, tout statut hors 2xx est rejeté et arrive dans `catch`",
+                  "it": "Sì, ogni stato fuori dal 2xx viene rifiutato e finisce nel `catch`"
+                }
+              },
+              {
+                "id": "throws-sync",
+                "correct": false,
+                "text": {
+                  "en": "It throws synchronously before returning a promise",
+                  "fr": "Elle lève une erreur de façon synchrone avant de renvoyer une promesse",
+                  "it": "Lancia un errore in modo sincrono prima di restituire una promise"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "`fetch` only rejects on a network-level failure — offline, DNS, CORS, an aborted request. An HTTP error is still a successful exchange as far as it is concerned, so a 404 or 500 arrives as a resolved response with `ok: false`. Forgetting the check is why error branches silently render an error page's JSON as if it were data. Axios throws on non-2xx instead.",
+              "fr": "`fetch` ne rejette qu'en cas d'échec réseau — hors ligne, DNS, CORS, requête annulée. Une erreur HTTP reste pour elle un échange réussi : un 404 ou un 500 arrive donc en réponse résolue avec `ok: false`. Oublier la vérification, c'est afficher le JSON d'une page d'erreur comme s'il s'agissait de données. Axios, lui, lève une erreur hors 2xx.",
+              "it": "`fetch` rifiuta solo per un errore di rete — offline, DNS, CORS, richiesta annullata. Un errore HTTP resta per lei uno scambio riuscito: un 404 o un 500 arriva quindi come risposta risolta con `ok: false`. Dimenticare il controllo è il motivo per cui il JSON di una pagina di errore viene mostrato come se fossero dati. Axios invece lancia un errore fuori dal 2xx."
+            }
+          },
+          {
+            "id": "stale-while-revalidate",
+            "prompt": {
+              "en": "What does \"stale-while-revalidate\" actually do?",
+              "fr": "Que fait réellement le « stale-while-revalidate » ?",
+              "it": "Cosa fa davvero lo \"stale-while-revalidate\"?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "show-then-refresh",
+                "correct": true,
+                "text": {
+                  "en": "Show the cached value immediately, refetch in the background, then update if it changed",
+                  "fr": "Afficher la valeur en cache aussitôt, revalider en arrière-plan, puis mettre à jour si elle a changé",
+                  "it": "Mostrare subito il valore in cache, rifetchare in background e poi aggiornare se è cambiato"
+                }
+              },
+              {
+                "id": "block",
+                "correct": false,
+                "text": {
+                  "en": "Block rendering until fresh data has arrived",
+                  "fr": "Bloquer le rendu jusqu'à l'arrivée de données fraîches",
+                  "it": "Bloccare il rendering finché non arrivano dati freschi"
+                }
+              },
+              {
+                "id": "never-refetch",
+                "correct": false,
+                "text": {
+                  "en": "Serve the cache and skip the network until it is manually cleared",
+                  "fr": "Servir le cache et éviter le réseau jusqu'à un vidage manuel",
+                  "it": "Servire la cache ed evitare la rete fino a uno svuotamento manuale"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The user sees something instantly instead of a spinner, and correctness catches up a moment later. The trade is that what is on screen may be briefly out of date — fine for a list of articles, wrong for an account balance you are about to act on. Choosing the staleness window is the real decision.",
+              "fr": "L'utilisateur voit quelque chose immédiatement plutôt qu'un indicateur de chargement, et l'exactitude rattrape un instant plus tard. En contrepartie, l'affichage peut être brièvement périmé — acceptable pour une liste d'articles, non pour un solde sur lequel on va agir. Choisir la fenêtre de péremption est la vraie décision.",
+              "it": "L'utente vede subito qualcosa invece di uno spinner, e la correttezza arriva un istante dopo. In cambio, ciò che è a schermo può essere brevemente non aggiornato — accettabile per un elenco di articoli, sbagliato per un saldo su cui si sta per agire. Scegliere la finestra di obsolescenza è la vera decisione."
+            }
+          },
+          {
+            "id": "optimistic-updates",
+            "prompt": {
+              "en": "An optimistic update needs which pieces to be safe?",
+              "fr": "De quels éléments une mise à jour optimiste a-t-elle besoin pour être sûre ?",
+              "it": "Di quali elementi ha bisogno un aggiornamento ottimistico per essere sicuro?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "snapshot-rollback",
+                "correct": true,
+                "text": {
+                  "en": "A snapshot of the previous cache, to roll back if the request fails",
+                  "fr": "Un instantané du cache précédent, pour revenir en arrière en cas d'échec",
+                  "it": "Uno snapshot della cache precedente, per tornare indietro se fallisce"
+                }
+              },
+              {
+                "id": "reconcile",
+                "correct": true,
+                "text": {
+                  "en": "Replacing the guess with the server's canonical response on success",
+                  "fr": "Remplacer la supposition par la réponse canonique du serveur en cas de succès",
+                  "it": "Sostituire la supposizione con la risposta canonica del server in caso di successo"
+                }
+              },
+              {
+                "id": "disable-ui",
+                "correct": false,
+                "text": {
+                  "en": "Disabling the interface until the server replies",
+                  "fr": "Désactiver l'interface jusqu'à la réponse du serveur",
+                  "it": "Disabilitare l'interfaccia fino alla risposta del server"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "You are showing a guess before you know it is true, so you need a way back and a way to confirm. Keep the snapshot, apply the guess, then either overwrite it with what the server actually returned or restore the snapshot. Disabling the UI while waiting is exactly the latency optimistic updates exist to hide.",
+              "fr": "Vous affichez une supposition avant de la savoir vraie : il faut donc un retour en arrière et une confirmation. Conservez l'instantané, appliquez la supposition, puis écrasez-la avec ce que le serveur a réellement renvoyé ou restaurez l'instantané. Désactiver l'interface pendant l'attente, c'est justement la latence que la mise à jour optimiste cherche à masquer.",
+              "it": "Stai mostrando una supposizione prima di sapere se è vera: servono quindi una via di ritorno e una conferma. Conserva lo snapshot, applica la supposizione, poi sovrascrivila con ciò che il server ha davvero restituito oppure ripristina lo snapshot. Disabilitare l'interfaccia durante l'attesa è proprio la latenza che l'aggiornamento ottimistico vuole nascondere."
+            }
+          },
+          {
+            "id": "query-key",
+            "prompt": {
+              "en": "Why does a query library ask for a key like `['user', id]` rather than just the fetch function?",
+              "fr": "Pourquoi une bibliothèque de requêtes demande-t-elle une clé comme `['user', id]` plutôt que la seule fonction de récupération ?",
+              "it": "Perché una libreria di query chiede una chiave come `['user', id]` invece della sola funzione di fetch?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "identity",
+                "correct": true,
+                "text": {
+                  "en": "The key identifies the cache entry, so it can dedupe, refetch and invalidate precisely",
+                  "fr": "La clé identifie l'entrée de cache, permettant déduplication, revalidation et invalidation précises",
+                  "it": "La chiave identifica la voce di cache, permettendo deduplicazione, rifetch e invalidazione precisi"
+                }
+              },
+              {
+                "id": "ordering",
+                "correct": false,
+                "text": {
+                  "en": "It sets the order requests are sent in",
+                  "fr": "Elle fixe l'ordre d'envoi des requêtes",
+                  "it": "Stabilisce l'ordine di invio delle richieste"
+                }
+              },
+              {
+                "id": "auth",
+                "correct": false,
+                "text": {
+                  "en": "It is sent to the server to authorise the request",
+                  "fr": "Elle est envoyée au serveur pour autoriser la requête",
+                  "it": "Viene inviata al server per autorizzare la richiesta"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The key is the cache's identity for that piece of server state. Two components asking for `['user', 7]` share one request instead of firing two; changing the id makes it a different entry; and after a mutation you can invalidate `['user', 7]` alone rather than throwing away everything.",
+              "fr": "La clé est l'identité de cette donnée serveur dans le cache. Deux composants demandant `['user', 7]` partagent une requête au lieu d'en lancer deux ; changer l'identifiant crée une autre entrée ; et après une mutation vous pouvez invalider `['user', 7]` seul plutôt que tout jeter.",
+              "it": "La chiave è l'identità di quel dato del server nella cache. Due componenti che chiedono `['user', 7]` condividono una richiesta invece di lanciarne due; cambiare l'id crea un'altra voce; e dopo una mutazione puoi invalidare solo `['user', 7]` invece di buttare via tutto."
+            }
+          },
+          {
+            "id": "why-a-library",
+            "prompt": {
+              "en": "What do you end up rebuilding by hand if you fetch with `useEffect` everywhere?",
+              "fr": "Que finit-on par réimplémenter à la main en récupérant les données avec `useEffect` partout ?",
+              "it": "Cosa si finisce per riscrivere a mano recuperando i dati con `useEffect` ovunque?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "the-hard-parts",
+                "correct": true,
+                "text": {
+                  "en": "Caching, deduplication, retries, invalidation and cancellation — in every component",
+                  "fr": "Cache, déduplication, reprises, invalidation et annulation — dans chaque composant",
+                  "it": "Cache, deduplicazione, tentativi, invalidazione e annullamento — in ogni componente"
+                }
+              },
+              {
+                "id": "jsx",
+                "correct": false,
+                "text": {
+                  "en": "JSX rendering of the results",
+                  "fr": "Le rendu JSX des résultats",
+                  "it": "Il rendering JSX dei risultati"
+                }
+              },
+              {
+                "id": "nothing",
+                "correct": false,
+                "text": {
+                  "en": "Nothing — `useEffect` already covers all of it",
+                  "fr": "Rien — `useEffect` couvre déjà tout cela",
+                  "it": "Niente — `useEffect` copre già tutto"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The fetch itself is three lines; everything around it is not. Server state needs to be shared between components, kept fresh, deduplicated, retried, cancelled and invalidated after writes. Writing that once per component is how `isLoading` flags multiply and quietly diverge — which is the argument for a library rather than a matter of taste.",
+              "fr": "La récupération elle-même tient en trois lignes ; tout ce qui l'entoure, non. L'état serveur doit être partagé entre composants, maintenu à jour, dédupliqué, réessayé, annulé et invalidé après écriture. Écrire cela une fois par composant, c'est ainsi que les drapeaux `isLoading` se multiplient et divergent en silence — d'où l'argument pour une bibliothèque, au-delà du goût.",
+              "it": "Il fetch in sé sono tre righe; tutto ciò che gli sta intorno no. Lo stato del server va condiviso fra componenti, tenuto fresco, deduplicato, ritentato, annullato e invalidato dopo le scritture. Scriverlo una volta per componente è il modo in cui i flag `isLoading` si moltiplicano e divergono in silenzio — da cui l'argomento per una libreria, al di là dei gusti."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -1106,6 +2698,10 @@
           "type": "lesson",
           "id": "fetching-conclusion",
           "sectionHeading": "Conclusion: Mastering Data Fetching"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -1148,6 +2744,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/08-forms-and-validations.md",
       "exerciseDir": "src/08-forms",
+      "quiz": {
+        "questions": [
+          {
+            "id": "controlled-vs-uncontrolled",
+            "prompt": {
+              "en": "What actually separates a controlled input from an uncontrolled one?",
+              "fr": "Qu'est-ce qui distingue vraiment un champ contrôlé d'un champ non contrôlé ?",
+              "it": "Cosa distingue davvero un input controllato da uno non controllato?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "source-of-truth",
+                "correct": true,
+                "text": {
+                  "en": "Whether React state or the DOM node holds the current value",
+                  "fr": "Le fait que la valeur courante soit dans l'état React ou dans le nœud DOM",
+                  "it": "Se il valore corrente stia nello stato di React o nel nodo DOM"
+                }
+              },
+              {
+                "id": "validation",
+                "correct": false,
+                "text": {
+                  "en": "Whether the field is validated before submission",
+                  "fr": "Le fait que le champ soit validé avant l'envoi",
+                  "it": "Se il campo viene validato prima dell'invio"
+                }
+              },
+              {
+                "id": "required",
+                "correct": false,
+                "text": {
+                  "en": "Whether it carries the `required` attribute",
+                  "fr": "Le fait qu'il porte l'attribut `required`",
+                  "it": "Se porta l'attributo `required`"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A controlled input renders `value` from state and writes every keystroke back through `onChange`, so React is the single source of truth. An uncontrolled one lets the DOM keep the value and reads it when needed, usually through a ref. Both are valid; they differ in who owns the data, not in how carefully the form is checked.",
+              "fr": "Un champ contrôlé affiche `value` depuis l'état et renvoie chaque frappe via `onChange` : React est la source unique de vérité. Un champ non contrôlé laisse la valeur au DOM et la lit au besoin, généralement via une ref. Les deux sont valables ; ils diffèrent par le propriétaire de la donnée, pas par le soin apporté à la validation.",
+              "it": "Un input controllato mostra `value` dallo stato e riscrive ogni battuta tramite `onChange`: React è l'unica fonte di verità. Uno non controllato lascia il valore al DOM e lo legge quando serve, di solito con una ref. Entrambi sono validi; differiscono per chi possiede il dato, non per quanto accuratamente il form viene controllato."
+            }
+          },
+          {
+            "id": "rhf-performance",
+            "prompt": {
+              "en": "A 20-field controlled form re-renders on every keystroke. How does React Hook Form avoid that?",
+              "fr": "Un formulaire contrôlé de 20 champs se rend à chaque frappe. Comment React Hook Form l'évite-t-il ?",
+              "it": "Un form controllato di 20 campi si rirenderizza a ogni battuta. Come lo evita React Hook Form?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "uncontrolled-register",
+                "correct": true,
+                "text": {
+                  "en": "`register` leaves the inputs uncontrolled and subscribes to them via refs",
+                  "fr": "`register` laisse les champs non contrôlés et s'y abonne via des refs",
+                  "it": "`register` lascia gli input non controllati e vi si iscrive tramite ref"
+                }
+              },
+              {
+                "id": "debounce",
+                "correct": false,
+                "text": {
+                  "en": "It debounces state updates on a timer",
+                  "fr": "Il temporise les mises à jour d'état avec un minuteur",
+                  "it": "Ritarda gli aggiornamenti di stato con un timer"
+                }
+              },
+              {
+                "id": "memo",
+                "correct": false,
+                "text": {
+                  "en": "It wraps every field in `React.memo`",
+                  "fr": "Il enveloppe chaque champ dans `React.memo`",
+                  "it": "Avvolge ogni campo in `React.memo`"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Typing changes the DOM node, and the library reads values through refs rather than storing each keystroke in React state — so nothing re-renders until something actually needs to, like an error appearing. The cost is that values are not React state, so anything that must react to a field live needs `watch` and re-renders again.",
+              "fr": "La saisie modifie le nœud DOM, et la bibliothèque lit les valeurs via des refs au lieu de stocker chaque frappe dans l'état React — rien ne se rend donc à nouveau tant que ce n'est pas nécessaire, comme l'apparition d'une erreur. En contrepartie, les valeurs ne sont pas de l'état React : tout ce qui doit réagir en direct à un champ exige `watch`, et les rendus reviennent.",
+              "it": "Digitare cambia il nodo DOM, e la libreria legge i valori tramite ref invece di salvare ogni battuta nello stato di React — così nulla si rirenderizza finché non serve davvero, come la comparsa di un errore. Il costo è che i valori non sono stato di React: ciò che deve reagire dal vivo a un campo richiede `watch`, e i render tornano."
+            }
+          },
+          {
+            "id": "schema-validation",
+            "prompt": {
+              "en": "What do you gain by describing a form with a Zod schema instead of hand-written `if` checks?",
+              "fr": "Que gagne-t-on à décrire un formulaire par un schéma Zod plutôt que par des `if` écrits à la main ?",
+              "it": "Cosa si guadagna descrivendo un form con uno schema Zod invece che con `if` scritti a mano?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "one-declaration",
+                "correct": true,
+                "text": {
+                  "en": "One declaration produces the rules, the messages and the TypeScript type",
+                  "fr": "Une seule déclaration fournit les règles, les messages et le type TypeScript",
+                  "it": "Un'unica dichiarazione produce regole, messaggi e tipo TypeScript"
+                }
+              },
+              {
+                "id": "server-free",
+                "correct": false,
+                "text": {
+                  "en": "The server no longer needs to validate the payload",
+                  "fr": "Le serveur n'a plus besoin de valider la charge utile",
+                  "it": "Il server non deve più validare il payload"
+                }
+              },
+              {
+                "id": "faster",
+                "correct": false,
+                "text": {
+                  "en": "Validation runs measurably faster than manual checks",
+                  "fr": "La validation s'exécute nettement plus vite que des contrôles manuels",
+                  "it": "La validazione è sensibilmente più veloce dei controlli manuali"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The schema is the single description of what valid input means. Rules and messages stop drifting apart across handlers, `z.infer` gives you the type for free so the form and its data cannot disagree, and the same schema can run on the server. Speed is not the point — a handful of `if`s is fast either way.",
+              "fr": "Le schéma est la description unique de ce qu'est une saisie valide. Règles et messages cessent de diverger entre gestionnaires, `z.infer` fournit le type gratuitement — le formulaire et ses données ne peuvent plus se contredire — et le même schéma peut tourner côté serveur. La vitesse n'est pas l'enjeu : quelques `if` sont rapides de toute façon.",
+              "it": "Lo schema è l'unica descrizione di cosa sia un input valido. Regole e messaggi smettono di divergere fra i gestori, `z.infer` dà il tipo gratis — form e dati non possono più contraddirsi — e lo stesso schema può girare sul server. La velocità non è il punto: qualche `if` è comunque veloce."
+            }
+          },
+          {
+            "id": "client-validation-limits",
+            "prompt": {
+              "en": "Your form validates thoroughly in the browser. What must the server still do?",
+              "fr": "Votre formulaire valide soigneusement dans le navigateur. Que doit encore faire le serveur ?",
+              "it": "Il tuo form valida a fondo nel browser. Cosa deve comunque fare il server?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "revalidate",
+                "correct": true,
+                "text": {
+                  "en": "Validate everything again, because the client can be bypassed",
+                  "fr": "Tout revalider, le client pouvant être contourné",
+                  "it": "Validare di nuovo tutto, perché il client può essere aggirato"
+                }
+              },
+              {
+                "id": "trust",
+                "correct": false,
+                "text": {
+                  "en": "Trust the payload, since it already passed the same schema",
+                  "fr": "Faire confiance à la charge utile, déjà validée par le même schéma",
+                  "it": "Fidarsi del payload, già validato dallo stesso schema"
+                }
+              },
+              {
+                "id": "only-types",
+                "correct": false,
+                "text": {
+                  "en": "Check types only; business rules were handled on the client",
+                  "fr": "Vérifier seulement les types ; les règles métier ont été traitées côté client",
+                  "it": "Controllare solo i tipi; le regole di business sono state gestite dal client"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Client validation is there to give fast, kind feedback — it is a user experience feature. Anyone can send a request straight to your endpoint with `curl`, so the browser's verdict is a suggestion, never a guarantee. Sharing one schema between both sides gives you the good experience and the real check without writing the rules twice.",
+              "fr": "La validation côté client sert à donner un retour rapide et clair : c'est une fonctionnalité d'expérience utilisateur. N'importe qui peut envoyer une requête directement à votre point d'entrée avec `curl` ; le verdict du navigateur est donc une suggestion, jamais une garantie. Partager un même schéma des deux côtés offre la bonne expérience et le vrai contrôle sans écrire les règles deux fois.",
+              "it": "La validazione lato client serve a dare un riscontro rapido e chiaro: è una funzionalità di esperienza utente. Chiunque può inviare una richiesta direttamente al tuo endpoint con `curl`, quindi il verdetto del browser è un suggerimento, mai una garanzia. Condividere un unico schema fra i due lati dà la buona esperienza e il controllo vero senza scrivere le regole due volte."
+            }
+          },
+          {
+            "id": "file-upload",
+            "prompt": {
+              "en": "How do you send a file together with text fields to an endpoint?",
+              "fr": "Comment envoyer un fichier avec des champs texte à un point d'entrée ?",
+              "it": "Come si invia un file insieme a campi di testo a un endpoint?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "formdata",
+                "correct": true,
+                "text": {
+                  "en": "Build a `FormData` and append both the file and the text values",
+                  "fr": "Construire un `FormData` et y ajouter le fichier et les valeurs texte",
+                  "it": "Costruire un `FormData` e aggiungere sia il file sia i valori di testo"
+                }
+              },
+              {
+                "id": "json",
+                "correct": false,
+                "text": {
+                  "en": "Put the `File` object into JSON and `JSON.stringify` it",
+                  "fr": "Placer l'objet `File` dans du JSON et faire `JSON.stringify`",
+                  "it": "Mettere l'oggetto `File` in JSON e fare `JSON.stringify`"
+                }
+              },
+              {
+                "id": "base64-required",
+                "correct": false,
+                "text": {
+                  "en": "Files can only be sent as base64 in a query string",
+                  "fr": "Les fichiers ne peuvent être envoyés qu'en base64 dans une chaîne de requête",
+                  "it": "I file si possono inviare solo in base64 in una query string"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "`JSON.stringify` cannot serialise a `File` — you would send `{}`. `FormData` encodes as multipart, carrying binary content and ordinary fields in one request. Let the browser set `Content-Type` itself: setting it manually drops the boundary parameter and the server cannot parse the parts.",
+              "fr": "`JSON.stringify` ne sait pas sérialiser un `File` — vous enverriez `{}`. `FormData` encode en multipart et transporte contenu binaire et champs ordinaires dans une seule requête. Laissez le navigateur définir `Content-Type` : le fixer à la main supprime le paramètre de délimitation et le serveur ne peut plus découper les parties.",
+              "it": "`JSON.stringify` non sa serializzare un `File` — invieresti `{}`. `FormData` codifica in multipart e porta contenuto binario e campi normali in un'unica richiesta. Lascia che sia il browser a impostare `Content-Type`: farlo a mano elimina il parametro di delimitazione e il server non riesce più a separare le parti."
+            }
+          },
+          {
+            "id": "multi-step-state",
+            "prompt": {
+              "en": "In a three-step wizard, where should the answers from step 1 live while the user is on step 2?",
+              "fr": "Dans un assistant en trois étapes, où doivent vivre les réponses de l'étape 1 pendant que l'utilisateur est à l'étape 2 ?",
+              "it": "In un wizard a tre passi, dove devono vivere le risposte del passo 1 mentre l'utente è al passo 2?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "parent-owns",
+                "correct": true,
+                "text": {
+                  "en": "In the wizard that outlives the steps, so unmounting a step keeps its data",
+                  "fr": "Dans l'assistant qui survit aux étapes, pour qu'en démontant une étape ses données subsistent",
+                  "it": "Nel wizard che sopravvive ai passi, così smontando un passo i suoi dati restano"
+                }
+              },
+              {
+                "id": "each-step",
+                "correct": false,
+                "text": {
+                  "en": "In each step component, read back when the user returns to it",
+                  "fr": "Dans chaque composant d'étape, relues au retour de l'utilisateur",
+                  "it": "In ogni componente di passo, rilette quando l'utente ci torna"
+                }
+              },
+              {
+                "id": "dom",
+                "correct": false,
+                "text": {
+                  "en": "In the hidden inputs of the previous step, still in the DOM",
+                  "fr": "Dans les champs cachés de l'étape précédente, toujours dans le DOM",
+                  "it": "Negli input nascosti del passo precedente, ancora nel DOM"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Steps mount and unmount as the user moves, and unmounting destroys their state — so anything stored per step is gone the moment you leave it. The wizard is the component whose lifetime spans the whole flow, so it owns the accumulated answers and hands each step the slice it edits.",
+              "fr": "Les étapes se montent et se démontent au fil de la navigation, et le démontage détruit leur état : ce qui est stocké par étape disparaît dès qu'on la quitte. L'assistant est le composant dont la durée de vie couvre tout le parcours ; c'est donc lui qui détient les réponses accumulées et confie à chaque étape la part qu'elle modifie.",
+              "it": "I passi si montano e si smontano mentre l'utente avanza, e lo smontaggio distrugge il loro stato: ciò che è salvato per passo sparisce appena lo lasci. Il wizard è il componente la cui vita copre l'intero flusso: possiede quindi le risposte accumulate e passa a ogni passo la porzione che modifica."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -1227,6 +3085,10 @@
           "type": "lesson",
           "id": "forms-conclusion",
           "sectionHeading": "Conclusion: Mastering Form Management"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -1269,6 +3131,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/09-performance-optimization.md",
       "exerciseDir": "src/09-performance",
+      "quiz": {
+        "questions": [
+          {
+            "id": "memo-defeated",
+            "prompt": {
+              "en": "A child is wrapped in `React.memo` but re-renders every time anyway. The parent passes `style={{ margin: 8 }}`. Why does that defeat it?",
+              "fr": "Un enfant enveloppé dans `React.memo` se rend malgré tout à chaque fois. Le parent passe `style={{ margin: 8 }}`. Pourquoi cela le met-il en échec ?",
+              "it": "Un figlio avvolto in `React.memo` si rirenderizza comunque ogni volta. Il genitore passa `style={{ margin: 8 }}`. Perché questo lo vanifica?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "new-object",
+                "correct": true,
+                "text": {
+                  "en": "The literal creates a new object each render, and the comparison is shallow",
+                  "fr": "Le littéral crée un nouvel objet à chaque rendu, et la comparaison est superficielle",
+                  "it": "Il letterale crea un nuovo oggetto a ogni render, e il confronto è superficiale"
+                }
+              },
+              {
+                "id": "memo-broken",
+                "correct": false,
+                "text": {
+                  "en": "`React.memo` ignores props whose name is `style`",
+                  "fr": "`React.memo` ignore les props nommées `style`",
+                  "it": "`React.memo` ignora le props chiamate `style`"
+                }
+              },
+              {
+                "id": "parent-forces",
+                "correct": false,
+                "text": {
+                  "en": "A parent re-render always forces children to re-render",
+                  "fr": "Le rendu du parent force toujours le rendu des enfants",
+                  "it": "Il render del genitore forza sempre il render dei figli"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "`{ margin: 8 }` is a fresh object every render, so the shallow compare sees a changed prop even though the contents are identical. The same trap catches inline arrow functions and array literals. Hoist the value, or memoise it with `useMemo` / `useCallback` — otherwise `React.memo` costs a comparison and saves nothing.",
+              "fr": "`{ margin: 8 }` est un objet neuf à chaque rendu ; la comparaison superficielle voit donc une prop modifiée alors que le contenu est identique. Le même piège vaut pour les fonctions fléchées et les littéraux de tableau en ligne. Sortez la valeur, ou mémoïsez-la avec `useMemo` / `useCallback` — sinon `React.memo` coûte une comparaison et n'économise rien.",
+              "it": "`{ margin: 8 }` è un oggetto nuovo a ogni render, quindi il confronto superficiale vede una prop cambiata anche se il contenuto è identico. La stessa trappola vale per funzioni freccia e letterali di array inline. Estrai il valore o memoizzalo con `useMemo` / `useCallback` — altrimenti `React.memo` costa un confronto e non risparmia nulla."
+            }
+          },
+          {
+            "id": "measure-first",
+            "prompt": {
+              "en": "What should come before wrapping components in `memo` and `useMemo`?",
+              "fr": "Que faut-il faire avant d'envelopper des composants dans `memo` et `useMemo` ?",
+              "it": "Cosa va fatto prima di avvolgere i componenti in `memo` e `useMemo`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "profile",
+                "correct": true,
+                "text": {
+                  "en": "Profile, to find which renders are actually costing time",
+                  "fr": "Profiler, pour trouver quels rendus coûtent réellement du temps",
+                  "it": "Profilare, per trovare quali render costano davvero tempo"
+                }
+              },
+              {
+                "id": "memo-everything",
+                "correct": false,
+                "text": {
+                  "en": "Nothing — memoising everything is free insurance",
+                  "fr": "Rien — tout mémoïser est une assurance gratuite",
+                  "it": "Niente — memoizzare tutto è un'assicurazione gratuita"
+                }
+              },
+              {
+                "id": "upgrade",
+                "correct": false,
+                "text": {
+                  "en": "Upgrade to the newest React version",
+                  "fr": "Passer à la version la plus récente de React",
+                  "it": "Aggiornare alla versione più recente di React"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Memoisation is not free: every `useMemo` adds a dependency array to keep correct and a comparison on each render, and a wrong dependency list turns a performance tweak into a stale-value bug. React DevTools' Profiler and the `<Profiler>` API tell you which commits are slow, so you spend that complexity where it actually pays.",
+              "fr": "La mémoïsation n'est pas gratuite : chaque `useMemo` ajoute un tableau de dépendances à maintenir juste et une comparaison à chaque rendu, et une liste de dépendances erronée transforme un réglage de performance en bug de valeur périmée. Le Profiler des React DevTools et l'API `<Profiler>` indiquent quels commits sont lents, pour investir cette complexité là où elle rapporte.",
+              "it": "La memoizzazione non è gratis: ogni `useMemo` aggiunge un array di dipendenze da tenere corretto e un confronto a ogni render, e un elenco di dipendenze sbagliato trasforma un'ottimizzazione in un bug da valore obsoleto. Il Profiler dei React DevTools e l'API `<Profiler>` dicono quali commit sono lenti, così investi quella complessità dove rende."
+            }
+          },
+          {
+            "id": "virtualization",
+            "prompt": {
+              "en": "A table renders 10,000 rows and scrolling stutters. What does virtualization change?",
+              "fr": "Un tableau affiche 10 000 lignes et le défilement saccade. Qu'est-ce que la virtualisation change ?",
+              "it": "Una tabella mostra 10.000 righe e lo scorrimento scatta. Cosa cambia la virtualizzazione?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "visible-only",
+                "correct": true,
+                "text": {
+                  "en": "Only the visible rows plus a small buffer are mounted; a spacer fakes the full height",
+                  "fr": "Seules les lignes visibles et une petite marge sont montées ; un espaceur simule la hauteur totale",
+                  "it": "Sono montate solo le righe visibili più un piccolo margine; uno spaziatore simula l'altezza totale"
+                }
+              },
+              {
+                "id": "faster-rows",
+                "correct": false,
+                "text": {
+                  "en": "Each row renders faster",
+                  "fr": "Chaque ligne s'affiche plus vite",
+                  "it": "Ogni riga si rende più velocemente"
+                }
+              },
+              {
+                "id": "compress",
+                "correct": false,
+                "text": {
+                  "en": "The data is compressed in memory",
+                  "fr": "Les données sont compressées en mémoire",
+                  "it": "I dati vengono compressi in memoria"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The problem is not row cost, it is row count: 10,000 nodes is a large DOM to build, lay out and keep. A virtualizer computes which slice the viewport shows, mounts roughly twenty of them, and uses a tall spacer so the scrollbar still behaves. Note this is why `Ctrl+F` stops finding offscreen rows — a real trade-off, not a free win.",
+              "fr": "Le problème n'est pas le coût d'une ligne mais leur nombre : 10 000 nœuds font un DOM lourd à construire, disposer et conserver. Un virtualiseur calcule la tranche visible, en monte une vingtaine, et emploie un espaceur pour que la barre de défilement reste correcte. C'est aussi pourquoi `Ctrl+F` ne trouve plus les lignes hors écran — un vrai compromis, pas un gain gratuit.",
+              "it": "Il problema non è il costo di una riga ma il loro numero: 10.000 nodi sono un DOM pesante da costruire, disporre e mantenere. Un virtualizzatore calcola la porzione visibile, ne monta una ventina e usa uno spaziatore perché la barra di scorrimento resti corretta. È anche il motivo per cui `Ctrl+F` non trova più le righe fuori schermo — un vero compromesso, non un guadagno gratuito."
+            }
+          },
+          {
+            "id": "bundle-splitting",
+            "prompt": {
+              "en": "Which genuinely reduce what a first-time visitor downloads?",
+              "fr": "Qu'est-ce qui réduit réellement ce que télécharge un premier visiteur ?",
+              "it": "Cosa riduce davvero ciò che scarica un visitatore alla prima visita?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "route-split",
+                "correct": true,
+                "text": {
+                  "en": "Splitting per route with `React.lazy`, so unvisited pages are not sent",
+                  "fr": "Découper par route avec `React.lazy`, pour ne pas envoyer les pages non visitées",
+                  "it": "Dividere per route con `React.lazy`, così le pagine non visitate non vengono inviate"
+                }
+              },
+              {
+                "id": "lighter-dep",
+                "correct": true,
+                "text": {
+                  "en": "Replacing a heavy dependency with a smaller one that does the job",
+                  "fr": "Remplacer une dépendance lourde par une plus petite qui suffit",
+                  "it": "Sostituire una dipendenza pesante con una più piccola che basta"
+                }
+              },
+              {
+                "id": "memo-more",
+                "correct": false,
+                "text": {
+                  "en": "Adding more `useMemo` calls",
+                  "fr": "Ajouter davantage d'appels à `useMemo`",
+                  "it": "Aggiungere altre chiamate a `useMemo`"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Bundle size and render speed are separate problems with separate fixes. Memoisation changes what happens after the code arrives; it cannot make the download smaller. Shipping less — later routes deferred, lighter libraries, no unused locales or icon sets — is what moves first-load numbers.",
+              "fr": "La taille du bundle et la vitesse de rendu sont deux problèmes distincts aux remèdes distincts. La mémoïsation agit après l'arrivée du code ; elle ne réduit pas le téléchargement. Envoyer moins — routes différées, bibliothèques plus légères, aucune locale ni jeu d'icônes inutilisé — voilà ce qui améliore le premier chargement.",
+              "it": "Dimensione del bundle e velocità di rendering sono problemi distinti con rimedi distinti. La memoizzazione agisce dopo che il codice è arrivato; non può ridurre il download. Spedire meno — route differite, librerie più leggere, nessuna locale o set di icone inutilizzati — è ciò che migliora il primo caricamento."
+            }
+          },
+          {
+            "id": "key-index-cost",
+            "prompt": {
+              "en": "A list of inputs uses `key={index}`. A row is inserted at the top. What goes wrong?",
+              "fr": "Une liste de champs utilise `key={index}`. Une ligne est insérée en tête. Qu'est-ce qui déraille ?",
+              "it": "Una lista di input usa `key={index}`. Viene inserita una riga in cima. Cosa va storto?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "state-follows-position",
+                "correct": true,
+                "text": {
+                  "en": "React reuses elements by position, so typed values stay with the slot instead of the item",
+                  "fr": "React réutilise les éléments par position : les valeurs saisies restent liées à l'emplacement, non à l'élément",
+                  "it": "React riusa gli elementi per posizione: i valori digitati restano legati allo slot, non all'elemento"
+                }
+              },
+              {
+                "id": "crash",
+                "correct": false,
+                "text": {
+                  "en": "React throws a duplicate-key error",
+                  "fr": "React lève une erreur de clé dupliquée",
+                  "it": "React lancia un errore di chiave duplicata"
+                }
+              },
+              {
+                "id": "nothing",
+                "correct": false,
+                "text": {
+                  "en": "Nothing — indexes are keys like any other",
+                  "fr": "Rien — les index sont des clés comme les autres",
+                  "it": "Niente — gli indici sono chiavi come le altre"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Keys tell React which element corresponds to which item across renders. With an index, inserting at the top shifts every item's key by one, so React matches the new first item to the old first element and keeps its DOM state — the text someone typed follows the position. Use an id that belongs to the data.",
+              "fr": "Les clés indiquent à React quel élément correspond à quelle donnée d'un rendu à l'autre. Avec un index, une insertion en tête décale toutes les clés d'un cran : React associe le nouveau premier élément à l'ancien et en conserve l'état DOM — le texte saisi suit la position. Utilisez un identifiant issu des données.",
+              "it": "Le chiavi dicono a React quale elemento corrisponde a quale dato tra un render e l'altro. Con un indice, un inserimento in cima sposta tutte le chiavi di uno: React abbina il nuovo primo elemento a quello vecchio e ne conserva lo stato DOM — il testo digitato segue la posizione. Usa un id che appartiene ai dati."
+            }
+          },
+          {
+            "id": "optimization-order",
+            "prompt": {
+              "en": "Which of these should you reach for *last* when a page feels slow?",
+              "fr": "Vers laquelle de ces solutions faut-il se tourner en *dernier* quand une page semble lente ?",
+              "it": "A quale di queste soluzioni ricorrere per *ultima* quando una pagina sembra lenta?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "micro-memo",
+                "correct": true,
+                "text": {
+                  "en": "Sprinkling memoisation across components you have not measured",
+                  "fr": "Parsemer de mémoïsation des composants non mesurés",
+                  "it": "Spargere memoizzazione su componenti non misurati"
+                }
+              },
+              {
+                "id": "fewer-rows",
+                "correct": false,
+                "text": {
+                  "en": "Rendering fewer things at once",
+                  "fr": "Afficher moins d'éléments à la fois",
+                  "it": "Mostrare meno elementi alla volta"
+                }
+              },
+              {
+                "id": "ship-less",
+                "correct": false,
+                "text": {
+                  "en": "Sending less JavaScript on the first load",
+                  "fr": "Envoyer moins de JavaScript au premier chargement",
+                  "it": "Inviare meno JavaScript al primo caricamento"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The big wins come from doing less work at all: ship less code, render fewer nodes, fetch less often. Memoisation only trims the cost of work you have decided to keep, and applied blindly it adds dependency arrays — and their staleness bugs — across the codebase in exchange for immeasurable gains.",
+              "fr": "Les grands gains viennent du travail qu'on ne fait pas : moins de code livré, moins de nœuds rendus, moins de requêtes. La mémoïsation ne fait que rogner le coût du travail conservé et, appliquée aveuglément, répand des tableaux de dépendances — et leurs bugs de valeurs périmées — dans tout le code, pour des gains non mesurables.",
+              "it": "I guadagni grossi vengono dal lavoro che non si fa: meno codice spedito, meno nodi resi, meno richieste. La memoizzazione si limita a ridurre il costo del lavoro che hai deciso di tenere e, applicata alla cieca, sparge array di dipendenze — e i loro bug da valore obsoleto — in tutto il codice, in cambio di guadagni non misurabili."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -1348,6 +3472,10 @@
           "type": "lesson",
           "id": "performance-conclusion",
           "sectionHeading": "Conclusion: Performance Mastery"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [
@@ -1390,6 +3518,268 @@
       "status": "available",
       "guideFile": "arguments/chapters/10-testing.md",
       "exerciseDir": "src/10-testing",
+      "quiz": {
+        "questions": [
+          {
+            "id": "query-priority",
+            "prompt": {
+              "en": "Testing Library ranks its queries. Why is `getByRole('button', { name: /save/i })` preferred over `getByTestId('save-btn')`?",
+              "fr": "Testing Library hiérarchise ses requêtes. Pourquoi préférer `getByRole('button', { name: /save/i })` à `getByTestId('save-btn')` ?",
+              "it": "Testing Library ordina le sue query. Perché preferire `getByRole('button', { name: /save/i })` a `getByTestId('save-btn')`?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "as-user",
+                "correct": true,
+                "text": {
+                  "en": "It finds the element the way a user or screen reader would, so it also checks the markup is accessible",
+                  "fr": "Elle trouve l'élément comme le ferait un utilisateur ou un lecteur d'écran, vérifiant du même coup l'accessibilité du balisage",
+                  "it": "Trova l'elemento come farebbe un utente o uno screen reader, verificando al contempo l'accessibilità del markup"
+                }
+              },
+              {
+                "id": "faster",
+                "correct": false,
+                "text": {
+                  "en": "Role queries are faster to execute",
+                  "fr": "Les requêtes par rôle s'exécutent plus vite",
+                  "it": "Le query per ruolo si eseguono più rapidamente"
+                }
+              },
+              {
+                "id": "testid-deprecated",
+                "correct": false,
+                "text": {
+                  "en": "`getByTestId` is deprecated",
+                  "fr": "`getByTestId` est dépréciée",
+                  "it": "`getByTestId` è deprecata"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "A test id is invisible to everyone but the test, so it can keep passing while the button has no accessible name and no real user can find it. Querying by role ties the test to what the interface actually exposes. `getByTestId` still exists as the escape hatch for things with no accessible handle — it is last on the list, not forbidden.",
+              "fr": "Un identifiant de test n'est visible que du test : il peut donc rester vert alors que le bouton n'a aucun nom accessible et qu'aucun utilisateur réel ne le trouve. Interroger par rôle lie le test à ce que l'interface expose vraiment. `getByTestId` demeure la porte de sortie pour ce qui n'a aucune prise accessible — dernier recours, non interdit.",
+              "it": "Un test id è invisibile a tutti tranne che al test: può quindi restare verde mentre il pulsante non ha alcun nome accessibile e nessun utente reale lo trova. Interrogare per ruolo lega il test a ciò che l'interfaccia espone davvero. `getByTestId` resta la via d'uscita per ciò che non ha appigli accessibili — ultimo in lista, non vietato."
+            }
+          },
+          {
+            "id": "getby-queryby-findby",
+            "prompt": {
+              "en": "You assert that an error message is *absent*. Which query do you use?",
+              "fr": "Vous vérifiez qu'un message d'erreur est *absent*. Quelle requête utilisez-vous ?",
+              "it": "Verifichi che un messaggio di errore sia *assente*. Quale query usi?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "queryby",
+                "correct": true,
+                "text": {
+                  "en": "`queryBy…`, because it returns `null` instead of throwing",
+                  "fr": "`queryBy…`, car elle renvoie `null` au lieu de lever une erreur",
+                  "it": "`queryBy…`, perché restituisce `null` invece di lanciare un errore"
+                }
+              },
+              {
+                "id": "getby",
+                "correct": false,
+                "text": {
+                  "en": "`getBy…`, then check the result is undefined",
+                  "fr": "`getBy…`, puis vérifier que le résultat est undefined",
+                  "it": "`getBy…`, poi controllare che il risultato sia undefined"
+                }
+              },
+              {
+                "id": "findby",
+                "correct": false,
+                "text": {
+                  "en": "`findBy…`, because absence is always asynchronous",
+                  "fr": "`findBy…`, l'absence étant toujours asynchrone",
+                  "it": "`findBy…`, perché l'assenza è sempre asincrona"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "The three differ in what they do when nothing matches: `getBy` throws immediately, `queryBy` returns `null`, and `findBy` returns a promise that waits. So absence needs `queryBy`, presence-after-waiting needs `findBy`, and plain presence needs `getBy` — whose thrown error is usually a better failure message than a bare assertion.",
+              "fr": "Les trois diffèrent par leur comportement quand rien ne correspond : `getBy` lève aussitôt, `queryBy` renvoie `null`, et `findBy` renvoie une promesse qui attend. L'absence appelle donc `queryBy`, la présence après attente `findBy`, et la présence simple `getBy` — dont l'erreur est souvent un meilleur message d'échec qu'une assertion nue.",
+              "it": "Le tre differiscono per cosa fanno quando nulla corrisponde: `getBy` lancia subito, `queryBy` restituisce `null` e `findBy` restituisce una promise che attende. L'assenza richiede quindi `queryBy`, la presenza dopo attesa `findBy`, e la presenza semplice `getBy` — il cui errore è spesso un messaggio di fallimento migliore di una nuda asserzione."
+            }
+          },
+          {
+            "id": "implementation-details",
+            "prompt": {
+              "en": "Which of these tests is most likely to break on a harmless refactor?",
+              "fr": "Lequel de ces tests a le plus de chances de casser lors d'un remaniement anodin ?",
+              "it": "Quale di questi test rischia di più di rompersi per un refactoring innocuo?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "internal-state",
+                "correct": true,
+                "text": {
+                  "en": "One asserting that the component's internal state variable equals `3`",
+                  "fr": "Celui qui vérifie qu'une variable d'état interne vaut `3`",
+                  "it": "Quello che verifica che una variabile di stato interna valga `3`"
+                }
+              },
+              {
+                "id": "visible-text",
+                "correct": false,
+                "text": {
+                  "en": "One asserting the visible total reads \"3 items\"",
+                  "fr": "Celui qui vérifie que le total affiché indique « 3 items »",
+                  "it": "Quello che verifica che il totale visibile riporti \"3 items\""
+                }
+              },
+              {
+                "id": "callback",
+                "correct": false,
+                "text": {
+                  "en": "One asserting the submit handler was called with the entered values",
+                  "fr": "Celui qui vérifie que le gestionnaire d'envoi reçoit les valeurs saisies",
+                  "it": "Quello che verifica che il gestore di invio riceva i valori inseriti"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Rename that variable, swap `useState` for `useReducer`, or restructure the component, and the test fails though nothing a user can perceive has changed. Tests tied to rendered output and to the contract with the outside world survive refactors and still catch real regressions — that is the whole point of testing behaviour rather than internals.",
+              "fr": "Renommez cette variable, remplacez `useState` par `useReducer` ou restructurez le composant, et le test échoue alors que rien de perceptible n'a changé. Les tests liés au rendu et au contrat avec l'extérieur survivent aux remaniements tout en attrapant les vraies régressions — c'est tout l'intérêt de tester le comportement plutôt que les rouages.",
+              "it": "Rinomina quella variabile, sostituisci `useState` con `useReducer` o ristruttura il componente, e il test fallisce benché nulla di percepibile sia cambiato. I test legati all'output reso e al contratto con l'esterno sopravvivono ai refactoring e colgono comunque le regressioni vere — è tutto il senso di testare il comportamento invece degli interni."
+            }
+          },
+          {
+            "id": "mocking-boundary",
+            "prompt": {
+              "en": "What is worth mocking in a component test?",
+              "fr": "Qu'est-il pertinent de simuler dans un test de composant ?",
+              "it": "Cosa vale la pena simulare in un test di componente?"
+            },
+            "multiple": true,
+            "options": [
+              {
+                "id": "network",
+                "correct": true,
+                "text": {
+                  "en": "The network call, so the test is deterministic and offline",
+                  "fr": "L'appel réseau, pour un test déterministe et hors ligne",
+                  "it": "La chiamata di rete, per un test deterministico e offline"
+                }
+              },
+              {
+                "id": "clock",
+                "correct": true,
+                "text": {
+                  "en": "Timers, so a debounce does not make the test wait in real time",
+                  "fr": "Les minuteurs, pour qu'un anti-rebond ne fasse pas attendre réellement",
+                  "it": "I timer, così un debounce non fa attendere in tempo reale"
+                }
+              },
+              {
+                "id": "child-components",
+                "correct": false,
+                "text": {
+                  "en": "Every child component, so only this component is exercised",
+                  "fr": "Chaque composant enfant, pour n'exercer que ce composant",
+                  "it": "Ogni componente figlio, così si esercita solo questo componente"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Mock at the boundary — things that are slow, non-deterministic or outside your control. Mocking your own children replaces the thing you wanted to check with a stub, and the test passes even when the real composition is broken. Let the children render; that integration is usually the bug you are hunting.",
+              "fr": "Simulez à la frontière : ce qui est lent, non déterministe ou hors de votre contrôle. Simuler vos propres enfants remplace justement ce que vous vouliez vérifier par un bouchon, et le test passe même quand la composition réelle est cassée. Laissez les enfants s'afficher : cette intégration est souvent le bug recherché.",
+              "it": "Simula al confine: ciò che è lento, non deterministico o fuori dal tuo controllo. Simulare i propri figli sostituisce proprio ciò che volevi verificare con uno stub, e il test passa anche quando la composizione reale è rotta. Lascia che i figli si rendano: quell'integrazione è spesso il bug che stai cercando."
+            }
+          },
+          {
+            "id": "coverage-meaning",
+            "prompt": {
+              "en": "A suite reports 100% line coverage. What does that guarantee?",
+              "fr": "Une suite affiche 100 % de couverture de lignes. Qu'est-ce que cela garantit ?",
+              "it": "Una suite riporta il 100% di copertura delle righe. Cosa garantisce?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "executed-only",
+                "correct": true,
+                "text": {
+                  "en": "Only that every line ran — not that its behaviour was asserted",
+                  "fr": "Seulement que chaque ligne s'est exécutée — non que son comportement a été vérifié",
+                  "it": "Solo che ogni riga è stata eseguita — non che il suo comportamento sia stato verificato"
+                }
+              },
+              {
+                "id": "bug-free",
+                "correct": false,
+                "text": {
+                  "en": "That the code contains no bugs",
+                  "fr": "Que le code ne contient aucun bug",
+                  "it": "Che il codice non contiene bug"
+                }
+              },
+              {
+                "id": "all-cases",
+                "correct": false,
+                "text": {
+                  "en": "That every input combination was tried",
+                  "fr": "Que toutes les combinaisons d'entrées ont été essayées",
+                  "it": "Che ogni combinazione di input è stata provata"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "Coverage measures execution, not verification: a test that renders a component and asserts nothing still colours the file green. It is useful in the negative — untouched lines are genuinely untested — but chasing the number produces tests written to reach lines rather than to describe behaviour. Edge cases live in branches coverage cannot see.",
+              "fr": "La couverture mesure l'exécution, pas la vérification : un test qui rend un composant sans rien vérifier colore quand même le fichier en vert. Elle est utile en négatif — les lignes non atteintes ne sont vraiment pas testées — mais courir après le chiffre produit des tests écrits pour atteindre des lignes plutôt que pour décrire un comportement. Les cas limites vivent dans des branches que la couverture ne voit pas.",
+              "it": "La copertura misura l'esecuzione, non la verifica: un test che rende un componente senza verificare nulla colora comunque il file di verde. È utile in negativo — le righe non toccate non sono davvero testate — ma rincorrere il numero produce test scritti per raggiungere righe invece che per descrivere un comportamento. I casi limite vivono in rami che la copertura non vede."
+            }
+          },
+          {
+            "id": "test-shape",
+            "prompt": {
+              "en": "Where should end-to-end tests sit relative to unit and component tests?",
+              "fr": "Où situer les tests de bout en bout par rapport aux tests unitaires et de composants ?",
+              "it": "Dove collocare i test end-to-end rispetto a quelli unitari e di componente?"
+            },
+            "multiple": false,
+            "options": [
+              {
+                "id": "few-critical",
+                "correct": true,
+                "text": {
+                  "en": "Few of them, covering the flows that must never break",
+                  "fr": "Peu nombreux, couvrant les parcours qui ne doivent jamais casser",
+                  "it": "Pochi, a coprire i flussi che non devono mai rompersi"
+                }
+              },
+              {
+                "id": "majority",
+                "correct": false,
+                "text": {
+                  "en": "The majority, since they are the most realistic",
+                  "fr": "La majorité, puisqu'ils sont les plus réalistes",
+                  "it": "La maggioranza, dato che sono i più realistici"
+                }
+              },
+              {
+                "id": "none",
+                "correct": false,
+                "text": {
+                  "en": "None, once component tests exist",
+                  "fr": "Aucun, dès lors que des tests de composants existent",
+                  "it": "Nessuno, una volta che esistono i test di componente"
+                }
+              }
+            ],
+            "explanation": {
+              "en": "End-to-end tests give the most confidence per test and cost the most to run and to keep: they are slow, they fail for environmental reasons, and a broken one tells you little about where the fault is. Reserve them for the handful of journeys the product cannot ship without — checkout, login — and let faster tests cover the detail underneath.",
+              "fr": "Les tests de bout en bout donnent le plus de confiance par test et coûtent le plus à exécuter et à maintenir : lents, sujets aux échecs d'environnement, et peu bavards sur l'origine d'une panne. Réservez-les aux quelques parcours sans lesquels le produit ne peut pas sortir — paiement, connexion — et laissez des tests plus rapides couvrir le détail.",
+              "it": "I test end-to-end danno la massima fiducia per test e costano di più da eseguire e mantenere: sono lenti, falliscono per motivi ambientali e uno rotto dice poco su dove sia il guasto. Riservali ai pochi percorsi senza i quali il prodotto non può uscire — checkout, login — e lascia che test più veloci coprano il dettaglio sottostante."
+            }
+          }
+        ]
+      },
       "steps": [
         {
           "type": "lesson",
@@ -1464,6 +3854,10 @@
           "type": "lesson",
           "id": "best-practices",
           "sectionHeading": "10. Testing Best Practices and Patterns"
+        },
+        {
+          "type": "quiz",
+          "id": "checkpoint"
         }
       ],
       "exercises": [

@@ -1,0 +1,318 @@
+# Checkpoint quiz — 08-forms
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 08-forms
+
+questions:
+  - id: controlled-vs-uncontrolled
+    prompt:
+      en: What actually separates a controlled input from an uncontrolled one?
+      fr: Qu'est-ce qui distingue vraiment un champ contrôlé d'un champ non contrôlé ?
+      it: Cosa distingue davvero un input controllato da uno non controllato?
+    options:
+      - id: source-of-truth
+        correct: true
+        text:
+          en: Whether React state or the DOM node holds the current value
+          fr: Le fait que la valeur courante soit dans l'état React ou dans le nœud DOM
+          it: Se il valore corrente stia nello stato di React o nel nodo DOM
+      - id: validation
+        text:
+          en: Whether the field is validated before submission
+          fr: Le fait que le champ soit validé avant l'envoi
+          it: Se il campo viene validato prima dell'invio
+      - id: required
+        text:
+          en: >-
+            Whether it carries the `required` attribute
+          fr: >-
+            Le fait qu'il porte l'attribut `required`
+          it: >-
+            Se porta l'attributo `required`
+    explanation:
+      en: >-
+        A controlled input renders `value` from state and writes every keystroke
+        back through `onChange`, so React is the single source of truth. An
+        uncontrolled one lets the DOM keep the value and reads it when needed,
+        usually through a ref. Both are valid; they differ in who owns the data,
+        not in how carefully the form is checked.
+      fr: >-
+        Un champ contrôlé affiche `value` depuis l'état et renvoie chaque frappe
+        via `onChange` : React est la source unique de vérité. Un champ non
+        contrôlé laisse la valeur au DOM et la lit au besoin, généralement via
+        une ref. Les deux sont valables ; ils diffèrent par le propriétaire de
+        la donnée, pas par le soin apporté à la validation.
+      it: >-
+        Un input controllato mostra `value` dallo stato e riscrive ogni battuta
+        tramite `onChange`: React è l'unica fonte di verità. Uno non controllato
+        lascia il valore al DOM e lo legge quando serve, di solito con una ref.
+        Entrambi sono validi; differiscono per chi possiede il dato, non per
+        quanto accuratamente il form viene controllato.
+
+  - id: rhf-performance
+    prompt:
+      en: >-
+        A 20-field controlled form re-renders on every keystroke. How does React
+        Hook Form avoid that?
+      fr: >-
+        Un formulaire contrôlé de 20 champs se rend à chaque frappe. Comment
+        React Hook Form l'évite-t-il ?
+      it: >-
+        Un form controllato di 20 campi si rirenderizza a ogni battuta. Come lo
+        evita React Hook Form?
+    options:
+      - id: uncontrolled-register
+        correct: true
+        text:
+          en: >-
+            `register` leaves the inputs uncontrolled and subscribes to them via
+            refs
+          fr: >-
+            `register` laisse les champs non contrôlés et s'y abonne via des refs
+          it: >-
+            `register` lascia gli input non controllati e vi si iscrive tramite ref
+      - id: debounce
+        text:
+          en: It debounces state updates on a timer
+          fr: Il temporise les mises à jour d'état avec un minuteur
+          it: Ritarda gli aggiornamenti di stato con un timer
+      - id: memo
+        text:
+          en: >-
+            It wraps every field in `React.memo`
+          fr: >-
+            Il enveloppe chaque champ dans `React.memo`
+          it: >-
+            Avvolge ogni campo in `React.memo`
+    explanation:
+      en: >-
+        Typing changes the DOM node, and the library reads values through refs
+        rather than storing each keystroke in React state — so nothing
+        re-renders until something actually needs to, like an error appearing.
+        The cost is that values are not React state, so anything that must
+        react to a field live needs `watch` and re-renders again.
+      fr: >-
+        La saisie modifie le nœud DOM, et la bibliothèque lit les valeurs via
+        des refs au lieu de stocker chaque frappe dans l'état React — rien ne se
+        rend donc à nouveau tant que ce n'est pas nécessaire, comme l'apparition
+        d'une erreur. En contrepartie, les valeurs ne sont pas de l'état React :
+        tout ce qui doit réagir en direct à un champ exige `watch`, et les
+        rendus reviennent.
+      it: >-
+        Digitare cambia il nodo DOM, e la libreria legge i valori tramite ref
+        invece di salvare ogni battuta nello stato di React — così nulla si
+        rirenderizza finché non serve davvero, come la comparsa di un errore. Il
+        costo è che i valori non sono stato di React: ciò che deve reagire dal
+        vivo a un campo richiede `watch`, e i render tornano.
+
+  - id: schema-validation
+    prompt:
+      en: >-
+        What do you gain by describing a form with a Zod schema instead of
+        hand-written `if` checks?
+      fr: >-
+        Que gagne-t-on à décrire un formulaire par un schéma Zod plutôt que par
+        des `if` écrits à la main ?
+      it: >-
+        Cosa si guadagna descrivendo un form con uno schema Zod invece che con
+        `if` scritti a mano?
+    options:
+      - id: one-declaration
+        correct: true
+        text:
+          en: >-
+            One declaration produces the rules, the messages and the TypeScript
+            type
+          fr: >-
+            Une seule déclaration fournit les règles, les messages et le type
+            TypeScript
+          it: >-
+            Un'unica dichiarazione produce regole, messaggi e tipo TypeScript
+      - id: server-free
+        text:
+          en: The server no longer needs to validate the payload
+          fr: Le serveur n'a plus besoin de valider la charge utile
+          it: Il server non deve più validare il payload
+      - id: faster
+        text:
+          en: Validation runs measurably faster than manual checks
+          fr: La validation s'exécute nettement plus vite que des contrôles manuels
+          it: La validazione è sensibilmente più veloce dei controlli manuali
+    explanation:
+      en: >-
+        The schema is the single description of what valid input means. Rules
+        and messages stop drifting apart across handlers, `z.infer` gives you
+        the type for free so the form and its data cannot disagree, and the same
+        schema can run on the server. Speed is not the point — a handful of
+        `if`s is fast either way.
+      fr: >-
+        Le schéma est la description unique de ce qu'est une saisie valide.
+        Règles et messages cessent de diverger entre gestionnaires, `z.infer`
+        fournit le type gratuitement — le formulaire et ses données ne peuvent
+        plus se contredire — et le même schéma peut tourner côté serveur. La
+        vitesse n'est pas l'enjeu : quelques `if` sont rapides de toute façon.
+      it: >-
+        Lo schema è l'unica descrizione di cosa sia un input valido. Regole e
+        messaggi smettono di divergere fra i gestori, `z.infer` dà il tipo
+        gratis — form e dati non possono più contraddirsi — e lo stesso schema
+        può girare sul server. La velocità non è il punto: qualche `if` è
+        comunque veloce.
+
+  - id: client-validation-limits
+    prompt:
+      en: >-
+        Your form validates thoroughly in the browser. What must the server
+        still do?
+      fr: >-
+        Votre formulaire valide soigneusement dans le navigateur. Que doit
+        encore faire le serveur ?
+      it: >-
+        Il tuo form valida a fondo nel browser. Cosa deve comunque fare il
+        server?
+    options:
+      - id: revalidate
+        correct: true
+        text:
+          en: Validate everything again, because the client can be bypassed
+          fr: Tout revalider, le client pouvant être contourné
+          it: Validare di nuovo tutto, perché il client può essere aggirato
+      - id: trust
+        text:
+          en: >-
+            Trust the payload, since it already passed the same schema
+          fr: >-
+            Faire confiance à la charge utile, déjà validée par le même schéma
+          it: >-
+            Fidarsi del payload, già validato dallo stesso schema
+      - id: only-types
+        text:
+          en: Check types only; business rules were handled on the client
+          fr: Vérifier seulement les types ; les règles métier ont été traitées côté client
+          it: Controllare solo i tipi; le regole di business sono state gestite dal client
+    explanation:
+      en: >-
+        Client validation is there to give fast, kind feedback — it is a user
+        experience feature. Anyone can send a request straight to your endpoint
+        with `curl`, so the browser's verdict is a suggestion, never a
+        guarantee. Sharing one schema between both sides gives you the good
+        experience and the real check without writing the rules twice.
+      fr: >-
+        La validation côté client sert à donner un retour rapide et clair :
+        c'est une fonctionnalité d'expérience utilisateur. N'importe qui peut
+        envoyer une requête directement à votre point d'entrée avec `curl` ; le
+        verdict du navigateur est donc une suggestion, jamais une garantie.
+        Partager un même schéma des deux côtés offre la bonne expérience et le
+        vrai contrôle sans écrire les règles deux fois.
+      it: >-
+        La validazione lato client serve a dare un riscontro rapido e chiaro: è
+        una funzionalità di esperienza utente. Chiunque può inviare una
+        richiesta direttamente al tuo endpoint con `curl`, quindi il verdetto
+        del browser è un suggerimento, mai una garanzia. Condividere un unico
+        schema fra i due lati dà la buona esperienza e il controllo vero senza
+        scrivere le regole due volte.
+
+  - id: file-upload
+    prompt:
+      en: >-
+        How do you send a file together with text fields to an endpoint?
+      fr: >-
+        Comment envoyer un fichier avec des champs texte à un point d'entrée ?
+      it: >-
+        Come si invia un file insieme a campi di testo a un endpoint?
+    options:
+      - id: formdata
+        correct: true
+        text:
+          en: >-
+            Build a `FormData` and append both the file and the text values
+          fr: >-
+            Construire un `FormData` et y ajouter le fichier et les valeurs texte
+          it: >-
+            Costruire un `FormData` e aggiungere sia il file sia i valori di testo
+      - id: json
+        text:
+          en: >-
+            Put the `File` object into JSON and `JSON.stringify` it
+          fr: >-
+            Placer l'objet `File` dans du JSON et faire `JSON.stringify`
+          it: >-
+            Mettere l'oggetto `File` in JSON e fare `JSON.stringify`
+      - id: base64-required
+        text:
+          en: Files can only be sent as base64 in a query string
+          fr: Les fichiers ne peuvent être envoyés qu'en base64 dans une chaîne de requête
+          it: I file si possono inviare solo in base64 in una query string
+    explanation:
+      en: >-
+        `JSON.stringify` cannot serialise a `File` — you would send `{}`.
+        `FormData` encodes as multipart, carrying binary content and ordinary
+        fields in one request. Let the browser set `Content-Type` itself:
+        setting it manually drops the boundary parameter and the server cannot
+        parse the parts.
+      fr: >-
+        `JSON.stringify` ne sait pas sérialiser un `File` — vous enverriez `{}`.
+        `FormData` encode en multipart et transporte contenu binaire et champs
+        ordinaires dans une seule requête. Laissez le navigateur définir
+        `Content-Type` : le fixer à la main supprime le paramètre de délimitation
+        et le serveur ne peut plus découper les parties.
+      it: >-
+        `JSON.stringify` non sa serializzare un `File` — invieresti `{}`.
+        `FormData` codifica in multipart e porta contenuto binario e campi
+        normali in un'unica richiesta. Lascia che sia il browser a impostare
+        `Content-Type`: farlo a mano elimina il parametro di delimitazione e il
+        server non riesce più a separare le parti.
+
+  - id: multi-step-state
+    prompt:
+      en: >-
+        In a three-step wizard, where should the answers from step 1 live while
+        the user is on step 2?
+      fr: >-
+        Dans un assistant en trois étapes, où doivent vivre les réponses de
+        l'étape 1 pendant que l'utilisateur est à l'étape 2 ?
+      it: >-
+        In un wizard a tre passi, dove devono vivere le risposte del passo 1
+        mentre l'utente è al passo 2?
+    options:
+      - id: parent-owns
+        correct: true
+        text:
+          en: >-
+            In the wizard that outlives the steps, so unmounting a step keeps
+            its data
+          fr: >-
+            Dans l'assistant qui survit aux étapes, pour qu'en démontant une
+            étape ses données subsistent
+          it: >-
+            Nel wizard che sopravvive ai passi, così smontando un passo i suoi
+            dati restano
+      - id: each-step
+        text:
+          en: In each step component, read back when the user returns to it
+          fr: Dans chaque composant d'étape, relues au retour de l'utilisateur
+          it: In ogni componente di passo, rilette quando l'utente ci torna
+      - id: dom
+        text:
+          en: In the hidden inputs of the previous step, still in the DOM
+          fr: Dans les champs cachés de l'étape précédente, toujours dans le DOM
+          it: Negli input nascosti del passo precedente, ancora nel DOM
+    explanation:
+      en: >-
+        Steps mount and unmount as the user moves, and unmounting destroys their
+        state — so anything stored per step is gone the moment you leave it.
+        The wizard is the component whose lifetime spans the whole flow, so it
+        owns the accumulated answers and hands each step the slice it edits.
+      fr: >-
+        Les étapes se montent et se démontent au fil de la navigation, et le
+        démontage détruit leur état : ce qui est stocké par étape disparaît dès
+        qu'on la quitte. L'assistant est le composant dont la durée de vie couvre
+        tout le parcours ; c'est donc lui qui détient les réponses accumulées et
+        confie à chaque étape la part qu'elle modifie.
+      it: >-
+        I passi si montano e si smontano mentre l'utente avanza, e lo smontaggio
+        distrugge il loro stato: ciò che è salvato per passo sparisce appena lo
+        lasci. Il wizard è il componente la cui vita copre l'intero flusso:
+        possiede quindi le risposte accumulate e passa a ogni passo la porzione
+        che modifica.

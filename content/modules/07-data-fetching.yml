@@ -43,6 +43,7 @@ steps:
     section: 10. Data Fetching Strategy Selection
   - lesson: fetching-conclusion
     section: "Conclusion: Mastering Data Fetching"
+  - quiz: checkpoint
 exercises:
   use-fetch:
     number: 1

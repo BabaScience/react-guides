@@ -390,7 +390,8 @@
       "todo-reducer": "Exercise: Todo App (useReducer)",
       "custom-hooks": "Custom Hooks",
       "advanced-patterns": "Advanced Patterns",
-      "hooks-wrap-up": "Wrap-Up"
+      "hooks-wrap-up": "Wrap-Up",
+      "checkpoint": "Checkpoint: React Hooks"
     },
     "03-component-patterns": {
       "composition-reusability": "Component Composition & Reusability",
@@ -409,7 +410,8 @@
       "tabs": "Exercise: Tabs (Compound)",
       "advanced-composition": "Advanced Composition Techniques",
       "pattern-selection-matrix": "Pattern Selection Decision Matrix",
-      "patterns-conclusion": "Wrap-Up: Architecting Excellence"
+      "patterns-conclusion": "Wrap-Up: Architecting Excellence",
+      "checkpoint": "Checkpoint: Component Patterns"
     },
     "04-styling": {
       "styling-paradigms": "Styling Paradigms",
@@ -428,7 +430,8 @@
       "theming-design-systems": "Theming & Design Systems",
       "themed-text": "Exercise: ThemedText",
       "styling-selection-matrix": "Styling Strategy Selection Matrix",
-      "styling-conclusion": "Wrap-Up: Architecting Stylistic Excellence"
+      "styling-conclusion": "Wrap-Up: Architecting Stylistic Excellence",
+      "checkpoint": "Checkpoint: Styling React"
     },
     "05-routing": {
       "routing-paradigms": "Routing Paradigms and Architecture",
@@ -447,7 +450,8 @@
       "route-guards": "Route Guards and Redirects",
       "advanced-routing": "Advanced Routing Patterns",
       "routing-performance": "Routing Performance Optimization",
-      "routing-conclusion": "Wrap-Up: Mastering Navigation Architecture"
+      "routing-conclusion": "Wrap-Up: Mastering Navigation Architecture",
+      "checkpoint": "Checkpoint: Routing"
     },
     "06-state-management": {
       "paradigms": "State Management Paradigms",
@@ -466,7 +470,8 @@
       "jotai": "Jotai: Atomic State Management",
       "recoil": "Recoil: Graph-Based State",
       "state-selection-matrix": "State Management Selection Matrix",
-      "state-conclusion": "Wrap-Up: State Management Mastery"
+      "state-conclusion": "Wrap-Up: State Management Mastery",
+      "checkpoint": "Checkpoint: State Management"
     },
     "07-data-fetching": {
       "fetching-paradigms": "Data Fetching Paradigms",
@@ -485,7 +490,8 @@
       "cache-strategies": "Cache Management Strategies",
       "create-cache": "Exercise: createCache",
       "fetching-selection-matrix": "Data Fetching Strategy Selection",
-      "fetching-conclusion": "Wrap-Up: Mastering Data Fetching"
+      "fetching-conclusion": "Wrap-Up: Mastering Data Fetching",
+      "checkpoint": "Checkpoint: Data Fetching"
     },
     "08-forms": {
       "form-paradigms": "Form Management Paradigms",
@@ -504,7 +510,8 @@
       "advanced-patterns": "Advanced Form Patterns",
       "form-errors": "Exercise: FormErrors",
       "forms-selection-matrix": "Form Strategy Selection Matrix",
-      "forms-conclusion": "Wrap-Up: Mastering Form Management"
+      "forms-conclusion": "Wrap-Up: Mastering Form Management",
+      "checkpoint": "Checkpoint: Forms and Validation"
     },
     "09-performance": {
       "rendering-behavior": "React Rendering Behavior",
@@ -523,7 +530,8 @@
       "use-debounced-value": "Exercise: useDebouncedValue",
       "performance-monitoring": "Performance Monitoring",
       "performance-selection-matrix": "Optimization Strategy Selection",
-      "performance-conclusion": "Wrap-Up: Performance Mastery"
+      "performance-conclusion": "Wrap-Up: Performance Mastery",
+      "checkpoint": "Checkpoint: Performance"
     },
     "10-testing": {
       "testing-fundamentals": "Testing Fundamentals & Philosophy",
@@ -541,7 +549,8 @@
       "e2e-cypress": "End-to-End Testing with Cypress",
       "e2e-playwright": "End-to-End Testing with Playwright",
       "coverage-quality": "Test Coverage and Quality Metrics",
-      "best-practices": "Testing Best Practices & Patterns"
+      "best-practices": "Testing Best Practices & Patterns",
+      "checkpoint": "Checkpoint: Testing"
     },
     "rn-01-prerequisites": {
       "react-prerequisites": "React (Non-Negotiable)",

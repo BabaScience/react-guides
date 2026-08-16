@@ -6,10 +6,11 @@ the safety net comes first so nothing regresses while the rest is fixed.
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
 **Phases 0, 1 and 2 are complete**, P2.2 included — grading now runs in an
-isolated frame. Phase 3 (pedagogy) is started: P3.1 has its machinery and one
-module's content. Phase 4 (new tracks) has not begun.
+isolated frame. Phase 3 (pedagogy) is started: P3.1 covers the whole React
+track, and nothing else in Phase 3 has been attempted. Phase 4 (new tracks) has
+not begun.
 
-Gate, re-run against the current tree: `npm run manifest` → *57 modules, 385
+Gate, re-run against the current tree: `npm run manifest` → *57 modules, 394
 steps, 67 exercises* · `npm run validate` → *Content valid, 2 warnings* (both
 the documented JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0
 errors · `npm run build` → succeeds, entry chunk 532 KB / 172 KB gzip, 60
@@ -387,7 +388,16 @@ out to be wrong; see P2.2 for what was measured.
 ## Phase 3 — Close the pedagogy gap
 
 ### [~] P3.1 — Quizzes (5–8 questions, instant feedback)
-Machinery done, content barely started: **1 of 57 modules has a quiz.**
+**The React track is complete: all 10 modules that have content carry a
+six-question checkpoint** (11-typescript and 12-advanced-patterns have no
+lessons yet, so nothing to check). Across the platform that is 10 of 57;
+React Native (21 modules) and JavaScript (24) are still untouched.
+
+Questions are written against each chapter, and aimed at the misconception
+rather than the definition — the stray `0` from `items.length &&`, a memoised
+child defeated by an inline object literal, an effect whose slower first
+request overwrites its newer second one. Each carries an explanation in all
+three locales, because the explanation is the part that teaches.
 
 Text lives inline in `content/quizzes/<module>.yml`, all locales together — a
 question, its options and its explanation are one unit, and splitting them

@@ -1,0 +1,290 @@
+# Checkpoint quiz — 02-hooks
+#
+# Conventions match 01-fundamentals.yml: text is inline in every locale, `en`
+# is required, and a question with more than one `correct: true` option is
+# answered as a multi-select without having to declare it.
+#
+# Note for editors: a value that *starts* with a backtick needs a block scalar
+# (`>-`), because YAML reserves the backtick as an indicator in that position.
+
+module: 02-hooks
+
+questions:
+  - id: hook-call-order
+    prompt:
+      en: Why may a hook never be called inside an `if` or a loop?
+      fr: Pourquoi un hook ne doit-il jamais être appelé dans un `if` ou une boucle ?
+      it: Perché un hook non va mai chiamato dentro un `if` o un ciclo?
+    options:
+      - id: call-order
+        correct: true
+        text:
+          en: React identifies each hook by the order in which it is called
+          fr: React identifie chaque hook par l'ordre dans lequel il est appelé
+          it: React identifica ogni hook dall'ordine in cui viene chiamato
+      - id: performance
+        text:
+          en: Conditional calls are slower, so React forbids them
+          fr: Les appels conditionnels sont plus lents, React les interdit donc
+          it: Le chiamate condizionali sono più lente, quindi React le vieta
+      - id: async
+        text:
+          en: Hooks are asynchronous and a branch could skip the await
+          fr: Les hooks sont asynchrones et une branche pourrait sauter l'await
+          it: Gli hook sono asincroni e un ramo potrebbe saltare l'await
+    explanation:
+      en: >-
+        React stores hook values in call slots, not by name. Skip a call on one
+        render and every hook after it shifts up a slot, so they all read the
+        wrong value. Put the condition *inside* the hook instead of putting the
+        hook inside the condition. `eslint-plugin-react-hooks` catches this.
+      fr: >-
+        React range les valeurs des hooks dans des emplacements d'appel, pas par
+        nom. Sautez un appel lors d'un rendu et tous les hooks suivants se
+        décalent d'un cran : ils lisent alors la mauvaise valeur. Mettez la
+        condition *dans* le hook plutôt que le hook dans la condition.
+        `eslint-plugin-react-hooks` le détecte.
+      it: >-
+        React memorizza i valori degli hook in slot di chiamata, non per nome.
+        Salta una chiamata in un render e tutti gli hook successivi slittano di
+        una posizione, leggendo il valore sbagliato. Metti la condizione
+        *dentro* l'hook invece dell'hook dentro la condizione.
+        `eslint-plugin-react-hooks` lo segnala.
+
+  - id: effect-cleanup-timing
+    prompt:
+      en: When does the cleanup function returned by `useEffect` run?
+      fr: Quand s'exécute la fonction de nettoyage renvoyée par `useEffect` ?
+      it: Quando viene eseguita la funzione di pulizia restituita da `useEffect`?
+    options:
+      - id: before-next
+        correct: true
+        text:
+          en: Before the next time that effect runs
+          fr: Avant la prochaine exécution de cet effet
+          it: Prima della successiva esecuzione di quell'effetto
+      - id: on-unmount
+        correct: true
+        text:
+          en: One final time when the component is removed
+          fr: Une dernière fois quand le composant est retiré
+          it: Un'ultima volta quando il componente viene rimosso
+      - id: before-paint
+        text:
+          en: Before the browser paints each render
+          fr: Avant que le navigateur ne peigne chaque rendu
+          it: Prima che il browser disegni ogni render
+    explanation:
+      en: >-
+        Cleanup is tied to the lifetime of the effect, not to the render. It
+        runs before the effect is set up again, and once more at unmount — which
+        is what lets one `useEffect` own both `addEventListener` and its
+        matching `removeEventListener` without either leaking.
+      fr: >-
+        Le nettoyage est lié à la durée de vie de l'effet, pas au rendu. Il
+        s'exécute avant que l'effet ne soit remis en place, puis une dernière
+        fois au démontage — c'est ce qui permet à un seul `useEffect` de porter
+        à la fois `addEventListener` et son `removeEventListener`, sans fuite.
+      it: >-
+        La pulizia è legata alla vita dell'effetto, non al render. Viene
+        eseguita prima che l'effetto venga rimontato e un'ultima volta allo
+        smontaggio — è ciò che permette a un solo `useEffect` di gestire sia
+        `addEventListener` sia il suo `removeEventListener`, senza perdite.
+
+  - id: ref-not-reactive
+    prompt:
+      en: >-
+        A click handler does `countRef.current += 1`, and the JSX renders
+        `{countRef.current}`. The number on screen never changes. Why?
+      fr: >-
+        Un gestionnaire de clic fait `countRef.current += 1`, et le JSX affiche
+        `{countRef.current}`. Le nombre à l'écran ne change jamais. Pourquoi ?
+      it: >-
+        Un gestore di clic esegue `countRef.current += 1` e il JSX mostra
+        `{countRef.current}`. Il numero a schermo non cambia mai. Perché?
+    options:
+      - id: no-rerender
+        correct: true
+        text:
+          en: Mutating a ref triggers no re-render, so the JSX is never recomputed
+          fr: Muter une ref ne déclenche aucun rendu, le JSX n'est donc jamais recalculé
+          it: Mutare una ref non provoca alcun render, quindi il JSX non viene ricalcolato
+      - id: readonly
+        text:
+          en: >-
+            `ref.current` is read-only and the assignment is silently ignored
+          fr: >-
+            `ref.current` est en lecture seule et l'affectation est ignorée
+          it: >-
+            `ref.current` è di sola lettura e l'assegnazione viene ignorata
+      - id: needs-effect
+        text:
+          en: Refs can only be changed inside a `useEffect`
+          fr: Une ref ne peut être modifiée que dans un `useEffect`
+          it: Una ref può essere modificata solo dentro un `useEffect`
+    explanation:
+      en: >-
+        The assignment works — `countRef.current` really does increase. Refs
+        simply are not reactive: they are a plain `{ current }` object React
+        keeps between renders, and writing to it is an ordinary property write.
+        If a value should appear on screen, it belongs in state.
+      fr: >-
+        L'affectation fonctionne : `countRef.current` augmente bel et bien. Les
+        refs ne sont simplement pas réactives — c'est un objet `{ current }`
+        ordinaire que React conserve d'un rendu à l'autre, et y écrire est une
+        écriture de propriété comme une autre. Si une valeur doit s'afficher,
+        sa place est dans l'état.
+      it: >-
+        L'assegnazione funziona: `countRef.current` aumenta davvero. Le ref
+        semplicemente non sono reattive — sono un normale oggetto `{ current }`
+        che React conserva tra un render e l'altro, e scriverci è una comune
+        scrittura di proprietà. Se un valore deve comparire a schermo, va nello
+        stato.
+
+  - id: not-a-side-effect
+    prompt:
+      en: Which of these does *not* belong in a `useEffect`?
+      fr: Laquelle de ces opérations n'a *pas* sa place dans un `useEffect` ?
+      it: Quale di queste operazioni *non* va in un `useEffect`?
+    options:
+      - id: derived-value
+        correct: true
+        text:
+          en: Computing a filtered list from a prop and a search term
+          fr: Calculer une liste filtrée à partir d'une prop et d'un terme de recherche
+          it: Calcolare una lista filtrata da una prop e da un termine di ricerca
+      - id: subscribe
+        text:
+          en: Subscribing to a WebSocket
+          fr: S'abonner à un WebSocket
+          it: Sottoscriversi a un WebSocket
+      - id: title
+        text:
+          en: Updating `document.title`
+          fr: Mettre à jour `document.title`
+          it: Aggiornare `document.title`
+    explanation:
+      en: >-
+        A side effect is something that escapes the component — the network,
+        storage, timers, subscriptions, the DOM. Code that only derives a value
+        from props and state is not one: compute it in the body of the
+        component. Routing it through an effect and a piece of state adds an
+        extra render and a chance for the two to drift apart.
+      fr: >-
+        Un effet de bord, c'est ce qui sort du composant : le réseau, le
+        stockage, les timers, les abonnements, le DOM. Du code qui se contente
+        de dériver une valeur des props et de l'état n'en est pas un :
+        calculez-le dans le corps du composant. Passer par un effet et un état
+        ajoute un rendu de plus et un risque de désynchronisation.
+      it: >-
+        Un side effect è ciò che esce dal componente: la rete, lo storage, i
+        timer, le sottoscrizioni, il DOM. Il codice che si limita a derivare un
+        valore da props e stato non lo è: calcolalo nel corpo del componente.
+        Passare da un effetto e da uno stato aggiunge un render in più e la
+        possibilità che i due divergano.
+
+  - id: usecallback-purpose
+    prompt:
+      en: When does wrapping a function in `useCallback` actually change anything?
+      fr: Quand envelopper une fonction dans `useCallback` change-t-il vraiment quelque chose ?
+      it: Quando avvolgere una funzione in `useCallback` cambia davvero qualcosa?
+    options:
+      - id: memo-child
+        correct: true
+        text:
+          en: >-
+            When it is passed to a child wrapped in `React.memo`
+          fr: >-
+            Quand elle est passée à un enfant enveloppé dans `React.memo`
+          it: >-
+            Quando viene passata a un figlio avvolto in `React.memo`
+      - id: hook-dep
+        correct: true
+        text:
+          en: When it is listed in another hook's dependency array
+          fr: Quand elle figure dans le tableau de dépendances d'un autre hook
+          it: Quando compare nell'array di dipendenze di un altro hook
+      - id: any-handler
+        text:
+          en: >-
+            On any `onClick`, since a new function each render is a leak
+          fr: >-
+            Sur tout `onClick`, une nouvelle fonction à chaque rendu étant une fuite
+          it: >-
+            Su ogni `onClick`, dato che una nuova funzione a ogni render è una perdita
+    explanation:
+      en: >-
+        Every render creates new function objects, and almost nothing cares —
+        a DOM handler just calls whatever it was given. It matters only where
+        something compares by reference: a memoised child seeing a new prop, or
+        a dependency array deciding an effect must run again. Elsewhere
+        `useCallback` adds a dependency array to maintain and buys nothing.
+      fr: >-
+        Chaque rendu crée de nouveaux objets fonction, et presque rien ne s'en
+        soucie : un gestionnaire DOM appelle simplement ce qu'on lui a donné.
+        Cela ne compte que là où quelque chose compare par référence — un
+        enfant mémoïsé qui voit une nouvelle prop, ou un tableau de dépendances
+        qui relance un effet. Ailleurs, `useCallback` ajoute un tableau de
+        dépendances à maintenir sans rien apporter.
+      it: >-
+        Ogni render crea nuovi oggetti funzione e quasi nulla se ne cura: un
+        gestore DOM chiama semplicemente ciò che ha ricevuto. Conta solo dove
+        qualcosa confronta per riferimento — un figlio memoizzato che vede una
+        nuova prop, o un array di dipendenze che fa ripartire un effetto.
+        Altrove `useCallback` aggiunge un array di dipendenze da mantenere
+        senza dare nulla in cambio.
+
+  - id: usereducer-benefit
+    prompt:
+      en: >-
+        A form tracks `values`, `errors`, `touched` and `isSubmitting`. What
+        does moving it to `useReducer` mainly buy you?
+      fr: >-
+        Un formulaire suit `values`, `errors`, `touched` et `isSubmitting`. Que
+        gagne-t-on principalement à passer à `useReducer` ?
+      it: >-
+        Un form gestisce `values`, `errors`, `touched` e `isSubmitting`. Cosa
+        si guadagna soprattutto passando a `useReducer`?
+    options:
+      - id: one-place
+        correct: true
+        text:
+          en: >-
+            The transitions between those fields live in one function instead
+            of being spread across handlers
+          fr: >-
+            Les transitions entre ces champs tiennent dans une seule fonction
+            au lieu d'être éparpillées dans les gestionnaires
+          it: >-
+            Le transizioni fra quei campi stanno in un'unica funzione invece di
+            essere sparse fra i gestori
+      - id: faster
+        text:
+          en: Reducers re-render faster than multiple `useState` calls
+          fr: Un reducer provoque des rendus plus rapides que plusieurs `useState`
+          it: Un reducer produce render più veloci di più chiamate a `useState`
+      - id: async
+        text:
+          en: It lets state updates be awaited
+          fr: Il permet d'attendre les mises à jour d'état avec await
+          it: Permette di attendere gli aggiornamenti di stato con await
+    explanation:
+      en: >-
+        With four `useState` calls, the rules about how the fields move
+        together exist only in whichever handler happens to touch them.
+        `useReducer` puts every transition in the reducer: the component says
+        *what happened* by dispatching an action, and one function decides what
+        the next state is. Performance is not the reason to reach for it.
+      fr: >-
+        Avec quatre `useState`, les règles décrivant comment les champs
+        évoluent ensemble n'existent que dans le gestionnaire qui les touche.
+        `useReducer` place chaque transition dans le reducer : le composant dit
+        *ce qui s'est passé* en émettant une action, et une seule fonction
+        décide de l'état suivant. La performance n'est pas la raison de
+        l'utiliser.
+      it: >-
+        Con quattro `useState`, le regole su come i campi si muovono insieme
+        esistono solo nel gestore che li tocca. `useReducer` mette ogni
+        transizione nel reducer: il componente dice *cosa è successo*
+        inviando un'azione e un'unica funzione decide lo stato successivo. Le
+        prestazioni non sono il motivo per usarlo.

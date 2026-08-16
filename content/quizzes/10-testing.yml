@@ -1,0 +1,313 @@
+# Checkpoint quiz — 10-testing
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 10-testing
+
+questions:
+  - id: query-priority
+    prompt:
+      en: >-
+        Testing Library ranks its queries. Why is `getByRole('button', { name:
+        /save/i })` preferred over `getByTestId('save-btn')`?
+      fr: >-
+        Testing Library hiérarchise ses requêtes. Pourquoi préférer
+        `getByRole('button', { name: /save/i })` à `getByTestId('save-btn')` ?
+      it: >-
+        Testing Library ordina le sue query. Perché preferire
+        `getByRole('button', { name: /save/i })` a `getByTestId('save-btn')`?
+    options:
+      - id: as-user
+        correct: true
+        text:
+          en: >-
+            It finds the element the way a user or screen reader would, so it
+            also checks the markup is accessible
+          fr: >-
+            Elle trouve l'élément comme le ferait un utilisateur ou un lecteur
+            d'écran, vérifiant du même coup l'accessibilité du balisage
+          it: >-
+            Trova l'elemento come farebbe un utente o uno screen reader,
+            verificando al contempo l'accessibilità del markup
+      - id: faster
+        text:
+          en: Role queries are faster to execute
+          fr: Les requêtes par rôle s'exécutent plus vite
+          it: Le query per ruolo si eseguono più rapidamente
+      - id: testid-deprecated
+        text:
+          en: >-
+            `getByTestId` is deprecated
+          fr: >-
+            `getByTestId` est dépréciée
+          it: >-
+            `getByTestId` è deprecata
+    explanation:
+      en: >-
+        A test id is invisible to everyone but the test, so it can keep passing
+        while the button has no accessible name and no real user can find it.
+        Querying by role ties the test to what the interface actually exposes.
+        `getByTestId` still exists as the escape hatch for things with no
+        accessible handle — it is last on the list, not forbidden.
+      fr: >-
+        Un identifiant de test n'est visible que du test : il peut donc rester
+        vert alors que le bouton n'a aucun nom accessible et qu'aucun utilisateur
+        réel ne le trouve. Interroger par rôle lie le test à ce que l'interface
+        expose vraiment. `getByTestId` demeure la porte de sortie pour ce qui n'a
+        aucune prise accessible — dernier recours, non interdit.
+      it: >-
+        Un test id è invisibile a tutti tranne che al test: può quindi restare
+        verde mentre il pulsante non ha alcun nome accessibile e nessun utente
+        reale lo trova. Interrogare per ruolo lega il test a ciò che
+        l'interfaccia espone davvero. `getByTestId` resta la via d'uscita per
+        ciò che non ha appigli accessibili — ultimo in lista, non vietato.
+
+  - id: getby-queryby-findby
+    prompt:
+      en: >-
+        You assert that an error message is *absent*. Which query do you use?
+      fr: >-
+        Vous vérifiez qu'un message d'erreur est *absent*. Quelle requête
+        utilisez-vous ?
+      it: >-
+        Verifichi che un messaggio di errore sia *assente*. Quale query usi?
+    options:
+      - id: queryby
+        correct: true
+        text:
+          en: >-
+            `queryBy…`, because it returns `null` instead of throwing
+          fr: >-
+            `queryBy…`, car elle renvoie `null` au lieu de lever une erreur
+          it: >-
+            `queryBy…`, perché restituisce `null` invece di lanciare un errore
+      - id: getby
+        text:
+          en: >-
+            `getBy…`, then check the result is undefined
+          fr: >-
+            `getBy…`, puis vérifier que le résultat est undefined
+          it: >-
+            `getBy…`, poi controllare che il risultato sia undefined
+      - id: findby
+        text:
+          en: >-
+            `findBy…`, because absence is always asynchronous
+          fr: >-
+            `findBy…`, l'absence étant toujours asynchrone
+          it: >-
+            `findBy…`, perché l'assenza è sempre asincrona
+    explanation:
+      en: >-
+        The three differ in what they do when nothing matches: `getBy` throws
+        immediately, `queryBy` returns `null`, and `findBy` returns a promise
+        that waits. So absence needs `queryBy`, presence-after-waiting needs
+        `findBy`, and plain presence needs `getBy` — whose thrown error is
+        usually a better failure message than a bare assertion.
+      fr: >-
+        Les trois diffèrent par leur comportement quand rien ne correspond :
+        `getBy` lève aussitôt, `queryBy` renvoie `null`, et `findBy` renvoie une
+        promesse qui attend. L'absence appelle donc `queryBy`, la présence après
+        attente `findBy`, et la présence simple `getBy` — dont l'erreur est
+        souvent un meilleur message d'échec qu'une assertion nue.
+      it: >-
+        Le tre differiscono per cosa fanno quando nulla corrisponde: `getBy`
+        lancia subito, `queryBy` restituisce `null` e `findBy` restituisce una
+        promise che attende. L'assenza richiede quindi `queryBy`, la presenza
+        dopo attesa `findBy`, e la presenza semplice `getBy` — il cui errore è
+        spesso un messaggio di fallimento migliore di una nuda asserzione.
+
+  - id: implementation-details
+    prompt:
+      en: >-
+        Which of these tests is most likely to break on a harmless refactor?
+      fr: >-
+        Lequel de ces tests a le plus de chances de casser lors d'un
+        remaniement anodin ?
+      it: >-
+        Quale di questi test rischia di più di rompersi per un refactoring
+        innocuo?
+    options:
+      - id: internal-state
+        correct: true
+        text:
+          en: >-
+            One asserting that the component's internal state variable equals `3`
+          fr: >-
+            Celui qui vérifie qu'une variable d'état interne vaut `3`
+          it: >-
+            Quello che verifica che una variabile di stato interna valga `3`
+      - id: visible-text
+        text:
+          en: One asserting the visible total reads "3 items"
+          fr: Celui qui vérifie que le total affiché indique « 3 items »
+          it: Quello che verifica che il totale visibile riporti "3 items"
+      - id: callback
+        text:
+          en: One asserting the submit handler was called with the entered values
+          fr: Celui qui vérifie que le gestionnaire d'envoi reçoit les valeurs saisies
+          it: Quello che verifica che il gestore di invio riceva i valori inseriti
+    explanation:
+      en: >-
+        Rename that variable, swap `useState` for `useReducer`, or restructure
+        the component, and the test fails though nothing a user can perceive has
+        changed. Tests tied to rendered output and to the contract with the
+        outside world survive refactors and still catch real regressions —
+        that is the whole point of testing behaviour rather than internals.
+      fr: >-
+        Renommez cette variable, remplacez `useState` par `useReducer` ou
+        restructurez le composant, et le test échoue alors que rien de
+        perceptible n'a changé. Les tests liés au rendu et au contrat avec
+        l'extérieur survivent aux remaniements tout en attrapant les vraies
+        régressions — c'est tout l'intérêt de tester le comportement plutôt que
+        les rouages.
+      it: >-
+        Rinomina quella variabile, sostituisci `useState` con `useReducer` o
+        ristruttura il componente, e il test fallisce benché nulla di
+        percepibile sia cambiato. I test legati all'output reso e al contratto
+        con l'esterno sopravvivono ai refactoring e colgono comunque le
+        regressioni vere — è tutto il senso di testare il comportamento invece
+        degli interni.
+
+  - id: mocking-boundary
+    prompt:
+      en: What is worth mocking in a component test?
+      fr: Qu'est-il pertinent de simuler dans un test de composant ?
+      it: Cosa vale la pena simulare in un test di componente?
+    options:
+      - id: network
+        correct: true
+        text:
+          en: The network call, so the test is deterministic and offline
+          fr: L'appel réseau, pour un test déterministe et hors ligne
+          it: La chiamata di rete, per un test deterministico e offline
+      - id: clock
+        correct: true
+        text:
+          en: Timers, so a debounce does not make the test wait in real time
+          fr: Les minuteurs, pour qu'un anti-rebond ne fasse pas attendre réellement
+          it: I timer, così un debounce non fa attendere in tempo reale
+      - id: child-components
+        text:
+          en: Every child component, so only this component is exercised
+          fr: Chaque composant enfant, pour n'exercer que ce composant
+          it: Ogni componente figlio, così si esercita solo questo componente
+    explanation:
+      en: >-
+        Mock at the boundary — things that are slow, non-deterministic or
+        outside your control. Mocking your own children replaces the thing you
+        wanted to check with a stub, and the test passes even when the real
+        composition is broken. Let the children render; that integration is
+        usually the bug you are hunting.
+      fr: >-
+        Simulez à la frontière : ce qui est lent, non déterministe ou hors de
+        votre contrôle. Simuler vos propres enfants remplace justement ce que
+        vous vouliez vérifier par un bouchon, et le test passe même quand la
+        composition réelle est cassée. Laissez les enfants s'afficher : cette
+        intégration est souvent le bug recherché.
+      it: >-
+        Simula al confine: ciò che è lento, non deterministico o fuori dal tuo
+        controllo. Simulare i propri figli sostituisce proprio ciò che volevi
+        verificare con uno stub, e il test passa anche quando la composizione
+        reale è rotta. Lascia che i figli si rendano: quell'integrazione è
+        spesso il bug che stai cercando.
+
+  - id: coverage-meaning
+    prompt:
+      en: A suite reports 100% line coverage. What does that guarantee?
+      fr: Une suite affiche 100 % de couverture de lignes. Qu'est-ce que cela garantit ?
+      it: Una suite riporta il 100% di copertura delle righe. Cosa garantisce?
+    options:
+      - id: executed-only
+        correct: true
+        text:
+          en: >-
+            Only that every line ran — not that its behaviour was asserted
+          fr: >-
+            Seulement que chaque ligne s'est exécutée — non que son comportement
+            a été vérifié
+          it: >-
+            Solo che ogni riga è stata eseguita — non che il suo comportamento
+            sia stato verificato
+      - id: bug-free
+        text:
+          en: That the code contains no bugs
+          fr: Que le code ne contient aucun bug
+          it: Che il codice non contiene bug
+      - id: all-cases
+        text:
+          en: That every input combination was tried
+          fr: Que toutes les combinaisons d'entrées ont été essayées
+          it: Che ogni combinazione di input è stata provata
+    explanation:
+      en: >-
+        Coverage measures execution, not verification: a test that renders a
+        component and asserts nothing still colours the file green. It is useful
+        in the negative — untouched lines are genuinely untested — but chasing
+        the number produces tests written to reach lines rather than to describe
+        behaviour. Edge cases live in branches coverage cannot see.
+      fr: >-
+        La couverture mesure l'exécution, pas la vérification : un test qui rend
+        un composant sans rien vérifier colore quand même le fichier en vert.
+        Elle est utile en négatif — les lignes non atteintes ne sont vraiment pas
+        testées — mais courir après le chiffre produit des tests écrits pour
+        atteindre des lignes plutôt que pour décrire un comportement. Les cas
+        limites vivent dans des branches que la couverture ne voit pas.
+      it: >-
+        La copertura misura l'esecuzione, non la verifica: un test che rende un
+        componente senza verificare nulla colora comunque il file di verde. È
+        utile in negativo — le righe non toccate non sono davvero testate — ma
+        rincorrere il numero produce test scritti per raggiungere righe invece
+        che per descrivere un comportamento. I casi limite vivono in rami che la
+        copertura non vede.
+
+  - id: test-shape
+    prompt:
+      en: >-
+        Where should end-to-end tests sit relative to unit and component tests?
+      fr: >-
+        Où situer les tests de bout en bout par rapport aux tests unitaires et
+        de composants ?
+      it: >-
+        Dove collocare i test end-to-end rispetto a quelli unitari e di
+        componente?
+    options:
+      - id: few-critical
+        correct: true
+        text:
+          en: >-
+            Few of them, covering the flows that must never break
+          fr: >-
+            Peu nombreux, couvrant les parcours qui ne doivent jamais casser
+          it: >-
+            Pochi, a coprire i flussi che non devono mai rompersi
+      - id: majority
+        text:
+          en: The majority, since they are the most realistic
+          fr: La majorité, puisqu'ils sont les plus réalistes
+          it: La maggioranza, dato che sono i più realistici
+      - id: none
+        text:
+          en: None, once component tests exist
+          fr: Aucun, dès lors que des tests de composants existent
+          it: Nessuno, una volta che esistono i test di componente
+    explanation:
+      en: >-
+        End-to-end tests give the most confidence per test and cost the most to
+        run and to keep: they are slow, they fail for environmental reasons, and
+        a broken one tells you little about where the fault is. Reserve them for
+        the handful of journeys the product cannot ship without — checkout,
+        login — and let faster tests cover the detail underneath.
+      fr: >-
+        Les tests de bout en bout donnent le plus de confiance par test et
+        coûtent le plus à exécuter et à maintenir : lents, sujets aux échecs
+        d'environnement, et peu bavards sur l'origine d'une panne. Réservez-les
+        aux quelques parcours sans lesquels le produit ne peut pas sortir —
+        paiement, connexion — et laissez des tests plus rapides couvrir le détail.
+      it: >-
+        I test end-to-end danno la massima fiducia per test e costano di più da
+        eseguire e mantenere: sono lenti, falliscono per motivi ambientali e uno
+        rotto dice poco su dove sia il guasto. Riservali ai pochi percorsi senza
+        i quali il prodotto non può uscire — checkout, login — e lascia che test
+        più veloci coprano il dettaglio sottostante.

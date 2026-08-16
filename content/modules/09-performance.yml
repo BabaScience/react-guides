@@ -43,6 +43,7 @@ steps:
     section: 10. Optimization Strategy Selection
   - lesson: performance-conclusion
     section: "Conclusion: Performance Mastery"
+  - quiz: checkpoint
 exercises:
   memoized-child:
     number: 1

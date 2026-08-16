@@ -1,0 +1,323 @@
+# Checkpoint quiz — 09-performance
+#
+# Conventions match 01-fundamentals.yml. A value that *starts* with a backtick
+# needs a block scalar (`>-`), because YAML reserves it as an indicator there.
+
+module: 09-performance
+
+questions:
+  - id: memo-defeated
+    prompt:
+      en: >-
+        A child is wrapped in `React.memo` but re-renders every time anyway. The
+        parent passes `style={{ margin: 8 }}`. Why does that defeat it?
+      fr: >-
+        Un enfant enveloppé dans `React.memo` se rend malgré tout à chaque fois.
+        Le parent passe `style={{ margin: 8 }}`. Pourquoi cela le met-il en échec ?
+      it: >-
+        Un figlio avvolto in `React.memo` si rirenderizza comunque ogni volta.
+        Il genitore passa `style={{ margin: 8 }}`. Perché questo lo vanifica?
+    options:
+      - id: new-object
+        correct: true
+        text:
+          en: >-
+            The literal creates a new object each render, and the comparison is
+            shallow
+          fr: >-
+            Le littéral crée un nouvel objet à chaque rendu, et la comparaison
+            est superficielle
+          it: >-
+            Il letterale crea un nuovo oggetto a ogni render, e il confronto è
+            superficiale
+      - id: memo-broken
+        text:
+          en: >-
+            `React.memo` ignores props whose name is `style`
+          fr: >-
+            `React.memo` ignore les props nommées `style`
+          it: >-
+            `React.memo` ignora le props chiamate `style`
+      - id: parent-forces
+        text:
+          en: A parent re-render always forces children to re-render
+          fr: Le rendu du parent force toujours le rendu des enfants
+          it: Il render del genitore forza sempre il render dei figli
+    explanation:
+      en: >-
+        `{ margin: 8 }` is a fresh object every render, so the shallow compare
+        sees a changed prop even though the contents are identical. The same trap
+        catches inline arrow functions and array literals. Hoist the value, or
+        memoise it with `useMemo` / `useCallback` — otherwise `React.memo` costs
+        a comparison and saves nothing.
+      fr: >-
+        `{ margin: 8 }` est un objet neuf à chaque rendu ; la comparaison
+        superficielle voit donc une prop modifiée alors que le contenu est
+        identique. Le même piège vaut pour les fonctions fléchées et les
+        littéraux de tableau en ligne. Sortez la valeur, ou mémoïsez-la avec
+        `useMemo` / `useCallback` — sinon `React.memo` coûte une comparaison et
+        n'économise rien.
+      it: >-
+        `{ margin: 8 }` è un oggetto nuovo a ogni render, quindi il confronto
+        superficiale vede una prop cambiata anche se il contenuto è identico. La
+        stessa trappola vale per funzioni freccia e letterali di array inline.
+        Estrai il valore o memoizzalo con `useMemo` / `useCallback` — altrimenti
+        `React.memo` costa un confronto e non risparmia nulla.
+
+  - id: measure-first
+    prompt:
+      en: >-
+        What should come before wrapping components in `memo` and `useMemo`?
+      fr: >-
+        Que faut-il faire avant d'envelopper des composants dans `memo` et
+        `useMemo` ?
+      it: >-
+        Cosa va fatto prima di avvolgere i componenti in `memo` e `useMemo`?
+    options:
+      - id: profile
+        correct: true
+        text:
+          en: Profile, to find which renders are actually costing time
+          fr: Profiler, pour trouver quels rendus coûtent réellement du temps
+          it: Profilare, per trovare quali render costano davvero tempo
+      - id: memo-everything
+        text:
+          en: >-
+            Nothing — memoising everything is free insurance
+          fr: >-
+            Rien — tout mémoïser est une assurance gratuite
+          it: >-
+            Niente — memoizzare tutto è un'assicurazione gratuita
+      - id: upgrade
+        text:
+          en: Upgrade to the newest React version
+          fr: Passer à la version la plus récente de React
+          it: Aggiornare alla versione più recente di React
+    explanation:
+      en: >-
+        Memoisation is not free: every `useMemo` adds a dependency array to keep
+        correct and a comparison on each render, and a wrong dependency list
+        turns a performance tweak into a stale-value bug. React DevTools'
+        Profiler and the `<Profiler>` API tell you which commits are slow, so
+        you spend that complexity where it actually pays.
+      fr: >-
+        La mémoïsation n'est pas gratuite : chaque `useMemo` ajoute un tableau de
+        dépendances à maintenir juste et une comparaison à chaque rendu, et une
+        liste de dépendances erronée transforme un réglage de performance en bug
+        de valeur périmée. Le Profiler des React DevTools et l'API `<Profiler>`
+        indiquent quels commits sont lents, pour investir cette complexité là où
+        elle rapporte.
+      it: >-
+        La memoizzazione non è gratis: ogni `useMemo` aggiunge un array di
+        dipendenze da tenere corretto e un confronto a ogni render, e un elenco
+        di dipendenze sbagliato trasforma un'ottimizzazione in un bug da valore
+        obsoleto. Il Profiler dei React DevTools e l'API `<Profiler>` dicono
+        quali commit sono lenti, così investi quella complessità dove rende.
+
+  - id: virtualization
+    prompt:
+      en: >-
+        A table renders 10,000 rows and scrolling stutters. What does
+        virtualization change?
+      fr: >-
+        Un tableau affiche 10 000 lignes et le défilement saccade. Qu'est-ce que
+        la virtualisation change ?
+      it: >-
+        Una tabella mostra 10.000 righe e lo scorrimento scatta. Cosa cambia la
+        virtualizzazione?
+    options:
+      - id: visible-only
+        correct: true
+        text:
+          en: >-
+            Only the visible rows plus a small buffer are mounted; a spacer
+            fakes the full height
+          fr: >-
+            Seules les lignes visibles et une petite marge sont montées ; un
+            espaceur simule la hauteur totale
+          it: >-
+            Sono montate solo le righe visibili più un piccolo margine; uno
+            spaziatore simula l'altezza totale
+      - id: faster-rows
+        text:
+          en: Each row renders faster
+          fr: Chaque ligne s'affiche plus vite
+          it: Ogni riga si rende più velocemente
+      - id: compress
+        text:
+          en: The data is compressed in memory
+          fr: Les données sont compressées en mémoire
+          it: I dati vengono compressi in memoria
+    explanation:
+      en: >-
+        The problem is not row cost, it is row count: 10,000 nodes is a large
+        DOM to build, lay out and keep. A virtualizer computes which slice the
+        viewport shows, mounts roughly twenty of them, and uses a tall spacer so
+        the scrollbar still behaves. Note this is why `Ctrl+F` stops finding
+        offscreen rows — a real trade-off, not a free win.
+      fr: >-
+        Le problème n'est pas le coût d'une ligne mais leur nombre : 10 000
+        nœuds font un DOM lourd à construire, disposer et conserver. Un
+        virtualiseur calcule la tranche visible, en monte une vingtaine, et
+        emploie un espaceur pour que la barre de défilement reste correcte.
+        C'est aussi pourquoi `Ctrl+F` ne trouve plus les lignes hors écran — un
+        vrai compromis, pas un gain gratuit.
+      it: >-
+        Il problema non è il costo di una riga ma il loro numero: 10.000 nodi
+        sono un DOM pesante da costruire, disporre e mantenere. Un virtualizzatore
+        calcola la porzione visibile, ne monta una ventina e usa uno spaziatore
+        perché la barra di scorrimento resti corretta. È anche il motivo per cui
+        `Ctrl+F` non trova più le righe fuori schermo — un vero compromesso, non
+        un guadagno gratuito.
+
+  - id: bundle-splitting
+    prompt:
+      en: Which genuinely reduce what a first-time visitor downloads?
+      fr: Qu'est-ce qui réduit réellement ce que télécharge un premier visiteur ?
+      it: Cosa riduce davvero ciò che scarica un visitatore alla prima visita?
+    options:
+      - id: route-split
+        correct: true
+        text:
+          en: >-
+            Splitting per route with `React.lazy`, so unvisited pages are not sent
+          fr: >-
+            Découper par route avec `React.lazy`, pour ne pas envoyer les pages
+            non visitées
+          it: >-
+            Dividere per route con `React.lazy`, così le pagine non visitate non
+            vengono inviate
+      - id: lighter-dep
+        correct: true
+        text:
+          en: Replacing a heavy dependency with a smaller one that does the job
+          fr: Remplacer une dépendance lourde par une plus petite qui suffit
+          it: Sostituire una dipendenza pesante con una più piccola che basta
+      - id: memo-more
+        text:
+          en: >-
+            Adding more `useMemo` calls
+          fr: >-
+            Ajouter davantage d'appels à `useMemo`
+          it: >-
+            Aggiungere altre chiamate a `useMemo`
+    explanation:
+      en: >-
+        Bundle size and render speed are separate problems with separate fixes.
+        Memoisation changes what happens after the code arrives; it cannot make
+        the download smaller. Shipping less — later routes deferred, lighter
+        libraries, no unused locales or icon sets — is what moves first-load
+        numbers.
+      fr: >-
+        La taille du bundle et la vitesse de rendu sont deux problèmes distincts
+        aux remèdes distincts. La mémoïsation agit après l'arrivée du code ; elle
+        ne réduit pas le téléchargement. Envoyer moins — routes différées,
+        bibliothèques plus légères, aucune locale ni jeu d'icônes inutilisé —
+        voilà ce qui améliore le premier chargement.
+      it: >-
+        Dimensione del bundle e velocità di rendering sono problemi distinti con
+        rimedi distinti. La memoizzazione agisce dopo che il codice è arrivato;
+        non può ridurre il download. Spedire meno — route differite, librerie
+        più leggere, nessuna locale o set di icone inutilizzati — è ciò che
+        migliora il primo caricamento.
+
+  - id: key-index-cost
+    prompt:
+      en: >-
+        A list of inputs uses `key={index}`. A row is inserted at the top. What
+        goes wrong?
+      fr: >-
+        Une liste de champs utilise `key={index}`. Une ligne est insérée en
+        tête. Qu'est-ce qui déraille ?
+      it: >-
+        Una lista di input usa `key={index}`. Viene inserita una riga in cima.
+        Cosa va storto?
+    options:
+      - id: state-follows-position
+        correct: true
+        text:
+          en: >-
+            React reuses elements by position, so typed values stay with the
+            slot instead of the item
+          fr: >-
+            React réutilise les éléments par position : les valeurs saisies
+            restent liées à l'emplacement, non à l'élément
+          it: >-
+            React riusa gli elementi per posizione: i valori digitati restano
+            legati allo slot, non all'elemento
+      - id: crash
+        text:
+          en: React throws a duplicate-key error
+          fr: React lève une erreur de clé dupliquée
+          it: React lancia un errore di chiave duplicata
+      - id: nothing
+        text:
+          en: Nothing — indexes are keys like any other
+          fr: Rien — les index sont des clés comme les autres
+          it: Niente — gli indici sono chiavi come le altre
+    explanation:
+      en: >-
+        Keys tell React which element corresponds to which item across renders.
+        With an index, inserting at the top shifts every item's key by one, so
+        React matches the new first item to the old first element and keeps its
+        DOM state — the text someone typed follows the position. Use an id that
+        belongs to the data.
+      fr: >-
+        Les clés indiquent à React quel élément correspond à quelle donnée d'un
+        rendu à l'autre. Avec un index, une insertion en tête décale toutes les
+        clés d'un cran : React associe le nouveau premier élément à l'ancien et
+        en conserve l'état DOM — le texte saisi suit la position. Utilisez un
+        identifiant issu des données.
+      it: >-
+        Le chiavi dicono a React quale elemento corrisponde a quale dato tra un
+        render e l'altro. Con un indice, un inserimento in cima sposta tutte le
+        chiavi di uno: React abbina il nuovo primo elemento a quello vecchio e ne
+        conserva lo stato DOM — il testo digitato segue la posizione. Usa un id
+        che appartiene ai dati.
+
+  - id: optimization-order
+    prompt:
+      en: >-
+        Which of these should you reach for *last* when a page feels slow?
+      fr: >-
+        Vers laquelle de ces solutions faut-il se tourner en *dernier* quand une
+        page semble lente ?
+      it: >-
+        A quale di queste soluzioni ricorrere per *ultima* quando una pagina
+        sembra lenta?
+    options:
+      - id: micro-memo
+        correct: true
+        text:
+          en: Sprinkling memoisation across components you have not measured
+          fr: Parsemer de mémoïsation des composants non mesurés
+          it: Spargere memoizzazione su componenti non misurati
+      - id: fewer-rows
+        text:
+          en: Rendering fewer things at once
+          fr: Afficher moins d'éléments à la fois
+          it: Mostrare meno elementi alla volta
+      - id: ship-less
+        text:
+          en: Sending less JavaScript on the first load
+          fr: Envoyer moins de JavaScript au premier chargement
+          it: Inviare meno JavaScript al primo caricamento
+    explanation:
+      en: >-
+        The big wins come from doing less work at all: ship less code, render
+        fewer nodes, fetch less often. Memoisation only trims the cost of work
+        you have decided to keep, and applied blindly it adds dependency arrays
+        — and their staleness bugs — across the codebase in exchange for
+        immeasurable gains.
+      fr: >-
+        Les grands gains viennent du travail qu'on ne fait pas : moins de code
+        livré, moins de nœuds rendus, moins de requêtes. La mémoïsation ne fait
+        que rogner le coût du travail conservé et, appliquée aveuglément, répand
+        des tableaux de dépendances — et leurs bugs de valeurs périmées — dans
+        tout le code, pour des gains non mesurables.
+      it: >-
+        I guadagni grossi vengono dal lavoro che non si fa: meno codice
+        spedito, meno nodi resi, meno richieste. La memoizzazione si limita a
+        ridurre il costo del lavoro che hai deciso di tenere e, applicata alla
+        cieca, sparge array di dipendenze — e i loro bug da valore obsoleto — in
+        tutto il codice, in cambio di guadagni non misurabili.

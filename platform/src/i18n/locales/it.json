@@ -390,7 +390,8 @@
       "todo-reducer": "Esercizio: App Todo (useReducer)",
       "custom-hooks": "Hook Personalizzati",
       "advanced-patterns": "Pattern Avanzati",
-      "hooks-wrap-up": "Conclusione"
+      "hooks-wrap-up": "Conclusione",
+      "checkpoint": "Checkpoint: gli hook di React"
     },
     "03-component-patterns": {
       "composition-reusability": "Composizione e Riusabilità dei Componenti",
@@ -409,7 +410,8 @@
       "tabs": "Esercizio: Tabs (Compound)",
       "advanced-composition": "Tecniche di composizione avanzate",
       "pattern-selection-matrix": "Matrice di scelta dei pattern",
-      "patterns-conclusion": "Conclusione: progettare l'eccellenza"
+      "patterns-conclusion": "Conclusione: progettare l'eccellenza",
+      "checkpoint": "Checkpoint: pattern dei componenti"
     },
     "04-styling": {
       "styling-paradigms": "Paradigmi di Stilizzazione",
@@ -428,7 +430,8 @@
       "theming-design-systems": "Theming e Design System",
       "themed-text": "Esercizio: ThemedText",
       "styling-selection-matrix": "Matrice di scelta della strategia di styling",
-      "styling-conclusion": "Conclusione: progettare l'eccellenza stilistica"
+      "styling-conclusion": "Conclusione: progettare l'eccellenza stilistica",
+      "checkpoint": "Checkpoint: lo stile in React"
     },
     "05-routing": {
       "routing-paradigms": "Paradigmi di Routing e Architettura",
@@ -447,7 +450,8 @@
       "route-guards": "Guardie di route e redirect",
       "advanced-routing": "Pattern di routing avanzati",
       "routing-performance": "Ottimizzazione delle performance di routing",
-      "routing-conclusion": "Conclusione: padroneggiare l'architettura di navigazione"
+      "routing-conclusion": "Conclusione: padroneggiare l'architettura di navigazione",
+      "checkpoint": "Checkpoint: il routing"
     },
     "06-state-management": {
       "paradigms": "Paradigmi di Gestione dello Stato",
@@ -466,7 +470,8 @@
       "jotai": "Jotai: gestione atomica dello stato",
       "recoil": "Recoil: stato orientato al grafo",
       "state-selection-matrix": "Matrice di scelta della gestione dello stato",
-      "state-conclusion": "Conclusione: padroneggiare la gestione dello stato"
+      "state-conclusion": "Conclusione: padroneggiare la gestione dello stato",
+      "checkpoint": "Checkpoint: gestione dello stato"
     },
     "07-data-fetching": {
       "fetching-paradigms": "Paradigmi di Recupero Dati",
@@ -485,7 +490,8 @@
       "cache-strategies": "Strategie di Gestione della Cache",
       "create-cache": "Esercizio: createCache",
       "fetching-selection-matrix": "Scegliere una strategia di data fetching",
-      "fetching-conclusion": "Conclusione: padroneggiare il data fetching"
+      "fetching-conclusion": "Conclusione: padroneggiare il data fetching",
+      "checkpoint": "Checkpoint: recupero dei dati"
     },
     "08-forms": {
       "form-paradigms": "Paradigmi di Gestione dei Form",
@@ -504,7 +510,8 @@
       "advanced-patterns": "Pattern Avanzati per i Form",
       "form-errors": "Esercizio: FormErrors",
       "forms-selection-matrix": "Matrice di scelta della strategia dei form",
-      "forms-conclusion": "Conclusione: padroneggiare la gestione dei form"
+      "forms-conclusion": "Conclusione: padroneggiare la gestione dei form",
+      "checkpoint": "Checkpoint: form e validazione"
     },
     "09-performance": {
       "rendering-behavior": "Comportamento di Rendering di React",
@@ -523,7 +530,8 @@
       "use-debounced-value": "Esercizio: useDebouncedValue",
       "performance-monitoring": "Monitoraggio delle performance",
       "performance-selection-matrix": "Scegliere una strategia di ottimizzazione",
-      "performance-conclusion": "Conclusione: padroneggiare le performance"
+      "performance-conclusion": "Conclusione: padroneggiare le performance",
+      "checkpoint": "Checkpoint: prestazioni"
     },
     "10-testing": {
       "testing-fundamentals": "Fondamenti e Filosofia del Testing",
@@ -541,7 +549,8 @@
       "e2e-cypress": "Test end-to-end con Cypress",
       "e2e-playwright": "Test end-to-end con Playwright",
       "coverage-quality": "Copertura dei test e metriche di qualità",
-      "best-practices": "Best Practice e Pattern di Testing"
+      "best-practices": "Best Practice e Pattern di Testing",
+      "checkpoint": "Checkpoint: il testing"
     },
     "rn-01-prerequisites": {
       "react-prerequisites": "React (Imprescindibile)",

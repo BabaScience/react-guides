@@ -43,6 +43,7 @@ steps:
     section: 10. Performance Optimization
   - lesson: routing-conclusion
     section: "Conclusion: Mastering Navigation Architecture"
+  - quiz: checkpoint
 exercises:
   match:
     number: 1

@@ -43,6 +43,7 @@ steps:
     section: 10. Form Strategy Selection Matrix
   - lesson: forms-conclusion
     section: "Conclusion: Mastering Form Management"
+  - quiz: checkpoint
 exercises:
   validate-email:
     number: 1

@@ -43,6 +43,7 @@ steps:
     section: 10. Styling Strategy Selection Matrix
   - lesson: styling-conclusion
     section: "Conclusion: Architecting Stylistic Excellence"
+  - quiz: checkpoint
 exercises:
   inline-styled:
     number: 1
