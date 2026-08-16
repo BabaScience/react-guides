@@ -151,6 +151,24 @@ function checkExercises(modules) {
     const tests = fs.readFileSync(testPath, 'utf8');
     const banners = [...stub.matchAll(/^\/\/\s*EXERCISE\s+(\d+)\s*:/gim)].map((x) => +x[1]);
 
+    // Reference solutions are optional, but a half-written one is worse than
+    // none: the learner passes, opens the tab and is shown the stub they just
+    // replaced. If the file exists it must cover every exercise in the module.
+    const solutionPath = path.join(dir, 'solution.tsx');
+    if (fs.existsSync(solutionPath)) {
+      const solution = fs.readFileSync(solutionPath, 'utf8');
+      const solved = [...solution.matchAll(/^\/\/\s*EXERCISE\s+(\d+)\s*:/gim)].map((x) => +x[1]);
+      for (const e of m.exercises) {
+        if (!solved.includes(e.number))
+          err(
+            'solutions',
+            `${m.id}/${e.id}: solution.tsx exists but has no "// EXERCISE ${e.number}:" banner`
+          );
+      }
+      if (/\bTODO\b/.test(solution))
+        err('solutions', `${m.id}: solution.tsx still contains a TODO`);
+    }
+
     for (const e of m.exercises) {
       checked++;
 

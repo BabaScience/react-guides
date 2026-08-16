@@ -8,6 +8,7 @@
       "status": "available",
       "guideFile": "arguments/chapters/01-fundamentals.md",
       "exerciseDir": "src/01-fundamentals",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {

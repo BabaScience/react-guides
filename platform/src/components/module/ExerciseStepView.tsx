@@ -2,13 +2,14 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { Module } from '@/types/exercise';
-import { loadExerciseStub, loadTestFile } from '@/data/loader';
+import { loadExerciseStub, loadTestFile, loadExerciseSolution } from '@/data/loader';
 import { useProgressStore } from '@/store/progress-store';
 import { SplitPane } from '@/components/exercise/SplitPane';
 import { CodeEditorLazy as CodeEditor } from '@/components/exercise/CodeEditorLazy';
 import { ExercisePanel } from '@/components/exercise/ExercisePanel';
 import { TestResultsPanel } from '@/components/exercise/TestResultsPanel';
 import { LivePreview } from '@/components/exercise/LivePreview';
+import { MarkdownRenderer } from '@/components/lesson/MarkdownRenderer';
 import { Button } from '@/components/ui';
 import { DEFAULT_TIMEOUT_MS, getRunner } from '@/sandbox/runners';
 import { buildExerciseCode } from '@/sandbox/exercise-extractor';
@@ -27,10 +28,14 @@ const SAVE_DEBOUNCE_MS = 600;
 function TabButton({
   label,
   active,
+  disabled,
+  title,
   onClick,
 }: {
   label: string;
   active?: boolean;
+  disabled?: boolean;
+  title?: string;
   onClick?: () => void;
 }) {
   return (
@@ -38,11 +43,16 @@ function TabButton({
       type="button"
       role="tab"
       aria-selected={!!active}
+      aria-disabled={disabled || undefined}
+      disabled={disabled}
+      title={title}
       onClick={onClick}
       className={`px-4 py-2 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary-500 ${
-        active
-          ? 'text-gray-900 dark:text-white border-b-2 border-primary-500 bg-white dark:bg-gray-950'
-          : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
+        disabled
+          ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+          : active
+            ? 'text-gray-900 dark:text-white border-b-2 border-primary-500 bg-white dark:bg-gray-950'
+            : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
       }`}
     >
       {label}
@@ -58,6 +68,14 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   const saveTestResults = useProgressStore((s) => s.saveTestResults);
   const markExerciseComplete = useProgressStore((s) => s.markExerciseComplete);
 
+  /**
+   * Gate for the reference solution. `completedManually` also promotes status
+   * to 'passed', so the escape hatch opens this too — deliberately: it exists
+   * for people the runner has failed, and the gate is a nudge to try first,
+   * not a lock. Anyone determined can read the repo.
+   */
+  const hasPassed = progress?.status === 'passed';
+
   const [code, setCode] = useState('');
   const [defaultCode, setDefaultCode] = useState('');
   const [fullFile, setFullFile] = useState('');
@@ -65,7 +83,8 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<TestRunResult | null>(progress?.testResults ?? null);
   const [running, setRunning] = useState(false);
-  const [leftTab, setLeftTab] = useState<'code' | 'preview'>('code');
+  const [leftTab, setLeftTab] = useState<'code' | 'preview' | 'solution'>('code');
+  const [solution, setSolution] = useState('');
 
   useEffect(() => {
     if (!exercise) return;
@@ -84,6 +103,30 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module.exerciseDir, exercise?.number]);
+
+  // Fetched only for modules the manifest says have solutions, and only once
+  // the learner has passed — so the answer is not sitting in the network tab
+  // of someone who is still working on it.
+  useEffect(() => {
+    if (!exercise || !module.hasSolutions || !hasPassed) return;
+    let cancelled = false;
+    loadExerciseSolution(module.exerciseDir)
+      .then((file) => {
+        if (!cancelled) setSolution(buildExerciseCode(file, exercise.number));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [module.exerciseDir, module.hasSolutions, exercise?.number, hasPassed]);
+
+  // Leaving a passed exercise for an unsolved one must not carry the previous
+  // answer into the new tab.
+  useEffect(() => {
+    setSolution('');
+    setLeftTab('code');
+  }, [exerciseId]);
 
   // Persisting on every keystroke meant a JSON.stringify of the whole progress
   // store plus a localStorage write per character. Keep the editor state
@@ -221,6 +264,15 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
                   active={leftTab === 'preview'}
                   onClick={() => setLeftTab('preview')}
                 />
+                {module.hasSolutions && (
+                  <TabButton
+                    label={hasPassed ? t('exercise.solution') : `🔒 ${t('exercise.solution')}`}
+                    active={leftTab === 'solution'}
+                    disabled={!hasPassed}
+                    title={hasPassed ? undefined : t('exercise.solutionLocked')}
+                    onClick={() => setLeftTab('solution')}
+                  />
+                )}
               </div>
               <div className="flex-1 min-h-0">
                 <div className={leftTab === 'code' ? 'h-full' : 'hidden'}>
@@ -232,6 +284,14 @@ export function ExerciseStepView({ module, exerciseId, stepIndex, totalSteps }: 
                     componentName={exercise.componentName}
                     testSource={testFileContent}
                   />
+                )}
+                {leftTab === 'solution' && (
+                  <div className="h-full overflow-auto p-4 bg-white dark:bg-gray-950">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                      {t('exercise.solutionNote')}
+                    </p>
+                    <MarkdownRenderer content={'```tsx\n' + solution + '\n```'} />
+                  </div>
                 )}
               </div>
             </div>

@@ -90,3 +90,14 @@ export function loadTestFile(exerciseDir: string): Promise<string> {
 export function loadExerciseReadme(exerciseDir: string): Promise<string> {
   return fetchText(`${exerciseDir}/README.md`, 'README');
 }
+
+/**
+ * The module's reference solutions, in the same `// EXERCISE N:` layout as the
+ * stub — so `buildExerciseCode` splits it with no extra parsing.
+ *
+ * Only call this when `module.hasSolutions` is true. Existence is a build-time
+ * fact recorded in the manifest, not something to discover by fetching.
+ */
+export function loadExerciseSolution(exerciseDir: string): Promise<string> {
+  return fetchText(`${exerciseDir}/solution.tsx`, 'reference solution');
+}

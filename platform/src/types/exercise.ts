@@ -82,6 +82,12 @@ export interface Module {
    */
   runner?: RunnerId;
   exercises: Exercise[];
+  /**
+   * True when `<exerciseDir>/solution.tsx` exists. Set by the manifest
+   * compiler, so the app never has to probe the network to find out — a dev
+   * server answers a missing path with index.html and a 200 (ANALYSIS §4.2b).
+   */
+  hasSolutions?: boolean;
   /** The module's checkpoint quiz, if `content/quizzes/<id>.yml` exists. */
   quiz?: Quiz;
   steps: Step[];

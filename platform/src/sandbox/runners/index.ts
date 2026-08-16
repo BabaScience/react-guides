@@ -13,17 +13,19 @@ import { reactBrowserRunner } from './react-browser';
  * character with real events, so a legitimate form test can take a second or
  * two on a slow machine.
  *
- * Raised from 15s when grading moved into the isolated frame. The frame itself
- * is cheap — ~0.5s to boot warm, ~5ms per round trip — but it runs React's
- * *development* build, which is what gives it a working `act()` and is several
- * times slower per simulated keystroke. Module 01 exercise 7 types ~50
- * characters across its cases and legitimately needs more than 15s now.
+ * This was briefly raised to 45s on the theory that development React was
+ * several times slower per simulated keystroke. That was wrong: the frame had
+ * been parked off-screen, where Chrome throttles its timers to about one per
+ * second, and `user.type` awaits a timer per character. With the frame
+ * rendered (see isolated-frame.ts) every exercise in module 01 completes in
+ * ~0.8s, so the old budget is plenty again — and failing fast matters when a
+ * run really is stuck.
  *
- * This is a backstop, not the primary defence: a runaway loop is caught by the
- * loop guard in ~2s, and this only has to cover what the guard cannot see — a
- * stray `setInterval`, a promise that never settles.
+ * A backstop, not the primary defence: a runaway loop is caught by the loop
+ * guard in ~2s, and this only has to cover what the guard cannot see — a stray
+ * `setInterval`, a promise that never settles.
  */
-export const DEFAULT_TIMEOUT_MS = 45_000;
+export const DEFAULT_TIMEOUT_MS = 20_000;
 
 /**
  * Placeholder for runners that are designed but not built. It reports the

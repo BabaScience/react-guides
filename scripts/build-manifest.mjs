@@ -181,6 +181,11 @@ export function buildManifest() {
     const exercises = doc.exercises ?? {};
     const skipSections = doc.skipSections ?? [];
 
+    // Reference solutions are optional: a module ships them or it doesn't, and
+    // the app needs to know which without asking the network.
+    const hasSolutions =
+      !!doc.exerciseDir && fs.existsSync(path.join(ROOT, doc.exerciseDir, 'solution.tsx'));
+
     // --- the guide, and the two invariants that make orphans impossible
     let available = [];
     if (doc.guide) {
@@ -295,6 +300,11 @@ export function buildManifest() {
       ...(doc.runner ? { runner: doc.runner } : {}),
       guideFile: doc.guide ?? '',
       exerciseDir: doc.exerciseDir ?? '',
+      // Whether `<exerciseDir>/solution.tsx` exists, decided here rather than by
+      // the app probing for the file at runtime. A dev server answers an unknown
+      // path with index.html and a 200, so "did the fetch succeed" is not a
+      // usable existence test — that is exactly bug §4.2(b).
+      ...(hasSolutions ? { hasSolutions: true } : {}),
       ...(quiz ? { quiz } : {}),
       steps: compiledSteps,
       exercises: Object.entries(exercises)

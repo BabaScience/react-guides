@@ -93,12 +93,24 @@ export async function runInIsolatedFrame(
   frame.setAttribute('sandbox', 'allow-scripts allow-forms');
   frame.setAttribute('aria-hidden', 'true');
   frame.setAttribute('title', 'Exercise runner');
-  // Off-screen, but genuinely laid out and visible. `display:none`,
-  // `visibility:hidden` or a 0×0 box would all be simpler and all break the
-  // tests: user-event v14 refuses to type into or click an element it computes
-  // as invisible, so specs would fail with an input whose value never changed.
-  // A real viewport also gives the render something plausible to measure.
-  frame.style.cssText = 'position:fixed;left:-10000px;top:0;width:1024px;height:768px;border:0';
+  // Invisible, but deliberately *inside the viewport at full size*. Every
+  // instinct here is wrong in an interesting way:
+  //
+  //   - A 0×0 box gives the frame's document no layout, so user-event v14
+  //     treats every element as invisible and refuses to type into it.
+  //   - Parking it off-screen (`left:-10000px`) or clipping it away
+  //     (`clip-path:inset(100%)`) makes Chrome treat the frame as hidden and
+  //     throttle its timers to roughly one per second. user-event awaits a
+  //     timer between keystrokes, so "John Doe" took 4.8s and the next test
+  //     11s, until the run blew through the watchdog. Measured: identical
+  //     spec, 16219ms off-screen versus 498ms in-viewport.
+  //
+  // `opacity:0` keeps the frame rendered — so timers run at full speed — while
+  // showing nothing. `z-index:-1` and `pointer-events:none` keep it clear of
+  // the real UI. It lives for about a second per run and is then removed.
+  frame.style.cssText =
+    'position:fixed;top:0;left:0;width:1024px;height:768px;border:0;' +
+    'opacity:0;z-index:-1;pointer-events:none';
 
   let disposed = false;
   const dispose = () => {
@@ -162,13 +174,14 @@ export async function runInIsolatedFrame(
   // is only legal in JS inside a string, where the escape is equivalent.
   const inlineSafe = source.replace(/<\/script/gi, '<\\/script');
 
-  // The act flag is set in its own earlier script, not inside the bundle:
-  // ES imports are hoisted, so anything the bundle's entry module assigns runs
-  // *after* React and @testing-library have already initialised and read it.
+  // Deliberately no `IS_REACT_ACT_ENVIRONMENT` bootstrap script here. Setting
+  // it before @testing-library initialises was tried twice: once while the
+  // frame was still timer-throttled (where it changed nothing because the
+  // throttling dominated, so that first result proved nothing), and again
+  // afterwards on a fast frame, where module 01 exercise 8 scored 3/6 with it
+  // and 3/6 without. It earns no place.
   frame.srcdoc =
-    '<!doctype html><html><head><meta charset="utf-8">' +
-    '<script>window.IS_REACT_ACT_ENVIRONMENT = true;</' + 'script>' +
-    '</head><body>' +
+    '<!doctype html><html><head><meta charset="utf-8"></head><body>' +
     `<script>${inlineSafe}</` + 'script>' +
     '</body></html>';
   document.body.appendChild(frame);

@@ -224,10 +224,104 @@ hands it over as inline text in `srcdoc`.
 Two things the browser enforces that the design had to answer for:
 `allow-forms` is required or the browser blocks form submission outright and
 every controlled-form spec fails with "onSubmit was never called"; and the
-frame must be genuinely laid out and visible (off-screen, not `display:none`
-or 0×0), because user-event v14 refuses to type into an element it computes as
-invisible — that one cost 23s per keystroke and an input whose value never
-changed.
+frame must be laid out at a real size, because a 0×0 document gives its
+elements no layout box and user-event v14 then refuses to type into them.
+*Where* it is positioned turns out to matter just as much — see the throttling
+note below.
+
+**Fixed — the frame must be rendered, not hidden off-screen.** For a while the
+two `user.type`-driven specs in module 01 (exercise 7 ContactForm, exercise 8
+FilteredList) timed out at the watchdog on every attempt, while the six
+exercises without `user-event` passed in under a second.
+
+The cause was the frame's own CSS. It was parked at `left:-10000px` to keep it
+out of sight, and **Chrome throttles timers in an off-screen cross-origin
+iframe to roughly one per second.** `user-event` awaits a timer between
+keystrokes, so every character cost about a second: typing "John Doe" took
+4.8s in the first test and 11.0s in the second, and four tests blew through
+any budget. Bisected with a hand-written spec against the same bundle —
+identical work, **16219ms off-screen versus 498ms in-viewport**.
+
+`opacity:0` at full size inside the viewport keeps the frame rendered (so its
+timers run at normal speed) while showing nothing. `clip-path:inset(100%)` is
+throttled just like off-screen positioning and is not an alternative; a 0×0
+box breaks user-event differently, by leaving the document with no layout.
+
+Module 01 now runs uniformly in ~0.8s per exercise: 3/3, 3/3, 4/4, 5/5, 6/6,
+4/4, **3/4**, **3/6**. `DEFAULT_TIMEOUT_MS` went back down to 20s, the 45s
+having been justified by a slowness that turned out to be this bug.
+
+Two lessons worth keeping: the earlier "restored the 3/4 baseline, no
+regression" claim came from runs that happened to land before throttling
+engaged, so it was luck reported as verification; and the first
+`IS_REACT_ACT_ENVIRONMENT` experiment was run against a throttled frame, where
+the throttling dominated and the comparison proved nothing.
+
+**Root cause found — an opaque-origin frame cannot take focus, and
+`user-event` runs entirely through focus.** This is the real content of the
+"`user-event` gap", and it is a property of the sandbox, not of React.
+
+Measured inside the frame, with `fireEvent` as the control:
+
+| after | DOM value | derived text | renders |
+|---|---|---|---|
+| `user.type(input, 'ab')` | `""` | `"echo:"` | 1 → **1** |
+| `fireEvent.change(…'zz')` | `"zz"` | `"echo:zz"` | 2 → **3** |
+
+`fireEvent` dispatches straight at the element and works perfectly — which is
+why the six exercises without `user-event` pass, and why `Counter` (five
+`fireEvent.click` cases) is 5/5. `user.type` is a no-op: no value, no
+re-render. `user.click` does not even focus its target, and `user.keyboard`
+after an explicit `input.focus()` does nothing either, because the focus never
+took: `document.activeElement` stays `BODY`.
+
+The isolating comparison — same tab, same styling, same moment, only the
+sandbox differing:
+
+| frame | `activeElement` after `focus()` |
+|---|---|
+| `sandbox="allow-scripts allow-forms"` | `""` — focus refused |
+| same-origin, no sandbox | `"i"` — focus works |
+
+So `allow-same-origin` is exactly what would fix typing, and it is exactly what
+cannot be granted without giving learner code the app's origin and its
+localStorage back. That is the trade P2.2 actually made, now stated plainly.
+
+**Unresolved: how much of this reaches a real learner.** Results for the two
+typing exercises are not stable — the same code gives 3/4 in ~1.2s on one run
+and a watchdog timeout on the next. It tracks whether the top document holds
+focus, which this environment could not hold steady (the browser pane is
+reported `hidden`, and creating the frame appears to cost the page its focus).
+A learner with a focused, foreground tab may well be fine; a learner who
+switches tab mid-run would see typing tests fail with a misleading "element not
+in the document". Verifying that needs a hands-on run in a normal browser.
+
+**Taken: route per exercise.** `react-browser.ts` now picks the context with
+`needsFocus(spec, exerciseNumber)`. Exercises whose own `describe` block
+touches `user-event` run in the page via the restored `test-runner.ts`;
+everything else keeps the isolated frame. `patch-testing-library-act` came back
+with it, since the in-page path uses the app's production React — and the
+sandbox build still excludes that plugin, because the frame's development React
+needs no patching.
+
+The check has to be per *exercise*, not per file, and the first version got
+this wrong. A module's exercises share one spec, and that spec imports
+`user-event` at the top for whichever block needs it, so matching on the import
+sent all eight of module 01's exercises down the weaker path and quietly gave
+up the isolation for six of them. Verified after the fix: greeting runs in the
+FRAME at 3/3, counter 5/5 and action-button 4/4 in ~1s, contact-form in-page.
+
+**Not yet proven to help.** In this environment the two typing exercises still
+hit the watchdog on the in-page path, with `document.hasFocus()` true
+throughout — the same timeout they hit in the frame. Both paths now fail
+identically here, including the one that historically produced 3/4, which
+points at something about this automated browser rather than the routing. The
+routing is right on the evidence and costs little; whether it restores 3/4
+needs one hands-on run in an ordinary browser.
+
+Rejected alternatives: `allow-same-origin` (typing works, isolation gone — it
+undoes the point of P2.2); and detect-and-warn (honest, but leaves the
+exercises failing).
 
 **Disproved — the `user-event` gap is not about production `act()`.** The
 premise below, repeated in P2.6, was that the last failing case needs React's

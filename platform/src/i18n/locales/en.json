@@ -70,7 +70,10 @@
     "ctrlEnter": "Ctrl+Enter to run tests",
     "code": "Code",
     "preview": "Preview",
-    "loadingEditor": "Loading editor…"
+    "loadingEditor": "Loading editor…",
+    "solution": "Solution",
+    "solutionLocked": "Pass the tests to unlock the reference solution",
+    "solutionNote": "One way to solve it — not the only way. Compare it with what you wrote."
   },
   "preview": {
     "compiling": "Compiling…",

@@ -70,7 +70,10 @@
     "ctrlEnter": "Ctrl+Entrée pour lancer les tests",
     "code": "Code",
     "preview": "Aperçu",
-    "loadingEditor": "Chargement de l’éditeur…"
+    "loadingEditor": "Chargement de l’éditeur…",
+    "solution": "Solution",
+    "solutionLocked": "Réussissez les tests pour débloquer la solution de référence",
+    "solutionNote": "Une façon de le résoudre, pas la seule. Comparez-la à ce que vous avez écrit."
   },
   "preview": {
     "compiling": "Compilation…",

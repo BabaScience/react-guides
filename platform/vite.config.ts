@@ -7,6 +7,43 @@ export default defineConfig({
   plugins: [
     react(),
     {
+      // React's production build ships an `act()` that throws, and
+      // @testing-library/react v14 calls `testUtils.act` on every render — so
+      // under a prod bundle every test run through the *in-page* runner fails.
+      // We rewrite TL's `domAct` to a pass-through.
+      //
+      // This only matters for `test-runner.ts`, the fallback path used by specs
+      // that drive `user-event` (see runners/react-browser.ts). The isolated
+      // frame carries its own development React, where `act` works properly and
+      // needs no patching — and the frame is built by vite.sandbox.config.ts,
+      // which deliberately does not include this plugin.
+      //
+      // Pass-through and nothing more, on purpose. Two earlier versions tried
+      // to make the stub flush React's work itself:
+      //
+      //   `cb(); flushSync(() => {})`  — never commits a `root.render()`,
+      //      because that render is scheduled on the default lane and a
+      //      separate empty flush does not pick it up.
+      //   `flushSync(() => cb())`      — commits the render, but then every
+      //      user-event dispatch also runs inside a sync flush, which defeats
+      //      React's own discrete-event flushing.
+      //
+      // The only thing that genuinely needs a flush is the initial `render()`,
+      // and that is wrapped where it belongs — in the runner's interceptor.
+      name: 'patch-testing-library-act',
+      enforce: 'pre',
+      transform(code, id) {
+        if (id.includes('@testing-library/react') && id.endsWith('.esm.js')) {
+          const patched = code.replace(
+            /const\s+domAct\s*=\s*testUtils\.act\s*;?/,
+            `const domAct = (cb) => cb();`
+          );
+          if (patched !== code) return patched;
+        }
+        return null;
+      },
+    },
+    {
       // Serves chapter markdown and exercise files to the running app in dev.
       // In production the same files are copied into public/raw/ by
       // scripts/copy-content.js and served as static assets.
