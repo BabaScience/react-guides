@@ -1573,5 +1573,15 @@
     "beginner": "Beginner",
     "intermediate": "Intermediate",
     "advanced": "Advanced"
+  },
+  "glossary": {
+    "title": "Glossary",
+    "intro": "Shared vocabulary across the three tracks. Each term links to the module that teaches it.",
+    "search": "Search terms…",
+    "definedIn": "Taught in {{module}}",
+    "seeAlso": "See also",
+    "definesTerms": "Defines",
+    "count_one": "{{count}} term",
+    "count_other": "{{count}} terms"
   }
 }

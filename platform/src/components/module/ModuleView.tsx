@@ -1,7 +1,7 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getModule, getModulesByTrack } from '@/data/modules';
+import { getModule, getModulesByTrack, getTermsDefinedIn } from '@/data/modules';
 import { useProgressStore } from '@/store/progress-store';
 import { useUIStore } from '@/store/ui-store';
 import { ModuleMeta } from '@/components/progress/ModuleMeta';
@@ -53,6 +53,34 @@ function Prerequisites({ module: mod }: { module: Module }) {
   );
 }
 
+/**
+ * The vocabulary this module is the defining home for.
+ *
+ * The other end of the glossary's cross-track link: the glossary says which
+ * module teaches a term, and the module says which terms it owns. Each chip
+ * deep-links to that entry rather than dumping the definition here.
+ */
+function DefinedTerms({ moduleId }: { moduleId: string }) {
+  const { t, i18n } = useTranslation();
+  const terms = getTermsDefinedIn(moduleId);
+  if (!terms.length) return null;
+
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-2">
+      <span className="text-xs text-gray-500 dark:text-gray-400">{t('glossary.definesTerms')}</span>
+      {terms.map((term) => (
+        <Link
+          key={term.id}
+          to={`/glossary#${term.id}`}
+          className="text-xs px-2.5 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+        >
+          {term.term[i18n.language] ?? term.term.en}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export function ModuleView() {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
@@ -94,6 +122,7 @@ export function ModuleView() {
         </p>
         <ModuleMeta module={mod} className="mt-3" />
         <Prerequisites module={mod} />
+        <DefinedTerms moduleId={mod.id} />
       </div>
 
       <div className="flex items-center gap-4 mb-8">

@@ -130,6 +130,68 @@ function roundMinutes(raw) {
 }
 
 /**
+ * Compile `content/glossary.yml`.
+ *
+ * Shared vocabulary, with each term naming the module that teaches it — the
+ * cross-track link ANALYSIS §6 asked for. Text is inline per locale, exactly
+ * like a quiz; `en` is required and the rest fall back to it.
+ *
+ * Returns `[]` when the file is absent, so the glossary stays optional.
+ */
+function compileGlossary(errors) {
+  const file = path.join(ROOT, 'content', 'glossary.yml');
+  if (!fs.existsSync(file)) return [];
+  const rel = 'glossary.yml';
+  const fail = (msg) => errors.push(`${rel}: ${msg}`);
+
+  const doc = YAML.parse(fs.readFileSync(file, 'utf8')) ?? {};
+  const terms = doc.terms ?? [];
+  if (!Array.isArray(terms)) {
+    fail('terms must be a list');
+    return [];
+  }
+
+  const seen = new Set();
+  const compiled = [];
+
+  for (const [i, entry] of terms.entries()) {
+    const where = entry?.id ? `term "${entry.id}"` : `terms[${i}]`;
+    if (typeof entry?.id !== 'string') {
+      fail(`${where} needs an id`);
+      continue;
+    }
+    if (seen.has(entry.id)) fail(`duplicate term id "${entry.id}"`);
+    seen.add(entry.id);
+
+    if (typeof entry.term?.en !== 'string') fail(`${where} needs an English term`);
+    if (typeof entry.definition?.en !== 'string') fail(`${where} needs an English definition`);
+    if (typeof entry.definedIn !== 'string') fail(`${where} needs definedIn`);
+
+    const seeAlso = entry.seeAlso ?? [];
+    if (!Array.isArray(seeAlso)) fail(`${where}: seeAlso must be a list of term ids`);
+    if (seeAlso.includes(entry.id)) fail(`${where} lists itself under seeAlso`);
+
+    compiled.push({
+      id: entry.id,
+      term: entry.term,
+      definition: entry.definition,
+      definedIn: entry.definedIn,
+      ...(seeAlso.length ? { seeAlso } : {}),
+    });
+  }
+
+  // Cross-references resolve, or they are dead links in the UI.
+  const ids = new Set(compiled.map((t) => t.id));
+  for (const t of compiled) {
+    for (const ref of t.seeAlso ?? []) {
+      if (!ids.has(ref)) fail(`term "${t.id}": seeAlso "${ref}" is not a term id`);
+    }
+  }
+
+  return compiled;
+}
+
+/**
  * Compile a module's checkpoint quiz, if it has one.
  *
  * Quiz text is inline and multi-locale: a question, its options and its
@@ -463,16 +525,27 @@ export function buildManifest() {
     a.track === b.track ? a.number - b.number : TRACKS.indexOf(a.track) - TRACKS.indexOf(b.track)
   );
 
-  return { modules, errors };
+  // --- the glossary, and its link back into the catalogue. A term whose
+  // `definedIn` does not resolve would render as a dead link on every page
+  // that lists it.
+  const glossary = compileGlossary(errors);
+  for (const t of glossary) {
+    if (!byId.has(t.definedIn))
+      errors.push(`glossary.yml: term "${t.id}": definedIn "${t.definedIn}" is not a module id`);
+  }
+
+  return { modules, glossary, errors };
 }
 
-function serialise(modules) {
+function serialise(modules, glossary) {
   return (
     JSON.stringify(
       {
-        // Generated — see scripts/build-manifest.mjs. Edit content/modules/*.yml.
+        // Generated — see scripts/build-manifest.mjs. Edit content/modules/*.yml
+        // and content/glossary.yml.
         generator: 'scripts/build-manifest.mjs',
         modules,
+        glossary,
       },
       null,
       2
@@ -486,7 +559,7 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 
 if (isMain) {
   const check = process.argv.includes('--check');
-  const { modules, errors } = buildManifest();
+  const { modules, glossary, errors } = buildManifest();
 
   if (errors.length) {
     console.error(`\n  FAIL  content/modules\n`);
@@ -495,7 +568,7 @@ if (isMain) {
     process.exit(1);
   }
 
-  const next = serialise(modules);
+  const next = serialise(modules, glossary);
   const current = fs.existsSync(MANIFEST_PATH) ? fs.readFileSync(MANIFEST_PATH, 'utf8') : null;
 
   if (check) {
@@ -511,7 +584,8 @@ if (isMain) {
     const steps = modules.reduce((n, m) => n + m.steps.length, 0);
     const exercises = modules.reduce((n, m) => n + m.exercises.length, 0);
     console.log(
-      `Wrote platform/src/data/manifest.json — ${modules.length} modules, ${steps} steps, ${exercises} exercises.`
+      `Wrote platform/src/data/manifest.json — ${modules.length} modules, ${steps} steps, ` +
+        `${exercises} exercises, ${glossary.length} glossary terms.`
     );
   }
 }

@@ -17,7 +17,7 @@
  * Display text lives in `src/i18n/locales/*.json`, keyed by the ids here.
  */
 
-import type { Module, Track } from '@/types/exercise';
+import type { GlossaryTerm, Module, Track } from '@/types/exercise';
 import manifest from './manifest.json';
 
 export const modules: Module[] = manifest.modules as Module[];
@@ -36,4 +36,16 @@ export function getModuleByNumber(num: number, track: Track): Module | undefined
 
 export function getModulesByTrack(track: Track): Module[] {
   return modules.filter((m) => m.track === track);
+}
+
+/** Shared vocabulary, compiled from `content/glossary.yml`. */
+export const glossary: GlossaryTerm[] = (manifest.glossary ?? []) as GlossaryTerm[];
+
+export function getTerm(id: string): GlossaryTerm | undefined {
+  return glossary.find((t) => t.id === id);
+}
+
+/** The terms a module is the defining home for — shown on its overview page. */
+export function getTermsDefinedIn(moduleId: string): GlossaryTerm[] {
+  return glossary.filter((t) => t.definedIn === moduleId);
 }

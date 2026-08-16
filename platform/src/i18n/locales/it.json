@@ -1573,5 +1573,15 @@
     "beginner": "Base",
     "intermediate": "Intermedio",
     "advanced": "Avanzato"
+  },
+  "glossary": {
+    "title": "Glossario",
+    "intro": "Vocabolario comune ai tre percorsi. Ogni termine rimanda al modulo che lo insegna.",
+    "search": "Cerca un termine…",
+    "definedIn": "Spiegato in {{module}}",
+    "seeAlso": "Vedi anche",
+    "definesTerms": "Definisce",
+    "count_one": "{{count}} termine",
+    "count_other": "{{count}} termini"
   }
 }

@@ -552,7 +552,42 @@ learned hooks elsewhere is not ours to gatekeep. Verified in en/fr/it.
 you know" list is what answers "am I ready for this?" — a whole-track diagram
 is a different feature, and would want the capstone work in P3.2 to point at.
 ### [ ] P3.5 — Exercises for the JS (0 today) and RN (4 today) tracks
-### [ ] P3.6 — Glossary + cross-track links
+### [~] P3.6 — Glossary + cross-track links
+22 curated terms in `content/glossary.yml`, inline in en/fr/it exactly like a
+quiz, compiled into the manifest and reachable at `/glossary`.
+
+**The cross-track link is the point.** §6 put it as "the JS track defines
+closures; the React track uses them without linking back". Every term names the
+module that teaches it, so *Closure* reads "Taught in Scope & Closures" and
+points at the JavaScript chapter from a React reader's page. It runs both ways:
+the glossary names the module, and each module header lists the terms it is the
+defining home for, deep-linking to `/glossary#<id>`. Terms are colour-coded by
+the track that owns them.
+
+The compiler rejects a `definedIn` that is not a module id, a `seeAlso` that is
+not a term id, a term listing itself, and duplicate ids — each verified by
+breaking it:
+
+```
+glossary.yml: term "closure": definedIn "js-99-nope" is not a module id
+glossary.yml: term "closure": seeAlso "no-such-term" is not a term id
+glossary.yml: term "closure" lists itself under seeAlso
+```
+
+Sorted with `localeCompare` in the active language, so *Fermeture (closure)*
+files under **F** for a French reader rather than under C, and accented
+initials collate properly. Verified in all three locales.
+
+Two things worth keeping: the deep link needed an explicit `scrollIntoView`,
+because the browser only honours a fragment on a real document load and this
+route arrives through the router — the reader was landing at the top of 22
+cards; and the page needed a header link, since a page reachable only by typing
+its URL is §4.1's unreachable-content problem one level up.
+
+*Remaining:* the terms are not yet linked from within lesson prose. Auto-linking
+would have to run over the markdown without touching code spans or fences,
+which is a different and riskier piece of work than the vocabulary itself.
+Twenty-two terms is also a starting set, not a complete one.
 
 ---
 

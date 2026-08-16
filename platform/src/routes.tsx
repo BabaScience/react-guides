@@ -28,6 +28,9 @@ const ExerciseView = lazy(() =>
 const StyleGuide = lazy(() =>
   import('@/components/styleguide/StyleGuide').then((m) => ({ default: m.StyleGuide }))
 );
+const GlossaryView = lazy(() =>
+  import('@/components/glossary/GlossaryView').then((m) => ({ default: m.GlossaryView }))
+);
 
 /** Skeleton shown while a route chunk is in flight. */
 function RouteFallback() {
@@ -55,6 +58,7 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <ProgressDashboard /> },
       { path: 'styleguide', element: suspended(<StyleGuide />) },
+      { path: 'glossary', element: suspended(<GlossaryView />) },
       { path: 'module/:id', element: suspended(<ModuleView />) },
       { path: 'module/:id/step/:stepIndex', element: suspended(<StepView />) },
       // Legacy routes (still work for direct links)

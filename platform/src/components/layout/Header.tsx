@@ -78,6 +78,15 @@ export function Header() {
       </nav>
 
       <div className="flex items-center gap-1">
+        {/* The glossary has no other way in. A page reachable only by typing
+            its URL is the same unreachable-content problem as ANALYSIS §4.1,
+            just one level up. */}
+        <Link
+          to="/glossary"
+          className={`px-2.5 py-1.5 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors ${focusRing}`}
+        >
+          {t('glossary.title')}
+        </Link>
         <div className="relative" ref={menuRef}>
           <button
             type="button"

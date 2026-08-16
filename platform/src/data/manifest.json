@@ -5762,5 +5762,393 @@
       ],
       "exercises": []
     }
+  ],
+  "glossary": [
+    {
+      "id": "closure",
+      "term": {
+        "en": "Closure",
+        "fr": "Fermeture (closure)",
+        "it": "Closure"
+      },
+      "definition": {
+        "en": "A function together with the variables it captured from where it was defined — not where it is called. Every React hook depends on this: an event handler created during a render closes over that render's state, which is why a handler can read a value that is already out of date.",
+        "fr": "Une fonction accompagnée des variables capturées là où elle a été définie — et non là où elle est appelée. Chaque hook React en dépend : un gestionnaire créé pendant un rendu capture l'état de ce rendu, d'où le fait qu'il puisse lire une valeur déjà périmée.",
+        "it": "Una funzione insieme alle variabili catturate dove è stata definita — non dove viene chiamata. Ogni hook di React ne dipende: un gestore creato durante un render cattura lo stato di quel render, ed è per questo che può leggere un valore già obsoleto."
+      },
+      "definedIn": "js-09-scope-closures",
+      "seeAlso": [
+        "hook",
+        "higher-order-function"
+      ]
+    },
+    {
+      "id": "pure-function",
+      "term": {
+        "en": "Pure function",
+        "fr": "Fonction pure",
+        "it": "Funzione pura"
+      },
+      "definition": {
+        "en": "A function whose result depends only on its arguments and which changes nothing outside itself. Same input, same output, every time. React assumes your components are pure during render, and a reducer must be.",
+        "fr": "Une fonction dont le résultat ne dépend que de ses arguments et qui ne modifie rien à l'extérieur. Mêmes entrées, mêmes sorties, à chaque fois. React suppose vos composants purs pendant le rendu, et un reducer doit l'être.",
+        "it": "Una funzione il cui risultato dipende solo dai suoi argomenti e che non modifica nulla all'esterno. Stessi input, stessi output, ogni volta. React presuppone componenti puri durante il render, e un reducer deve esserlo."
+      },
+      "definedIn": "js-05-functions",
+      "seeAlso": [
+        "side-effect",
+        "reducer"
+      ]
+    },
+    {
+      "id": "higher-order-function",
+      "term": {
+        "en": "Higher-order function",
+        "fr": "Fonction d'ordre supérieur",
+        "it": "Funzione di ordine superiore"
+      },
+      "definition": {
+        "en": "A function that takes a function as an argument, returns one, or both. `map`, `filter` and `setTimeout` are all higher-order; so is the component wrapper pattern React calls a higher-order component.",
+        "fr": "Une fonction qui prend une fonction en argument, en renvoie une, ou les deux. `map`, `filter` et `setTimeout` en sont ; le motif d'enveloppe que React appelle composant d'ordre supérieur aussi.",
+        "it": "Una funzione che prende una funzione come argomento, ne restituisce una, o entrambe. `map`, `filter` e `setTimeout` lo sono; così come il pattern di wrapping che React chiama componente di ordine superiore."
+      },
+      "definedIn": "js-05-functions",
+      "seeAlso": [
+        "higher-order-component",
+        "closure"
+      ]
+    },
+    {
+      "id": "promise",
+      "term": {
+        "en": "Promise",
+        "fr": "Promesse",
+        "it": "Promise"
+      },
+      "definition": {
+        "en": "An object standing for a value that is not available yet, and will either resolve or reject. `await` is syntax over the same thing. Note that `fetch` rejects only on a network failure — an HTTP 404 resolves.",
+        "fr": "Un objet représentant une valeur pas encore disponible, qui finira par se résoudre ou être rejetée. `await` n'est qu'une syntaxe par-dessus. Attention : `fetch` ne rejette qu'en cas d'échec réseau — un 404 se résout.",
+        "it": "Un oggetto che rappresenta un valore non ancora disponibile, che si risolverà o verrà rifiutato. `await` è solo sintassi sulla stessa cosa. Attenzione: `fetch` rifiuta solo per errori di rete — un 404 si risolve."
+      },
+      "definedIn": "js-13-async",
+      "seeAlso": [
+        "event-loop",
+        "server-state"
+      ]
+    },
+    {
+      "id": "event-loop",
+      "term": {
+        "en": "Event loop",
+        "fr": "Boucle d'événements",
+        "it": "Event loop"
+      },
+      "definition": {
+        "en": "The mechanism that runs your JavaScript one task at a time and picks up callbacks when the stack empties. It is why a long synchronous loop freezes the page: nothing else — a timer, a click, a repaint — can run until it yields.",
+        "fr": "Le mécanisme qui exécute votre JavaScript une tâche à la fois et reprend les callbacks quand la pile se vide. C'est pourquoi une longue boucle synchrone fige la page : rien d'autre — minuteur, clic, rendu — ne peut s'exécuter avant qu'elle ne rende la main.",
+        "it": "Il meccanismo che esegue il tuo JavaScript un task alla volta e riprende i callback quando lo stack si svuota. È il motivo per cui un lungo ciclo sincrono blocca la pagina: nient'altro — timer, clic, ridisegno — può girare finché non cede il controllo."
+      },
+      "definedIn": "js-15-event-loop",
+      "seeAlso": [
+        "promise",
+        "side-effect"
+      ]
+    },
+    {
+      "id": "destructuring",
+      "term": {
+        "en": "Destructuring",
+        "fr": "Déstructuration",
+        "it": "Destrutturazione"
+      },
+      "definition": {
+        "en": "Pulling values out of an object or array into named variables in one step. `const { name = 'Guest' } = props` is how nearly every React component reads its props, default included.",
+        "fr": "Extraire des valeurs d'un objet ou d'un tableau vers des variables nommées en une seule étape. `const { name = 'Guest' } = props` est la façon dont presque tout composant React lit ses props, valeur par défaut comprise.",
+        "it": "Estrarre valori da un oggetto o da un array in variabili nominate in un solo passaggio. `const { name = 'Guest' } = props` è il modo in cui quasi ogni componente React legge le sue props, default incluso."
+      },
+      "definedIn": "js-02-language-basics",
+      "seeAlso": [
+        "props"
+      ]
+    },
+    {
+      "id": "es-module",
+      "term": {
+        "en": "ES module",
+        "fr": "Module ES",
+        "it": "Modulo ES"
+      },
+      "definition": {
+        "en": "The `import` / `export` system built into the language. Modules are evaluated once and their imports are hoisted, so a statement at the top of a file runs *after* everything it imports has initialised.",
+        "fr": "Le système `import` / `export` intégré au langage. Un module n'est évalué qu'une fois et ses imports sont remontés : une instruction en haut d'un fichier s'exécute donc *après* l'initialisation de tout ce qu'il importe.",
+        "it": "Il sistema `import` / `export` integrato nel linguaggio. Un modulo è valutato una sola volta e i suoi import sono sollevati: un'istruzione in cima a un file gira quindi *dopo* che tutto ciò che importa si è inizializzato."
+      },
+      "definedIn": "js-12-modules"
+    },
+    {
+      "id": "jsx",
+      "term": {
+        "en": "JSX",
+        "fr": "JSX",
+        "it": "JSX"
+      },
+      "definition": {
+        "en": "Syntax that compiles to `React.createElement()` calls. `<h1>Hi</h1>` becomes a plain object describing what to render — it is not HTML, and it is not a DOM node.",
+        "fr": "Une syntaxe compilée en appels à `React.createElement()`. `<h1>Hi</h1>` devient un simple objet décrivant ce qu'il faut afficher — ce n'est ni du HTML, ni un nœud DOM.",
+        "it": "Sintassi che compila in chiamate a `React.createElement()`. `<h1>Hi</h1>` diventa un semplice oggetto che descrive cosa rendere — non è HTML e non è un nodo DOM."
+      },
+      "definedIn": "01-fundamentals",
+      "seeAlso": [
+        "component"
+      ]
+    },
+    {
+      "id": "component",
+      "term": {
+        "en": "Component",
+        "fr": "Composant",
+        "it": "Componente"
+      },
+      "definition": {
+        "en": "A function that takes props and returns what should appear on screen. Everything else in React — state, effects, context — exists to let that function stay a function while still remembering things.",
+        "fr": "Une fonction qui reçoit des props et renvoie ce qui doit s'afficher. Tout le reste de React — état, effets, context — existe pour que cette fonction reste une fonction tout en gardant de la mémoire.",
+        "it": "Una funzione che riceve props e restituisce ciò che deve comparire a schermo. Tutto il resto di React — stato, effetti, context — esiste perché quella funzione resti una funzione pur ricordando qualcosa."
+      },
+      "definedIn": "01-fundamentals",
+      "seeAlso": [
+        "props",
+        "state",
+        "jsx"
+      ]
+    },
+    {
+      "id": "props",
+      "term": {
+        "en": "Props",
+        "fr": "Props",
+        "it": "Props"
+      },
+      "definition": {
+        "en": "The values a parent passes to a child. They flow one way and are read-only: mutating a prop changes nothing on screen, because React has no idea it happened.",
+        "fr": "Les valeurs qu'un parent transmet à un enfant. Elles circulent dans un seul sens et sont en lecture seule : muter une prop ne change rien à l'écran, car React n'en sait rien.",
+        "it": "I valori che un genitore passa a un figlio. Scorrono in una sola direzione e sono di sola lettura: mutare una prop non cambia nulla a schermo, perché React non se ne accorge."
+      },
+      "definedIn": "01-fundamentals",
+      "seeAlso": [
+        "state",
+        "destructuring"
+      ]
+    },
+    {
+      "id": "state",
+      "term": {
+        "en": "State",
+        "fr": "État",
+        "it": "Stato"
+      },
+      "definition": {
+        "en": "Data a component owns and can change, where a change triggers a re-render. Updates are not applied immediately — three `setCount(count + 1)` calls in one handler all read the same `count` and land on the same value.",
+        "fr": "Des données qu'un composant possède et peut modifier, une modification déclenchant un nouveau rendu. Les mises à jour ne sont pas immédiates : trois `setCount(count + 1)` dans un même gestionnaire lisent tous le même `count` et aboutissent à la même valeur.",
+        "it": "Dati che un componente possiede e può cambiare, dove un cambiamento provoca un nuovo render. Gli aggiornamenti non sono immediati: tre `setCount(count + 1)` nello stesso gestore leggono tutti lo stesso `count` e arrivano allo stesso valore."
+      },
+      "definedIn": "01-fundamentals",
+      "seeAlso": [
+        "props",
+        "reducer",
+        "hook"
+      ]
+    },
+    {
+      "id": "key",
+      "term": {
+        "en": "Key",
+        "fr": "Clé",
+        "it": "Chiave"
+      },
+      "definition": {
+        "en": "The identity React uses to match a list item to the same element across renders. Keys are about identity, not speed: with array indexes, inserting at the top makes state follow the position instead of the item.",
+        "fr": "L'identité utilisée par React pour associer un élément de liste au même nœud d'un rendu à l'autre. Les clés relèvent de l'identité, pas de la vitesse : avec des index, une insertion en tête fait suivre l'état à la position plutôt qu'à l'élément.",
+        "it": "L'identità che React usa per abbinare un elemento di lista allo stesso nodo tra un render e l'altro. Le chiavi riguardano l'identità, non la velocità: con gli indici, un inserimento in cima fa seguire lo stato alla posizione invece che all'elemento."
+      },
+      "definedIn": "01-fundamentals"
+    },
+    {
+      "id": "controlled-component",
+      "term": {
+        "en": "Controlled component",
+        "fr": "Composant contrôlé",
+        "it": "Componente controllato"
+      },
+      "definition": {
+        "en": "A form input whose `value` comes from state and whose every keystroke goes back through `onChange`. React owns the value; supplying `value` without `onChange` makes the field read-only.",
+        "fr": "Un champ de formulaire dont la `value` vient de l'état et dont chaque frappe repasse par `onChange`. React possède la valeur ; fournir `value` sans `onChange` rend le champ en lecture seule.",
+        "it": "Un input il cui `value` viene dallo stato e le cui battute passano tutte da `onChange`. React possiede il valore; fornire `value` senza `onChange` rende il campo di sola lettura."
+      },
+      "definedIn": "01-fundamentals",
+      "seeAlso": [
+        "state"
+      ]
+    },
+    {
+      "id": "hook",
+      "term": {
+        "en": "Hook",
+        "fr": "Hook",
+        "it": "Hook"
+      },
+      "definition": {
+        "en": "A function that lets a component reach into React's render cycle — remember a value, run an effect, read context. React identifies each one by call order, which is why a hook may never sit inside an `if` or a loop.",
+        "fr": "Une fonction permettant à un composant de se brancher sur le cycle de rendu de React — mémoriser une valeur, lancer un effet, lire un context. React les identifie par ordre d'appel, d'où l'interdiction d'un hook dans un `if` ou une boucle.",
+        "it": "Una funzione che permette a un componente di agganciarsi al ciclo di render di React — ricordare un valore, eseguire un effetto, leggere un context. React li identifica per ordine di chiamata: ecco perché un hook non può stare dentro un `if` o un ciclo."
+      },
+      "definedIn": "02-hooks",
+      "seeAlso": [
+        "closure",
+        "side-effect",
+        "ref"
+      ]
+    },
+    {
+      "id": "side-effect",
+      "term": {
+        "en": "Side effect",
+        "fr": "Effet de bord",
+        "it": "Side effect"
+      },
+      "definition": {
+        "en": "Anything that escapes the component: a request, storage, a timer, a subscription, touching the DOM. Code that only derives a value from props and state is not one — compute it in the body, not in an effect.",
+        "fr": "Tout ce qui sort du composant : une requête, le stockage, un minuteur, un abonnement, une manipulation du DOM. Du code qui se contente de dériver une valeur des props et de l'état n'en est pas un — calculez-le dans le corps, pas dans un effet.",
+        "it": "Tutto ciò che esce dal componente: una richiesta, lo storage, un timer, una sottoscrizione, toccare il DOM. Il codice che si limita a derivare un valore da props e stato non lo è — calcolalo nel corpo, non in un effetto."
+      },
+      "definedIn": "02-hooks",
+      "seeAlso": [
+        "pure-function",
+        "event-loop"
+      ]
+    },
+    {
+      "id": "ref",
+      "term": {
+        "en": "Ref",
+        "fr": "Ref",
+        "it": "Ref"
+      },
+      "definition": {
+        "en": "A `{ current }` box React keeps between renders. Writing to it is an ordinary property assignment — no re-render, ever. If a value should appear on screen it belongs in state, not a ref.",
+        "fr": "Une boîte `{ current }` que React conserve d'un rendu à l'autre. Y écrire est une affectation de propriété ordinaire — jamais de nouveau rendu. Si une valeur doit s'afficher, sa place est dans l'état.",
+        "it": "Una scatola `{ current }` che React conserva tra un render e l'altro. Scriverci è una normale assegnazione di proprietà — mai un nuovo render. Se un valore deve comparire a schermo, va nello stato, non in una ref."
+      },
+      "definedIn": "02-hooks",
+      "seeAlso": [
+        "state"
+      ]
+    },
+    {
+      "id": "context",
+      "term": {
+        "en": "Context",
+        "fr": "Context",
+        "it": "Context"
+      },
+      "definition": {
+        "en": "A way to hand a value to a whole subtree without threading it through every layer. It has no selectors: `useContext` subscribes to the entire value, so any change re-renders every consumer.",
+        "fr": "Un moyen de fournir une valeur à tout un sous-arbre sans la faire transiter par chaque niveau. Il n'a pas de sélecteurs : `useContext` s'abonne à la valeur entière, donc tout changement rend à nouveau chaque consommateur.",
+        "it": "Un modo per fornire un valore a un intero sottoalbero senza passarlo per ogni livello. Non ha selettori: `useContext` si iscrive all'intero valore, quindi ogni cambiamento rirenderizza tutti i consumatori."
+      },
+      "definedIn": "02-hooks",
+      "seeAlso": [
+        "props",
+        "state"
+      ]
+    },
+    {
+      "id": "reducer",
+      "term": {
+        "en": "Reducer",
+        "fr": "Reducer",
+        "it": "Reducer"
+      },
+      "definition": {
+        "en": "A pure function taking the current state and an action describing what happened, and returning the next state. It puts the rules about how fields change together in one place instead of across every handler.",
+        "fr": "Une fonction pure prenant l'état courant et une action décrivant ce qui s'est passé, et renvoyant l'état suivant. Elle rassemble en un seul endroit les règles d'évolution conjointe des champs.",
+        "it": "Una funzione pura che prende lo stato corrente e un'azione che descrive cosa è successo, e restituisce lo stato successivo. Raccoglie in un solo posto le regole su come i campi cambiano insieme."
+      },
+      "definedIn": "02-hooks",
+      "seeAlso": [
+        "pure-function",
+        "state"
+      ]
+    },
+    {
+      "id": "higher-order-component",
+      "term": {
+        "en": "Higher-order component (HOC)",
+        "fr": "Composant d'ordre supérieur (HOC)",
+        "it": "Componente di ordine superiore (HOC)"
+      },
+      "definition": {
+        "en": "A function that takes a component and returns a wrapped one with extra behaviour. Largely superseded by custom hooks, which share logic without adding a layer to the tree.",
+        "fr": "Une fonction qui prend un composant et en renvoie un enveloppé, doté d'un comportement supplémentaire. Largement supplanté par les hooks personnalisés, qui partagent la logique sans ajouter de niveau à l'arbre.",
+        "it": "Una funzione che prende un componente e ne restituisce uno avvolto, con comportamento aggiuntivo. Ampiamente superato dagli hook personalizzati, che condividono logica senza aggiungere un livello all'albero."
+      },
+      "definedIn": "03-component-patterns",
+      "seeAlso": [
+        "higher-order-function",
+        "render-prop"
+      ]
+    },
+    {
+      "id": "render-prop",
+      "term": {
+        "en": "Render prop",
+        "fr": "Render prop",
+        "it": "Render prop"
+      },
+      "definition": {
+        "en": "A prop whose value is a function returning what to render, so the component supplies the data and the caller decides the markup. Custom hooks now cover most of what it was used for.",
+        "fr": "Une prop dont la valeur est une fonction renvoyant ce qu'il faut afficher : le composant fournit les données, l'appelant décide du balisage. Les hooks personnalisés couvrent aujourd'hui l'essentiel de ses usages.",
+        "it": "Una prop il cui valore è una funzione che restituisce cosa rendere: il componente fornisce i dati e chi lo usa decide il markup. Gli hook personalizzati coprono ormai gran parte dei suoi usi."
+      },
+      "definedIn": "03-component-patterns",
+      "seeAlso": [
+        "higher-order-component"
+      ]
+    },
+    {
+      "id": "server-state",
+      "term": {
+        "en": "Server state",
+        "fr": "État serveur",
+        "it": "Stato del server"
+      },
+      "definition": {
+        "en": "Data owned by the server and cached in the client. Unlike local state it goes stale, needs refetching, deduplication and invalidation — which is why it belongs in a data-fetching library rather than a reducer full of `isLoading` flags.",
+        "fr": "Des données appartenant au serveur et mises en cache côté client. Contrairement à l'état local, elles se périment et exigent revalidation, déduplication et invalidation — d'où une bibliothèque de récupération de données plutôt qu'un reducer rempli de drapeaux `isLoading`.",
+        "it": "Dati posseduti dal server e messi in cache nel client. A differenza dello stato locale scadono e richiedono rifetch, deduplicazione e invalidazione — per questo stanno in una libreria di data fetching e non in un reducer pieno di flag `isLoading`."
+      },
+      "definedIn": "07-data-fetching",
+      "seeAlso": [
+        "promise",
+        "state"
+      ]
+    },
+    {
+      "id": "memoization",
+      "term": {
+        "en": "Memoization",
+        "fr": "Mémoïsation",
+        "it": "Memoizzazione"
+      },
+      "definition": {
+        "en": "Caching a result so it is not recomputed while its inputs are unchanged. `React.memo` compares props shallowly, so an inline object or arrow function defeats it — a new reference every render looks like a change.",
+        "fr": "Mettre en cache un résultat pour ne pas le recalculer tant que ses entrées sont inchangées. `React.memo` compare les props en surface : un objet ou une fonction fléchée en ligne la met en échec, une nouvelle référence à chaque rendu ressemblant à un changement.",
+        "it": "Mettere in cache un risultato per non ricalcolarlo finché i suoi input non cambiano. `React.memo` confronta le props in modo superficiale: un oggetto o una funzione freccia inline lo vanificano, perché una nuova referenza a ogni render sembra un cambiamento."
+      },
+      "definedIn": "09-performance",
+      "seeAlso": [
+        "pure-function",
+        "closure"
+      ]
+    }
   ]
 }

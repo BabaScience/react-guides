@@ -67,6 +67,29 @@ import type { RunnerId } from '@/sandbox/runner-types';
 
 export type Track = 'react' | 'react-native' | 'javascript';
 
+/**
+ * Text carried per locale. `en` is guaranteed by the manifest compiler; the
+ * index signature is what lets a caller look a locale up by variable — the
+ * active language is a string, not a literal union.
+ */
+export interface Localized {
+  en: string;
+  [locale: string]: string | undefined;
+}
+
+/**
+ * A shared vocabulary entry. `definedIn` is the module that teaches the term —
+ * the cross-track link, so a reader meeting "closure" in the React hooks
+ * chapter can reach the JavaScript chapter that explains it.
+ */
+export interface GlossaryTerm {
+  id: string;
+  term: Localized;
+  definition: Localized;
+  definedIn: string;
+  seeAlso?: string[];
+}
+
 export interface Module {
   id: string;
   number: number;
