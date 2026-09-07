@@ -22,9 +22,10 @@ import type { TestRunResult } from '@/types/exercise';
  *
  * Specs that drive `user-event` cannot use that frame, because an opaque
  * origin is refused focus and `user-event` works entirely through focus. Those
- * run in the page instead, via `test-runner.ts`. It is the weaker arrangement
+ * run in the page instead, via `test-runner.ts`, as do exercises that use
+ * browser storage. It is the weaker arrangement
  * — learner code can reach `document` and `localStorage` there — and it is
- * confined to the specs that genuinely need it. See `needsFocus`.
+ * confined to the exercises that genuinely need it. See `needsPageContext`.
  */
 
 /**
@@ -34,7 +35,7 @@ import type { TestRunResult } from '@/types/exercise';
 const LOOP_STALL_BUDGET_MS = 2_000;
 
 /**
- * Does *this exercise's* block drive the keyboard or pointer via `user-event`?
+ * Does *this exercise's* block need something the isolated frame cannot give?
  *
  * It matters because of where the code can run. The isolated frame is on an
  * opaque origin, and **an opaque-origin frame is not allowed to take focus**:
@@ -55,18 +56,27 @@ const LOOP_STALL_BUDGET_MS = 2_000;
  * block happens to need it. Testing the whole file sends every exercise in the
  * module down the weaker path — module 01 has eight, and only two type.
  */
-function needsFocus(spec: string, exerciseNumber: number): boolean {
+/**
+ * What forces an exercise out of the isolated frame: anything driven through
+ * `user-event` (which works entirely through focus, and an opaque origin is
+ * refused focus), or any use of browser storage (an opaque origin has no
+ * storage area — reading it throws "the document is sandboxed").
+ */
+const NEEDS_PAGE = /\buser(?:Event)?\s*\.|\b(?:local|session)Storage\b/;
+
+function needsPageContext(spec: string, exerciseNumber: number): boolean {
   const start = spec.search(
     new RegExp(`describe\\s*\\(\\s*['"\`]\\s*Exercise\\s+${exerciseNumber}\\b`, 'i')
   );
-  if (start === -1) return /\buser(?:Event)?\s*\./.test(spec); // can't isolate it: be safe
+  // Can't isolate the block: assume it needs the page rather than fail oddly.
+  if (start === -1) return NEEDS_PAGE.test(spec);
 
   const rest = spec.slice(start + 1);
   const next = rest.search(/describe\s*\(\s*['"`]\s*Exercise\s+\d+\b/i);
   const block = next === -1 ? rest : rest.slice(0, next);
 
-  // `userEvent.setup()`, `user.type(`, `user.click(`, `user.clear(` …
-  return /\buser(?:Event)?\s*\./.test(block);
+  // `userEvent.setup()`, `user.type(`, … or any use of browser storage.
+  return NEEDS_PAGE.test(block);
 }
 
 /** Strip the learner's import lines; the reassembled file supplies its own. */
@@ -107,9 +117,9 @@ export const reactBrowserRunner: ExerciseRunner = {
   }: ExerciseRunRequest): Promise<TestRunResult> {
     const assembled = reassembleFullCode(moduleSource, exerciseNumber, stripImports(userCode));
 
-    // Which execution context grades this spec. See `needsFocus` for why the
-    // isolated frame cannot run everything.
-    const inPage = needsFocus(spec, exerciseNumber);
+    // Which execution context grades this exercise. See `needsPageContext`
+    // for why the isolated frame cannot run everything.
+    const inPage = needsPageContext(spec, exerciseNumber);
 
     // The guard turns a runaway loop into a failed test instead of a frozen
     // tab. Its budget measures *time without the thread yielding*, not total

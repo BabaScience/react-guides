@@ -46,7 +46,7 @@ export function LessonView() {
 
       {content && (
         <>
-          <MarkdownRenderer content={content} />
+          <MarkdownRenderer content={content} glossaryForModule={mod.id} />
           <div className="max-w-4xl mx-auto mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 flex justify-between">
             <Link
               to={`/module/${mod.id}`}

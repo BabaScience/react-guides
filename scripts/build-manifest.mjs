@@ -176,6 +176,7 @@ function compileGlossary(errors) {
       term: entry.term,
       definition: entry.definition,
       definedIn: entry.definedIn,
+      ...(entry.autolink ? { autolink: true } : {}),
       ...(seeAlso.length ? { seeAlso } : {}),
     });
   }

@@ -421,6 +421,7 @@
       ],
       "guideFile": "arguments/chapters/02-react-hooks.md",
       "exerciseDir": "src/02-hooks",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -822,6 +823,7 @@
       ],
       "guideFile": "arguments/chapters/03-component-patterns-best-practices.md",
       "exerciseDir": "src/03-component-patterns",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -1214,6 +1216,7 @@
       ],
       "guideFile": "arguments/chapters/04-react-styling.md",
       "exerciseDir": "src/04-styling",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -1606,6 +1609,7 @@
       ],
       "guideFile": "arguments/chapters/05-routing.md",
       "exerciseDir": "src/05-routing",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -1999,6 +2003,7 @@
       ],
       "guideFile": "arguments/chapters/06-state-management.md",
       "exerciseDir": "src/06-state-management",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -2391,6 +2396,7 @@
       ],
       "guideFile": "arguments/chapters/07-data-fetching.md",
       "exerciseDir": "src/07-data-fetching",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -2783,6 +2789,7 @@
       ],
       "guideFile": "arguments/chapters/08-forms-and-validations.md",
       "exerciseDir": "src/08-forms",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -3176,6 +3183,7 @@
       ],
       "guideFile": "arguments/chapters/09-performance-optimization.md",
       "exerciseDir": "src/09-performance",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -3568,6 +3576,7 @@
       ],
       "guideFile": "arguments/chapters/10-testing.md",
       "exerciseDir": "src/10-testing",
+      "hasSolutions": true,
       "quiz": {
         "questions": [
           {
@@ -5777,6 +5786,7 @@
         "it": "Una funzione insieme alle variabili catturate dove è stata definita — non dove viene chiamata. Ogni hook di React ne dipende: un gestore creato durante un render cattura lo stato di quel render, ed è per questo che può leggere un valore già obsoleto."
       },
       "definedIn": "js-09-scope-closures",
+      "autolink": true,
       "seeAlso": [
         "hook",
         "higher-order-function"
@@ -5795,6 +5805,7 @@
         "it": "Una funzione il cui risultato dipende solo dai suoi argomenti e che non modifica nulla all'esterno. Stessi input, stessi output, ogni volta. React presuppone componenti puri durante il render, e un reducer deve esserlo."
       },
       "definedIn": "js-05-functions",
+      "autolink": true,
       "seeAlso": [
         "side-effect",
         "reducer"
@@ -5813,6 +5824,7 @@
         "it": "Una funzione che prende una funzione come argomento, ne restituisce una, o entrambe. `map`, `filter` e `setTimeout` lo sono; così come il pattern di wrapping che React chiama componente di ordine superiore."
       },
       "definedIn": "js-05-functions",
+      "autolink": true,
       "seeAlso": [
         "higher-order-component",
         "closure"
@@ -5831,6 +5843,7 @@
         "it": "Un oggetto che rappresenta un valore non ancora disponibile, che si risolverà o verrà rifiutato. `await` è solo sintassi sulla stessa cosa. Attenzione: `fetch` rifiuta solo per errori di rete — un 404 si risolve."
       },
       "definedIn": "js-13-async",
+      "autolink": true,
       "seeAlso": [
         "event-loop",
         "server-state"
@@ -5849,6 +5862,7 @@
         "it": "Il meccanismo che esegue il tuo JavaScript un task alla volta e riprende i callback quando lo stack si svuota. È il motivo per cui un lungo ciclo sincrono blocca la pagina: nient'altro — timer, clic, ridisegno — può girare finché non cede il controllo."
       },
       "definedIn": "js-15-event-loop",
+      "autolink": true,
       "seeAlso": [
         "promise",
         "side-effect"
@@ -5867,6 +5881,7 @@
         "it": "Estrarre valori da un oggetto o da un array in variabili nominate in un solo passaggio. `const { name = 'Guest' } = props` è il modo in cui quasi ogni componente React legge le sue props, default incluso."
       },
       "definedIn": "js-02-language-basics",
+      "autolink": true,
       "seeAlso": [
         "props"
       ]
@@ -5883,7 +5898,8 @@
         "fr": "Le système `import` / `export` intégré au langage. Un module n'est évalué qu'une fois et ses imports sont remontés : une instruction en haut d'un fichier s'exécute donc *après* l'initialisation de tout ce qu'il importe.",
         "it": "Il sistema `import` / `export` integrato nel linguaggio. Un modulo è valutato una sola volta e i suoi import sono sollevati: un'istruzione in cima a un file gira quindi *dopo* che tutto ciò che importa si è inizializzato."
       },
-      "definedIn": "js-12-modules"
+      "definedIn": "js-12-modules",
+      "autolink": true
     },
     {
       "id": "jsx",
@@ -5898,6 +5914,7 @@
         "it": "Sintassi che compila in chiamate a `React.createElement()`. `<h1>Hi</h1>` diventa un semplice oggetto che descrive cosa rendere — non è HTML e non è un nodo DOM."
       },
       "definedIn": "01-fundamentals",
+      "autolink": true,
       "seeAlso": [
         "component"
       ]
@@ -5985,6 +6002,7 @@
         "it": "Un input il cui `value` viene dallo stato e le cui battute passano tutte da `onChange`. React possiede il valore; fornire `value` senza `onChange` rende il campo di sola lettura."
       },
       "definedIn": "01-fundamentals",
+      "autolink": true,
       "seeAlso": [
         "state"
       ]
@@ -6002,6 +6020,7 @@
         "it": "Una funzione che permette a un componente di agganciarsi al ciclo di render di React — ricordare un valore, eseguire un effetto, leggere un context. React li identifica per ordine di chiamata: ecco perché un hook non può stare dentro un `if` o un ciclo."
       },
       "definedIn": "02-hooks",
+      "autolink": true,
       "seeAlso": [
         "closure",
         "side-effect",
@@ -6021,6 +6040,7 @@
         "it": "Tutto ciò che esce dal componente: una richiesta, lo storage, un timer, una sottoscrizione, toccare il DOM. Il codice che si limita a derivare un valore da props e stato non lo è — calcolalo nel corpo, non in un effetto."
       },
       "definedIn": "02-hooks",
+      "autolink": true,
       "seeAlso": [
         "pure-function",
         "event-loop"
@@ -6074,6 +6094,7 @@
         "it": "Una funzione pura che prende lo stato corrente e un'azione che descrive cosa è successo, e restituisce lo stato successivo. Raccoglie in un solo posto le regole su come i campi cambiano insieme."
       },
       "definedIn": "02-hooks",
+      "autolink": true,
       "seeAlso": [
         "pure-function",
         "state"
@@ -6092,6 +6113,7 @@
         "it": "Una funzione che prende un componente e ne restituisce uno avvolto, con comportamento aggiuntivo. Ampiamente superato dagli hook personalizzati, che condividono logica senza aggiungere un livello all'albero."
       },
       "definedIn": "03-component-patterns",
+      "autolink": true,
       "seeAlso": [
         "higher-order-function",
         "render-prop"
@@ -6110,6 +6132,7 @@
         "it": "Una prop il cui valore è una funzione che restituisce cosa rendere: il componente fornisce i dati e chi lo usa decide il markup. Gli hook personalizzati coprono ormai gran parte dei suoi usi."
       },
       "definedIn": "03-component-patterns",
+      "autolink": true,
       "seeAlso": [
         "higher-order-component"
       ]
@@ -6127,6 +6150,7 @@
         "it": "Dati posseduti dal server e messi in cache nel client. A differenza dello stato locale scadono e richiedono rifetch, deduplicazione e invalidazione — per questo stanno in una libreria di data fetching e non in un reducer pieno di flag `isLoading`."
       },
       "definedIn": "07-data-fetching",
+      "autolink": true,
       "seeAlso": [
         "promise",
         "state"
@@ -6145,6 +6169,7 @@
         "it": "Mettere in cache un risultato per non ricalcolarlo finché i suoi input non cambiano. `React.memo` confronta le props in modo superficiale: un oggetto o una funzione freccia inline lo vanificano, perché una nuova referenza a ogni render sembra un cambiamento."
       },
       "definedIn": "09-performance",
+      "autolink": true,
       "seeAlso": [
         "pure-function",
         "closure"

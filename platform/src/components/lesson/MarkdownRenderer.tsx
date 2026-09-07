@@ -1,12 +1,24 @@
+import { useMemo } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import type { Components } from 'react-markdown';
+import { glossary } from '@/data/modules';
+import { remarkGlossary } from '@/lib/remark-glossary';
 import { MermaidDiagram } from './MermaidDiagram';
 import { ShikiCode } from './ShikiCode';
 
 interface MarkdownRendererProps {
   content: string;
+  /**
+   * Turn on glossary auto-linking for a lesson, passing the module being read
+   * so its own terms are not linked back to itself. Left off everywhere else:
+   * a quiz explanation or a reference solution is short enough that a link
+   * mid-sentence is a distraction rather than a way out.
+   */
+  glossaryForModule?: string;
 }
 
 const components: Components = {
@@ -90,6 +102,27 @@ const components: Components = {
     );
   },
   a({ href, children }) {
+    // A glossary link is in-app and must not open a tab. It is also styled
+    // more quietly than an author's link: it arrives mid-sentence, uninvited,
+    // and should read as a footnote rather than a call to action.
+    if (href?.startsWith('/glossary#')) {
+      return (
+        <RouterLink
+          to={href}
+          data-glossary=""
+          className="text-gray-700 dark:text-gray-300 underline decoration-dotted decoration-gray-400 dark:decoration-gray-600 underline-offset-2 hover:decoration-solid hover:text-primary-600 dark:hover:text-primary-400"
+        >
+          {children}
+        </RouterLink>
+      );
+    }
+    if (href?.startsWith('/')) {
+      return (
+        <RouterLink to={href} className="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 underline">
+          {children}
+        </RouterLink>
+      );
+    }
     return (
       <a href={href} className="text-primary-600 dark:text-primary-400 hover:text-primary-500 dark:hover:text-primary-300 underline" target="_blank" rel="noopener noreferrer">
         {children}
@@ -133,11 +166,21 @@ export function InlineMarkdown({ content }: MarkdownRendererProps) {
   );
 }
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content, glossaryForModule }: MarkdownRendererProps) {
+  const { i18n } = useTranslation();
+
+  const plugins = useMemo(
+    () =>
+      glossaryForModule
+        ? [remarkGfm, remarkGlossary(glossary, i18n.language, glossaryForModule)]
+        : [remarkGfm],
+    [glossaryForModule, i18n.language]
+  );
+
   return (
     <div className="max-w-4xl mx-auto">
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={plugins}
         rehypePlugins={[rehypeRaw]}
         components={components}
       >

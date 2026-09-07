@@ -14,12 +14,21 @@
 #   definition one or two sentences; teach the distinction, don't restate the name
 #   definedIn  the module id that teaches it. Compiler-checked.
 #   seeAlso    other term ids. Compiler-checked, and must not be the term itself.
+#   autolink   opt in to being linked automatically inside lesson prose
+#
+# `autolink` is opt-in, not opt-out, and that is deliberate. "Closure",
+# "memoization" and "event loop" mean one thing wherever they appear. "State",
+# "key", "props", "component", "ref" and "context" are ordinary English words —
+# auto-linking "in this context" or "the state of the art" would be noise, and
+# noise in the middle of a sentence is worse than no link at all. Those six
+# terms still live in the glossary and are still reachable from their module.
 #
 # A value that *starts* with a backtick needs a block scalar (`>-`).
 
 terms:
   # ---------------------------------------------------------------- JavaScript
   - id: closure
+    autolink: true
     definedIn: js-09-scope-closures
     seeAlso: [hook, higher-order-function]
     term:
@@ -44,6 +53,7 @@ terms:
         questo che può leggere un valore già obsoleto.
 
   - id: pure-function
+    autolink: true
     definedIn: js-05-functions
     seeAlso: [side-effect, reducer]
     term:
@@ -67,6 +77,7 @@ terms:
         esserlo.
 
   - id: higher-order-function
+    autolink: true
     definedIn: js-05-functions
     seeAlso: [higher-order-component, closure]
     term:
@@ -88,6 +99,7 @@ terms:
         di wrapping che React chiama componente di ordine superiore.
 
   - id: promise
+    autolink: true
     definedIn: js-13-async
     seeAlso: [event-loop, server-state]
     term:
@@ -110,6 +122,7 @@ terms:
         Attenzione: `fetch` rifiuta solo per errori di rete — un 404 si risolve.
 
   - id: event-loop
+    autolink: true
     definedIn: js-15-event-loop
     seeAlso: [promise, side-effect]
     term:
@@ -134,6 +147,7 @@ terms:
         girare finché non cede il controllo.
 
   - id: destructuring
+    autolink: true
     definedIn: js-02-language-basics
     seeAlso: [props]
     term:
@@ -156,6 +170,7 @@ terms:
         quasi ogni componente React legge le sue props, default incluso.
 
   - id: es-module
+    autolink: true
     definedIn: js-12-modules
     term:
       en: ES module
@@ -179,6 +194,7 @@ terms:
 
   # --------------------------------------------------------------------- React
   - id: jsx
+    autolink: true
     definedIn: 01-fundamentals
     seeAlso: [component]
     term:
@@ -288,6 +304,7 @@ terms:
         alla posizione invece che all'elemento.
 
   - id: controlled-component
+    autolink: true
     definedIn: 01-fundamentals
     seeAlso: [state]
     term:
@@ -309,6 +326,7 @@ terms:
         `onChange` rende il campo di sola lettura.
 
   - id: hook
+    autolink: true
     definedIn: 02-hooks
     seeAlso: [closure, side-effect, ref]
     term:
@@ -332,6 +350,7 @@ terms:
         non può stare dentro un `if` o un ciclo.
 
   - id: side-effect
+    autolink: true
     definedIn: 02-hooks
     seeAlso: [pure-function, event-loop]
     term:
@@ -398,6 +417,7 @@ terms:
         valore, quindi ogni cambiamento rirenderizza tutti i consumatori.
 
   - id: reducer
+    autolink: true
     definedIn: 02-hooks
     seeAlso: [pure-function, state]
     term:
@@ -419,6 +439,7 @@ terms:
         posto le regole su come i campi cambiano insieme.
 
   - id: higher-order-component
+    autolink: true
     definedIn: 03-component-patterns
     seeAlso: [higher-order-function, render-prop]
     term:
@@ -440,6 +461,7 @@ terms:
         che condividono logica senza aggiungere un livello all'albero.
 
   - id: render-prop
+    autolink: true
     definedIn: 03-component-patterns
     seeAlso: [higher-order-component]
     term:
@@ -462,6 +484,7 @@ terms:
         personalizzati coprono ormai gran parte dei suoi usi.
 
   - id: server-state
+    autolink: true
     definedIn: 07-data-fetching
     seeAlso: [promise, state]
     term:
@@ -486,6 +509,7 @@ terms:
         in un reducer pieno di flag `isLoading`.
 
   - id: memoization
+    autolink: true
     definedIn: 09-performance
     seeAlso: [pure-function, closure]
     term:

@@ -87,6 +87,12 @@ export interface GlossaryTerm {
   term: Localized;
   definition: Localized;
   definedIn: string;
+  /**
+   * Whether this term may be linked automatically inside lesson prose. Opt-in:
+   * "closure" is unambiguous, "state" and "key" are ordinary English words and
+   * linking them mid-sentence would be noise.
+   */
+  autolink?: boolean;
   seeAlso?: string[];
 }
 

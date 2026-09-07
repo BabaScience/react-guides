@@ -6,15 +6,21 @@ the safety net comes first so nothing regresses while the rest is fixed.
 Status legend: `[ ]` todo · `[~]` in progress · `[x]` done
 
 **Phases 0, 1 and 2 are complete**, P2.2 included — grading now runs in an
-isolated frame. Phase 3 (pedagogy) is started: P3.1 covers the whole React
-track, and nothing else in Phase 3 has been attempted. Phase 4 (new tracks) has
-not begun.
+isolated frame. Phase 3 is largely done for the React track: **P3.3 and P3.4
+are complete**, P3.1 and P3.6 cover React and are marked `[~]` only because the
+other two tracks are untouched. **P3.2 and P3.5 have not been started**, and
+both are large. Phase 4 (new tracks) has not begun.
 
 Gate, re-run against the current tree: `npm run manifest` → *57 modules, 394
-steps, 67 exercises* · `npm run validate` → *Content valid, 2 warnings* (both
-the documented JS-translation gap) · `npm run lint` → 0 errors · `tsc -b` → 0
-errors · `npm run build` → succeeds, entry chunk 532 KB / 172 KB gzip, 60
-chunks, `dist/assets` 17 MB.
+steps, 67 exercises, 22 glossary terms* · `npm run validate` → *Content valid,
+2 warnings* (both the documented JS-translation gap) · `npm run lint` → 0
+errors · `tsc -b` → 0 errors · `npm run build` → succeeds, entry chunk 216 KB
+gzip, 64 chunks, `dist/assets` 18 MB.
+
+The entry chunk grew from 172 KB gzip when the in-page runner came back for
+`user-event` and storage exercises (P2.2, option 2). That is the standing cost
+of the dual-path runner, and it is the first thing to reclaim if that decision
+is ever reversed.
 
 `npm run dev` and `npm run build` both run `sandbox:build` first (via `predev` /
 `prebuild`), so `public/sandbox-host.js` is never stale. Editing anything under
@@ -509,7 +515,76 @@ unreachable section.
 interface was sketched; building it showed a quiz isn't graded by running code
 and would have needed a fake code-shaped request. It is its own step type.
 ### [ ] P3.2 — Mini-projects per module + one capstone per track
-### [ ] P3.3 — Reference solutions revealed after passing
+### [x] P3.3 — Reference solutions revealed after passing
+
+**All 10 React modules ship reference solutions — 63 exercises.**
+
+A module's solutions live in `<exerciseDir>/solution.tsx`, in the same
+`// EXERCISE N:` layout as the stub, so the existing extractor splits it with
+no new parsing. The manifest compiler records `hasSolutions` at build time —
+the app never probes the network, because a dev server answers a missing path
+with 200 and an HTML body, which is exactly §4.2(b). The validator fails the
+build if a `solution.tsx` exists but misses an exercise, or still contains a
+`TODO`: a half-written solution shows the learner the stub they just replaced.
+
+A **Solution** tab appears beside Code and Preview, gated on `status ===
+'passed'`. Locked it renders a padlock, `disabled`, `aria-disabled` and a
+tooltip; clicking reveals nothing. **The answer is not fetched until the gate
+opens** — 0 network requests for `solution.tsx` while locked, so it is absent
+from the page rather than merely hidden. `completedManually` opens it too,
+deliberately: that hatch exists for people the runner has failed, and the gate
+is a nudge to try first, not a lock.
+
+Each solution is commented with *why*, not what — the default in the
+destructuring is why `<Greeting name="" />` renders "Hello, !"; the cleanup
+*is* the debounce; `[...items]` before `sort` because sort mutates.
+
+**57 of 63 verified passing through the real runner.** Per module:
+
+| module | result |
+|---|---|
+| 01-fundamentals | 6/8 — contact-form 3/4, filtered-list 3/6 |
+| 02-hooks | 5/7 — todo-reducer 1/5; callback-parent untested by its own spec |
+| 03-component-patterns | **6/6** |
+| 04-styling | **6/6** |
+| 05-routing | **6/6** |
+| 06-state-management | **6/6** |
+| 07-data-fetching | 5/6 — use-debounce 2/3 |
+| 08-forms | 5/6 — login-form timed out |
+| 09-performance | **6/6** |
+| 10-testing | **6/6** |
+
+Four of the five shortfalls are the `user-event` blocker in P2.2. The fifth is
+module 07's "cancels a pending update" debounce case, which fails consistently
+with the canonical implementation the stub itself prescribes — a runner/spec
+interaction, not a wrong solution.
+
+**Three platform gaps surfaced by writing these, each now fixed:**
+
+1. **`localStorage` is unreachable in the frame.** Module 06 *teaches*
+   `useLocalStorage`, and an opaque origin has no storage area at all —
+   reading it throws "the document is sandboxed". `needsFocus` became
+   `needsPageContext` and now also routes storage-using exercises to the page.
+   That exercise went 0/5 → **5/5**.
+2. **Three matchers the content already used did not exist**:
+   `toBeGreaterThanOrEqual`, `toBeLessThanOrEqual`, `toBeInstanceOf`. Module
+   07's interval and abortable exercises could not pass whatever anyone wrote.
+   Both went to **4/4**.
+3. **`jest.useFakeTimers()` was missing**, and module 09 teaches it. The
+   harness now has a virtual clock — `useFakeTimers`, `useRealTimers`,
+   `advanceTimersByTime`, `runOnlyPendingTimers` — with the real timer captured
+   up front so `waitFor` cannot freeze, and an automatic restore after every
+   test so fake timers never leak into the next one. That exercise went
+   0/4 → **4/4**.
+
+**A constraint worth knowing before writing more solutions:** the reassembled
+file uses the *stub's* import line, so a solution may only use what the
+exercise already imports. Module 09 needed `React.useMemo` / `React.useCallback`
+rather than named imports for exactly this reason.
+
+*Remaining:* React Native (4 exercises) and JavaScript (0) have no solutions,
+because they have almost no exercises — that is P3.5's problem, not this one.
+
 ### [x] P3.4 — Time estimates, difficulty, prerequisites graph
 
 All 55 available modules carry all three. The two coming-soon modules carry
@@ -553,7 +628,7 @@ you know" list is what answers "am I ready for this?" — a whole-track diagram
 is a different feature, and would want the capstone work in P3.2 to point at.
 ### [ ] P3.5 — Exercises for the JS (0 today) and RN (4 today) tracks
 ### [~] P3.6 — Glossary + cross-track links
-22 curated terms in `content/glossary.yml`, inline in en/fr/it exactly like a
+Machinery complete; 22 curated terms in `content/glossary.yml`, inline in en/fr/it exactly like a
 quiz, compiled into the manifest and reachable at `/glossary`.
 
 **The cross-track link is the point.** §6 put it as "the JS track defines
@@ -584,10 +659,28 @@ route arrives through the router — the reader was landing at the top of 22
 cards; and the page needed a header link, since a page reachable only by typing
 its URL is §4.1's unreachable-content problem one level up.
 
-*Remaining:* the terms are not yet linked from within lesson prose. Auto-linking
-would have to run over the markdown without touching code spans or fences,
-which is a different and riskier piece of work than the vocabulary itself.
-Twenty-two terms is also a starting set, not a complete one.
+**Auto-linking is done, on the AST rather than the text.**
+`src/lib/remark-glossary.ts` is a remark plugin that links a term the first
+time it appears in a lesson's prose. Working on the mdast is the safety
+argument: `code` and `inlineCode` are their own node types, so a term inside a
+fence or backticks is simply not reachable by the walk. A regex over the raw
+markdown would have to re-derive that and would eventually get it wrong.
+Verified on module 02's useEffect lesson: *JSX* and *Closure* linked once each,
+**0 links inside `code`/`pre`** while 2 further "JSX" mentions sat in code
+untouched, and none of module 02's own terms linked back to the page being read.
+
+Three limits keep it from becoming noise: `autolink` is **opt-in**, so
+"closure" and "memoization" link but "state", "key", "props", "component",
+"ref" and "context" never do — auto-linking "in this context" is worse than no
+link; once per term per document; and never a term the current module defines.
+16 of the 22 terms opt in. Links are styled as dotted underlines, deliberately
+quieter than an author's link, and route in-app rather than opening a tab.
+
+A term's display name is matched with any trailing gloss stripped, so the
+French *Fermeture (closure)* matches "fermeture" in prose rather than never
+matching at all.
+
+*Remaining:* 22 terms is a starting set, not a complete vocabulary.
 
 ---
 

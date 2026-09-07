@@ -217,6 +217,38 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
         }
       },
 
+      // The inclusive pair and `toBeInstanceOf` were missing, and module 07's
+      // spec uses all three — an interval test asserting "at least N ticks"
+      // could not pass at all, whatever the learner wrote. A matcher the
+      // content already depends on is not an optional extra.
+      toBeGreaterThanOrEqual(expected: number) {
+        const pass = (actual as number) >= expected;
+        if (negated ? pass : !pass) {
+          throw new Error(
+            `Expected ${actual} ${negated ? 'not ' : ''}to be greater than or equal to ${expected}`
+          );
+        }
+      },
+
+      toBeLessThanOrEqual(expected: number) {
+        const pass = (actual as number) <= expected;
+        if (negated ? pass : !pass) {
+          throw new Error(
+            `Expected ${actual} ${negated ? 'not ' : ''}to be less than or equal to ${expected}`
+          );
+        }
+      },
+
+      toBeInstanceOf(expected: new (...args: never[]) => unknown) {
+        const pass = actual instanceof expected;
+        if (negated ? pass : !pass) {
+          const name = expected?.name ?? String(expected);
+          throw new Error(
+            `Expected ${fmt(actual)} ${negated ? 'not ' : ''}to be an instance of ${name}`
+          );
+        }
+      },
+
       toThrow(expectedMsg?: string | RegExp) {
         let threw = false;
         let thrownError: unknown;
@@ -467,9 +499,114 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
     return mock;
   }
 
+  // --- fake timers ---
+  //
+  // Module 09 *teaches* `jest.useFakeTimers()`, and the harness did not have
+  // it, so that exercise could not pass whatever the learner wrote. This is a
+  // virtual clock: `setTimeout`/`setInterval` are swapped for queue writes and
+  // time only moves when a test advances it.
+  //
+  // The real functions are captured once, up front, and the harness's own
+  // `waitFor` uses those — otherwise installing fake timers inside a test
+  // would freeze the polling loop that is waiting for it.
+  const realSetTimeout = globalThis.setTimeout;
+  const realClearTimeout = globalThis.clearTimeout;
+  const realSetInterval = globalThis.setInterval;
+  const realClearInterval = globalThis.clearInterval;
+
+  interface FakeTimer {
+    id: number;
+    due: number;
+    fn: (...args: unknown[]) => void;
+    args: unknown[];
+    /** Repeat period for intervals; undefined for a one-shot timeout. */
+    every?: number;
+  }
+
+  let fakeTimersOn = false;
+  let virtualNow = 0;
+  let nextTimerId = 1;
+  let pending: FakeTimer[] = [];
+
+  function installFakeTimers() {
+    if (fakeTimersOn) return;
+    fakeTimersOn = true;
+    virtualNow = 0;
+    pending = [];
+
+    const schedule = (fn: unknown, ms?: number, args: unknown[] = [], every?: number) => {
+      const timer: FakeTimer = {
+        id: nextTimerId++,
+        due: virtualNow + (ms ?? 0),
+        fn: fn as (...a: unknown[]) => void,
+        args,
+        every,
+      };
+      pending.push(timer);
+      return timer.id;
+    };
+    const cancel = (id: unknown) => {
+      pending = pending.filter((t) => t.id !== id);
+    };
+
+    globalThis.setTimeout = ((fn: unknown, ms?: number, ...args: unknown[]) =>
+      schedule(fn, ms, args)) as unknown as typeof globalThis.setTimeout;
+    globalThis.clearTimeout = cancel as unknown as typeof globalThis.clearTimeout;
+    globalThis.setInterval = ((fn: unknown, ms?: number, ...args: unknown[]) =>
+      schedule(fn, ms, args, ms ?? 0)) as unknown as typeof globalThis.setInterval;
+    globalThis.clearInterval = cancel as unknown as typeof globalThis.clearInterval;
+  }
+
+  function restoreRealTimers() {
+    if (!fakeTimersOn) return;
+    fakeTimersOn = false;
+    pending = [];
+    globalThis.setTimeout = realSetTimeout;
+    globalThis.clearTimeout = realClearTimeout;
+    globalThis.setInterval = realSetInterval;
+    globalThis.clearInterval = realClearInterval;
+  }
+
+  /**
+   * Move the virtual clock forward, firing whatever comes due.
+   *
+   * Timers are fired in due order, and the clock is set to each timer's due
+   * time before its callback runs — so a callback that schedules another timer
+   * gets the right base. An interval is re-queued rather than run in a loop,
+   * which is what stops a 0ms interval from spinning forever.
+   */
+  function advanceTimersByTime(ms: number) {
+    if (!fakeTimersOn) return;
+    const target = virtualNow + ms;
+
+    // Bounded so a self-rescheduling timer cannot hang the run.
+    for (let guard = 0; guard < 10_000; guard++) {
+      const due = pending.filter((t) => t.due <= target).sort((a, b) => a.due - b.due)[0];
+      if (!due) break;
+
+      virtualNow = due.due;
+      if (due.every === undefined) {
+        pending = pending.filter((t) => t.id !== due.id);
+      } else {
+        due.due = virtualNow + Math.max(1, due.every);
+      }
+      due.fn(...due.args);
+    }
+
+    virtualNow = target;
+  }
+
   const jest = {
     fn: createMockFn,
     spyOn,
+    useFakeTimers: installFakeTimers,
+    useRealTimers: restoreRealTimers,
+    advanceTimersByTime,
+    runOnlyPendingTimers: () => {
+      if (!fakeTimersOn) return;
+      const furthest = pending.reduce((max, t) => Math.max(max, t.due), virtualNow);
+      advanceTimersByTime(furthest - virtualNow);
+    },
   };
 
   // --- waitFor ---
@@ -487,7 +624,9 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
         return;
       } catch (e) {
         if (Date.now() - start >= timeout) throw e;
-        await new Promise((r) => setTimeout(r, interval));
+        // The *real* timer: a test that installed fake timers would otherwise
+        // freeze this loop, which is the one thing waiting for it to finish.
+        await new Promise((r) => realSetTimeout(r, interval));
       }
     }
   }
@@ -549,6 +688,12 @@ export function createTestHarness(options: TestHarnessOptions = {}) {
             }
           }
         }
+        // Fake timers are restored whether or not the test remembered to call
+        // `jest.useRealTimers()`. Leaving them installed would replace the
+        // global clock for every test after this one, and the failure would
+        // appear somewhere unrelated.
+        restoreRealTimers();
+
         // Internal cleanup always runs last: unmount anything
         // @testing-library/react rendered so it can't leak into the next test.
         if (options.afterEachTest) {

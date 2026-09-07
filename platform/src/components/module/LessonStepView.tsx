@@ -87,7 +87,7 @@ export function LessonStepView({ module, step, stepIndex, totalSteps }: LessonSt
       </div>
 
       {/* Lesson content */}
-      {content && <MarkdownRenderer content={content} />}
+      {content && <MarkdownRenderer content={content} glossaryForModule={module.id} />}
 
       {/* Navigation */}
       <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-800 flex items-center justify-between">
